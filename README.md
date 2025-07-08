@@ -1,70 +1,45 @@
-# React + TypeScript + Vite
+# Pepe Booking Wizard 🧙‍♂️✨
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Willkommen beim Frontend-Projekt **pepe-frontend-app**!  
+Hier entsteht ein schicker, moderner **Buchungswizard**, der die Kommunikation mit unserem eigenen Backend übernimmt – voll automatisiert, voll in Style, voll React!
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🔗 API-Anbindung
 
-## Expanding the ESLint configuration
+Alle Daten holt sich diese App von unserer eigenen API:  
+👉 [Pepe Backend API Docs](https://pepe-backend-4nid.onrender.com/apidocs/#/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Diese Schnittstelle wurde eigens programmiert und liefert alles, was der Wizard zum Leben braucht: Verfügbarkeiten, Anfragen, Buchungen & Co.
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🛠️ Tech-Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- ⚛️ **React**
+- 🧠 **TypeScript**
+- ⚡️ **Vite**
+- 🎨 **Tailwind CSS**
+- 🍄 **shadcn/ui** (für stylische Komponenten)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚧 Was hier passieren wird
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# pepe-frontend-app
+Auf dieser Frontendseite bauen wir einen mehrstufigen Buchungsprozess mit:
+
+1. **Datumsauswahl & Verfügbarkeit prüfen**
+2. **Künstler- und Showauswahl**
+3. **Kundendaten eingeben**
+4. **Zusammenfassung & Bestätigung**
+5. **Abschicken – boom! 🎉**
+
+---
+
+## 📦 Installation & Entwicklung
+
+```bash
+git clone https://github.com/dein-user/pepe-frontend-app.git
+cd pepe-frontend-app
+npm install
+npm run dev
