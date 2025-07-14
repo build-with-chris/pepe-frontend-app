@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
-import Header from './Header';
-import Home from './routes/Home';
-import Anfragen from './routes/Anfragen';
-import Kuenstler from './routes/Kuenstler';
+import Header from './components/Header';
+import Home from './pages/Home';
+import Anfragen from './pages/Anfragen';
+import Kuenstler from './pages/Kuenstler';
 
 
 function App() {
