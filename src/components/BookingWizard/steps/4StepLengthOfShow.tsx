@@ -1,6 +1,4 @@
-
-
-import React from 'react';
+import React, { useState } from 'react';
 import type { BookingData } from '../types';
 
 export interface StepLengthOfShowProps {
@@ -16,6 +14,7 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
   onNext,
   onPrev,
 }) => {
+  const [customMode, setCustomMode] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     onChange({ duration_minutes: isNaN(value) ? 0 : value });
@@ -23,18 +22,45 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
 
   return (
     <div className="step">
-      <h2>Dauer der Einlage</h2>
+      <h2 className="text-4xl text-center mb-5 font-black font-mono">Dauer der Show</h2>
       <div className="input-group" style={{ margin: '16px 0' }}>
-        <label htmlFor="duration">Dauer in Minuten:</label>
-        <input
-          id="duration"
-          type="number"
-          min={1}
-          value={data.duration_minutes}
-          onChange={handleChange}
-          placeholder="z.B. 30"
-          style={{ marginLeft: '8px' }}
-        />
+        <label className="flex justify-center mb-5" htmlFor="durationSelect">Dauer auswählen:</label>
+        <select
+          id="durationSelect"
+          value={customMode ? 'custom' : data.duration_minutes.toString()}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val === 'custom') {
+              setCustomMode(true);
+            } else {
+              const minutes = parseInt(val, 10);
+              setCustomMode(false);
+              onChange({ duration_minutes: isNaN(minutes) ? 0 : minutes });
+            }
+          }}
+          className="flex justify-center mb-5 ml-2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="5">5 Minuten</option>
+          <option value="10">10 Minuten</option>
+          <option value="15">15 Minuten</option>
+          {data.team_size !== 1 && (
+            <option value="20">20 Minuten</option>
+          )}
+          <option value="custom">Andere...</option>
+        </select>
+        {customMode && (
+          <input
+            type="number"
+            min={1}
+            value={data.duration_minutes || ''}
+            onChange={(e) => {
+              const v = parseInt(e.target.value, 10);
+              onChange({ duration_minutes: isNaN(v) ? 0 : v });
+            }}
+            placeholder="Minuten"
+            className="ml-2 w-20 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        )}
       </div>
       <div className="navigation">
         <button type="button" onClick={onPrev}>

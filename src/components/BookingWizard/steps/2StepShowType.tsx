@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BookingData } from '../types';
+import OptionCard from '../OptionCard';
 
 export interface StepShowTypeProps {
   data: BookingData;
@@ -13,31 +14,29 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ show_type: e.target.value });
+    onNext();
   };
 
   return (
-    <div className="step">
-      <h2>Show-Typ auswählen</h2>
-      <div className="options">
+    <div className="step flex flex-col items-center">
+      <h2 className="text-4xl text-center mb-5 font-black font-mono">Show-Typ</h2>
+      <div className="p-5 w-2/3 mx-auto grid grid-cols-2 gap-4">
         {options.map(option => (
-          <label key={option} style={{ display: 'block', margin: '8px 0' }}>
-            <input
-              type="radio"
-              name="show_type"
-              value={option}
-              checked={data.show_type === option}
-              onChange={handleChange}
-            />
-            <span style={{ marginLeft: '8px' }}>{option}</span>
-          </label>
+          <OptionCard
+            key={option}
+            name="show_type"
+            value={option}
+            label={option}
+            imgSrc={`/images/showTypes/${option.replace(/ /g, '_')}.png`}
+            checked={data.show_type === option}
+            onChange={val => onChange({ show_type: val })}
+            onSelectNext={onNext}
+          />
         ))}
       </div>
       <div className="navigation">
         <button type="button" onClick={onPrev}>
           Zurück
-        </button>
-        <button type="button" onClick={onNext} disabled={!data.show_type}>
-          Weiter
         </button>
       </div>
     </div>

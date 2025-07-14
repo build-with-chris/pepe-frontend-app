@@ -1,6 +1,7 @@
 
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import ProgressBar from './ProgressBar';
 import type { BookingData } from './types';
 import StepEventType from './steps/1StepEventType';
 import StepShowType from './steps/2StepShowType';
@@ -29,28 +30,43 @@ const steps = [
 ];
 
 const BookingWizard: React.FC = () => {
-  const [data, setData] = useState<BookingData>({
-    client_email: '',
-    client_name: '',
-    disciplines: [],
-    distance_km: 0,
-    duration_minutes: 0,
-    event_address: '',
-    event_date: '',
-    event_time: '',
-    event_type: '',
-    show_type: '',
-    is_indoor: false,
-    needs_light: false,
-    needs_sound: false,
-    newsletter_opt_in: false,
-    number_of_guests: 0,
-    special_requests: '',
-    team_size: 0,
-    planning_status: ''
-  });
+  // Load saved wizard state from localStorage or use defaults
+  const savedData = localStorage.getItem('bookingData');
+  const savedStep = localStorage.getItem('bookingStep');
+  const initialData: BookingData = savedData
+    ? JSON.parse(savedData)
+    : {
+        client_email: '',
+        client_name: '',
+        disciplines: [],
+        distance_km: 0,
+        duration_minutes: 0,
+        event_address: '',
+        event_date: '',
+        event_time: '',
+        event_type: '',
+        show_type: '',
+        is_indoor: false,
+        needs_light: false,
+        needs_sound: false,
+        newsletter_opt_in: false,
+        number_of_guests: 0,
+        special_requests: '',
+        team_size: 0,
+        planning_status: ''
+      };
+  const initialStep = savedStep ? Number(savedStep) : 0;
+  const [data, setData] = useState<BookingData>(initialData);
+  const [stepIndex, setStepIndex] = useState<number>(initialStep);
 
-  const [stepIndex, setStepIndex] = useState(0);
+  // Persist wizard data and step to localStorage
+  useEffect(() => {
+    localStorage.setItem('bookingData', JSON.stringify(data));
+  }, [data]);
+
+  useEffect(() => {
+    localStorage.setItem('bookingStep', stepIndex.toString());
+  }, [stepIndex]);
   const CurrentStep = steps[stepIndex];
 
   const onNext = () => {
@@ -70,16 +86,15 @@ const BookingWizard: React.FC = () => {
   };
 
   return (
-    <div className="booking-wizard">
-      <div className="progress">
-        Schritt {stepIndex + 1} von {steps.length}
-      </div>
+    <div className="p-5">
+      
       <CurrentStep
         data={data}
         onChange={onChange}
         onNext={onNext}
         onPrev={onPrev}
       />
+      <ProgressBar stepIndex={stepIndex} totalSteps={steps.length} />
     </div>
   );
 };

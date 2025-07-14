@@ -8,7 +8,7 @@ export default function Home(){
             <img className="max-h-full w-auto object-contain" src={PEPE} alt="Pepe Artists" />
             <div className="flex flex-wrap items-center gap-2 md:flex-row">
                 <Link to="/anfragen">
-                    <Button>Booking Assistant</Button>
+                    <Button className="-top-[10px] size-w-full">Booking Assistant</Button>
                 </Link>
             </div>
         </div>

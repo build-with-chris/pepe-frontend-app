@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import type { BookingData } from '../types';
 
@@ -42,53 +40,47 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
   };
 
   return (
-    <div className="step">
-      <h2>Disziplinen auswählen</h2>
-      <div
-        className="options-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
-          gap: '16px',
-          margin: '16px 0',
-        }}
-      >
-        {disciplinesOptions.map(option => (
-          <label
-            key={option}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              cursor: 'pointer',
-              border: data.disciplines.includes(option) ? '2px solid #333' : '2px solid transparent',
-              borderRadius: '8px',
-              padding: '8px',
-            }}
-          >
-            <img
-              src={`/images/disciplines/${option.replace(/ /g, '_')}.png`}
-              alt={option}
-              style={{ width: '48px', height: '48px', marginBottom: '8px' }}
-            />
-            <input
-              type="checkbox"
-              checked={data.disciplines.includes(option)}
-              onChange={() => toggleDiscipline(option)}
-              style={{ marginBottom: '4px' }}
-            />
-            <span style={{ textAlign: 'center' }}>{option}</span>
-          </label>
-        ))}
+    <div className="step flex flex-col items-center">
+      <h2 className="text-2xl font-bold text-center mt-4">Disziplinen auswählen</h2>
+      <div className="w-full overflow-auto px-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+        <div className="grid grid-cols-3 lg:grid-cols-4 gap-4">
+          {disciplinesOptions.map(option => (
+            <label
+              key={option}
+              className={`flex flex-col items-center justify-center p-2 cursor-pointer rounded-lg border-2 ${
+                data.disciplines.includes(option) ? 'border-gray-800' : 'border-transparent'
+              }`}
+              onClick={() => toggleDiscipline(option)}
+            >
+              <img
+                src={`/images/disciplines/${option.replace(/ /g, '_')}.jpg`}
+                alt={option}
+                className="pointer-events-none w-24 h-32 md:w-32 md:h-48 mb-2"
+              />
+              <input
+                type="checkbox"
+                checked={data.disciplines.includes(option)}
+                readOnly
+                className="mb-2"
+              />
+              <span className="text-center">{option}</span>
+            </label>
+          ))}
+        </div>
       </div>
-      <div className="navigation">
-        <button type="button" onClick={onPrev}>
+      <div className="navigation flex justify-between w-2/3 mt-4">
+        <button
+          type="button"
+          onClick={onPrev}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
           Zurück
         </button>
         <button
           type="button"
           onClick={onNext}
           disabled={data.disciplines.length === 0}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
         >
           Weiter
         </button>

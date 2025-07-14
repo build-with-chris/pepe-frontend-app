@@ -2,6 +2,7 @@
 
 import React from 'react';
 import type { BookingData } from '../types';
+import OptionCard from '../OptionCard';
 
 export interface StepArtistCountProps {
   data: BookingData;
@@ -29,18 +30,17 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
   return (
     <div className="step">
       <h2>Anzahl der Artists</h2>
-      <div className="options">
+      <div className="grid grid-cols-3 gap-4 w-full">
         {options.map(option => (
-          <label key={option.value} style={{ display: 'block', margin: '8px 0' }}>
-            <input
-              type="radio"
-              name="team_size"
-              value={option.value}
-              checked={data.team_size === option.value}
-              onChange={handleChange}
-            />
-            <span style={{ marginLeft: '8px' }}>{option.label}</span>
-          </label>
+          <OptionCard
+            key={option.value}
+            name="team_size"
+            value={option.value.toString()}
+            label={option.label}
+            imgSrc={`/images/teamSizes/${option.label.replace(/ /g, '_')}.png`}
+            checked={data.team_size === option.value}
+            onChange={val => { onChange({ team_size: Number(val) }); onNext(); }}
+          />
         ))}
       </div>
       <div className="navigation">

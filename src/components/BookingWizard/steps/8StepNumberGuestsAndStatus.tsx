@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BookingData } from '../types';
+import OptionCard from '../OptionCard';
 
 export interface StepNumberGuestsAndStatusProps {
   data: BookingData;
@@ -33,31 +34,34 @@ const StepNumberGuestsAndStatus: React.FC<StepNumberGuestsAndStatusProps> = ({
   return (
     <div className="step">
       <h2>Gäste & Planungsstatus</h2>
-      <div className="input-group" style={{ margin: '16px 0' }}>
-        <label htmlFor="guests">Anzahl der Gäste:</label>
+      <div className="w-2/3 mx-auto mb-6">
+        <label htmlFor="guests" className="block text-sm font-medium text-gray-700">
+          Anzahl der Gäste
+        </label>
         <input
           id="guests"
           type="number"
           min={1}
           value={data.number_of_guests}
           onChange={handleGuestsChange}
-          style={{ marginLeft: '8px', width: '60px' }}
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="options" style={{ margin: '16px 0' }}>
-        <span>Planungsstatus:</span>
-        {statusOptions.map(option => (
-          <label key={option.value} style={{ display: 'block', margin: '8px 0' }}>
-            <input
-              type="radio"
+      <div className="flex flex-col items-center w-full">
+        <h3 className="text-sm font-medium text-gray-700 mb-2">Planungsstatus</h3>
+        <div className="grid grid-cols-2 gap-4 w-2/3 mx-auto">
+          {statusOptions.map(option => (
+            <OptionCard
+              key={option.value}
               name="planning_status"
               value={option.value}
+              label={option.label}
+              imgSrc={`/images/status/${option.value.replace(/ /g, '_')}.png`}
               checked={data.planning_status === option.value}
-              onChange={handleStatusChange}
+              onChange={val => { onChange({ planning_status: val }); onNext(); }}
             />
-            <span style={{ marginLeft: '8px' }}>{option.label}</span>
-          </label>
-        ))}
+          ))}
+        </div>
       </div>
       <div className="navigation">
         <button type="button" onClick={onPrev}>

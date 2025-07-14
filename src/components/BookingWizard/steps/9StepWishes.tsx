@@ -1,7 +1,6 @@
-
-
 import React from 'react';
 import type { BookingData } from '../types';
+import OptionCard from '../OptionCard';
 
 export interface StepWishesProps {
   data: BookingData;
@@ -16,42 +15,52 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
   };
 
   return (
-    <div className="step">
-      <h2>Wünsche & Sonderwünsche</h2>
-      <div className="input-group" style={{ margin: '16px 0' }}>
-        <label htmlFor="wishes">Hier kannst du deine Wünsche eintragen:</label>
+    <div className="step flex flex-col items-center">
+      <h2 className="text-2xl font-bold text-center mt-4">Wünsche & Sonderwünsche</h2>
+      <div className="w-2/3 mx-auto mb-6">
+        <label htmlFor="wishes" className="block text-sm font-medium text-gray-700">
+          Hier kannst du deine Wünsche eintragen:
+        </label>
         <textarea
           id="wishes"
           value={data.special_requests}
           onChange={handleChange}
           placeholder="z.B. besondere Lichtwünsche, Story-Elemente, Überraschungsmomente"
           rows={4}
-          style={{ marginTop: '8px', width: '100%', padding: '8px' }}
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="options" style={{ margin: '16px 0' }}>
-        <label style={{ display: 'block', margin: '8px 0' }}>
-          <input
-            type="checkbox"
-            checked={data.needs_light}
-            onChange={e => onChange({ needs_light: e.target.checked })}
-          />
-          <span style={{ marginLeft: '8px' }}>Licht benötigt</span>
-        </label>
-        <label style={{ display: 'block', margin: '8px 0' }}>
-          <input
-            type="checkbox"
-            checked={data.needs_sound}
-            onChange={e => onChange({ needs_sound: e.target.checked })}
-          />
-          <span style={{ marginLeft: '8px' }}>Ton/Musikanlage benötigt</span>
-        </label>
+      <div className="grid grid-cols-2 gap-4 w-2/3 mx-auto mb-6">
+        <OptionCard
+          name="needs_light"
+          value="true"
+          label="Licht benötigt"
+          imgSrc="/images/needs_light.png"
+          checked={data.needs_light}
+          onChange={val => onChange({ needs_light: val === 'true' })}
+        />
+        <OptionCard
+          name="needs_sound"
+          value="true"
+          label="Ton/Musikanlage benötigt"
+          imgSrc="/images/needs_sound.png"
+          checked={data.needs_sound}
+          onChange={val => onChange({ needs_sound: val === 'true' })}
+        />
       </div>
-      <div className="navigation">
-        <button type="button" onClick={onPrev}>
+      <div className="flex justify-between w-2/3 mb-6">
+        <button
+          type="button"
+          onClick={onPrev}
+          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
           Zurück
         </button>
-        <button type="button" onClick={onNext}>
+        <button
+          type="button"
+          onClick={onNext}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
           Weiter
         </button>
       </div>
