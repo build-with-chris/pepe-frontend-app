@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
 import { Loader2 } from 'lucide-react';
@@ -9,9 +9,17 @@ export interface StepShowtimeProps {
 }
 
 const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
+  const responseRef = useRef<HTMLDivElement>(null);
+
   const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (responseRef.current && response) {
+      responseRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [response]);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -116,7 +124,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         </button>
       </div>
       {response && (
-        <div className="w-2/3 mx-auto bg-white border border-gray-200 rounded-lg shadow mt-6 p-6">
+        <div ref={responseRef} className="w-2/3 mx-auto bg-white border border-gray-200 rounded-lg shadow mt-6 p-6">
           <h3 className="text-xl font-semibold mb-4">Angebotsübersicht</h3>
           <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-gray-700">
             <div>

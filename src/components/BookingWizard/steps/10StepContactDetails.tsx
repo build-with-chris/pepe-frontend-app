@@ -53,11 +53,12 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientEmail" className="block text-sm font-medium text-gray-700">
-          E-Mail
+          E-Mail <span className="text-red-500">*</span>
         </label>
         <input
           id="clientEmail"
           type="email"
+          required
           value={data.client_email}
           onChange={handleEmailChange}
           placeholder="name@beispiel.de"

@@ -62,11 +62,12 @@ const StepLocation: React.FC<StepLocationProps> = ({
       </div>
       <div className="w-full lg:w-2/3 mx-auto mb-6">
         <label htmlFor="city" className="block text-sm font-medium text-gray-700">
-          Stadt
+          Stadt <span className="text-red-500">*</span>
         </label>
         <input
           id="city"
           type="text"
+          required
           value={city}
           onChange={e => { const v = e.target.value; setCity(v); updateAddress(street, postalCode, v); }}
           placeholder="Musterstadt"

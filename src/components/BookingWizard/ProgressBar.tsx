@@ -24,7 +24,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ stepIndex, totalSteps }) => {
       <img
         src={src}
         alt={`Schritt ${stepIndex + 1} von ${totalSteps}`}
-        className="w-1/3 max-w-none"
+        className="w-4/5 max-w-none"
       />
     </div>
   );
