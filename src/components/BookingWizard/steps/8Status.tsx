@@ -25,7 +25,7 @@ const StepNumberGuestsAndStatus: React.FC<StepNumberGuestsAndStatusProps> = ({
     <div className="step flex flex-col items-center">
       <h2 className="text-2xl font-bold text-center mb-6">Planungsstatus</h2>
 
-      <div className="grid grid-cols-2 gap-4 w-1/3 mb-8 mx-auto">
+      <div className="grid grid-cols-2 gap-4 w-full lg:w-1/3 mb-8 mx-auto">
         {statusOptionsList.map(option => (
           <div
             key={option.value}

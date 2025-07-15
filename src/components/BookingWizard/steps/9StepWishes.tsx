@@ -16,7 +16,7 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
   return (
     <div className="w-full step flex flex-col items-center">
       <h2 className="text-4xl font-bold text-center mt-4">Wünsche & Sonderwünsche</h2>
-      <div className="w-2/3 mx-auto mb-6">
+      <div className="w-full lg:w-2/3 mx-auto mb-6">
         <label htmlFor="wishes" className="block text-sm font-medium text-gray-700">
           Hier kannst du deine Wünsche eintragen:
         </label>
@@ -29,7 +29,7 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4 w-1/3 mx-auto mb-6">
+      <div className="flex justify-around items-center gap-6 w-full lg:w-2/3 mx-auto mb-6">
         {[
           { key: 'light', label: 'Licht benötigt', field: 'needs_light', checked: data.needs_light },
           { key: 'sound', label: 'Ton/Musikanlage benötigt', field: 'needs_sound', checked: data.needs_sound },
@@ -37,7 +37,7 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
           <div
             key={option.key}
             onClick={() => onChange({ [option.field]: !option.checked } as any)}
-            className={`w-full sm:w-60 aspect-square flex items-center justify-center rounded-lg cursor-pointer transition-colors
+            className={`w-full max-w-[300px] max-h-[300px] aspect-square flex items-center justify-center rounded-lg cursor-pointer transition-colors
               ${option.checked
                 ? 'bg-blue-600 border-2 border-blue-400 text-white'
                 : 'bg-gray-800 border-2 border-gray-600 text-gray-300 hover:bg-gray-700'

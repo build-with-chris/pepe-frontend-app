@@ -30,7 +30,7 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
   return (
     <div className="step">
       <h2 className="text-4xl text-center mb-5 font-black font-mono">Anzahl der Artists</h2>
-      <div className="grid grid-cols-3 gap-4 w-full">
+      <div className="grid grid-cols-3 gap-4 w-full lg:w-2/3 mx-auto">
         {options.map(option => (
           <OptionCard
             key={option.value}

@@ -13,6 +13,7 @@ import StepWishes from './steps/9StepWishes';
 import StepContactDetails from './steps/10StepContactDetails';
 import StepShowtime from './steps/11StepShowtime';
 import { Button } from '../ui/button';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 const steps = [
   StepEventType,
@@ -90,17 +91,19 @@ const BookingWizard: React.FC = () => {
         variant="outline"
         onClick={onPrev}
         disabled={stepIndex === 0}
-        className="absolute top-10 left-10 bg-sky-600 text-white"
+        className="absolute top-10 left-2 md:left-10 bg-sky-600 text-white"
       >
-        Zurück
+        <ArrowLeft className="md:hidden h-5 w-5" />
+        <span className="hidden md:inline">Zurück</span>
       </Button>
       <Button
         variant="outline"
         onClick={onNext}
-        className="absolute top-10 left-40 bg-sky-600 text-white"
+        className="absolute top-10 left-17 md:left-40 bg-sky-600 text-white"
         disabled={stepIndex === 10}
       >
-        Weiter
+        <span className="hidden md:inline">Weiter</span>
+        <ArrowRight className="md:hidden h-5 w-5" />
       </Button>
     <ProgressBar stepIndex={stepIndex} totalSteps={steps.length} />
       <CurrentStep

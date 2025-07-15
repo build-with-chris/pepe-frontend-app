@@ -38,7 +38,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
   return (
     <div className="step flex flex-col items-center">
       <h2 className="text-4xl font-bold text-center mt-4">Kontakt & Rabatt</h2>
-      <div className="w-2/3 lg:w-1/3 mx-auto mb-6">
+      <div className="w-full lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientName" className="block text-sm font-medium text-gray-700">
           Name
         </label>
@@ -51,7 +51,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="w-2/3 lg:w-1/3 mx-auto mb-6">
+      <div className="w-full lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientEmail" className="block text-sm font-medium text-gray-700">
           E-Mail
         </label>
@@ -64,7 +64,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="w-2/3 lg:w-1/3 mx-auto mb-6">
+      <div className="w-full lg:w-1/3 mx-auto mb-6">
         <div className="flex items-center space-x-4 p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition">
           <input
             id="newsletter"

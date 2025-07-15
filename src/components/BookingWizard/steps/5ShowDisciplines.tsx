@@ -41,23 +41,27 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
 
   return (
     <div className="step flex flex-col items-center">
-      <h2 className="text-2xl font-bold text-center mt-4">Disziplinen auswählen</h2>
+      <h2 className="text-4xl font-bold text-center my-4">Disziplinen auswählen</h2>
       <div className="w-full overflow-auto px-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
         <div className="grid grid-cols-3 lg:grid-cols-4 gap-4">
           {disciplinesOptions.map(option => (
             <div
               key={option}
               onClick={() => toggleDiscipline(option)}
-              className={`w-full flex flex-col items-center justify-center p-2 cursor-pointer rounded-lg border-2 ${
-                data.disciplines.includes(option) ? 'border-gray-800' : 'border-transparent'
+              className={`aspect-square w-2/3 relative cursor-pointer rounded-lg overflow-hidden ${
+                data.disciplines.includes(option)
+                  ? 'border-4 border-blue-500'
+                  : 'border-2 border-transparent'
               }`}
             >
               <img
                 src={`/images/disciplines/${option.replace(/ /g, '_')}.jpg`}
                 alt={option}
-                className="w-24 h-32 md:w-32 md:h-48 mb-2"
+                className="absolute inset-0 w-full h-full object-cover"
               />
-              <span className="text-center">{option}</span>
+              <div className="absolute bottom-0 w-full bg-black bg-opacity-50 py-1">
+                <span className="text-white text-center block text-sm">{option}</span>
+              </div>
             </div>
           ))}
         </div>

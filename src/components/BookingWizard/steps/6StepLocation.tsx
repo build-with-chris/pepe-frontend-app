@@ -34,7 +34,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
   return (
     <div className="step">
       <h2 className='text-4xl text-center font-mono font-black'>Veranstaltungsort</h2>
-      <div className="w-2/3 mx-auto mb-4">
+      <div className="w-full lg:w-2/3 mx-auto mb-4">
         <label htmlFor="street" className="block text-sm font-medium text-gray-700">
           Straße
         </label>
@@ -47,7 +47,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="w-2/3 mx-auto mb-4">
+      <div className="w-full lg:w-2/3 mx-auto mb-4">
         <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">
           PLZ
         </label>
@@ -60,7 +60,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="w-2/3 mx-auto mb-6">
+      <div className="w-full lg:w-2/3 mx-auto mb-6">
         <label htmlFor="city" className="block text-sm font-medium text-gray-700">
           Stadt
         </label>
@@ -73,7 +73,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4 w-2/3 mx-auto mb-6">
+      <div className="grid grid-cols-2 gap-4 w-full lg:w-2/3 mx-auto mb-6">
         <OptionCard
           name="is_indoor"
           value="true"
