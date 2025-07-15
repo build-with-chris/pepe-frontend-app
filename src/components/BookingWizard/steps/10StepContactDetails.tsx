@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BookingData } from '../types';
+import { Mail } from 'lucide-react';
 
 export interface StepContactDetailsProps {
   data: BookingData;
@@ -36,8 +37,8 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
 
   return (
     <div className="step flex flex-col items-center">
-      <h2 className="text-2xl font-bold text-center mt-4">Kontakt & Rabatt</h2>
-      <div className="w-2/3 mx-auto mb-6">
+      <h2 className="text-4xl font-bold text-center mt-4">Kontakt & Rabatt</h2>
+      <div className="w-2/3 lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientName" className="block text-sm font-medium text-gray-700">
           Name
         </label>
@@ -50,7 +51,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="w-2/3 mx-auto mb-6">
+      <div className="w-2/3 lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientEmail" className="block text-sm font-medium text-gray-700">
           E-Mail
         </label>
@@ -63,34 +64,26 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="w-2/3 mx-auto mb-6 flex items-center">
-        <input
-          id="newsletter"
-          type="checkbox"
-          checked={data.newsletter_opt_in}
-          onChange={handleNewsletterChange}
-          className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-        />
-        <label htmlFor="newsletter" className="ml-3 text-gray-700">
-          Newsletter abonnieren (5% Rabatt)
-        </label>
-      </div>
-      <div className="flex justify-between w-2/3 mb-6">
-        <button
-          type="button"
-          onClick={onPrev}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Zurück
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={!canProceed}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-        >
-          Weiter
-        </button>
+      <div className="w-2/3 lg:w-1/3 mx-auto mb-6">
+        <div className="flex items-center space-x-4 p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition">
+          <input
+            id="newsletter"
+            type="checkbox"
+            checked={data.newsletter_opt_in}
+            onChange={handleNewsletterChange}
+            className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-10"
+          />
+          <Mail className="h-6 w-6 text-blue-600 animate-bounce" />
+          <div className="flex-1">
+            <label htmlFor="newsletter" className="text-sm font-medium text-gray-700">
+              Newsletter abonnieren (5% Rabatt auf diese Anfrage)
+            </label>
+            <p className="text-xs text-gray-500 mt-1">
+              Wir informieren dich über neueste Acts, Showorte und Veranstaltungen.
+              Kein Spam, versprochen!
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

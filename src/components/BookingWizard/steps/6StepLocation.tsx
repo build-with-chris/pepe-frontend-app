@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
 
@@ -15,8 +15,16 @@ const StepLocation: React.FC<StepLocationProps> = ({
   onNext,
   onPrev,
 }) => {
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({ event_address: e.target.value });
+  // Separate address fields: Straße, PLZ, Stadt
+  const [street, setStreet] = useState<string>('');
+  const [postalCode, setPostalCode] = useState<string>('');
+  const [city, setCity] = useState<string>('');
+  const [hasSelection, setHasSelection] = useState(false);
+
+  // Combine into single event_address on change
+  const updateAddress = (newStreet: string, newPostalCode: string, newCity: string) => {
+    const addr = `${newStreet}${newPostalCode ? ', ' + newPostalCode : ''}${newCity ? ' ' + newCity : ''}`.trim();
+    onChange({ event_address: addr });
   };
 
   const handleIndoorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,17 +33,43 @@ const StepLocation: React.FC<StepLocationProps> = ({
 
   return (
     <div className="step">
-      <h2 className='text-3xl text-center font-mono font-black'>Veranstaltungsort</h2>
-      <div className="w-2/3 mx-auto mb-6">
-        <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-          Adresse
+      <h2 className='text-4xl text-center font-mono font-black'>Veranstaltungsort</h2>
+      <div className="w-2/3 mx-auto mb-4">
+        <label htmlFor="street" className="block text-sm font-medium text-gray-700">
+          Straße
         </label>
         <input
-          id="address"
+          id="street"
           type="text"
-          value={data.event_address}
-          onChange={handleAddressChange}
-          placeholder="Straße, Stadt, PLZ"
+          value={street}
+          onChange={e => { const v = e.target.value; setStreet(v); updateAddress(v, postalCode, city); }}
+          placeholder="Musterstraße 1"
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div className="w-2/3 mx-auto mb-4">
+        <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">
+          PLZ
+        </label>
+        <input
+          id="postalCode"
+          type="text"
+          value={postalCode}
+          onChange={e => { const v = e.target.value; setPostalCode(v); updateAddress(street, v, city); }}
+          placeholder="12345"
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div className="w-2/3 mx-auto mb-6">
+        <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+          Stadt
+        </label>
+        <input
+          id="city"
+          type="text"
+          value={city}
+          onChange={e => { const v = e.target.value; setCity(v); updateAddress(street, postalCode, v); }}
+          placeholder="Musterstadt"
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
@@ -45,29 +79,29 @@ const StepLocation: React.FC<StepLocationProps> = ({
           value="true"
           label="Indoor"
           imgSrc="/images/indoor.png"
-          checked={data.is_indoor === true}
-          onChange={val => { onChange({ is_indoor: val === 'true' }); onNext(); }}
+          checked={hasSelection && data.is_indoor === true}
+          onChange={val => {
+            setHasSelection(true);
+            onChange({ is_indoor: val === 'true' });
+            if (street && postalCode && city) {
+              onNext();
+            }
+          }}
         />
         <OptionCard
           name="is_indoor"
           value="false"
           label="Outdoor"
           imgSrc="/images/outdoor.png"
-          checked={data.is_indoor === false}
-          onChange={val => { onChange({ is_indoor: val === 'true' }); onNext(); }}
+          checked={hasSelection && data.is_indoor === false}
+          onChange={val => {
+            setHasSelection(true);
+            onChange({ is_indoor: val === 'true' });
+            if (street && postalCode && city) {
+              onNext();
+            }
+          }}
         />
-      </div>
-      <div className="navigation">
-        <button type="button" onClick={onPrev}>
-          Zurück
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={!data.event_address}
-        >
-          Weiter
-        </button>
       </div>
     </div>
   );

@@ -34,11 +34,6 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
           />
         ))}
       </div>
-      <div className="navigation">
-        <button type="button" onClick={onPrev}>
-          Zurück
-        </button>
-      </div>
     </div>
   );
 };

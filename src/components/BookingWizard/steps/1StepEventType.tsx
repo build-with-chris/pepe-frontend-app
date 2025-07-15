@@ -22,15 +22,22 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
       <h2 className="text-4xl text-center mb-5 font-black font-mono">Event Typ</h2>
       <div className="grid grid-cols-2 gap-4 w-full">
         {options.map(option => (
-          <OptionCard
+          <div
             key={option}
-            name="event_type"
-            value={option}
-            label={option}
-            imgSrc={`/images/eventTypes/${option.replace(/ /g, '_')}.jpg`}
-            checked={data.event_type === option}
-            onChange={val => { onChange({ event_type: val }); onNext(); }}
-          />
+            onClick={() => {
+              onChange({ event_type: option });
+              onNext();
+            }}
+          >
+            <OptionCard
+              name="event_type"
+              value={option}
+              label={option}
+              imgSrc={`/images/eventTypes/${option.replace(/ /g, '_')}.jpg`}
+              checked={data.event_type === option}
+              onChange={val => onChange({ event_type: val })}
+            />
+          </div>
         ))}
       </div>
     </div>

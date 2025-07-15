@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { BookingData } from '../types';
+import { Button } from '../../ui/button';
 
 export interface StepLengthOfShowProps {
   data: BookingData;
@@ -23,7 +24,7 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
   return (
     <div className="step">
       <h2 className="text-4xl text-center mb-5 font-black font-mono">Dauer der Show</h2>
-      <div className="input-group" style={{ margin: '16px 0' }}>
+      <div className="input-group flex flex-col items-center justify-center" style={{ margin: '16px 0' }}>
         <label className="flex justify-center mb-5" htmlFor="durationSelect">Dauer auswählen:</label>
         <select
           id="durationSelect"
@@ -32,13 +33,16 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
             const val = e.target.value;
             if (val === 'custom') {
               setCustomMode(true);
+              
             } else {
               const minutes = parseInt(val, 10);
               setCustomMode(false);
               onChange({ duration_minutes: isNaN(minutes) ? 0 : minutes });
+              onNext();
             }
+            
           }}
-          className="flex justify-center mb-5 ml-2 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-1/5 mb-5 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="5">5 Minuten</option>
           <option value="10">10 Minuten</option>
@@ -49,31 +53,30 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
           <option value="custom">Andere...</option>
         </select>
         {customMode && (
-          <input
-            type="number"
-            min={1}
-            value={data.duration_minutes || ''}
-            onChange={(e) => {
-              const v = parseInt(e.target.value, 10);
-              onChange({ duration_minutes: isNaN(v) ? 0 : v });
-            }}
-            placeholder="Minuten"
-            className="ml-2 w-20 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <>
+            <input
+              type="number"
+              min={1}
+              value={data.duration_minutes || ''}
+              onChange={(e) => {
+                const v = parseInt(e.target.value, 10);
+                onChange({ duration_minutes: isNaN(v) ? 0 : v });
+              }}
+              placeholder="Minuten"
+              className="w-20 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <Button
+              variant="default"
+              onClick={onNext}
+              disabled={data.duration_minutes < 1}
+              className="mt-4"
+            >
+              Weiter
+            </Button>
+          </>
         )}
       </div>
-      <div className="navigation">
-        <button type="button" onClick={onPrev}>
-          Zurück
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={data.duration_minutes < 1}
-        >
-          Weiter
-        </button>
-      </div>
+      
     </div>
   );
 };

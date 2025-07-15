@@ -45,46 +45,24 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
       <div className="w-full overflow-auto px-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
         <div className="grid grid-cols-3 lg:grid-cols-4 gap-4">
           {disciplinesOptions.map(option => (
-            <label
+            <div
               key={option}
-              className={`flex flex-col items-center justify-center p-2 cursor-pointer rounded-lg border-2 ${
+              onClick={() => toggleDiscipline(option)}
+              className={`w-full flex flex-col items-center justify-center p-2 cursor-pointer rounded-lg border-2 ${
                 data.disciplines.includes(option) ? 'border-gray-800' : 'border-transparent'
               }`}
-              onClick={() => toggleDiscipline(option)}
             >
               <img
                 src={`/images/disciplines/${option.replace(/ /g, '_')}.jpg`}
                 alt={option}
-                className="pointer-events-none w-24 h-32 md:w-32 md:h-48 mb-2"
-              />
-              <input
-                type="checkbox"
-                checked={data.disciplines.includes(option)}
-                readOnly
-                className="mb-2"
+                className="w-24 h-32 md:w-32 md:h-48 mb-2"
               />
               <span className="text-center">{option}</span>
-            </label>
+            </div>
           ))}
         </div>
       </div>
-      <div className="navigation flex justify-between w-2/3 mt-4">
-        <button
-          type="button"
-          onClick={onPrev}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Zurück
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={data.disciplines.length === 0}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-        >
-          Weiter
-        </button>
-      </div>
+      
     </div>
   );
 };

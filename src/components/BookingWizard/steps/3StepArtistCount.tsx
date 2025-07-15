@@ -29,7 +29,7 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
 
   return (
     <div className="step">
-      <h2>Anzahl der Artists</h2>
+      <h2 className="text-4xl text-center mb-5 font-black font-mono">Anzahl der Artists</h2>
       <div className="grid grid-cols-3 gap-4 w-full">
         {options.map(option => (
           <OptionCard
@@ -43,18 +43,7 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
           />
         ))}
       </div>
-      <div className="navigation">
-        <button type="button" onClick={onPrev}>
-          Zurück
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={![1, 2, 3].includes(data.team_size)}
-        >
-          Weiter
-        </button>
-      </div>
+      
     </div>
   );
 };

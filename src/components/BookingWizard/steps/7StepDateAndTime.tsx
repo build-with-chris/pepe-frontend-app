@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BookingData } from '../types';
+import { Button } from '../../ui/button';
 
 export interface StepDateAndTimeProps {
   data: BookingData;
@@ -7,6 +8,7 @@ export interface StepDateAndTimeProps {
   onNext: () => void;
   onPrev: () => void;
 }
+
 
 const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
   data,
@@ -22,44 +24,58 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
     onChange({ event_time: e.target.value });
   };
 
+  const handleGuestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    onChange({ number_of_guests: isNaN(value) ? 0 : value });
+  };
+
   return (
     <div className="step flex flex-col items-center">
-      <h2 className="text-2xl font-bold text-center mt-4">Datum & Uhrzeit</h2>
-      <div className="w-2/3 mx-auto mb-6">
-        <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700">
-          Datum
+      <h2 className="text-4xl font-bold text-center mt-4">Datum & Uhrzeit</h2>
+      <div className="flex w-1/3 mx-auto mb-6 space-x-4">
+        <div className="flex-1">
+          <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700 mb-1">
+            Datum
+          </label>
+          <input
+            id="eventDate"
+            type="date"
+            value={data.event_date}
+            onChange={handleDateChange}
+            className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div className="flex-1">
+          <label htmlFor="eventTime" className="block text-sm font-medium text-gray-700 mb-1">
+            Uhrzeit
+          </label>
+          <input
+            id="eventTime"
+            type="time"
+            value={data.event_time}
+            onChange={handleTimeChange}
+            className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+      <div className="w-1/3 mx-auto mb-6">
+        <label htmlFor="guests" className="block text-sm font-medium text-gray-700 mb-1">
+          Anzahl der Gäste
         </label>
         <input
-          id="eventDate"
-          type="date"
-          value={data.event_date}
-          onChange={handleDateChange}
+          id="guests"
+          type="number"
+          min={1}
+          value={data.number_of_guests}
+          onChange={handleGuestsChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              onNext();
+            }
+          }}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-      </div>
-      <div className="w-2/3 mx-auto mb-6">
-        <label htmlFor="eventTime" className="block text-sm font-medium text-gray-700">
-          Uhrzeit
-        </label>
-        <input
-          id="eventTime"
-          type="time"
-          value={data.event_time}
-          onChange={handleTimeChange}
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      <div className="navigation">
-        <button type="button" onClick={onPrev}>
-          Zurück
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={!data.event_date || !data.event_time}
-        >
-          Weiter
-        </button>
       </div>
     </div>
   );

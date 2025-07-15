@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import ProgressBar from './ProgressBar';
 import type { BookingData } from './types';
@@ -10,10 +8,11 @@ import StepArtistCount from './steps/3StepArtistCount';
 import StepLengthOfShow from './steps/4StepLengthOfShow';
 import StepLocation from './steps/6StepLocation';
 import StepDateAndTime from './steps/7StepDateAndTime';
-import StepNumberGuestsAndStatus from './steps/8StepNumberGuestsAndStatus';
+import StepNumberGuestsAndStatus from './steps/8Status.tsx';
 import StepWishes from './steps/9StepWishes';
 import StepContactDetails from './steps/10StepContactDetails';
 import StepShowtime from './steps/11StepShowtime';
+import { Button } from '../ui/button';
 
 const steps = [
   StepEventType,
@@ -86,15 +85,32 @@ const BookingWizard: React.FC = () => {
   };
 
   return (
-    <div className="p-5">
-      
+    <div className="p-5 relative">
+      <Button
+        variant="outline"
+        onClick={onPrev}
+        disabled={stepIndex === 0}
+        className="absolute top-10 left-10 bg-sky-600 text-white"
+      >
+        Zurück
+      </Button>
+      <Button
+        variant="outline"
+        onClick={onNext}
+        className="absolute top-10 left-40 bg-sky-600 text-white"
+        disabled={stepIndex === 10}
+      >
+        Weiter
+      </Button>
+    <ProgressBar stepIndex={stepIndex} totalSteps={steps.length} />
       <CurrentStep
         data={data}
         onChange={onChange}
         onNext={onNext}
         onPrev={onPrev}
+        
       />
-      <ProgressBar stepIndex={stepIndex} totalSteps={steps.length} />
+      
     </div>
   );
 };

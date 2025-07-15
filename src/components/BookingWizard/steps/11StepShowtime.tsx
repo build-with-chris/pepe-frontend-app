@@ -1,8 +1,7 @@
-
-
 import React, { useState } from 'react';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
+import { Loader2 } from 'lucide-react';
 
 export interface StepShowtimeProps {
   data: BookingData;
@@ -29,7 +28,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
 
   return (
     <div className="step">
-      <h2>Anfrage überprüfen & absenden</h2>
+      <h2 className="text-4xl font-bold text-center my-4">Showtime</h2>
       <div className="w-2/3 mx-auto mb-6 bg-white border border-gray-200 rounded-lg shadow p-6">
         <h3 className="text-xl font-semibold mb-4">Ihre Daten im Überblick</h3>
         <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-gray-700">
@@ -99,12 +98,21 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           </div>
         </dl>
       </div>
-      <div className="navigation" style={{ marginTop: '16px' }}>
-        <button type="button" onClick={onPrev} disabled={loading}>
-          Zurück
-        </button>
-        <button type="button" onClick={handleSubmit} disabled={loading} style={{ marginLeft: '8px' }}>
-          {loading ? 'Senden...' : 'Absenden'}
+      <div className="navigation flex justify-center w-full mt-4">
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={loading}
+          className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg shadow cursor-pointer hover:bg-sky-700 disabled:opacity-50 transition-colors"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+              Senden...
+            </>
+          ) : (
+            'Absenden'
+          )}
         </button>
       </div>
       {response && (

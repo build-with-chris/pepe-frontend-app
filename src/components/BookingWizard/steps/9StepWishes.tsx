@@ -1,6 +1,5 @@
 import React from 'react';
 import type { BookingData } from '../types';
-import OptionCard from '../OptionCard';
 
 export interface StepWishesProps {
   data: BookingData;
@@ -15,8 +14,8 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
   };
 
   return (
-    <div className="step flex flex-col items-center">
-      <h2 className="text-2xl font-bold text-center mt-4">Wünsche & Sonderwünsche</h2>
+    <div className="w-full step flex flex-col items-center">
+      <h2 className="text-4xl font-bold text-center mt-4">Wünsche & Sonderwünsche</h2>
       <div className="w-2/3 mx-auto mb-6">
         <label htmlFor="wishes" className="block text-sm font-medium text-gray-700">
           Hier kannst du deine Wünsche eintragen:
@@ -30,40 +29,25 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4 w-2/3 mx-auto mb-6">
-        <OptionCard
-          name="needs_light"
-          value="true"
-          label="Licht benötigt"
-          imgSrc="/images/needs_light.png"
-          checked={data.needs_light}
-          onChange={val => onChange({ needs_light: val === 'true' })}
-        />
-        <OptionCard
-          name="needs_sound"
-          value="true"
-          label="Ton/Musikanlage benötigt"
-          imgSrc="/images/needs_sound.png"
-          checked={data.needs_sound}
-          onChange={val => onChange({ needs_sound: val === 'true' })}
-        />
+      <div className="grid grid-cols-2 gap-4 w-1/3 mx-auto mb-6">
+        {[
+          { key: 'light', label: 'Licht benötigt', field: 'needs_light', checked: data.needs_light },
+          { key: 'sound', label: 'Ton/Musikanlage benötigt', field: 'needs_sound', checked: data.needs_sound },
+        ].map(option => (
+          <div
+            key={option.key}
+            onClick={() => onChange({ [option.field]: !option.checked } as any)}
+            className={`w-full sm:w-60 aspect-square flex items-center justify-center rounded-lg cursor-pointer transition-colors
+              ${option.checked
+                ? 'bg-blue-600 border-2 border-blue-400 text-white'
+                : 'bg-gray-800 border-2 border-gray-600 text-gray-300 hover:bg-gray-700'
+              }`}
+          >
+            <span className="font-medium">{option.label}</span>
+          </div>
+        ))}
       </div>
-      <div className="flex justify-between w-2/3 mb-6">
-        <button
-          type="button"
-          onClick={onPrev}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
-        >
-          Zurück
-        </button>
-        <button
-          type="button"
-          onClick={onNext}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Weiter
-        </button>
-      </div>
+      
     </div>
   );
 };
