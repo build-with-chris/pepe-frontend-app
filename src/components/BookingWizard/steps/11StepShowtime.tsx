@@ -107,47 +107,45 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         </dl>
       </div>
       <div className="navigation flex justify-center w-full mt-4">
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={loading}
-          className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg shadow cursor-pointer hover:bg-sky-700 disabled:opacity-50 transition-colors"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-              Senden...
-            </>
-          ) : (
-            'Absenden'
-          )}
-        </button>
+        {!response ? (
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={loading}
+            className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg shadow cursor-pointer hover:bg-sky-700 disabled:opacity-50 transition-colors"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                Senden...
+              </>
+            ) : (
+              'Absenden'
+            )}
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => window.location.assign('/')}
+            className="flex items-center px-6 py-3 bg-gray-500 text-white rounded-lg shadow cursor-pointer hover:bg-gray-600 transition-colors"
+          >
+            X
+          </button>
+        )}
       </div>
       {response && (
-        <div ref={responseRef} className="w-2/3 mx-auto bg-white border border-gray-200 rounded-lg shadow mt-6 p-6">
-          <h3 className="text-xl font-semibold mb-4">Angebotsübersicht</h3>
-          <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-gray-700">
-            <div>
-              <dt className="font-medium">Verfügbare Artists</dt>
-              <dd>{response.num_available_artists}</dd>
-            </div>
-            <div>
-              <dt className="font-medium">Preis (Minimum)</dt>
-              <dd>{response.price_min} €</dd>
-            </div>
-            <div>
-              <dt className="font-medium">Preis (Maximum)</dt>
-              <dd>{response.price_max} €</dd>
-            </div>
-            <div>
-              <dt className="font-medium">Angebotener Preis</dt>
-              <dd>{response.price_offered} €</dd>
-            </div>
-            <div className="md:col-span-2">
-              <dt className="font-medium">Request ID</dt>
-              <dd>{response.request_id}</dd>
-            </div>
-          </dl>
+        <div ref={responseRef} className="relative w-2/3 mx-auto bg-white border border-gray-200 
+        rounded-lg shadow mt-6 p-6">
+          <h3 className="text-xl font-semibold mb-4">Anfrage erhalten!</h3>
+          <p className="text-gray-700 leading-relaxed">
+            Am {new Date(data.event_date).toLocaleDateString('de-DE')} haben wir 
+            {" "}{response.num_available_artists} verfügbare{response.num_available_artists > 1 ? '' : 'n'} 
+            {" "}Artist{response.num_available_artists > 1 ? 's' : ''} 
+            {" "}für Ihren Event. Der Preis wird voraussichtlich zwischen 
+            {" "}{response.price_min}€ und {response.price_max}€ 
+            {" "}liegen. Ihre Anfrage geht nun an unsere Künstler raus 
+            {" "}– innerhalb von 48 Stunden erhalten Sie ein gesammeltes Angebot.
+          </p>
         </div>
       )}
       {error && (

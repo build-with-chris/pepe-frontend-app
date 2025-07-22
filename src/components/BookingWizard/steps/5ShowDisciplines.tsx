@@ -55,7 +55,7 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
               }`}
             >
               <img
-                src={`/images/disciplines/${option.replace(/ /g, '_')}.jpg`}
+                src={`/images/disciplines/${option.replace(/ /g, '_')}.webp`}
                 alt={option}
                 className="absolute inset-0 w-full h-full object-cover"
               />

@@ -12,8 +12,6 @@ export interface StepContactDetailsProps {
 const StepContactDetails: React.FC<StepContactDetailsProps> = ({
   data,
   onChange,
-  onNext,
-  onPrev,
 }) => {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ client_name: e.target.value });
@@ -26,14 +24,6 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
   const handleNewsletterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ newsletter_opt_in: e.target.checked });
   };
-
-  const isValidEmail = (email: string) => {
-    // simple email regex
-    return /\S+@\S+\.\S+/.test(email);
-  };
-
-  const canProceed =
-    data.client_name.trim().length > 0 && isValidEmail(data.client_email);
 
   return (
     <div className="step flex flex-col items-center">

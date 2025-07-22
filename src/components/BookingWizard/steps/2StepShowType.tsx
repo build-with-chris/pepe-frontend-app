@@ -27,7 +27,7 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
             name="show_type"
             value={option}
             label={option}
-            imgSrc={`/images/showTypes/${option.replace(/ /g, '_')}.png`}
+            imgSrc={`/images/showTypes/${option === 'Bühnen Show' ? 'Buehnen_Show' : option.replace(/ /g, '_')}.webp`}
             checked={data.show_type === option}
             onChange={val => onChange({ show_type: val })}
             onSelectNext={onNext}

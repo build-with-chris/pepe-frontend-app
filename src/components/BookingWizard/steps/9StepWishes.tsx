@@ -32,15 +32,15 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
       <div className="flex justify-around items-center gap-6 w-full lg:w-2/3 mx-auto mb-6">
         {[
           { key: 'light', label: 'Licht benötigt', field: 'needs_light', checked: data.needs_light },
-          { key: 'sound', label: 'Ton/Musikanlage benötigt', field: 'needs_sound', checked: data.needs_sound },
+          { key: 'sound', label: 'Musikanlage benötigt', field: 'needs_sound', checked: data.needs_sound },
         ].map(option => (
           <div
             key={option.key}
             onClick={() => onChange({ [option.field]: !option.checked } as any)}
             className={`w-full max-w-[300px] max-h-[300px] aspect-square flex items-center justify-center rounded-lg cursor-pointer transition-colors
               ${option.checked
-                ? 'bg-blue-600 border-2 border-blue-400 text-white'
-                : 'bg-gray-800 border-2 border-gray-600 text-gray-300 hover:bg-gray-700'
+                ? 'bg-blue-600 border-2 border-blue-400 text-white text-2xl'
+                : 'bg-gray-800 border-2 border-gray-600 text-gray-300 hover:bg-gray-700 text-2xl'
               }`}
           >
             <span className="font-medium">{option.label}</span>

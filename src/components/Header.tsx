@@ -13,6 +13,7 @@ export default function Header() {
                 <NavLink to="/anfragen" className={({ isActive }) => isActive ? 'font-bold' : undefined}>Anfragen</NavLink>
                 <NavLink to="/kuenstler" className={({ isActive }) => isActive ? 'font-bold' : undefined}>Künstler</NavLink>
             </nav>
+                <NavLink to="/login" className={({ isActive }) => isActive ? 'font-bold' : undefined}>Login</NavLink>
 
         </header>
     )

@@ -35,8 +35,8 @@ const StepNumberGuestsAndStatus: React.FC<StepNumberGuestsAndStatusProps> = ({
             }}
             className={`w-full aspect-square flex items-center justify-center p-4 border rounded-lg cursor-pointer ${
               data.planning_status === option.value
-                ? 'bg-gray-100 border-white text-black'
-                : 'bg-gray-800 border-gray-600 text-white'
+                ? 'bg-blue-600 border-2 border-blue-400 text-white text-2xl'
+                : 'bg-gray-800 border-2 border-gray-600 text-gray-300 hover:bg-gray-700 text-2xl'
             }`}
           >
             {option.label}
