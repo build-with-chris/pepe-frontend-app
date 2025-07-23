@@ -12,8 +12,15 @@ import {
 import slide1 from "@/assets/landingpage/slide1.png";
 import slide2 from "@/assets/landingpage/slide2.png";
 import slide3 from "@/assets/landingpage/slide3.png";
+import slide1Lg from "@/assets/landingpage/slide1-lg.png";
+import slide2Lg from "@/assets/landingpage/slide2-lg.png";
+import slide3Lg from "@/assets/landingpage/slide3-lg.png";
 
-const slides = [slide1, slide2, slide3];
+const slides = [
+  { small: slide1, large: slide1Lg },
+  { small: slide2, large: slide2Lg },
+  { small: slide3, large: slide3Lg },
+];
 
 export function CarouselOrientation() {
   return (
@@ -21,18 +28,21 @@ export function CarouselOrientation() {
       opts={{
         align: "start",
       }}
-      plugins={[Autoplay({ delay: 2000 })]}
+      plugins={[Autoplay({ delay: 5000 })]}
       orientation="horizontal"
-      className="relative w-full border border-red-500 h-[400px] md:h-[600px] lg:h-[800px]"
+      className="w-screen h-[400px] md:h-[600px] lg:h-[800px] relative"
     >
-      <CarouselContent className="flex h-full w-full overflow-hidden">
-        {slides.map((src, idx) => (
-          <CarouselItem key={idx} className="flex items-center justify-center h-full min-w-full shrink-0">
-            <img
-              src={src}
-              alt={`Slide ${idx + 1}`}
-              className="object-cover w-full h-full max-h-[800px]"
-            />
+      <CarouselContent className="h-full">
+        {slides.map(({ small, large }, idx) => (
+          <CarouselItem key={idx} className="flex items-center justify-center">
+            <picture className="w-full h-full">
+              <source media="(min-width: 1024px)" srcSet={large} />
+              <img
+                src={small}
+                alt={`Slide ${idx + 1}`}
+                className="object-cover object-center lg:object-top w-full h-full"
+              />
+            </picture>
           </CarouselItem>
         ))}
       </CarouselContent>

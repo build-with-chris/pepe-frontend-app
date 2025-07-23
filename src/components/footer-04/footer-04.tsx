@@ -5,30 +5,16 @@ import { Link } from "react-router-dom";
 import {InstagramIcon} from "lucide-react";
 
 const footerLinks = [
-  {
-    title: "Overview",
-    href: "#",
-  },
-  {
-    title: "Features",
-    href: "#",
-  },
-  {
-    title: "Pricing",
-    href: "#",
-  },
-  {
-    title: "Careers",
-    href: "#",
-  },
-  {
-    title: "Help",
-    href: "#",
-  },
-  {
-    title: "Privacy",
-    href: "#",
-  },
+  { title: "Mediamaterial", href: "/mediamaterial" },
+  { title: "Shows & Formate", href: "/shows" },
+  { title: "Buchen", href: "/anfragen" },
+  { title: "Referenzen", href: "/referenzen" },
+  { title: "FAQ", href: "/faq" },
+  { title: "Agentur & Team", href: "/agentur" },
+  { title: "Kontakt", href: "/kontakt" },
+  { title: "Impressum", href: "/impressum" },
+  { title: "Datenschutz", href: "/datenschutz" },
+  { title: "AGB", href: "/agb" },
 ];
 
 const Footer04Page = () => {
@@ -39,7 +25,6 @@ const Footer04Page = () => {
         <div className="max-w-screen-xl mx-auto">
           <div className="py-12 flex flex-col sm:flex-row items-start justify-between gap-x-8 gap-y-10 px-6 xl:px-0">
             <div>
-              {/* Logo */}
               <svg
                 id="logo-7"
                 width="124"
@@ -63,7 +48,7 @@ const Footer04Page = () => {
                   <li key={title}>
                     <Link
                       to={href}
-                      className="text-muted-foreground hover:text-foreground"
+                      className="text-muted-foreground hover:text-white"
                     >
                       {title}
                     </Link>
@@ -74,10 +59,10 @@ const Footer04Page = () => {
 
             {/* Subscribe Newsletter */}
             <div className="max-w-xs w-full">
-              <h6 className="font-semibold">Stay up to date</h6>
+              <h6 className="font-semibold">Angebote & Shows</h6>
               <form className="mt-6 flex items-center gap-2">
-                <Input type="email" placeholder="Enter your email" />
-                <Button>Subscribe</Button>
+                <Input type="email" placeholder="Email hier eingeben" />
+                <Button>Anmelden</Button>
               </form>
             </div>
           </div>
@@ -87,13 +72,13 @@ const Footer04Page = () => {
             <span className="text-muted-foreground">
               &copy; {new Date().getFullYear()}{" "}
               <Link to="/" target="_blank">
-                Shadcn UI Blocks
+                PepeShows
               </Link>
               . All rights reserved.
             </span>
 
             <div className="flex items-center gap-5 text-muted-foreground">
-              <Link to="#" target="_blank">
+              <Link to="https://www.instagram.com/pepe_arts/" target="_blank">
                 <InstagramIcon className="h-5 w-5" />
               </Link>
               

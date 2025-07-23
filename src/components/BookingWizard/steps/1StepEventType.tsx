@@ -18,9 +18,9 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
   };
 
   return (
-    <div className="p-0 w-full lg:w-2/3 mx-auto md:max-w-screen-md">
+    <div className="p-0 w-full mx-auto md:max-w-4/5">
       <h2 className="text-4xl text-center mb-5 font-black font-mono">Event Typ</h2>
-      <div className="grid grid-cols-2 gap-2 w-full">
+      <div className="grid lg:grid-cols-4 md: grid-cols-2 gap-4 w-full">
         {options.map(option => (
           <div
             key={option}

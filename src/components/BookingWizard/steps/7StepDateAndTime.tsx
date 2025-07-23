@@ -1,6 +1,6 @@
 import React from 'react';
+import { Calendar, Clock } from 'lucide-react';
 import type { BookingData } from '../types';
-import { Button } from '../../ui/button';
 
 export interface StepDateAndTimeProps {
   data: BookingData;
@@ -37,25 +37,37 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
           <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700 mb-1">
             Datum
           </label>
-          <input
-            id="eventDate"
-            type="date"
-            value={data.event_date}
-            onChange={handleDateChange}
-            className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative">
+            <input
+              id="eventDate"
+              type="date"
+              value={data.event_date}
+              onChange={handleDateChange}
+              className="block w-full pr-10 border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <Calendar
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              aria-hidden="true"
+            />
+          </div>
         </div>
         <div className="flex-1">
           <label htmlFor="eventTime" className="block text-sm font-medium text-gray-700 mb-1">
             Uhrzeit
           </label>
-          <input
-            id="eventTime"
-            type="time"
-            value={data.event_time}
-            onChange={handleTimeChange}
-            className="block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative">
+            <input
+              id="eventTime"
+              type="time"
+              value={data.event_time}
+              onChange={handleTimeChange}
+              className="block w-full pr-10 border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <Clock
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+              aria-hidden="true"
+            />
+          </div>
         </div>
       </div>
       <div className="w-1/3 mx-auto mb-6">

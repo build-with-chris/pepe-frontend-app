@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import confetti from 'canvas-confetti';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
 import { Loader2 } from 'lucide-react';
@@ -18,6 +19,11 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   useEffect(() => {
     if (responseRef.current && response) {
       responseRef.current.scrollIntoView({ behavior: 'smooth' });
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
     }
   }, [response]);
 

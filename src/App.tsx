@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Anfragen from './pages/Anfragen';
 import Kuenstler from './pages/Kuenstler';
@@ -7,6 +7,7 @@ import Footer from './components/footer-04/footer-04'
 import Navbar01Page from './components/navbar-01/navbar-01';
 
 function App() {
+  const location = useLocation();
 
   return (
 
@@ -19,7 +20,7 @@ function App() {
         <Route path="/login" element={<Login />} />
 
       </Routes>
-    <Footer />
+    {location.pathname !== '/anfragen' && <Footer />}
     </div>
   )
 }

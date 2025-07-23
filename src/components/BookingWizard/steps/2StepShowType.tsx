@@ -20,7 +20,7 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
   return (
     <div className="step flex flex-col items-center">
       <h2 className="text-4xl text-center mb-5 font-black font-mono">Show-Typ</h2>
-      <div className="p-5 w-full lg:w-2/3 mx-auto grid grid-cols-2 gap-4 md:max-w-screen-md">
+      <div className="p-5 w-full lg:w-2/3 mx-auto grid grid-cols-2 gap-4 md:max-w-3/5">
         {options.map(option => (
           <OptionCard
             key={option}
