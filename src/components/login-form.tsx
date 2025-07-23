@@ -9,14 +9,54 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import React, { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export function Login({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const { setUser, setToken } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    console.log("Calling verify at:", import.meta.env.VITE_API_URL);
+    e.preventDefault();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      alert(error.message);
+    } else {
+      console.log("Access Token:", data.session?.access_token);
+      const accessToken = data.session?.access_token;
+      // Verify token with Flask backend
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        alert("Backend verification failed: " + (err.msg || err.error));
+        return;
+      }
+      const { user } = await res.json();
+      console.log("Verified user payload:", user);
+      // Update AuthContext and redirect
+      setUser(user);
+      setToken(accessToken);
+      navigate("/dashboard");
+    }
+  };
 
   return (
-    <div className={cn("flex flex-col gap-6 w-full md:max-w-screen-md mx-auto mt-12", className)} {...props}>
+    <div className={cn("flex flex-col gap-6 w-full md:max-w-screen-md mx-auto", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
@@ -25,7 +65,7 @@ export function Login({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="">
+          <form onSubmit={handleSignIn} className="">
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full">
@@ -55,6 +95,8 @@ export function Login({
                     type="email"
                     placeholder="m@example.com"
                     required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="grid gap-3">
@@ -67,7 +109,13 @@ export function Login({
                       Forgot your password?
                     </a>
                   </div>
-                  <Input id="password" type="password" required />
+                  <Input
+                    id="password"
+                    type="password"
+                    required
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                  />
                 </div>
                 <Button type="submit" className="w-full mt-2">
                   Login
@@ -75,9 +123,9 @@ export function Login({
               </div>
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
+                <Link to="/signup" className="underline underline-offset-4">
                   Sign up
-                </a>
+                </Link>
               </div>
             </div>
           </form>
