@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
@@ -21,6 +20,35 @@ const disciplinesOptions = [
   "Pantomime/Entertainment",
 ];
 
+async function updateBackendArtist(token: string, artistId: string, artistPayload: any) {
+  const baseUrl = import.meta.env.VITE_API_URL;
+  const res = await fetch(`${baseUrl}/api/artists/${artistId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(artistPayload),
+  });
+  const text = await res.text();
+  if (!res.ok) {
+    // handle common errors
+    if (res.status === 409) {
+      throw new Error('Email already exists');
+    }
+    if (res.status === 404) {
+      throw new Error('Artist not found');
+    }
+    throw new Error(`Update artist failed: ${res.status} ${text}`);
+  }
+  try {
+    const body = JSON.parse(text);
+    return body.id ?? artistId;
+  } catch {
+    return artistId;
+  }
+}
+
 export default function Profile() {
   const { user, token } = useAuth();
   const navigate = useNavigate();
@@ -29,35 +57,78 @@ export default function Profile() {
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [disciplines, setDisciplines] = useState<string[]>([]);
-  const [priceMin, setPriceMin] = useState<number>(500);
-  const [priceMax, setPriceMax] = useState<number>(2000);
+  const [priceMin, setPriceMin] = useState<number>(700);
+  const [priceMax, setPriceMax] = useState<number>(900);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [backendArtistId, setBackendArtistId] = useState<string | null>(null);
+  const [locked, setLocked] = useState(false);
 
   useEffect(() => {
     if (!user) navigate("/login");
   }, [user]);
 
-  // Load existing profile on mount
   useEffect(() => {
     const loadProfile = async () => {
       if (!user) return;
       const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("user_id", user!.sub)
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user!.sub)
         .single();
       if (data) {
-        setName(data.name || "");
-        setAddress(data.address || "");
-        setPhoneNumber(data.phone_number || "");
+        setName(data.name || '');
+        setAddress(data.address || '');
+        setPhoneNumber(data.phone_number || '');
         setDisciplines(data.disciplines || []);
         setPriceMin(data.price_min || 500);
         setPriceMax(data.price_max || 2000);
+        if (data.backend_artist_id) {
+          setBackendArtistId(data.backend_artist_id);
+          setLocked(true);
+        }
       }
     };
     loadProfile();
   }, [user]);
+
+  async function createOrFetchBackendArtist(token: string, email: string, artistPayload: any) {
+    const baseUrl = import.meta.env.VITE_API_URL;
+    // Generate a fallback password if backend requires one (since password_hash is required server-side)
+    const password = (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
+      ? (crypto as any).randomUUID()
+      : Math.random().toString(36).substring(2);
+    const creationPayload = { ...artistPayload, password };
+    // Try to create the artist
+    let res = await fetch(`${baseUrl}/api/artists`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(creationPayload),
+    });
+    if (res.ok) {
+      const body = await res.json();
+      return body.id ?? null;
+    }
+    const text = await res.text();
+    console.warn('createOrFetchBackendArtist failed response:', res.status, text);
+    // If email conflict or similar, fallback to fetching existing artist by email
+    if (res.status === 409 || text.toLowerCase().includes('email')) {
+      const listRes = await fetch(`${baseUrl}/api/artists`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (listRes.ok) {
+        const list = await listRes.json();
+        const match = list.find((a: any) => a.email?.toLowerCase() === email.toLowerCase());
+        if (match) return match.id;
+      }
+    }
+    throw new Error(`Backend createArtist failed: ${res.status} ${text}`);
+  }
 
   const [success, setSuccess] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
@@ -92,40 +163,88 @@ export default function Profile() {
       setError(supabaseError.message);
     } else {
       setSuccess(true);
-      // Also create Artist in backend SQLite via Flask API
+      // Auch Artist im Backend anlegen oder holen, wenn noch nicht vorhanden
       try {
-        const artistPayload = {
-          name,
-          email: user!.email,
-          address,
-          phone_number: phoneNumber,
-          disciplines,
-          price_min: priceMin,
-          price_max: priceMax,
-        };
-        console.log("Calling backend createArtist:", artistPayload);
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/artists`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(artistPayload),
-        });
-        const text = await res.text();
-        if (!res.ok) {
-          console.error("Backend createArtist failed:", res.status, text);
+        // Hole aktuellen Profil-Datensatz, um backend_artist_id zu prüfen
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('backend_artist_id')
+          .eq('user_id', user!.sub)
+          .single();
+
+        if (profile?.backend_artist_id) {
+          if (!locked) {
+            if (!user?.email) throw new Error('User email fehlt');
+            const artistPayload = {
+              name,
+              email: user.email,
+              address,
+              phone_number: phoneNumber,
+              disciplines,
+              price_min: priceMin,
+              price_max: priceMax,
+            };
+            try {
+              // versuche zu updaten
+              const updatedId = await updateBackendArtist(token!, profile.backend_artist_id, artistPayload);
+              await supabase
+                .from('profiles')
+                .upsert({ user_id: user!.sub, backend_artist_id: updatedId })
+                .eq('user_id', user!.sub);
+              setBackendArtistId(updatedId);
+              setLocked(true);
+            } catch (err: any) {
+              if (err.message === 'Artist not found') {
+                // fallback: neu erstellen
+                const backendRespId = await createOrFetchBackendArtist(token!, user.email, artistPayload);
+                if (backendRespId) {
+                  await supabase
+                    .from('profiles')
+                    .upsert({ user_id: user!.sub, backend_artist_id: backendRespId })
+                    .eq('user_id', user!.sub);
+                  setBackendArtistId(backendRespId);
+                  setLocked(true);
+                }
+              } else {
+                throw err; // wird im outer catch behandelt
+              }
+            }
+          } else {
+            setBackendArtistId(profile.backend_artist_id);
+            setLocked(true);
+          }
         } else {
-          console.log("Backend createArtist succeeded");
+          // neu anlegen wie vorher
+          if (!user?.email) throw new Error('User email fehlt');
+          const artistPayload = {
+            name,
+            email: user.email,
+            address,
+            phone_number: phoneNumber,
+            disciplines,
+            price_min: priceMin,
+            price_max: priceMax,
+          };
+          const backendRespId = await createOrFetchBackendArtist(token!, user.email, artistPayload);
+          if (backendRespId) {
+            await supabase
+              .from('profiles')
+              .upsert({ user_id: user!.sub, backend_artist_id: backendRespId })
+              .eq('user_id', user!.sub);
+            setBackendArtistId(backendRespId);
+            setLocked(true);
+          }
         }
       } catch (err) {
-        console.error("Error calling backend createArtist:", err);
+        console.error('Error syncing artist with backend:', err);
+        setError('Profil gespeichert, aber Künstler konnte nicht ans Backend synchronisiert werden. Versuch es später nochmal.');
       }
       // navigate("/dashboard");
     }
   };
 
   const toggleDiscipline = (d: string) => {
+    if (locked) return;
     setDisciplines((prev) =>
       prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]
     );
@@ -134,6 +253,18 @@ export default function Profile() {
   return (
     <div className="max-w-xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Profil einrichten</h1>
+      {locked && (
+        <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 rounded">
+          <p className="mb-2">✅ Profil ist abgeschlossen und an das Backend gesendet. Es ist aktuell gesperrt.</p>
+          <button
+            type="button"
+            className="underline"
+            onClick={() => { setLocked(false); setSuccess(false); }}
+          >
+            Profil bearbeiten
+          </button>
+        </div>
+      )}
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {success && (
         <div className="mb-4 text-green-700 bg-green-100 border border-green-400 rounded p-3">
@@ -155,6 +286,7 @@ export default function Profile() {
             onChange={(e) => setName(e.target.value)}
             className="w-full border px-3 py-2 rounded"
             required
+            disabled={locked}
           />
         </div>
         <div>
@@ -165,6 +297,7 @@ export default function Profile() {
             onChange={(e) => setAddress(e.target.value)}
             className="w-full border px-3 py-2 rounded"
             required
+            disabled={locked}
           />
         </div>
         <div>
@@ -175,6 +308,7 @@ export default function Profile() {
             onChange={(e) => setPhoneNumber(e.target.value)}
             className="w-full border px-3 py-2 rounded"
             required
+            disabled={locked}
           />
         </div>
         <div>
@@ -185,6 +319,7 @@ export default function Profile() {
                 type="button"
                 key={d}
                 onClick={() => toggleDiscipline(d)}
+                disabled={locked}
                 className={`px-3 py-1 border rounded ${
                   disciplines.includes(d)
                     ? "bg-blue-600 text-white"
@@ -206,6 +341,7 @@ export default function Profile() {
               className="w-full border px-3 py-2 rounded"
               min={0}
               required
+              disabled={locked}
             />
           </div>
           <div className="flex-1">
@@ -217,15 +353,16 @@ export default function Profile() {
               className="w-full border px-3 py-2 rounded"
               min={priceMin}
               required
+              disabled={locked}
             />
           </div>
         </div>
         <button
           type="submit"
-          disabled={loading}
-          className="w-full bg-green-600 text-white py-2 rounded"
+          disabled={loading || locked}
+          className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-50"
         >
-          {loading ? "Speichern..." : "Profil speichern"}
+          {locked ? "Profil gesperrt" : loading ? "Speichern..." : "Profil speichern"}
         </button>
       </form>
     </div>

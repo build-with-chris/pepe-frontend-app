@@ -1,18 +1,18 @@
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 
 export function Login({
@@ -31,7 +31,10 @@ export function Login({
     setLoading(true);
     try {
       // Authenticate with Supabase
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
       if (signInError) {
         console.error("Supabase signIn error:", signInError);
         alert("Login failed: " + signInError.message);
@@ -61,7 +64,6 @@ export function Login({
 
       // Update AuthContext with user identity
       setToken(token);
-      // Store authenticated user in context
       setUser({ sub: supUser.id, ...supUser });
       navigate("/profile");
     } catch (err) {
@@ -95,7 +97,6 @@ export function Login({
                   Login with Apple
                 </Button>
                 <Button variant="outline" className="w-full">
-                  {/* Placeholder: Google Login */}
                   Login with Google
                 </Button>
               </div>
@@ -134,9 +135,7 @@ export function Login({
                     onChange={e => setPassword(e.target.value)}
                   />
                 </div>
-                <Button type="button" className="w-full mt-2" onClick={handleSignIn}
-                  disabled={loading}
-                >
+                <Button type="button" className="w-full mt-2" onClick={handleSignIn} disabled={loading}>
                   Login
                 </Button>
               </div>
@@ -155,5 +154,5 @@ export function Login({
         and <a href="#">Privacy Policy</a>.
       </div>
     </div>
-  )
+  );
 }

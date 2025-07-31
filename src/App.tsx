@@ -11,6 +11,9 @@ import Footer from './components/footer-04/footer-04'
 import Navbar01Page from './components/navbar-01/navbar-01';
 import Profile from './pages/ProfileSetup.tsx'
 import SplashScreen from './pages/SplashScreen';
+import CalendarPage from './pages/Kalender';
+import MyGigs from './pages/MyGigs';
+import MeineAnfragen from './pages/MeineAnfragen';
 
 function App() {
   const location = useLocation();
@@ -31,13 +34,16 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile/>} />
+          <Route path="/kalender" element={<CalendarPage />} />
+          <Route path="/my-gigs" element={<MyGigs />} />
+          <Route path="/meine-anfragen" element={<MeineAnfragen />} />
         </Route>
 
         <Route element={<ProtectedRoute requiredRole="admin" />}>
           <Route path="/admin" element={<Admin />} />
         </Route>
       </Routes>
-    {location.pathname !== '/anfragen' && <Footer />}
+    {!['/anfragen', '/login', '/signup'].includes(location.pathname) && <Footer />}
     </div>
   )
 }
