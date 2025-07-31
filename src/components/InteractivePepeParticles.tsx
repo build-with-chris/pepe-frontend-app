@@ -160,8 +160,7 @@ export default function InteractivePepeParticles() {
         const height = canvas.offsetHeight;
 
         // leichte Trail-Fade statt harter Löschung
-        ctx.fillStyle = 'rgba(0,0,0,0.12)';
-        ctx.fillRect(0, 0, width, height);
+        ctx.clearRect(0, 0, width, height);
 
         const particles = particlesRef.current;
         const mouse = mouseRef.current;

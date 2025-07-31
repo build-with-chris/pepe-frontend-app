@@ -8,7 +8,7 @@ export default function Home() {
            <div className="w-screen" style={{ background: 'radial-gradient(circle at center, rgba(79,91,220,0.22) 30%, rgba(0,0,0,0.05) 90%)' }}>
         {/* Animation oben: shrinkwrap + padding */}
         <div className="flex justify-center">
-          <div className="relative w-full max-w-[900px] aspect-[8/3] overflow-hidden">
+          <div className="relative rounded-4xl w-full max-w-[900px] aspect-[8/3] overflow-hidden">
             <PepesParticles />
           </div>
         </div>
