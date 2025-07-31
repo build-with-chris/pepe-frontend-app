@@ -20,10 +20,12 @@ const disciplinesOptions = [
   "Pantomime/Entertainment",
 ];
 
-async function updateBackendArtist(token: string, artistId: string, artistPayload: any) {
+async function updateBackendArtist(token: string, artistId: string, artistPayload: any, setBackendDebug: React.Dispatch<React.SetStateAction<string | null>>) {
+  console.groupCollapsed('updateBackendArtist');
+  console.log('Payload:', artistPayload);
   const baseUrl = import.meta.env.VITE_API_URL;
   const res = await fetch(`${baseUrl}/api/artists/${artistId}`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
@@ -31,14 +33,20 @@ async function updateBackendArtist(token: string, artistId: string, artistPayloa
     body: JSON.stringify(artistPayload),
   });
   const text = await res.text();
+  console.log('Response status:', res.status);
+  console.log('Response body:', text);
+  console.groupEnd();
   if (!res.ok) {
     // handle common errors
     if (res.status === 409) {
+      setBackendDebug(`updateBackendArtist failed: Conflict 409`);
       throw new Error('Email already exists');
     }
     if (res.status === 404) {
+      setBackendDebug(`updateBackendArtist failed: Not Found 404`);
       throw new Error('Artist not found');
     }
+    setBackendDebug(`updateBackendArtist failed: ${res.status} ${text.slice(0, 200)}`);
     throw new Error(`Update artist failed: ${res.status} ${text}`);
   }
   try {
@@ -63,6 +71,7 @@ export default function Profile() {
   const [loading, setLoading] = useState(false);
   const [backendArtistId, setBackendArtistId] = useState<string | null>(null);
   const [locked, setLocked] = useState(false);
+  const [backendDebug, setBackendDebug] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -71,68 +80,123 @@ export default function Profile() {
   useEffect(() => {
     const loadProfile = async () => {
       if (!user) return;
-      const { data } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('user_id', user!.sub)
-        .single();
-      if (data) {
-        setName(data.name || '');
-        setAddress(data.address || '');
-        setPhoneNumber(data.phone_number || '');
-        setDisciplines(data.disciplines || []);
-        setPriceMin(data.price_min || 500);
-        setPriceMax(data.price_max || 2000);
-        if (data.backend_artist_id) {
-          setBackendArtistId(data.backend_artist_id);
-          setLocked(true);
+      try {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', user!.sub)
+          .single();
+        if (data) {
+          setName(data.name || '');
+          setAddress(data.address || '');
+          setPhoneNumber(data.phone_number || '');
+          setDisciplines(data.disciplines || []);
+          setPriceMin(data.price_min || 500);
+          setPriceMax(data.price_max || 2000);
+          if (data.backend_artist_id) {
+            setBackendArtistId(data.backend_artist_id);
+            setLocked(true);
+          }
         }
+      } catch (err) {
+        console.error('Error loading profile from Supabase', err);
+        setBackendDebug(`Load profile failed: ${err}`);
       }
     };
     loadProfile();
   }, [user]);
 
   async function createOrFetchBackendArtist(token: string, email: string, artistPayload: any) {
-    const baseUrl = import.meta.env.VITE_API_URL;
-    // Generate a fallback password if backend requires one (since password_hash is required server-side)
-    const password = (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
-      ? (crypto as any).randomUUID()
-      : Math.random().toString(36).substring(2);
-    const creationPayload = { ...artistPayload, password };
-    // Try to create the artist
-    let res = await fetch(`${baseUrl}/api/artists`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(creationPayload),
-    });
-    if (res.ok) {
-      const body = await res.json();
-      return body.id ?? null;
-    }
-    const text = await res.text();
-    console.warn('createOrFetchBackendArtist failed response:', res.status, text);
-    // If email conflict or similar, fallback to fetching existing artist by email
-    if (res.status === 409 || text.toLowerCase().includes('email')) {
-      const listRes = await fetch(`${baseUrl}/api/artists`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (listRes.ok) {
-        const list = await listRes.json();
-        const match = list.find((a: any) => a.email?.toLowerCase() === email.toLowerCase());
-        if (match) return match.id;
-      }
-    }
-    throw new Error(`Backend createArtist failed: ${res.status} ${text}`);
+  console.groupCollapsed('createOrFetchBackendArtist create attempt');
+  const baseUrl = import.meta.env.VITE_API_URL;
+
+  // Wenn wir schon eine backendArtistId im State haben, nichts neu machen
+  if (backendArtistId) {
+    console.log('createOrFetchBackendArtist: existing backendArtistId, skipping create', backendArtistId);
+    console.groupEnd();
+    return backendArtistId;
   }
+
+  // Generate a fallback password if backend requires one (since password_hash is required server-side)
+  const password = (typeof crypto !== 'undefined' && (crypto as any).randomUUID)
+    ? (crypto as any).randomUUID()
+    : Math.random().toString(36).substring(2);
+  const creationPayload = { ...artistPayload, password };
+  console.log('creationPayload', creationPayload);
+
+  // Try to create the artist
+  const res = await fetch(`${baseUrl}/api/artists`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(creationPayload),
+  });
+
+  let text = await res.text();
+  let body;
+  try {
+    body = JSON.parse(text);
+  } catch {
+    body = null;
+  }
+  console.log('Response status:', res.status);
+  console.log('Response body:', body ?? text);
+  console.groupEnd();
+
+  if (res.ok) {
+    return body?.id ?? null;
+  }
+
+  console.groupCollapsed('createOrFetchBackendArtist fallback search');
+  console.warn('createOrFetchBackendArtist failed response:', res.status, text);
+
+  // If conflict/email issue, try to find existing by email
+  if (res.status === 409 || text.toLowerCase().includes('email')) {
+    const listRes = await fetch(`${baseUrl}/api/artists`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    let list: any[] = [];
+    if (listRes.ok) {
+      list = await listRes.json();
+    }
+    console.log('List from fallback search:', list);
+    const match = list.find((a: any) => a.email?.toLowerCase() === email.toLowerCase());
+    console.log('Match found:', match);
+    if (match) {
+      console.log('createOrFetchBackendArtist: fallback match found, persisting backendArtistId', match.id);
+      setBackendArtistId(match.id);
+      try {
+        if (user) {
+          await supabase
+            .from('profiles')
+            .upsert({ user_id: user.sub, backend_artist_id: match.id });
+        }
+      } catch (upsertErr) {
+        console.warn('Failed to persist fallback backend_artist_id to Supabase', upsertErr);
+      }
+      console.groupEnd();
+      return match.id;
+    }
+    console.groupEnd();
+    // if we got 409 but couldn't find existing, throw specific error
+    if (res.status === 409) {
+      setBackendDebug(`createOrFetchBackendArtist conflict 409 but no existing found`); // preserve earlier debug pattern
+      throw new Error('Email already exists');
+    }
+  } else {
+    console.groupEnd();
+  }
+
+  setBackendDebug(`createOrFetchBackendArtist failed: ${res.status} ${text.slice(0, 200)}`);
+  throw new Error(`Backend createArtist failed: ${res.status} ${text}`);
+}
 
   const [success, setSuccess] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Submitting profile', { name, address, phoneNumber, disciplines, priceMin, priceMax, backendArtistId, locked });
     setError(null);
     if (!name || !address || !phoneNumber || disciplines.length === 0) {
       setError("Bitte fülle alle Pflichtfelder aus.");
@@ -144,19 +208,22 @@ export default function Profile() {
     }
     setLoading(true);
     // Save profile data to Supabase (example, adjust table name)
+    const payload = {
+      user_id: user!.sub,
+      name,
+      address,
+      phone_number: phoneNumber,
+      disciplines,
+      price_min: priceMin,
+      price_max: priceMax,
+      is_complete: true,
+    };
     const { data, error: supabaseError } = await supabase
       .from("profiles")
-      .upsert({
-        user_id: user!.sub,
-        name,
-        address,
-        phone_number: phoneNumber,
-        disciplines,
-        price_min: priceMin,
-        price_max: priceMax,
-        is_complete: true,
-      })
-      .eq("user_id", user!.sub);
+      .upsert(payload);
+
+    console.log('Supabase upsert payload', { name, address, phoneNumber, disciplines, priceMin, priceMax });
+    console.log('Supabase response', { data, supabaseError });
 
     setLoading(false);
     if (supabaseError) {
@@ -166,13 +233,24 @@ export default function Profile() {
       // Auch Artist im Backend anlegen oder holen, wenn noch nicht vorhanden
       try {
         // Hole aktuellen Profil-Datensatz, um backend_artist_id zu prüfen
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('backend_artist_id')
-          .eq('user_id', user!.sub)
-          .single();
+        let profileBackendArtistId: string | null = null;
+        try {
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('backend_artist_id')
+            .eq('user_id', user!.sub)
+            .maybeSingle();
+          if (profileError) {
+            console.warn('Error fetching profile backend_artist_id:', profileError);
+          } else if (profile?.backend_artist_id) {
+            profileBackendArtistId = profile.backend_artist_id;
+          }
+        } catch (fetchErr) {
+          console.warn('Exception fetching profile backend_artist_id:', fetchErr);
+        }
 
-        if (profile?.backend_artist_id) {
+        const effectiveBackendId = profileBackendArtistId || backendArtistId;
+        if (effectiveBackendId) {
           if (!locked) {
             if (!user?.email) throw new Error('User email fehlt');
             const artistPayload = {
@@ -185,32 +263,38 @@ export default function Profile() {
               price_max: priceMax,
             };
             try {
-              // versuche zu updaten
-              const updatedId = await updateBackendArtist(token!, profile.backend_artist_id, artistPayload);
+              console.log('Updating existing backend artist', effectiveBackendId);
+              const updatedId = await updateBackendArtist(token!, effectiveBackendId, artistPayload, setBackendDebug);
               await supabase
                 .from('profiles')
-                .upsert({ user_id: user!.sub, backend_artist_id: updatedId })
-                .eq('user_id', user!.sub);
+                .upsert({ user_id: user!.sub, backend_artist_id: updatedId });
               setBackendArtistId(updatedId);
               setLocked(true);
             } catch (err: any) {
               if (err.message === 'Artist not found') {
                 // fallback: neu erstellen
-                const backendRespId = await createOrFetchBackendArtist(token!, user.email, artistPayload);
+                const backendRespId = await createOrFetchBackendArtist(token!, user.email, {
+                  name,
+                  email: user.email,
+                  address,
+                  phone_number: phoneNumber,
+                  disciplines,
+                  price_min: priceMin,
+                  price_max: priceMax,
+                });
                 if (backendRespId) {
                   await supabase
                     .from('profiles')
-                    .upsert({ user_id: user!.sub, backend_artist_id: backendRespId })
-                    .eq('user_id', user!.sub);
+                    .upsert({ user_id: user!.sub, backend_artist_id: backendRespId });
                   setBackendArtistId(backendRespId);
                   setLocked(true);
                 }
               } else {
-                throw err; // wird im outer catch behandelt
+                setError('Künstler konnte nicht aktualisiert werden.');
               }
             }
           } else {
-            setBackendArtistId(profile.backend_artist_id);
+            setBackendArtistId(effectiveBackendId);
             setLocked(true);
           }
         } else {
@@ -229,14 +313,14 @@ export default function Profile() {
           if (backendRespId) {
             await supabase
               .from('profiles')
-              .upsert({ user_id: user!.sub, backend_artist_id: backendRespId })
-              .eq('user_id', user!.sub);
+              .upsert({ user_id: user!.sub, backend_artist_id: backendRespId });
             setBackendArtistId(backendRespId);
             setLocked(true);
           }
         }
       } catch (err) {
         console.error('Error syncing artist with backend:', err);
+        setBackendDebug(prev => `Sync error: ${err}${prev ? '\n' + prev : ''}`);
         setError('Profil gespeichert, aber Künstler konnte nicht ans Backend synchronisiert werden. Versuch es später nochmal.');
       }
       // navigate("/dashboard");
@@ -253,18 +337,7 @@ export default function Profile() {
   return (
     <div className="max-w-xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Profil einrichten</h1>
-      {locked && (
-        <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 rounded">
-          <p className="mb-2">✅ Profil ist abgeschlossen und an das Backend gesendet. Es ist aktuell gesperrt.</p>
-          <button
-            type="button"
-            className="underline"
-            onClick={() => { setLocked(false); setSuccess(false); }}
-          >
-            Profil bearbeiten
-          </button>
-        </div>
-      )}
+      {/* locked notice removed from top */}
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {success && (
         <div className="mb-4 text-green-700 bg-green-100 border border-green-400 rounded p-3">
@@ -365,6 +438,23 @@ export default function Profile() {
           {locked ? "Profil gesperrt" : loading ? "Speichern..." : "Profil speichern"}
         </button>
       </form>
+      {locked && (
+        <div className="mt-6 p-4 bg-transparent border border-white rounded-md text-white shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+          <p className="mb-2">✅ Profil ist abgeschlossen und an das Backend gesendet. Es ist aktuell gesperrt.</p>
+          <button
+            type="button"
+            className="underline"
+            onClick={() => { setLocked(false); setSuccess(false); }}
+          >
+            Profil bearbeiten
+          </button>
+        </div>
+      )}
+      {backendDebug && (
+        <div className="mt-4 p-3 bg-gray-100 border rounded text-xs whitespace-pre-wrap">
+          <strong>Debug Log:</strong>
+          <div>{backendDebug}</div>
+        </div>
+      )}
     </div>
-);
-}
+); }
