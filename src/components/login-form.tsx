@@ -10,10 +10,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import React, { useState } from "react";
-import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
 
 export function Login({
   className,
@@ -23,35 +23,52 @@ export function Login({
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    console.log("Calling verify at:", import.meta.env.VITE_API_URL);
+  const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      alert(error.message);
-    } else {
-      console.log("Access Token:", data.session?.access_token);
-      const accessToken = data.session?.access_token;
-      // Verify token with Flask backend
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+    console.log("handleSignIn triggered", { email, password });
+    setLoading(true);
+    try {
+      // Authenticate with Supabase
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) {
+        console.error("Supabase signIn error:", signInError);
+        alert("Login failed: " + signInError.message);
+        return;
+      }
+      const session = signInData.session;
+      const supUser = signInData.user;
+      if (!session || !supUser) {
+        throw new Error("No session or user returned from Supabase");
+      }
+      const token = session.access_token;
+      // Verify Supabase JWT with backend
+      const verifyRes = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-      if (!res.ok) {
-        const err = await res.json();
-        alert("Backend verification failed: " + (err.msg || err.error));
+      console.log("Verify response:", verifyRes.status);
+      const verifyJson = await verifyRes.json().catch(() => ({}));
+      if (!verifyRes.ok) {
+        console.error("Verify failed:", verifyJson);
+        alert("Token verification failed");
         return;
       }
-      const { user } = await res.json();
-      console.log("Verified user payload:", user);
-      // Update AuthContext and redirect
-      setUser(user);
-      setToken(accessToken);
-      navigate("/dashboard");
+
+      // Update AuthContext with user identity
+      setToken(token);
+      // Store authenticated user in context
+      setUser({ sub: supUser.id, ...supUser });
+      navigate("/profile");
+    } catch (err) {
+      console.error("handleSignIn exception:", err);
+      alert("Unexpected error during login: " + (err instanceof Error ? err.message : String(err)));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,13 +76,13 @@ export function Login({
     <div className={cn("flex flex-col gap-6 w-full md:max-w-screen-md mx-auto", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
+          <CardTitle className="text-xl">Login for Artists</CardTitle>
           <CardDescription>
             Login with your Apple or Google account
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSignIn} className="">
+          <form className="">
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full">
@@ -117,7 +134,9 @@ export function Login({
                     onChange={e => setPassword(e.target.value)}
                   />
                 </div>
-                <Button type="submit" className="w-full mt-2">
+                <Button type="button" className="w-full mt-2" onClick={handleSignIn}
+                  disabled={loading}
+                >
                   Login
                 </Button>
               </div>
