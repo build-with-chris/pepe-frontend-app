@@ -68,9 +68,31 @@ const CalendarPage: React.FC = () => {
   const [available, setAvailable] = useState<AvailabilitySlot[]>([]);
   const availableDates = available.map((s) => new Date(s.date));
   const modifiers = { available: availableDates };
-  const modifiersClassNames = { available: 'bg-green-500/80 text-white rounded-full' };
+  const modifiersClassNames = { available: 'bg-green-500/80 text-white rounded-full transition-colors' };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [rangeStart, setRangeStart] = useState<Date | null>(null);
+  const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
+  const [processingRange, setProcessingRange] = useState(false);
+
+  const getDateRange = (start: Date, end: Date) => {
+    const dates: Date[] = [];
+    const current = new Date(start);
+    while (current <= end) {
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 1);
+    }
+    return dates;
+  };
+
+  // lokale YYYY-MM-DD Formatierung, vermeidet UTC Off-by-One
+  const formatISODate = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
 
   const { backendArtistId, loadingArtistId, profileFetchTried, profileMissingBackendArtistId, refreshArtistId } =
     useBackendArtistId(supabase, user, token);
@@ -82,6 +104,10 @@ const CalendarPage: React.FC = () => {
     // expose for manual console inspection
     (window as any).__CAL_DEBUG = { user, backendArtistId, supabaseUserId };
   }, [user, backendArtistId, supabaseUserId]);
+
+  useEffect(() => {
+    console.log("AVAILABLE STATE UPDATED:", available);
+    }, [available]);
 
   useEffect(() => {
     if (token) {
@@ -131,7 +157,7 @@ const CalendarPage: React.FC = () => {
       console.log('Sample dates from backend', data.slice(0, 10).map(d => d.date));
       console.log(
         'Normalized selected dates for DayPicker',
-        data.map(d => new Date(d.date).toISOString().split('T')[0])
+        data.map(d => formatISODate(new Date(d.date)))
       );
       setAvailable(data);
     } catch (err: any) {
@@ -143,31 +169,53 @@ const CalendarPage: React.FC = () => {
   };
 
   const addAvailability = async (date: Date) => {
-    if (!token) return;
-    const iso = date.toISOString().split("T")[0];
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/availability`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(backendArtistId ? { date: iso, artist_id: backendArtistId } : { date: iso }),
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Add failed: ${res.status} ${text}`);
-      }
-      const newSlot: AvailabilitySlot = await res.json();
-      setAvailable((prev) => [...prev, newSlot]);
-    } catch (err: any) {
-      console.error("addAvailability error", err);
-      setError("Verfügbarkeit konnte nicht hinzugefügt werden.");
+  if (!token) return;
+  const iso = formatISODate(date);
+  if (available.some((s) => s.date === iso)) return; // schon vorhanden
+
+  // Optimistischer Eintrag (temporär)
+  const tempSlot: AvailabilitySlot = { id: -Date.now(), date: iso };
+  setAvailable((prev) => [...prev, tempSlot]);
+
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/availability`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(backendArtistId ? { date: iso, artist_id: backendArtistId } : { date: iso }),
+    });
+    const text = await res.text();
+    if (!res.ok) {
+      console.error("addAvailability failed", res.status, text);
+      // Rückgängig machen
+      setAvailable((prev) => prev.filter((s) => s.id !== tempSlot.id));
+      throw new Error(`Add failed: ${res.status} ${text}`);
     }
-  };
+
+    let newSlot: AvailabilitySlot;
+    try {
+      newSlot = JSON.parse(text);
+    } catch (parseErr) {
+      console.warn("Could not parse created availability, using fallback", parseErr, text);
+      newSlot = { id: tempSlot.id, date: iso }; // behalte temporären Eintrag
+    }
+
+    setAvailable((prev) => {
+      const withoutTemp = prev.filter((s) => s.id !== tempSlot.id && s.date !== iso);
+      return [...withoutTemp, newSlot];
+    });
+  } catch (err: any) {
+    console.error("addAvailability error", err);
+    setError("Verfügbarkeit konnte nicht hinzugefügt werden.");
+  }
+};
 
   const removeAvailability = async (slot: AvailabilitySlot) => {
     if (!token) return;
+    // optimistische Entfernung direkt
+    setAvailable((prev) => prev.filter((s) => s.id !== slot.id));
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/availability/${slot.id}`, {
         method: "DELETE",
@@ -177,10 +225,11 @@ const CalendarPage: React.FC = () => {
         const text = await res.text();
         throw new Error(`Remove failed: ${res.status} ${text}`);
       }
-      setAvailable((prev) => prev.filter((s) => s.id !== slot.id));
     } catch (err: any) {
       console.error("removeAvailability error", err);
       setError("Verfügbarkeit konnte nicht entfernt werden.");
+      // im Fehlerfall zurückrollen
+      setAvailable((prev) => [...prev, slot]);
     }
   };
 
@@ -191,29 +240,51 @@ const CalendarPage: React.FC = () => {
 
   // helper to check if date is available
   const isAvailable = (date: Date) => {
-    const iso = date.toISOString().split("T")[0];
+    const iso = formatISODate(date);
     return available.some((s) => s.date === iso);
   };
 
-  const handleDayClick = async (date: Date | undefined, _: any, event?: React.MouseEvent) => {
-    if (event) event.preventDefault();
-    if (!date) return;
-    setError(null);
-    try {
-      if (isAvailable(date)) {
-        const iso = date.toISOString().split("T")[0];
+ const handleDayClick = async (date: Date | undefined, _: any, event?: React.MouseEvent) => {
+  if (event) event.preventDefault();
+  if (!date) return;
+  setError(null);
+
+  // wenn kein Range läuft oder der vorherige abgeschlossen ist, neuen starten
+  if (!rangeStart || (rangeStart && rangeEnd)) {
+    setRangeStart(date);
+    setRangeEnd(null);
+    return;
+  }
+
+  // Start gesetzt, aber noch kein Ende
+  if (rangeStart && !rangeEnd) {
+    if (date < rangeStart) {
+      setRangeStart(date);
+      return;
+    }
+
+    // gleicher Tag: sofort toggeln (einzeln) ohne await, optimistisches UI
+    if (date.getTime() === rangeStart.getTime()) {
+      const iso = formatISODate(date);
+      const already = available.some((s) => s.date === iso);
+      if (already) {
         const slot = available.find((s) => s.date === iso);
         if (slot) {
-          await removeAvailability(slot);
+          removeAvailability(slot);
         }
       } else {
-        await addAvailability(date);
+        addAvailability(date);
       }
-    } catch (e: any) {
-      console.error('handleDayClick error', e);
-      setError('Fehler beim Verarbeiten des Tages.');
+      setRangeStart(null);
+      setRangeEnd(null);
+      return;
     }
-  };
+
+    // gültiges Enddatum wählen
+    setRangeEnd(date);
+    return;
+  }
+};
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -258,6 +329,128 @@ const CalendarPage: React.FC = () => {
         modifiers={modifiers}
         modifiersClassNames={modifiersClassNames}
       />
+      <div className="mt-4">
+        {rangeStart && !rangeEnd && (
+          <div className="mb-2">
+            <strong>Enddatum wählen.</strong>
+            <button
+              className="ml-4 underline text-sm"
+              onClick={() => { setRangeStart(null); setRangeEnd(null); }}
+            >
+              Abbrechen
+            </button>
+          </div>
+        )}
+        {rangeStart && rangeEnd && (
+          (() => {
+            const datesInRange = getDateRange(rangeStart, rangeEnd);
+            const isoRange = datesInRange.map(d => formatISODate(d));
+            const availableInRange = isoRange.filter(d => available.some(s => s.date === d));
+            const allAvailable = availableInRange.length === isoRange.length;
+            const noneAvailable = availableInRange.length === 0;
+            const title = `${rangeStart.toLocaleDateString()} bis ${rangeEnd.toLocaleDateString()}`;
+            return (
+              <div className="mb-3 p-3 border rounded bg-gray-800 text-white flex flex-col gap-2">
+                <div>Ausgewählter Zeitraum: <strong>{title}</strong></div>
+                <div className="flex gap-2">
+                  {allAvailable && (
+                    <button
+                      className="px-3 py-1 bg-red-600 rounded"
+                      disabled={processingRange}
+                      onClick={async () => {
+                        setProcessingRange(true);
+                        try {
+                          // alle entfernen
+                          for (const iso of isoRange) {
+                            const slot = available.find(s => s.date === iso);
+                            if (slot) await removeAvailability(slot);
+                          }
+                        } finally {
+                          setProcessingRange(false);
+                          setRangeStart(null);
+                          setRangeEnd(null);
+                        }
+                      }}
+                    >
+                      Verfügbarkeit löschen für {title}
+                    </button>
+                  )}
+                  {noneAvailable && (
+                    <button
+                      className="px-3 py-1 bg-green-600 rounded"
+                      disabled={processingRange}
+                      onClick={async () => {
+                        setProcessingRange(true);
+                        try {
+                          // alle hinzufügen
+                          for (const iso of isoRange) {
+                            await addAvailability(new Date(iso));
+                          }
+                        } finally {
+                          setProcessingRange(false);
+                          setRangeStart(null);
+                          setRangeEnd(null);
+                        }
+                      }}
+                    >
+                      Verfügbarkeit hinzufügen für {title}
+                    </button>
+                  )}
+                  {!allAvailable && !noneAvailable && (
+                    <>
+                      <button
+                        className="px-3 py-1 bg-green-600 rounded"
+                        disabled={processingRange}
+                        onClick={async () => {
+                          setProcessingRange(true);
+                          try {
+                            for (const iso of isoRange) {
+                              if (!available.some(s => s.date === iso)) {
+                                await addAvailability(new Date(iso));
+                              }
+                            }
+                          } finally {
+                            setProcessingRange(false);
+                            setRangeStart(null);
+                            setRangeEnd(null);
+                          }
+                        }}
+                      >
+                        Alle als verfügbar setzen
+                      </button>
+                      <button
+                        className="px-3 py-1 bg-red-600 rounded"
+                        disabled={processingRange}
+                        onClick={async () => {
+                          setProcessingRange(true);
+                          try {
+                            for (const iso of isoRange) {
+                              const slot = available.find(s => s.date === iso);
+                              if (slot) await removeAvailability(slot);
+                            }
+                          } finally {
+                            setProcessingRange(false);
+                            setRangeStart(null);
+                            setRangeEnd(null);
+                          }
+                        }}
+                      >
+                        Alle entfernen
+                      </button>
+                    </>
+                  )}
+                  <button
+                    className="ml-auto underline text-sm"
+                    onClick={() => { setRangeStart(null); setRangeEnd(null); }}
+                  >
+                    Abbrechen
+                  </button>
+                </div>
+              </div>
+            );
+          })()
+        )}
+      </div>
       {error && error.startsWith("Fehler beim Laden: 500") && (
         <div className="mt-2 text-sm text-yellow-700">
           Wenn weiterhin 500 kommt: Backend-Logs checken oder Token prüfen.
