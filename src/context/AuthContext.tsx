@@ -30,16 +30,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // initial session
-    supabase.auth.getSession().then(({ data }) => {
+    (async () => {
+      const { data } = await supabase.auth.getSession();
       const session: Session | null = data.session;
       if (session) {
         const u = session.user;
         setToken(session.access_token);
         setUser({ sub: u.id, email: u.email || undefined, role: (u.user_metadata as any)?.role || undefined });
+        (window as any).supabaseClient = supabase;
       }
-    });
+    })();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, newSession) => {
+    let subscription: { unsubscribe: () => void } | null = null;
+    const { data: listenerData } = supabase.auth.onAuthStateChange((_, newSession) => {
       if (newSession) {
         const u = newSession.user;
         setToken(newSession.access_token);
@@ -48,9 +51,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setToken(null);
         setUser(null);
       }
+      (window as any).supabaseClient = supabase;
     });
+    if (listenerData && typeof listenerData.subscription?.unsubscribe === 'function') {
+      subscription = listenerData.subscription;
+    }
+
     return () => {
-      subscription?.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 

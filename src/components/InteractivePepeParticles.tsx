@@ -311,8 +311,8 @@ export default function InteractivePepeParticles() {
   }, []);
 
   return (
-    <div className="relative w-full h-full">
-      <canvas ref={canvasRef} className="w-full h-full block" />
+    <div className="relative w-full h-full p-0 m-0">
+      <canvas ref={canvasRef} className="w-full h-full block p-0 m-0" />
     </div>
   );
 }

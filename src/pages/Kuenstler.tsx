@@ -19,8 +19,14 @@ const artists = [
 export default function Kuenstler(){
     return (
       <div>
+
         <div className="relative h-[400px] md:h-[600px] lg:h-[800px] overflow-hidden flex items-start justify-center">
           <CarouselOrientation />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <h2 className="text-4xl md:text-6xl font-bold text-white text-center">
+              Wir machen ihr Event<br />unvergesslich
+            </h2>
+          </div>
         </div>
         <div className="container mx-auto p-6 text-white">
           <section className="intro mb-12 space-y-4">

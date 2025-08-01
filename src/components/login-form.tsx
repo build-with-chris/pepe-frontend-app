@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +24,9 @@ export function Login({
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSignIn = async (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.preventDefault();
     console.log("handleSignIn triggered", { email, password });
     setLoading(true);
@@ -84,7 +85,7 @@ export function Login({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="">
+          <form className="" onSubmit={handleSignIn}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
                 <Button variant="outline" className="w-full">
@@ -135,7 +136,7 @@ export function Login({
                     onChange={e => setPassword(e.target.value)}
                   />
                 </div>
-                <Button type="button" className="w-full mt-2" onClick={handleSignIn} disabled={loading}>
+                <Button type="submit" className="w-full mt-2" disabled={loading}>
                   Login
                 </Button>
               </div>
