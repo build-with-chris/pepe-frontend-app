@@ -12,6 +12,7 @@ import Navbar01Page from './components/navbar-01/navbar-01';
 import Profile from './pages/ProfileSetup.tsx'
 import SplashScreen from './pages/SplashScreen';
 import CalendarPage from './pages/Kalender';
+import Kontakt from './pages/Kontakt';
 import MyGigs from './pages/MyGigs';
 import MeineAnfragen from './pages/MeineAnfragen';
 
@@ -28,6 +29,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/anfragen" element={<Anfragen />} />
         <Route path="/kuenstler" element={<Kuenstler />} />
+        <Route path="/kontakt" element={<Kontakt />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
       

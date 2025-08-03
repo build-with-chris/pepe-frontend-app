@@ -31,7 +31,7 @@ export const NavMenu = ({ user: passedUser, ...props }: NavMenuExtProps) => {
             { label: "Home", to: "/home" },
             { label: "Booking Assistent", to: "/anfragen" },
             { label: "Künstler", to: "/kuenstler" },
-            { label: "Contact Us", to: "#" },
+            { label: "Kontakt", to: "/kontakt" },
           ],
     [loggedIn]
   );
