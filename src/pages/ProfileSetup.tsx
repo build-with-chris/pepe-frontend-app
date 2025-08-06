@@ -92,7 +92,7 @@ export default function Profile() {
           setPhoneNumber(data.phone_number || '');
           setDisciplines(data.disciplines || []);
           setPriceMin(data.price_min || 500);
-          setPriceMax(data.price_max || 2000);
+          setPriceMax(data.price_max || 700);
           if (data.backend_artist_id) {
             setBackendArtistId(data.backend_artist_id);
             setLocked(true);

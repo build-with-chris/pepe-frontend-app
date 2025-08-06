@@ -87,7 +87,8 @@ const MeineAnfragen: React.FC = () => {
 
   const filtered = anfragen.filter(a => {
     if (activeTab === 'aktion') {
-      return String(a.status).toLowerCase() === 'requested';
+      const st = String(a.status).toLowerCase();
+      return st === 'requested' || st === 'angefragt';
     }
     return true;
   });
@@ -121,7 +122,7 @@ const MeineAnfragen: React.FC = () => {
     // optimistisch: status auf angeboten setzen
     setAnfragen(prev => prev.map(a => (a.id === id ? { ...a, status: 'angeboten' } as any : a)));
     try {
-      await apiFetch(`/api/requests/${id}/offer`, {
+      await apiFetch(`/api/requests/requests/${id}/offer`, {
         method: 'PUT',
         body: JSON.stringify({ artist_gage: preisNum }),
       });

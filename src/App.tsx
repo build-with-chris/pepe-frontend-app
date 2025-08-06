@@ -15,6 +15,9 @@ import CalendarPage from './pages/Kalender';
 import Kontakt from './pages/Kontakt';
 import MyGigs from './pages/MyGigs';
 import MeineAnfragen from './pages/MeineAnfragen';
+import Rechnungen from './pages/Invoices';
+import AnstehendeGigs from './pages/PendingGigs';
+import KuenstlerVerwaltung from './pages/Artists';
 
 function App() {
   const location = useLocation();
@@ -44,6 +47,9 @@ function App() {
 
         <Route element={<ProtectedRoute requiredRole="admin" />}>
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/rechnungen" element={<Rechnungen />} />
+          <Route path="/admin/anstehende-gigs" element={<AnstehendeGigs />} />
+          <Route path="/admin/kuenstler" element={<KuenstlerVerwaltung />} />
         </Route>
       </Routes>
     {!['/anfragen', '/login', '/signup'].includes(location.pathname) && <Footer />}

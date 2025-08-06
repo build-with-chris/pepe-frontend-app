@@ -33,17 +33,27 @@ const Navbar01Page = () => {
 
           <div className="flex items-center gap-3">
             {user ? (
-              <Button variant="secondary" size="lg" className="hidden sm:inline-flex" onClick={handleLogout}>
-                Logout
-              </Button>
-            ) : (
-              <Link to="/login">
-                <Button variant="secondary" size="lg" className="hidden sm:inline-flex">
-                  Sign In
+              <div className="w-auto max-w-xs md:max-w-none">
+                <Button
+                  variant="secondary"
+                  className="text-sm px-3 py-1.5 md:text-base md:px-5 md:py-2.5"
+                  onClick={handleLogout}
+                >
+                  Logout
                 </Button>
-              </Link>
+              </div>
+            ) : (
+              <div className="w-auto max-w-xs md:max-w-none">
+                <Link to="/login">
+                  <Button
+                    variant="secondary"
+                    className="text-sm px-3 py-1.5 md:text-base md:px-5 md:py-2.5"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              </div>
             )}
-
             {/* Mobile Menu */}
             <div className="md:hidden">
               <NavigationSheet />

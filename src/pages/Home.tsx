@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import PepesParticles from "@/components/InteractivePepeParticles";
+import hero from "../assets/LP TRY.png"
 
 export default function Home() {
   return (
     <>
-           <div className="w-screen" style={{ background: 'radial-gradient(circle at center, rgba(79,91,220,0.22) 30%, rgba(0,0,0,0.05) 90%)' }}>
+           <div
+      className="w-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${hero})` }}
+    >
         {/* Animation oben: shrinkwrap + padding */}
         <div className="flex justify-center">
           <div className="relative rounded-4xl w-full max-w-[900px] aspect-[8/3] overflow-hidden">
@@ -15,7 +19,6 @@ export default function Home() {
 
         {/* Titel + Call-to-Action darunter */}
         <div className="flex flex-col items-center text-white gap-6 p-6">
-          <h2 className="text-3xl font-black text-white">Wo Kunst zu Magie wird</h2>
           <Link to="/anfragen">
             <Button size="xl" className="font-bold text-white">
               Booking Assistant

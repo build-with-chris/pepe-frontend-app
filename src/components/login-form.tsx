@@ -65,8 +65,17 @@ export function Login({
 
       // Update AuthContext with user identity
       setToken(token);
-      setUser({ sub: supUser.id, ...supUser });
-      navigate("/profile");
+      setUser({
+        sub: supUser.id,
+        email: supUser.email || undefined,
+        role: (supUser.app_metadata as any)?.role || undefined,
+      });
+      const role = (supUser.app_metadata as any)?.role;
+      if (role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/profile');
+      }
     } catch (err) {
       console.error("handleSignIn exception:", err);
       alert("Unexpected error during login: " + (err instanceof Error ? err.message : String(err)));

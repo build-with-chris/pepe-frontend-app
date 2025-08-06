@@ -5,9 +5,9 @@ import {
   NavigationMenuList,
 } from "../ui/navigation-menu";
 import type { NavigationMenuProps } from "@radix-ui/react-navigation-menu";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { useMemo } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 interface NavMenuExtProps extends NavigationMenuProps {
   user?: any | null; // optional override, falls gewünscht
@@ -17,24 +17,34 @@ export const NavMenu = ({ user: passedUser, ...props }: NavMenuExtProps) => {
   const { user: contextUser } = useAuth();
   const user = passedUser !== undefined ? passedUser : contextUser;
   const loggedIn = Boolean(user);
+  const isAdmin = user?.role === 'admin';
+  console.log('🧭 NavMenu - current user:', user);
+  console.log('🧭 NavMenu - isAdmin flag:', isAdmin);
 
-  const menuItems = useMemo(
-    () =>
-      loggedIn
-        ? [
-            { label: "Profil", to: "/profile" },
-            { label: "Kalender", to: "/kalender" },
-            { label: "Anfragen", to: "/meine-anfragen" },
-            { label: "Meine Gigs", to: "/meine-gigs" },
-          ]
-        : [
-            { label: "Home", to: "/home" },
-            { label: "Booking Assistent", to: "/anfragen" },
-            { label: "Künstler", to: "/kuenstler" },
-            { label: "Kontakt", to: "/kontakt" },
-          ],
-    [loggedIn]
-  );
+  const menuItems = useMemo(() => {
+    console.log('🧭 NavMenu - computing menuItems, isAdmin=', isAdmin, 'loggedIn=', loggedIn);
+    if (isAdmin) {
+      return [
+        { label: 'Dashboard', to: '/admin' },
+        { label: 'Rechnungen', to: '/admin/rechnungen' },
+        { label: 'Anstehende Gigs', to: '/admin/anstehende-gigs' },
+        { label: 'Künstler', to: '/admin/kuenstler' },
+      ];
+    }
+    return loggedIn
+      ? [
+          { label: 'Profil', to: '/profile' },
+          { label: 'Kalender', to: '/kalender' },
+          { label: 'Anfragen', to: '/meine-anfragen' },
+          { label: 'Meine Gigs', to: '/meine-gigs' },
+        ]
+      : [
+          { label: 'Home', to: '/home' },
+          { label: 'Booking Assistent', to: '/anfragen' },
+          { label: 'Künstler', to: '/kuenstler' },
+          { label: 'Kontakt', to: '/kontakt' },
+        ];
+  }, [loggedIn, isAdmin]);
 
   return (
     <NavigationMenu {...props}>
