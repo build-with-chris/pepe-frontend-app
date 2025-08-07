@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { HiCalendar, HiLocationMarker, HiClock, HiCurrencyEuro } from 'react-icons/hi';
 import { useAuth } from '../context/AuthContext';
 
-type Status = 'requested' | 'angefragt' | 'angeboten' | 'akzeptiert' | 'abgelehnt' | 'storniert';
+type Status = 'angefragt' | 'angeboten' | 'akzeptiert' | 'abgelehnt' | 'storniert';
 
 interface Anfrage {
   id: number | string;
@@ -19,11 +20,12 @@ interface Anfrage {
   special_requests: string;
   status: Status | string;
   team_size: string | number;
+  artist_gage?: number;           
+  artist_offer_date?: string;    
 }
 
 const statusDisplay: Record<string, string> = {
-  requested: 'Aktion nötig',
-  angefragt: 'Angefragt',
+  angefragt: 'Aktion nötig',
   angeboten: 'Angeboten',
   akzeptiert: 'Akzeptiert',
   abgelehnt: 'Abgelehnt',
@@ -75,6 +77,8 @@ const MeineAnfragen: React.FC = () => {
         // Erwartet ein Array direkt oder in { requests: [...] }
         const list: Anfrage[] = Array.isArray(data) ? data : data.requests || [];
         setAnfragen(list);
+        console.log('🕵️‍♀️ Loaded requests with all fields:', list);
+        console.log('🧐 Loaded statuses:', list.map(a => a.status));
       } catch (e: any) {
         console.error('Fehler beim Laden:', e);
         setError(e.message || 'Fehler beim Laden der Anfragen');
@@ -86,11 +90,17 @@ const MeineAnfragen: React.FC = () => {
   }, [token]);
 
   const filtered = anfragen.filter(a => {
+    const st = String(a.status).toLowerCase();
+    console.log(`🧐 Filtering id=${a.id}, raw='${a.status}', norm='${st}', tab='${activeTab}'`);
     if (activeTab === 'aktion') {
-      const st = String(a.status).toLowerCase();
-      return st === 'requested' || st === 'angefragt';
+      // Zeige nur angefragte (noch nicht beantwortete) Anfragen
+      return st === 'angefragt';
     }
-    return true;
+    // Bei 'alle' Tab wirklich alle anzeigen
+    if (activeTab === 'alle') {
+      return true;
+    }
+    return false;  // falls später weitere Tabs hinzukommen
   });
 
   const formatDate = (d: string) => {
@@ -106,6 +116,12 @@ const MeineAnfragen: React.FC = () => {
     return t.slice(0,5);
   };
 
+  // Extract the city part from an address (last segment after comma)
+  const getCity = (address: string) => {
+    const parts = address.split(',');
+    return parts.length > 1 ? parts[parts.length - 1].trim() : address;
+  };
+
   const handleOfferChange = (id: string | number, value: string) => {
     setOfferInputs(prev => ({ ...prev, [id]: value }));
   };
@@ -119,19 +135,21 @@ const MeineAnfragen: React.FC = () => {
       return;
     }
     setSubmitting(id);
-    // optimistisch: status auf angeboten setzen
-    setAnfragen(prev => prev.map(a => (a.id === id ? { ...a, status: 'angeboten' } as any : a)));
+    // Optimistische Aktualisierung von Status und Gage
+    setAnfragen(prev => prev.map(a => a.id === id ? { ...a, status: 'angeboten', artist_gage: preisNum } : a));
     try {
-      await apiFetch(`/api/requests/requests/${id}/offer`, {
+      const result = await apiFetch(`/api/requests/requests/${id}/offer`, {
         method: 'PUT',
         body: JSON.stringify({ artist_gage: preisNum }),
       });
+      // Aktualisiere mit den vom Server gelieferten Werten
+      setAnfragen(prev => prev.map(a => a.id === id ? { ...a, status: result.status, artist_gage: result.price_offered } : a));
       alert('Angebot erfolgreich an den Admin weitergegeben.');
     } catch (e: any) {
       console.error(e);
       alert('Fehler beim Absenden des Angebots: ' + (e.message || '')); 
       // rollback
-      setAnfragen(prev => prev.map(a => (a.id === id ? { ...a, status: 'requested' } as any : a)));
+      setAnfragen(prev => prev.map(a => a.id === id ? { ...a, status: 'angefragt' } : a));
     } finally {
       setSubmitting(null);
     }
@@ -142,13 +160,17 @@ const MeineAnfragen: React.FC = () => {
       <h1 className="text-2xl font-semibold mb-4">Meine Anfragen</h1>
       <div className="flex gap-3 mb-6">
         <button
-          className={`px-4 py-2 rounded ${activeTab === 'aktion' ? 'bg-black text-white' : 'border'}`}
+          className={`px-4 py-2 rounded hover:bg-white hover:text-black ${
+            activeTab === 'aktion' ? 'bg-white text-black' : 'text-white'
+          }`}
           onClick={() => setActiveTab('aktion')}
         >
           Aktion nötig
         </button>
         <button
-          className={`px-4 py-2 rounded ${activeTab === 'alle' ? 'bg-black text-white' : 'border'}`}
+          className={`px-4 py-2 rounded hover:bg-white hover:text-black ${
+            activeTab === 'alle' ? 'bg-white text-black' : 'text-white'
+          }`}
           onClick={() => setActiveTab('alle')}
         >
           Alle Anfragen
@@ -158,9 +180,6 @@ const MeineAnfragen: React.FC = () => {
       {loading && <div>lade Anfragen…</div>}
       {error && <div className="text-red-600 mb-4">{error}</div>}
 
-      <div className="mb-4 text-xs bg-gray-100 p-3 rounded">
-        <div className="font-mono break-words">Debug raw data: {JSON.stringify(anfragen.slice(0,5), null, 2)}</div>
-      </div>
 
       {!loading && filtered.length === 0 && (
         <div className="text-center text-gray-600">Keine Anfragen in dieser Ansicht.</div>
@@ -168,16 +187,35 @@ const MeineAnfragen: React.FC = () => {
 
       <div className="space-y-6">
         {filtered.map(anfrage => (
-          <div key={anfrage.id} className="border rounded-lg p-5 shadow-sm">
+          <>
+            {console.log('🕵️‍♀️ Rendering Anfrage object:', anfrage)}
+            <div key={anfrage.id} className="border rounded-lg p-5 shadow-sm">
             <div className="flex justify-between flex-wrap gap-4">
               <div className="flex-1 min-w-[200px]">
-                <div className="font-bold text-lg">{anfrage.event_type} – {anfrage.show_type}</div>
-                <div className="text-sm text-gray-600">
-                  {formatDate(anfrage.event_date)} {formatTime(anfrage.event_time)} · {anfrage.event_address}
+                <div className="font-bold text-lg mb-7">
+                  {anfrage.event_type} - {getCity(anfrage.event_address)} - {anfrage.show_type}
                 </div>
-                <div className="mt-1 text-sm">
-                  Empfohlene Gage: {anfrage.recommended_price_min.toLocaleString('de-DE')}€ – {anfrage.recommended_price_max.toLocaleString('de-DE')}€
+                <div className="flex items-center space-x-2 text-sm text-white">
+                  <HiCalendar className="w-4 h-4" />
+                  <span>{formatDate(anfrage.event_date)} {formatTime(anfrage.event_time)}</span>
                 </div>
+                <div className="flex items-center space-x-2 text-sm text-white">
+                  <HiLocationMarker className="w-4 h-4" />
+                  <span>{anfrage.event_address}</span>
+                </div>
+                <div className="mt-1 flex items-center space-x-2 text-sm">
+                  <HiCurrencyEuro className="w-4 h-4" />
+                  <span>Empfohlene Gage: {anfrage.recommended_price_min.toLocaleString('de-DE')}€ – {anfrage.recommended_price_max.toLocaleString('de-DE')}€</span>
+                </div>
+                <div className="mt-1 flex items-center space-x-2 text-sm font-medium">
+                  <HiClock className="w-4 h-4" />
+                  <span>Dauer der Show: {anfrage.duration_minutes} Minuten</span>
+                </div>
+                {anfrage.special_requests && (
+                  <div className="mt-1 text-sm">
+                    Besondere Wünsche: {anfrage.special_requests}
+                  </div>
+                )}
               </div>
               <div className="flex-none flex flex-col items-start gap-2">
                 <div>
@@ -185,7 +223,18 @@ const MeineAnfragen: React.FC = () => {
                     {statusDisplay[String(anfrage.status).toLowerCase()] || String(anfrage.status)}
                   </span>
                 </div>
-                {String(anfrage.status).toLowerCase() === 'requested' && (
+                {activeTab === 'alle' ? (
+                  <div className="space-y-1 text-sm">
+                    {anfrage.artist_gage != null ? (
+                      <div>Dein Angebot: {anfrage.artist_gage.toLocaleString('de-DE')}€</div>
+                    ) : (
+                      <div className="italic text-gray-500">Keine Gage abgegeben.</div>
+                    )}
+                    {anfrage.artist_offer_date && (
+                      <div>Gesendet am: {formatDate(anfrage.artist_offer_date)}{' '}{formatTime(anfrage.artist_offer_date)}</div>
+                    )}
+                  </div>
+                ) : String(anfrage.status).toLowerCase() === 'angefragt' ? (
                   <div className="flex flex-col gap-2 w-full">
                     <label className="text-sm font-medium">Dein Angebot (in €)</label>
                     <div className="flex gap-2">
@@ -204,13 +253,21 @@ const MeineAnfragen: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                )}
-                {String(anfrage.status).toLowerCase() !== 'requested' && (
-                  <div className="text-sm italic text-gray-500">Kein weiteres Handeln nötig.</div>
+                ) : (
+                  <div className="space-y-1 text-sm">
+                    <div className="italic text-gray-500">Kein weiteres Handeln nötig.</div>
+                    {anfrage.artist_gage != null && (
+                      <div>Dein Angebot: {anfrage.artist_gage.toLocaleString('de-DE')}€</div>
+                    )}
+                    {anfrage.artist_offer_date && (
+                      <div>Gesendet am: {formatDate(anfrage.artist_offer_date)}{' '}{formatTime(anfrage.artist_offer_date)}</div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
-          </div>
+            </div>
+          </>
         ))}
       </div>
     </div>

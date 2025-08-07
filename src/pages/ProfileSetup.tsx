@@ -72,6 +72,10 @@ export default function Profile() {
   const [backendArtistId, setBackendArtistId] = useState<string | null>(null);
   const [locked, setLocked] = useState(false);
   const [backendDebug, setBackendDebug] = useState<string | null>(null);
+  // Profile image and bio state
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [bio, setBio] = useState<string>('');
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -93,6 +97,8 @@ export default function Profile() {
           setDisciplines(data.disciplines || []);
           setPriceMin(data.price_min || 500);
           setPriceMax(data.price_max || 700);
+          setBio(data.bio || '');
+          setProfileImageUrl(data.image_url || null);
           if (data.backend_artist_id) {
             setBackendArtistId(data.backend_artist_id);
             setLocked(true);
@@ -250,6 +256,7 @@ export default function Profile() {
         }
 
         const effectiveBackendId = profileBackendArtistId || backendArtistId;
+        let backendRespId: string | null = null;
         if (effectiveBackendId) {
           if (!locked) {
             if (!user?.email) throw new Error('User email fehlt');
@@ -270,10 +277,11 @@ export default function Profile() {
                 .upsert({ user_id: user!.sub, backend_artist_id: updatedId });
               setBackendArtistId(updatedId);
               setLocked(true);
+              backendRespId = updatedId;
             } catch (err: any) {
               if (err.message === 'Artist not found') {
                 // fallback: neu erstellen
-                const backendRespId = await createOrFetchBackendArtist(token!, user.email, {
+                backendRespId = await createOrFetchBackendArtist(token!, user.email, {
                   name,
                   email: user.email,
                   address,
@@ -296,6 +304,7 @@ export default function Profile() {
           } else {
             setBackendArtistId(effectiveBackendId);
             setLocked(true);
+            backendRespId = effectiveBackendId;
           }
         } else {
           // neu anlegen wie vorher
@@ -309,7 +318,7 @@ export default function Profile() {
             price_min: priceMin,
             price_max: priceMax,
           };
-          const backendRespId = await createOrFetchBackendArtist(token!, user.email, artistPayload);
+          backendRespId = await createOrFetchBackendArtist(token!, user.email, artistPayload);
           if (backendRespId) {
             await supabase
               .from('profiles')
@@ -318,6 +327,36 @@ export default function Profile() {
             setLocked(true);
           }
         }
+
+        // ---- Profile image upload and bio update ----
+        if (backendRespId || effectiveBackendId) {
+          // upload image if provided
+          let imageUrl: string | null = null;
+          if (profileImageFile) {
+            try {
+              const fileExt = profileImageFile.name.split('.').pop();
+              const fileName = `${user!.sub}.${fileExt}`;
+              const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('profiles')
+                .upload(fileName, profileImageFile);
+              if (!uploadError) {
+                const { data: { publicUrl } } = supabase.storage.from('profiles').getPublicUrl(fileName);
+                imageUrl = publicUrl;
+                setProfileImageUrl(publicUrl);
+              }
+            } catch (imgErr) {
+              console.warn('Fehler beim Hochladen des Profilbilds:', imgErr);
+            }
+          }
+          // update Supabase profile with image_url and bio
+          await supabase.from('profiles').upsert({
+            user_id: user!.sub,
+            backend_artist_id: backendRespId || effectiveBackendId,
+            image_url: imageUrl,
+            bio: bio,
+          });
+        }
+        // ---- END Profile image upload and bio update ----
       } catch (err) {
         console.error('Error syncing artist with backend:', err);
         setBackendDebug(prev => `Sync error: ${err}${prev ? '\n' + prev : ''}`);
@@ -430,6 +469,30 @@ export default function Profile() {
             />
           </div>
         </div>
+        {/* Profile image and bio fields */}
+        <div>
+          <label className="block mb-1 font-medium">Profilbild</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={e => setProfileImageFile(e.target.files?.[0] ?? null)}
+            disabled={locked}
+            className="w-full"
+          />
+          {profileImageUrl && (
+            <img src={profileImageUrl} alt="Profilbild" className="mt-2 h-24 rounded object-cover" />
+          )}
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Über mich</label>
+          <textarea
+            value={bio}
+            onChange={e => setBio(e.target.value)}
+            disabled={locked}
+            className="w-full border px-3 py-2 rounded h-24"
+          />
+        </div>
+        {/* END Profile image and bio fields */}
         <button
           type="submit"
           disabled={loading || locked}
@@ -457,4 +520,5 @@ export default function Profile() {
         </div>
       )}
     </div>
-); }
+  );
+}

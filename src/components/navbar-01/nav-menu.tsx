@@ -18,8 +18,7 @@ export const NavMenu = ({ user: passedUser, ...props }: NavMenuExtProps) => {
   const user = passedUser !== undefined ? passedUser : contextUser;
   const loggedIn = Boolean(user);
   const isAdmin = user?.role === 'admin';
-  console.log('🧭 NavMenu - current user:', user);
-  console.log('🧭 NavMenu - isAdmin flag:', isAdmin);
+
 
   const menuItems = useMemo(() => {
     console.log('🧭 NavMenu - computing menuItems, isAdmin=', isAdmin, 'loggedIn=', loggedIn);

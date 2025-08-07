@@ -37,7 +37,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const u = session.user;
         setToken(session.access_token);
         setUser({ sub: u.id, email: u.email || undefined, role: (u.app_metadata as any)?.role || undefined });
-        console.log('👑 User-Role im Context:', (u.app_metadata as any)?.role);
         (window as any).supabaseClient = supabase;
       }
     })();
@@ -48,7 +47,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const u = newSession.user;
         setToken(newSession.access_token);
         setUser({ sub: u.id, email: u.email || undefined, role: (u.app_metadata as any)?.role || undefined });
-        console.log('👑 User-Role im Context:', (u.app_metadata as any)?.role);
       } else {
         setToken(null);
         setUser(null);

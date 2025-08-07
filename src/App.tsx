@@ -18,6 +18,7 @@ import MeineAnfragen from './pages/MeineAnfragen';
 import Rechnungen from './pages/Invoices';
 import AnstehendeGigs from './pages/PendingGigs';
 import KuenstlerVerwaltung from './pages/Artists';
+import OfferEditPage from './pages/OfferEditPage';
 
 function App() {
   const location = useLocation();
@@ -50,6 +51,10 @@ function App() {
           <Route path="/admin/rechnungen" element={<Rechnungen />} />
           <Route path="/admin/anstehende-gigs" element={<AnstehendeGigs />} />
           <Route path="/admin/kuenstler" element={<KuenstlerVerwaltung />} />
+          <Route
+            path="/admin/requests/:reqId/offers/:offerId/edit"
+            element={<OfferEditPage />}
+          />
         </Route>
       </Routes>
     {!['/anfragen', '/login', '/signup'].includes(location.pathname) && <Footer />}
