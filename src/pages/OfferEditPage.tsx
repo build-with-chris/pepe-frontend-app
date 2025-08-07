@@ -19,6 +19,33 @@ export default function OfferEditPage() {
   const [artistOfferData, setArtistOfferData] = useState<any>(null);
   const [artistNames, setArtistNames] = useState<string[]>([]);
 
+  const allowedStatuses = ['angefragt','angeboten','akzeptiert','abgelehnt','storniert'] as const;
+
+  async function handleStatusChange(offerId: number, newStatus: string) {
+    console.log('🔧 handleStatusChange called for offerId, newStatus:', offerId, newStatus);
+    try {
+      console.log(`🚀 Sending PUT to /admin/admin_offers/${offerId}`);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/admin_offers/${offerId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setAdminOffers(prev =>
+        prev.map(o => (o.id === offerId ? { ...o, status: newStatus } : o))
+      );
+    } catch (err) {
+      console.error('Status update failed', err);
+      alert('Status konnte nicht aktualisiert werden');
+    }
+  }
+
   useEffect(() => {
     if (!token || !reqId || !offerId) return;
     setLoading(true);
@@ -76,6 +103,17 @@ export default function OfferEditPage() {
                 .filter(a => reqData.artist_ids.includes(a.id))
                 .map(a => a.name);
               setArtistNames(names);
+              // Debug log loaded data
+              console.log('🔍 OfferEditPage loaded:', {
+                requestData: reqData,
+                adminOffers: offers,
+                artistOfferData: artistOffer,
+                artistNames: names,
+                recMin,
+                recMax,
+                gage,
+                notes
+              });
             })
             .catch(err => console.error('Fehler beim Laden der Künstlernamen:', err));
         }
@@ -114,7 +152,19 @@ export default function OfferEditPage() {
   }
 
   if (loading) return <p className="p-6 text-white">Lade Daten...</p>;
-  if (error) return <p className="p-6 text-red-500">Fehler: {error}</p>;
+  if (error) {
+    console.error('🚨 OfferEditPage error:', error);
+    return <p className="p-6 text-red-500">Fehler: {error}</p>;
+  }
+  // Debug log before render
+  console.log('🔄 Rendering OfferEditPage with state:', {
+    requestData,
+    adminOffers,
+    artistOfferData,
+    artistNames,
+    gage,
+    notes
+  });
 
   return (
     <div className="w-screen bg-black min-h-screen text-white">
@@ -145,16 +195,31 @@ export default function OfferEditPage() {
           {/* Right: Artist Offers */}
           <div className="grid grid-cols-1 gap-4">
             <h2 className="text-xl font-semibold mb-2">Artist-Angebote</h2>
-            {artistNames.map((name, idx) => (
-              <div key={requestData.artist_ids[idx]} className="bg-gray-800 p-4 rounded shadow">
-                <p><strong>Künstler:</strong> {name}</p>
+            {requestData.artist_ids.map((artistId, idx) => {
+              console.log('🔁 Rendering artist card idx:', idx, 'artistId:', artistId, 'adminOffer:', adminOffers[idx]);
+              return (
+              <div key={artistId} className="bg-gray-800 p-4 rounded shadow">
+                <p><strong>Künstler:</strong> {artistNames[idx] ?? artistId}</p>
                 {artistOfferData?.artist_gage != null ? (
                   <p><strong>Gesendete Gage:</strong> {artistOfferData.artist_gage.toLocaleString('de-DE')}€</p>
                 ) : (
                   <p className="italic">noch keine Gage gesendet</p>
                 )}
+                <label className="block mt-2 font-medium">Status</label>
+                <select
+                  className="mt-1 w-full bg-gray-700 text-white p-2 rounded"
+                  value={adminOffers[idx]?.status ?? requestData.status}
+                  onChange={e => handleStatusChange(adminOffers[idx]?.id, e.target.value)}
+                >
+                  {allowedStatuses.map(s => (
+                    <option key={s} value={s} className="text-black">
+                      {s}
+                    </option>
+                  ))}
+                </select>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
