@@ -80,17 +80,19 @@ export default function KuenstlerVerwaltung() {
               className="bg-gray-800 rounded shadow-lg cursor-pointer overflow-hidden"
               onClick={() => toggle(artist.id)}
             >
-              {artist.profile_image_url ? (
-                <img
-                  src={artist.profile_image_url}
-                  alt={artist.name}
-                  className="w-full h-48 object-cover"
-                />
-              ) : (
-                <div className="w-full h-48 bg-gray-700 flex items-center justify-center text-gray-400">
-                  Kein Bild
-                </div>
-              )}
+              <div className="relative w-full aspect-square bg-gray-700">
+                {artist.profile_image_url ? (
+                  <img
+                    src={artist.profile_image_url}
+                    alt={artist.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                    Kein Bild
+                  </div>
+                )}
+              </div>
               <div className="p-4">
                 <h2 className="text-lg font-semibold mb-2">{artist.name}</h2>
                 <p className="text-sm text-gray-300 whitespace-pre-line mb-2">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useAuth } from '@/context/AuthContext';
@@ -66,15 +66,45 @@ const CalendarPage: React.FC = () => {
   const { token, user, supabase } = useAuth();
   const supabaseUserId = (user as any)?.id || (user as any)?.sub || null;
   const [available, setAvailable] = useState<AvailabilitySlot[]>([]);
-  const availableDates = available.map((s) => new Date(s.date));
+  // Tick once per day at local midnight so the UI drops past days automatically
+  const [todayTick, setTodayTick] = useState(0);
+
+  // Start of today (local time)
+  const startOfToday = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, [todayTick]);
+
+  useEffect(() => {
+    const now = new Date();
+    const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    const ms = nextMidnight.getTime() - now.getTime() + 1000; // +1s safety
+    const t = setTimeout(() => setTodayTick((x) => x + 1), ms);
+    return () => clearTimeout(t);
+  }, [todayTick]);
+
+  // Only highlight future (and today) availability
+  const futureAvailable = useMemo(() => {
+    return available.filter((s) => {
+      const d = new Date(s.date + 'T00:00:00');
+      return d >= startOfToday;
+    });
+  }, [available, startOfToday]);
+
+  const availableDates = futureAvailable.map((s) => new Date(s.date));
   const modifiers = { available: availableDates };
   const modifiersClassNames = { available: 'bg-green-500/80 text-white rounded-full transition-colors' };
+  const disabledDays = { before: startOfToday };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [rangeStart, setRangeStart] = useState<Date | null>(null);
   const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
   const [processingRange, setProcessingRange] = useState(false);
+
+  // Merkt sich, für welches Datum (ISO) wir bereits automatisch Verfügbarkeit sichergestellt haben
+  const lastEnsuredIsoRef = useRef<string | null>(null);
 
   const getDateRange = (start: Date, end: Date) => {
     const dates: Date[] = [];
@@ -238,6 +268,37 @@ const CalendarPage: React.FC = () => {
     fetchAvailability();
   }, [token, backendArtistId, loadingArtistId]);
 
+  // Stelle sicher, dass immer "heute + 365" als verfügbar markiert ist (falls noch nicht vorhanden)
+  useEffect(() => {
+    if (!token) return;
+    if (!backendArtistId || loadingArtistId) return;
+
+    const oneYearAhead = new Date(startOfToday);
+    oneYearAhead.setDate(oneYearAhead.getDate() + 365);
+    const iso = formatISODate(oneYearAhead);
+
+    // Nur einmal pro Datum versuchen (verhindert Mehrfach-POSTs)
+    if (lastEnsuredIsoRef.current === iso) return;
+
+    const exists = available.some((s) => s.date === iso);
+    if (exists) {
+      lastEnsuredIsoRef.current = iso;
+      return;
+    }
+
+    console.log('🟢 Auto-Availability: adding', iso, 'for artist', backendArtistId);
+    lastEnsuredIsoRef.current = iso;
+    (async () => {
+      try {
+        await addAvailability(oneYearAhead);
+      } catch (e) {
+        console.warn('Auto-Availability failed for', iso, e);
+        // Beim Fehler erlauben wir einen erneuten Versuch (z. B. nach Reload)
+        lastEnsuredIsoRef.current = null;
+      }
+    })();
+  }, [token, backendArtistId, loadingArtistId, startOfToday, available]);
+
   // helper to check if date is available
   const isAvailable = (date: Date) => {
     const iso = formatISODate(date);
@@ -247,6 +308,8 @@ const CalendarPage: React.FC = () => {
  const handleDayClick = async (date: Date | undefined, _: any, event?: React.MouseEvent) => {
   if (event) event.preventDefault();
   if (!date) return;
+  // Ignore past dates entirely
+  if (date < startOfToday) return;
   setError(null);
 
   // wenn kein Range läuft oder der vorherige abgeschlossen ist, neuen starten
@@ -328,6 +391,7 @@ const CalendarPage: React.FC = () => {
         onDayClick={handleDayClick as any}
         modifiers={modifiers}
         modifiersClassNames={modifiersClassNames}
+        disabled={disabledDays}
       />
       <div className="mt-4">
         {rangeStart && !rangeEnd && (

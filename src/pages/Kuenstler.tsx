@@ -1,22 +1,45 @@
-import React from 'react';
-import {CarouselOrientation} from "@/components/carousel-Landingpage"
+import React, { useEffect, useState } from 'react';
+import { CarouselOrientation } from "@/components/carousel-Landingpage";
 
-
-const artists = [
-  {
-    name: 'Max Mustermann',
-    description: 'Ein Artist mit beeindruckender Cyr-Wheel-Technik und Bühnenpräsenz.',
-    imageSrc: '/assets/artists/max.jpg',
-  },
-  {
-    name: 'Anna Beispiel',
-    description: 'Luftakrobatin, die ihre Kunst mit filigranen Bewegungen in schwindelerregender Höhe zeigt.',
-    imageSrc: '/assets/artists/anna.jpg',
-  },
-  // Weitere Künstler hier hinzufügen...
-];
+interface Artist {
+  id: number;
+  name: string;
+  profile_image_url?: string | null;
+  bio?: string | null;
+}
 
 export default function Kuenstler(){
+  const [artists, setArtists] = useState<Artist[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const baseUrl = import.meta.env.VITE_API_URL;
+    const url = `${baseUrl}/api/artists`;
+    (async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        const rawList: any[] = Array.isArray(data) ? data : (data?.artists ?? []);
+        const mapped: Artist[] = rawList.map(a => ({
+          id: a.id,
+          name: a.name,
+          profile_image_url: a.profile_image_url ?? a.image_url ?? null,
+          bio: a.bio ?? null,
+        }));
+        setArtists(mapped);
+      } catch (e: any) {
+        console.error('Künstler-Laden fehlgeschlagen:', e);
+        setError(e?.message || 'Fehler beim Laden');
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
     return (
       <div>
 
@@ -49,16 +72,36 @@ export default function Kuenstler(){
           </section>
 
           <section className="artist-cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {artists.map(artist => (
-              <div key={artist.name} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <img
-                  src={artist.imageSrc}
-                  alt={artist.name}
-                  className="w-full h-48 object-cover"
-                />
+            {loading && (
+              <div className="col-span-full text-gray-300">Lade Künstler…</div>
+            )}
+            {error && (
+              <div className="col-span-full text-red-400">{error}</div>
+            )}
+            {!loading && !error && artists.length === 0 && (
+              <div className="col-span-full text-gray-300">Noch keine Künstler verfügbar.</div>
+            )}
+            {!loading && !error && artists.map(artist => (
+              <div key={artist.id} className="bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800">
+                <div className="relative w-full aspect-square bg-gray-800">
+                  {artist.profile_image_url ? (
+                    <img
+                      src={artist.profile_image_url}
+                      alt={artist.name}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                      Kein Bild
+                    </div>
+                  )}
+                </div>
                 <div className="p-4">
-                  <h2 className="text-2xl font-semibold mb-2">{artist.name}</h2>
-                  <p className="text-gray-600">{artist.description}</p>
+                  <h2 className="text-xl font-semibold mb-2 text-white">{artist.name}</h2>
+                  <p className="text-sm text-gray-300 whitespace-pre-line line-clamp-4">
+                    {artist.bio?.trim() || 'Keine Bio hinterlegt.'}
+                  </p>
                 </div>
               </div>
             ))}
