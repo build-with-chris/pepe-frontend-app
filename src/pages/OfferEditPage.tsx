@@ -16,17 +16,19 @@ export default function OfferEditPage() {
 
   const [requestData, setRequestData] = useState<any>(null);
   const [adminOffers, setAdminOffers] = useState<any[]>([]);
-  const [artistOfferData, setArtistOfferData] = useState<any>(null);
   const [artistNames, setArtistNames] = useState<string[]>([]);
+  const [artistStatuses, setArtistStatuses] = useState<Record<number, string>>({});
+  const [artistGages, setArtistGages] = useState<Record<number, number | null>>({});
 
   const allowedStatuses = ['angefragt','angeboten','akzeptiert','abgelehnt','storniert'] as const;
 
-  async function handleStatusChange(offerId: number, newStatus: string) {
-    console.log('🔧 handleStatusChange called for offerId, newStatus:', offerId, newStatus);
+  // Neuer Handler: Admin ändert Status für EINEN Artist (per-artist status)
+  async function handleArtistStatusChange(artistId: number, newStatus: string) {
+    if (!reqId) return;
+    console.log('🛠️ handleArtistStatusChange →', { reqId, artistId, newStatus });
     try {
-      console.log(`🚀 Sending PUT to /admin/admin_offers/${offerId}`);
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/admin/admin_offers/${offerId}`,
+        `${import.meta.env.VITE_API_URL}/admin/requests/${reqId}/artist_status/${artistId}`,
         {
           method: 'PUT',
           headers: {
@@ -37,11 +39,10 @@ export default function OfferEditPage() {
         }
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      setAdminOffers(prev =>
-        prev.map(o => (o.id === offerId ? { ...o, status: newStatus } : o))
-      );
+      // UI-State aktualisieren
+      setArtistStatuses(prev => ({ ...prev, [artistId]: newStatus }));
     } catch (err) {
-      console.error('Status update failed', err);
+      console.error('❌ Konnte Artist-Status nicht setzen', err);
       alert('Status konnte nicht aktualisiert werden');
     }
   }
@@ -49,51 +50,95 @@ export default function OfferEditPage() {
   useEffect(() => {
     if (!token || !reqId || !offerId) return;
     setLoading(true);
-    // Fetch all requests (artist view) to get recommended customer price
+    // Debug: Show all fetch URLs
+    const baseUrl = import.meta.env.VITE_API_URL;
+    console.groupCollapsed('🔎 OfferEditPage fetch URLs');
+    console.log('• admin requests all  →', `${baseUrl}/admin/requests/all`);
+    console.log('• admin_offers        →', `${baseUrl}/admin/requests/${reqId}/admin_offers`);
+    console.log('• per-artist statuses →', `${baseUrl}/admin/requests/${reqId}/artist_status`);
+    console.groupEnd();
+
+    // Fetch all requests (ADMIN view) to get the specific booking request
     const reqsPromise = fetch(
-      `${import.meta.env.VITE_API_URL}/api/requests/requests`,
+      `${baseUrl}/admin/requests/all`,
       { headers: { Authorization: `Bearer ${token}` } }
-    ).then(res => {
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return res.json();
+    ).then(async res => {
+      console.log('🎯 admin requests all response status:', res.status);
+      const text = await res.text().catch(() => '');
+      if (!res.ok) {
+        console.error('admin requests all failed:', res.status, text);
+        throw new Error(`HTTP ${res.status}`);
+      }
+      // Try to parse JSON even if text was already read
+      let json: any;
+      try { json = text ? JSON.parse(text) : []; } catch (e) { json = []; }
+      const list = Array.isArray(json)
+        ? json
+        : (json && Array.isArray(json.requests))
+          ? json.requests
+          : [];
+      const ids = list.map((r:any) => r && r.id);
+      console.log('🧾 admin requests count:', list.length, 'ids:', ids);
+      if (!Array.isArray(list) || list.length === 0) {
+        console.warn('⚠️ admin requests: leere Liste oder unbekanntes Format', json);
+      }
+      return list;
     });
     // Fetch all admin offers for this request to get override-price
     const offersPromise = fetch(
-      `${import.meta.env.VITE_API_URL}/admin/requests/${reqId}/admin_offers`,
+      `${baseUrl}/admin/requests/${reqId}/admin_offers`,
       { headers: { Authorization: `Bearer ${token}` } }
     ).then(res => {
+      console.log('🎯 admin_offers response status:', res.status);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
     });
-    // Also fetch the artist's own offer
-    const artistOfferPromise = fetch(
-      `${import.meta.env.VITE_API_URL}/api/requests/requests/${reqId}/offer`,
+    // NEU: Per-Artist-Status für diese Anfrage (Admin-Route)
+    const artistStatusesPromise = fetch(
+      `${baseUrl}/admin/requests/${reqId}/artist_status`,
       { headers: { Authorization: `Bearer ${token}` } }
     ).then(res => {
+      console.log('🎯 artist_status response status:', res.status);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
     });
-    Promise.all([reqsPromise, offersPromise, artistOfferPromise])
-      .then(([reqList, offers, artistOffer]) => {
-        // Find this request
-        const reqData = reqList.find((r: any) => String(r.id) === reqId);
-        if (!reqData) throw new Error('Request not found');
-        // Set recommended customer price
-        setRecMin(reqData.recommended_price_min);
-        setRecMax(reqData.recommended_price_max);
-        // Determine initial gage: artist's own offer, if any
-        const ownGage = artistOffer?.artist_gage;
-        // If no artist offer, fall back to admin override, then to recommendation
+    Promise.all([reqsPromise, offersPromise, artistStatusesPromise])
+      .then(([reqList, offers, artistStatusesList]) => {
+        // Debug: Suche Request in admin list
+        console.log('🔎 Suche Request in admin list nach reqId=', reqId, 'typ:', typeof reqId);
+        console.log('📦 Erstes Element der Liste (falls vorhanden):', reqList[0]);
+        const targetIdNum = Number(reqId);
+        const reqData = reqList.find((r: any) => Number(r.id) === targetIdNum);
+        if (!reqData) {
+          console.error('❌ Request not found in admin list. Available IDs:', reqList.map((r:any)=>r.id));
+          throw new Error(`Request not found (id=${reqId})`);
+        }
+        // Set recommended customer price with fallback to price_min/max if missing
+        const recMinVal = (reqData.recommended_price_min ?? reqData.price_min ?? 0);
+        const recMaxVal = (reqData.recommended_price_max ?? reqData.price_max ?? 0);
+        setRecMin(recMinVal);
+        setRecMax(recMaxVal);
+        // Determine current offer override price or fallback to recommendation
         const currentOffer = offers.find((o: any) => String(o.id) === offerId);
-        setGage(
-          ownGage != null
-            ? ownGage
-            : currentOffer?.override_price ?? reqData.recommended_price_min
-        );
+        const gageInit = (currentOffer?.override_price ?? recMinVal);
+        setGage(Number.isFinite(gageInit) ? Number(gageInit) : 0);
         setNotes(currentOffer?.notes ?? '');
         setRequestData(reqData);
         setAdminOffers(offers);
-        setArtistOfferData(artistOffer);
+        // Map per-artist Status & gesendete Gage → { [artist_id]: status } & { [artist_id]: requested_gage }
+        if (Array.isArray(artistStatusesList)) {
+          const mapStatus: Record<number, string> = {};
+          const mapGage: Record<number, number | null> = {};
+          for (const row of artistStatusesList) {
+            if (row && typeof row.artist_id === 'number') {
+              mapStatus[row.artist_id] = row.status;
+              // Kann null sein, wenn noch nichts gesendet wurde
+              mapGage[row.artist_id] = (row.requested_gage ?? null);
+            }
+          }
+          setArtistStatuses(mapStatus);
+          setArtistGages(mapGage);
+        }
         // Fetch artist names for display
         if (reqData.artist_ids?.length) {
           fetch(`${import.meta.env.VITE_API_URL}/api/artists`)
@@ -107,7 +152,7 @@ export default function OfferEditPage() {
               console.log('🔍 OfferEditPage loaded:', {
                 requestData: reqData,
                 adminOffers: offers,
-                artistOfferData: artistOffer,
+                artistStatuses: artistStatusesList,
                 artistNames: names,
                 recMin,
                 recMax,
@@ -160,7 +205,8 @@ export default function OfferEditPage() {
   console.log('🔄 Rendering OfferEditPage with state:', {
     requestData,
     adminOffers,
-    artistOfferData,
+    artistStatuses,
+    artistGages,
     artistNames,
     gage,
     notes
@@ -186,7 +232,7 @@ export default function OfferEditPage() {
             <p><strong>Beleuchtung:</strong> {requestData.needs_light ? 'Ja' : 'Nein'}</p>
             <p><strong>Ton:</strong> {requestData.needs_sound ? 'Ja' : 'Nein'}</p>
             <p><strong>Gäste:</strong> {requestData.number_of_guests}</p>
-            <p><strong>Empf. Preis Max:</strong> {recMax.toLocaleString('de-DE')}€</p>
+            <p><strong>Empf. Preis Max:</strong> {Number(recMax ?? 0).toLocaleString('de-DE')}€</p>
             <p><strong>Disziplin:</strong> {requestData.show_discipline}</p>
             <p><strong>Show-Typ:</strong> {requestData.show_type}</p>
             <p><strong>Besondere Wünsche:</strong> {requestData.special_requests || '–'}</p>
@@ -200,16 +246,21 @@ export default function OfferEditPage() {
               return (
               <div key={artistId} className="bg-gray-800 p-4 rounded shadow">
                 <p><strong>Künstler:</strong> {artistNames[idx] ?? artistId}</p>
-                {artistOfferData?.artist_gage != null ? (
-                  <p><strong>Gesendete Gage:</strong> {artistOfferData.artist_gage.toLocaleString('de-DE')}€</p>
+                {/* Gesendete Gage (vom Artist). Fallback: Solo-Request → requestData.artist_gage */}
+                {artistGages[artistId] != null ? (
+                  <p><strong>Gesendete Gage:</strong> {Number(artistGages[artistId]).toLocaleString('de-DE')}€</p>
                 ) : (
-                  <p className="italic">noch keine Gage gesendet</p>
+                  requestData?.artist_ids?.length === 1 && requestData?.artist_gage != null ? (
+                    <p><strong>Gesendete Gage:</strong> {Number(requestData.artist_gage).toLocaleString('de-DE')}€</p>
+                  ) : (
+                    <p className="italic">noch keine Gage gesendet</p>
+                  )
                 )}
                 <label className="block mt-2 font-medium">Status</label>
                 <select
                   className="mt-1 w-full bg-gray-700 text-white p-2 rounded"
-                  value={adminOffers[idx]?.status ?? requestData.status}
-                  onChange={e => handleStatusChange(adminOffers[idx]?.id, e.target.value)}
+                  value={artistStatuses[artistId] ?? requestData.status ?? ''}
+                  onChange={e => handleArtistStatusChange(artistId, e.target.value)}
                 >
                   {allowedStatuses.map(s => (
                     <option key={s} value={s} className="text-black">
