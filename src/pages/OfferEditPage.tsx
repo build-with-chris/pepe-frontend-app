@@ -16,7 +16,7 @@ export default function OfferEditPage() {
 
   const [requestData, setRequestData] = useState<any>(null);
   const [adminOffers, setAdminOffers] = useState<any[]>([]);
-  const [artistNames, setArtistNames] = useState<string[]>([]);
+  const [artistNameById, setArtistNameById] = useState<Record<number, string>>({});
   const [artistStatuses, setArtistStatuses] = useState<Record<number, string>>({});
   const [artistGages, setArtistGages] = useState<Record<number, number | null>>({});
 
@@ -147,16 +147,20 @@ export default function OfferEditPage() {
           fetch(`${import.meta.env.VITE_API_URL}/api/artists`)
             .then(res => res.json())
             .then((allArtists: any[]) => {
-              const names = allArtists
-                .filter(a => reqData.artist_ids.includes(a.id))
-                .map(a => a.name);
-              setArtistNames(names);
+              const idsArr: number[] = Array.isArray(reqData.artist_ids) ? reqData.artist_ids : [];
+              const nameMap: Record<number, string> = {};
+              for (const a of allArtists) {
+                if (idsArr.includes(a.id)) {
+                  nameMap[a.id] = a.name;
+                }
+              }
+              setArtistNameById(nameMap);
               // Debug log loaded data
               console.log('🔍 OfferEditPage loaded:', {
                 requestData: reqData,
                 adminOffers: offers,
                 artistStatuses: artistStatusesList,
-                artistNames: names,
+                artistNameById: nameMap,
                 recMin,
                 recMax,
                 gage,
@@ -210,10 +214,15 @@ export default function OfferEditPage() {
     adminOffers,
     artistStatuses,
     artistGages,
-    artistNames,
+    artistNameById,
     gage,
     notes
   });
+
+  // Typed artistIds to avoid implicit any in map
+  const artistIds: number[] = Array.isArray(requestData?.artist_ids)
+    ? (requestData.artist_ids as number[])
+    : [];
 
   return (
     <div className="w-screen bg-black min-h-screen text-white">
@@ -223,7 +232,7 @@ export default function OfferEditPage() {
           {/* Left: Event Details */}
           <div className="bg-gray-800 p-4 rounded shadow grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <h2 className="text-xl font-semibold mb-4 col-span-full">Event-Details</h2>
-            <p><strong>Angefragte Künstler:</strong> {artistNames.join(', ')}</p>
+            <p><strong>Angefragte Künstler:</strong> {artistIds.map((id) => artistNameById[id] ?? id).join(', ')}</p>
             <p><strong>Angefragte Disziplinen:</strong> {requestData.show_discipline}</p>
             <p><strong>Name Veranstalter:</strong> {requestData.client_name}</p>
             <p><strong>Dauer der Show:</strong> {requestData.duration_minutes} Minuten</p>
@@ -244,16 +253,16 @@ export default function OfferEditPage() {
           {/* Right: Artist Offers */}
           <div className="grid grid-cols-1 gap-4">
             <h2 className="text-xl font-semibold mb-2">Artist-Angebote</h2>
-            {requestData.artist_ids.map((artistId, idx) => {
+            {artistIds.map((artistId: number, idx: number) => {
               console.log('🔁 Rendering artist card idx:', idx, 'artistId:', artistId, 'adminOffer:', adminOffers[idx]);
               return (
               <div key={artistId} className="bg-gray-800 p-4 rounded shadow">
-                <p><strong>Künstler:</strong> {artistNames[idx] ?? artistId}</p>
+                <p><strong>Künstler:</strong> {artistNameById[artistId] ?? artistId}</p>
                 {/* Gesendete Gage (vom Artist). Fallback: Solo-Request → requestData.artist_gage */}
                 {artistGages[artistId] != null ? (
                   <p><strong>Gesendete Gage:</strong> {Number(artistGages[artistId]).toLocaleString('de-DE')}€</p>
                 ) : (
-                  requestData?.artist_ids?.length === 1 && requestData?.artist_gage != null ? (
+                  artistIds.length === 1 && requestData?.artist_gage != null ? (
                     <p><strong>Gesendete Gage:</strong> {Number(requestData.artist_gage).toLocaleString('de-DE')}€</p>
                   ) : (
                     <p className="italic">noch keine Gage gesendet</p>

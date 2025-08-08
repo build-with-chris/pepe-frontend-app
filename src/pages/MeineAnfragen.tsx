@@ -32,6 +32,14 @@ const statusDisplay: Record<string, string> = {
   storniert: 'Storniert',
 };
 
+const statusBadgeClass = (stRaw: string) => {
+  const st = String(stRaw).toLowerCase();
+  if (st === 'abgelehnt' || st === 'storniert') return 'bg-red-100 text-red-800';
+  if (st === 'akzeptiert') return 'bg-green-100 text-green-800';
+  // angefragt & angeboten → gelb
+  return 'bg-yellow-100 text-yellow-800';
+};
+
 const MeineAnfragen: React.FC = () => {
   const { token } = useAuth();
   if (!token) {
@@ -221,7 +229,7 @@ const MeineAnfragen: React.FC = () => {
               </div>
               <div className="flex-none flex flex-col items-start gap-2">
                 <div>
-                  <span className="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">
+                  <span className={`px-2 py-1 text-xs rounded-full ${statusBadgeClass(anfrage.status as string)}`}>
                     {statusDisplay[String(anfrage.status).toLowerCase()] || String(anfrage.status)}
                   </span>
                 </div>
