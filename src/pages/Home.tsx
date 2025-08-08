@@ -1,27 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import PepesParticles from "@/components/InteractivePepeParticles";
-import hero from "../assets/LP TRY.png"
+import hero from "../assets/PepeHero.webp"
 
 export default function Home() {
   return (
     <>
            <div
-      className="w-screen bg-cover bg-center"
+      className="relative w-screen min-h-[70vh] bg-black bg-center bg-no-repeat bg-contain"
       style={{ backgroundImage: `url(${hero})` }}
     >
-        {/* Animation oben: shrinkwrap + padding */}
-        <div className="flex justify-center">
-          <div className="relative rounded-4xl w-full max-w-[900px] aspect-[8/3] overflow-hidden">
+      {/* Dark overlay to dim the hero image */}
+      <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+        {/* Pepe Canvas unten mittig */}
+        <div className="pointer-events-none absolute inset-x-0 -bottom-12 md:-bottom-5 z-10 flex justify-center">
+          <div className="relative w-full max-w-[1080px] aspect-[8/3] overflow-hidden">
             <PepesParticles />
           </div>
         </div>
-
         {/* Titel + Call-to-Action darunter */}
-        <div className="flex flex-col items-center text-white gap-6 p-6">
+        <div className="relative z-10 flex flex-col items-center text-white gap-6 p-6">
           <Link to="/anfragen">
-            <Button size="xl" className="font-bold text-white">
-              Booking Assistant
+            <Button
+              size="lg"
+              variant="ghost"
+              className="group font-semibold text-white hover:text-white bg-transparent hover:bg-transparent focus:bg-transparent shadow-none ring-0 transition-transform duration-200 cursor-pointer"
+            >
+              <span className="inline-block transition-transform duration-200 group-hover:scale-[1.22]">
+                Booking Assistant
+              </span>
             </Button>
           </Link>
         </div>

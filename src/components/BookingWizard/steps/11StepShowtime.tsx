@@ -33,7 +33,18 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
     try {
       const res = await postRequest(data);
       setResponse(res);
+
+      // 👉 Notify the wizard to clear its cached data and also clear here as a fallback
+      try {
+        window.dispatchEvent(new Event('booking:submitted'));
+        localStorage.removeItem('bookingData');
+        localStorage.removeItem('bookingStep');
+        console.log('🧹 Booking wizard cache cleared after submit (Step 11)');
+      } catch (e) {
+        console.warn('Could not clear wizard cache:', e);
+      }
     } catch (err: any) {
+      console.error('❌ postRequest failed:', err);
       setError(err.message || 'Ein Fehler ist aufgetreten');
     } finally {
       setLoading(false);

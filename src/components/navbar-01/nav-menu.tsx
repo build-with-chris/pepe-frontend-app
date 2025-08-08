@@ -36,6 +36,7 @@ export const NavMenu = ({ user: passedUser, ...props }: NavMenuExtProps) => {
           { label: 'Kalender', to: '/kalender' },
           { label: 'Anfragen', to: '/meine-anfragen' },
           { label: 'Meine Gigs', to: '/meine-gigs' },
+          { label: 'Buchhaltung', to: '/buchhaltung' },
         ]
       : [
           { label: 'Home', to: '/home' },

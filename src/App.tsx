@@ -19,6 +19,8 @@ import Rechnungen from './pages/Invoices';
 import AnstehendeGigs from './pages/PendingGigs';
 import KuenstlerVerwaltung from './pages/Artists';
 import OfferEditPage from './pages/OfferEditPage';
+import Buchhaltung from './pages/Buchhaltung'
+
 
 function App() {
   const location = useLocation();
@@ -39,7 +41,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
       
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/buchhaltung" element={<Buchhaltung />} />
           <Route path="/profile" element={<Profile/>} />
           <Route path="/kalender" element={<CalendarPage />} />
           <Route path="/meine-gigs" element={<MyGigs />} />
