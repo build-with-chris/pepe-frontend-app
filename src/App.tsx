@@ -42,7 +42,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile/>} />
           <Route path="/kalender" element={<CalendarPage />} />
-          <Route path="/my-gigs" element={<MyGigs />} />
+          <Route path="/meine-gigs" element={<MyGigs />} />
           <Route path="/meine-anfragen" element={<MeineAnfragen />} />
         </Route>
 
