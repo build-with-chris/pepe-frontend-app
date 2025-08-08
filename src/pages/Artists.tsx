@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 interface Artist {
   id: number;
   name: string;
-  image_url: string;
+  profile_image_url?: string | null;
+  bio?: string | null;
 }
 
 export default function KuenstlerVerwaltung() {
@@ -23,7 +24,14 @@ export default function KuenstlerVerwaltung() {
       })
       .then(data => {
         // Expecting data.artists or an array directly
-        const list: Artist[] = data.artists ?? data;
+        const rawList: any[] = data.artists ?? data ?? [];
+        const list: Artist[] = rawList.map(a => ({
+          id: a.id,
+          name: a.name,
+          // prefer backend field; fallback to legacy image_url if present
+          profile_image_url: a.profile_image_url ?? a.image_url ?? null,
+          bio: a.bio ?? null,
+        }));
         setArtists(list);
         setLoading(false);
       })
@@ -72,13 +80,22 @@ export default function KuenstlerVerwaltung() {
               className="bg-gray-800 rounded shadow-lg cursor-pointer overflow-hidden"
               onClick={() => toggle(artist.id)}
             >
-              <img
-                src={artist.image_url}
-                alt={artist.name}
-                className="w-full h-48 object-cover"
-              />
+              {artist.profile_image_url ? (
+                <img
+                  src={artist.profile_image_url}
+                  alt={artist.name}
+                  className="w-full h-48 object-cover"
+                />
+              ) : (
+                <div className="w-full h-48 bg-gray-700 flex items-center justify-center text-gray-400">
+                  Kein Bild
+                </div>
+              )}
               <div className="p-4">
                 <h2 className="text-lg font-semibold mb-2">{artist.name}</h2>
+                <p className="text-sm text-gray-300 whitespace-pre-line mb-2">
+                  {artist.bio?.trim() || 'Keine Bio hinterlegt.'}
+                </p>
                 {expanded.includes(artist.id) && (
                   <ul className="text-sm space-y-1">
                     {(() => {

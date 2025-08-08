@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
+
 import { useNavigate } from "react-router-dom";
+
+// Expose supabase globally in dev for easier console debugging
+if (import.meta.env.DEV) {
+  (window as any).supabase = supabase;
+}
+
+const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || 'profiles';
 
 const disciplinesOptions = [
   "Zauberer",
@@ -81,36 +89,63 @@ export default function Profile() {
     if (!user) navigate("/login");
   }, [user]);
 
+  // Debug: Log Supabase session & localStorage token presence on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const sessionResp = await supabase.auth.getSession();
+        const session = sessionResp.data.session;
+        console.log('🔐 Supabase session?', !!session, session?.user?.id || null);
+        if (!session) {
+          console.warn('⚠️ Keine Supabase-Session vorhanden. Storage-Uploads benötigen authenticated-Session (sonst RLS-Fehler).');
+        }
+        // Also show which localStorage key would hold the token
+        const url = (import.meta as any).env?.VITE_SUPABASE_URL as string | undefined;
+        if (url) {
+          const ref = url.replace('https://', '').split('.')[0];
+          const lsKey = `sb-${ref}-auth-token`;
+          const raw = localStorage.getItem(lsKey);
+          console.log('🔑 localStorage token present?', !!raw, 'key=', lsKey);
+        }
+      } catch (e) {
+        console.error('❌ Supabase session check failed:', e);
+      }
+    })();
+  }, []);
+
   useEffect(() => {
     const loadProfile = async () => {
-      if (!user) return;
+      if (!user || !token) return;
+      const baseUrl = import.meta.env.VITE_API_URL;
       try {
-        const { data } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', user!.sub)
-          .single();
-        if (data) {
-          setName(data.name || '');
-          setAddress(data.address || '');
-          setPhoneNumber(data.phone_number || '');
-          setDisciplines(data.disciplines || []);
-          setPriceMin(data.price_min || 500);
-          setPriceMax(data.price_max || 700);
-          setBio(data.bio || '');
-          setProfileImageUrl(data.image_url || null);
-          if (data.backend_artist_id) {
-            setBackendArtistId(data.backend_artist_id);
-            setLocked(true);
-          }
+        const res = await fetch(`${baseUrl}/api/artists/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+          const t = await res.text().catch(() => '');
+          console.warn('GET /api/artists/me failed', res.status, t);
+          return;
+        }
+        const me = await res.json();
+        setName(me.name || '');
+        setAddress(me.address || '');
+        setPhoneNumber(me.phone_number || '');
+        setDisciplines(me.disciplines || []);
+        setPriceMin(me.price_min ?? 700);
+        setPriceMax(me.price_max ?? 900);
+        setBio(me.bio || '');
+        setProfileImageUrl(me.profile_image_url || null);
+        if (me.id) {
+          setBackendArtistId(String(me.id));
+          setLocked(true);
         }
       } catch (err) {
-        console.error('Error loading profile from Supabase', err);
-        setBackendDebug(`Load profile failed: ${err}`);
+        console.error('Error loading profile from backend', err);
+        setBackendDebug(`Load backend profile failed: ${err}`);
       }
     };
     loadProfile();
-  }, [user]);
+  }, [user, token]);
 
   async function createOrFetchBackendArtist(token: string, email: string, artistPayload: any) {
   console.groupCollapsed('createOrFetchBackendArtist create attempt');
@@ -205,164 +240,118 @@ export default function Profile() {
     console.log('Submitting profile', { name, address, phoneNumber, disciplines, priceMin, priceMax, backendArtistId, locked });
     setError(null);
     if (!name || !address || !phoneNumber || disciplines.length === 0) {
-      setError("Bitte fülle alle Pflichtfelder aus.");
+      setError('Bitte fülle alle Pflichtfelder aus.');
       return;
     }
     if (priceMin > priceMax) {
-      setError("Das Minimum darf nicht größer als das Maximum sein.");
+      setError('Das Minimum darf nicht größer als das Maximum sein.');
       return;
     }
     setLoading(true);
-    // Save profile data to Supabase (example, adjust table name)
-    const payload = {
-      user_id: user!.sub,
-      name,
-      address,
-      phone_number: phoneNumber,
-      disciplines,
-      price_min: priceMin,
-      price_max: priceMax,
-      is_complete: true,
-    };
-    const { data, error: supabaseError } = await supabase
-      .from("profiles")
-      .upsert(payload);
+    try {
+      const baseUrl = import.meta.env.VITE_API_URL;
+      if (!user?.email) throw new Error('User email fehlt');
+      const artistPayload = {
+        name,
+        email: user.email,
+        address,
+        phone_number: phoneNumber,
+        disciplines,
+        price_min: priceMin,
+        price_max: priceMax,
+      };
 
-    console.log('Supabase upsert payload', { name, address, phoneNumber, disciplines, priceMin, priceMax });
-    console.log('Supabase response', { data, supabaseError });
-
-    setLoading(false);
-    if (supabaseError) {
-      setError(supabaseError.message);
-    } else {
-      setSuccess(true);
-      // Auch Artist im Backend anlegen oder holen, wenn noch nicht vorhanden
-      try {
-        // Hole aktuellen Profil-Datensatz, um backend_artist_id zu prüfen
-        let profileBackendArtistId: string | null = null;
-        try {
-          const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('backend_artist_id')
-            .eq('user_id', user!.sub)
-            .maybeSingle();
-          if (profileError) {
-            console.warn('Error fetching profile backend_artist_id:', profileError);
-          } else if (profile?.backend_artist_id) {
-            profileBackendArtistId = profile.backend_artist_id;
-          }
-        } catch (fetchErr) {
-          console.warn('Exception fetching profile backend_artist_id:', fetchErr);
-        }
-
-        const effectiveBackendId = profileBackendArtistId || backendArtistId;
-        let backendRespId: string | null = null;
-        if (effectiveBackendId) {
-          if (!locked) {
-            if (!user?.email) throw new Error('User email fehlt');
-            const artistPayload = {
-              name,
-              email: user.email,
-              address,
-              phone_number: phoneNumber,
-              disciplines,
-              price_min: priceMin,
-              price_max: priceMax,
-            };
-            try {
-              console.log('Updating existing backend artist', effectiveBackendId);
-              const updatedId = await updateBackendArtist(token!, effectiveBackendId, artistPayload, setBackendDebug);
-              await supabase
-                .from('profiles')
-                .upsert({ user_id: user!.sub, backend_artist_id: updatedId });
-              setBackendArtistId(updatedId);
-              setLocked(true);
-              backendRespId = updatedId;
-            } catch (err: any) {
-              if (err.message === 'Artist not found') {
-                // fallback: neu erstellen
-                backendRespId = await createOrFetchBackendArtist(token!, user.email, {
-                  name,
-                  email: user.email,
-                  address,
-                  phone_number: phoneNumber,
-                  disciplines,
-                  price_min: priceMin,
-                  price_max: priceMax,
-                });
-                if (backendRespId) {
-                  await supabase
-                    .from('profiles')
-                    .upsert({ user_id: user!.sub, backend_artist_id: backendRespId });
-                  setBackendArtistId(backendRespId);
-                  setLocked(true);
-                }
-              } else {
-                setError('Künstler konnte nicht aktualisiert werden.');
-              }
-            }
-          } else {
-            setBackendArtistId(effectiveBackendId);
-            setLocked(true);
-            backendRespId = effectiveBackendId;
-          }
-        } else {
-          // neu anlegen wie vorher
-          if (!user?.email) throw new Error('User email fehlt');
-          const artistPayload = {
-            name,
-            email: user.email,
-            address,
-            phone_number: phoneNumber,
-            disciplines,
-            price_min: priceMin,
-            price_max: priceMax,
-          };
-          backendRespId = await createOrFetchBackendArtist(token!, user.email, artistPayload);
-          if (backendRespId) {
-            await supabase
-              .from('profiles')
-              .upsert({ user_id: user!.sub, backend_artist_id: backendRespId });
-            setBackendArtistId(backendRespId);
-            setLocked(true);
-          }
-        }
-
-        // ---- Profile image upload and bio update ----
-        if (backendRespId || effectiveBackendId) {
-          // upload image if provided
-          let imageUrl: string | null = null;
-          if (profileImageFile) {
-            try {
-              const fileExt = profileImageFile.name.split('.').pop();
-              const fileName = `${user!.sub}.${fileExt}`;
-              const { data: uploadData, error: uploadError } = await supabase.storage
-                .from('profiles')
-                .upload(fileName, profileImageFile);
-              if (!uploadError) {
-                const { data: { publicUrl } } = supabase.storage.from('profiles').getPublicUrl(fileName);
-                imageUrl = publicUrl;
-                setProfileImageUrl(publicUrl);
-              }
-            } catch (imgErr) {
-              console.warn('Fehler beim Hochladen des Profilbilds:', imgErr);
-            }
-          }
-          // update Supabase profile with image_url and bio
-          await supabase.from('profiles').upsert({
-            user_id: user!.sub,
-            backend_artist_id: backendRespId || effectiveBackendId,
-            image_url: imageUrl,
-            bio: bio,
-          });
-        }
-        // ---- END Profile image upload and bio update ----
-      } catch (err) {
-        console.error('Error syncing artist with backend:', err);
-        setBackendDebug(prev => `Sync error: ${err}${prev ? '\n' + prev : ''}`);
-        setError('Profil gespeichert, aber Künstler konnte nicht ans Backend synchronisiert werden. Versuch es später nochmal.');
+      // Erstellen oder Aktualisieren im Backend
+      let effectiveId = backendArtistId;
+      if (effectiveId) {
+        console.log('Updating existing backend artist', effectiveId);
+        const updatedId = await updateBackendArtist(token!, effectiveId, artistPayload, setBackendDebug);
+        setBackendArtistId(updatedId);
+        effectiveId = updatedId;
+      } else {
+        const createdId = await createOrFetchBackendArtist(token!, user.email, artistPayload);
+        if (!createdId) throw new Error('Konnte Künstler nicht anlegen');
+        setBackendArtistId(createdId);
+        effectiveId = createdId;
       }
-      // navigate("/dashboard");
+
+      // Profilbild via Supabase Storage hochladen (nur Storage, keine Supabase-DB)
+      let imageUrl: string | null = profileImageUrl ?? null;
+      if (profileImageFile) {
+        try {
+          // Dateiendung robust ermitteln
+          let ext = (profileImageFile.name.split('.').pop() || '').toLowerCase();
+          if (!ext || ext.length > 5) {
+            const mime = profileImageFile.type;
+            if (mime === 'image/jpeg' || mime === 'image/jpg') ext = 'jpg';
+            else if (mime === 'image/png') ext = 'png';
+            else if (mime === 'image/webp') ext = 'webp';
+            else ext = 'jpg';
+          }
+          const path = `artist/${effectiveId}/${Date.now()}.${ext}`;
+
+          console.groupCollapsed('📤 Upload profile image');
+          console.log('Bucket:', PROFILE_BUCKET);
+          console.log('Path  :', path);
+          console.log('Type  :', profileImageFile.type);
+          console.log('Size  :', profileImageFile.size);
+
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from(PROFILE_BUCKET)
+            .upload(path, profileImageFile, {
+              contentType: profileImageFile.type || `image/${ext}`,
+              // Wichtig: kein Upsert -> benötigt nur INSERT-Policy
+              upsert: false,
+            });
+
+          if (uploadError) {
+            console.error('❌ Supabase upload error:', uploadError);
+            console.groupEnd();
+            // Backend-URL nicht überschreiben, wenn Upload fehlschlägt
+            setBackendDebug(prev => `Upload failed: ${uploadError.message || uploadError}\nBucket=${PROFILE_BUCKET}\nPath=${path}\n${prev ?? ''}`);
+            throw uploadError;
+          }
+
+          const { data: pub } = supabase.storage.from(PROFILE_BUCKET).getPublicUrl(path);
+          imageUrl = pub.publicUrl;
+          console.log('✅ publicUrl:', imageUrl);
+          setProfileImageUrl(imageUrl);
+          console.groupEnd();
+        } catch (imgErr: any) {
+          console.warn('Fehler beim Hochladen des Profilbilds:', imgErr?.message || imgErr);
+        }
+      }
+
+      // Backend: Bild-URL & Bio synchronisieren (nur URL senden, wenn Upload/URL vorhanden)
+      try {
+        const payload: any = { bio: (bio ?? '').toString() };
+        if (imageUrl) payload.profile_image_url = imageUrl;
+        const resp = await fetch(`${baseUrl}/api/artists/me/profile`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        const text = await resp.text();
+        console.log('PATCH /api/artists/me/profile', resp.status, text);
+        if (!resp.ok) {
+          setBackendDebug(prev => `update /artists/me/profile failed: ${resp.status} ${text.slice(0,200)}\n${prev ?? ''}`);
+        }
+      } catch (syncErr: any) {
+        console.warn('Fehler beim Sync ans Backend:', syncErr);
+        setBackendDebug(prev => `Backend sync exception: ${syncErr?.message || syncErr}\n${prev ?? ''}`);
+      }
+
+      setSuccess(true);
+      setLocked(true);
+    } catch (err: any) {
+      console.error('Error syncing artist with backend:', err);
+      setError('Profil speichern fehlgeschlagen. Bitte später erneut versuchen.');
+      setBackendDebug(prev => `Sync error: ${err?.message || err}${prev ? '\n' + prev : ''}`);
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -47,6 +47,38 @@ export default function OfferEditPage() {
     }
   }
 
+  // Bulk: Setze alle Artists dieser Anfrage auf "storniert"
+  async function handleBulkCancel() {
+    if (!reqId) return;
+    const confirmAll = window.confirm('Willst du wirklich ALLE Artists auf "storniert" setzen?');
+    if (!confirmAll) return;
+    try {
+      console.log('🛠️ handleBulkCancel →', { reqId });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/admin/requests/${reqId}/artist_status`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status: 'storniert' }), // ohne artist_ids => alle
+        }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      // UI-State: alle bekannten Artist-IDs auf 'storniert' setzen
+      const ids: number[] = Array.isArray(requestData?.artist_ids) ? (requestData.artist_ids as number[]) : [];
+      setArtistStatuses(prev => {
+        const next = { ...prev } as Record<number, string>;
+        for (const id of ids) next[id] = 'storniert';
+        return next;
+      });
+    } catch (err) {
+      console.error('❌ Bulk-Status-Update fehlgeschlagen', err);
+      alert('Bulk-Status-Update fehlgeschlagen');
+    }
+  }
+
   useEffect(() => {
     if (!token || !reqId || !offerId) return;
     setLoading(true);
@@ -252,7 +284,17 @@ export default function OfferEditPage() {
           </div>
           {/* Right: Artist Offers */}
           <div className="grid grid-cols-1 gap-4">
-            <h2 className="text-xl font-semibold mb-2">Artist-Angebote</h2>
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-xl font-semibold">Artist-Angebote</h2>
+              <button
+                type="button"
+                onClick={handleBulkCancel}
+                className="px-3 py-2 rounded text-sm bg-red-600 hover:bg-red-700 text-white disabled:opacity-60"
+                disabled={!artistIds.length}
+              >
+                Alle stornieren
+              </button>
+            </div>
             {artistIds.map((artistId: number, idx: number) => {
               console.log('🔁 Rendering artist card idx:', idx, 'artistId:', artistId, 'adminOffer:', adminOffers[idx]);
               return (
