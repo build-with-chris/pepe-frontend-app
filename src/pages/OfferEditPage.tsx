@@ -130,12 +130,15 @@ export default function OfferEditPage() {
           const mapStatus: Record<number, string> = {};
           const mapGage: Record<number, number | null> = {};
           for (const row of artistStatusesList) {
-            if (row && typeof row.artist_id === 'number') {
-              mapStatus[row.artist_id] = row.status;
-              // Kann null sein, wenn noch nichts gesendet wurde
-              mapGage[row.artist_id] = (row.requested_gage ?? null);
-            }
+            if (!row) continue;
+            const idNum = Number((row as any).artist_id);
+            console.log('🧩 per-artist status row', row, '→ parsed artist_id:', idNum, 'raw type:', typeof (row as any).artist_id);
+            if (!Number.isFinite(idNum)) continue;
+            mapStatus[idNum] = (row as any).status;
+            mapGage[idNum] = ((row as any).requested_gage ?? null);
           }
+          console.log('🧭 mapped artistStatuses =', mapStatus);
+          console.log('🧭 mapped artistGages    =', mapGage);
           setArtistStatuses(mapStatus);
           setArtistGages(mapGage);
         }
@@ -259,7 +262,7 @@ export default function OfferEditPage() {
                 <label className="block mt-2 font-medium">Status</label>
                 <select
                   className="mt-1 w-full bg-gray-700 text-white p-2 rounded"
-                  value={artistStatuses[artistId] ?? requestData.status ?? ''}
+                  value={artistStatuses[artistId] ?? 'angefragt'}
                   onChange={e => handleArtistStatusChange(artistId, e.target.value)}
                 >
                   {allowedStatuses.map(s => (
@@ -268,6 +271,7 @@ export default function OfferEditPage() {
                     </option>
                   ))}
                 </select>
+                <p className="mt-1 text-xs text-gray-400">(Status-Quelle: {artistStatuses[artistId] ? 'per-Artist' : 'Default'})</p>
               </div>
               );
             })}

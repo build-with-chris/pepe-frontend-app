@@ -138,9 +138,11 @@ const MeineAnfragen: React.FC = () => {
     // Optimistische Aktualisierung von Status und Gage
     setAnfragen(prev => prev.map(a => a.id === id ? { ...a, status: 'angeboten', artist_gage: preisNum } : a));
     try {
+      // Debug log for payload
+      console.log('🛰️ Sende Artist-Angebot PUT payload:', { price_offered: preisNum });
       const result = await apiFetch(`/api/requests/requests/${id}/offer`, {
         method: 'PUT',
-        body: JSON.stringify({ artist_gage: preisNum }),
+        body: JSON.stringify({ price_offered: preisNum }),
       });
       // Aktualisiere mit den vom Server gelieferten Werten
       setAnfragen(prev => prev.map(a => a.id === id ? { ...a, status: result.status, artist_gage: result.price_offered } : a));
