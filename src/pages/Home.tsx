@@ -19,19 +19,7 @@ export default function Home() {
           </div>
         </div>
         {/* Titel + Call-to-Action darunter */}
-        <div className="relative z-10 flex flex-col items-center text-white gap-6 p-6">
-          <Link to="/anfragen">
-            <Button
-              size="lg"
-              variant="ghost"
-              className="group font-semibold text-white hover:text-white bg-transparent hover:bg-transparent focus:bg-transparent shadow-none ring-0 transition-transform duration-200 cursor-pointer"
-            >
-              <span className="inline-block transition-transform duration-200 group-hover:scale-[1.22]">
-                Booking Assistant
-              </span>
-            </Button>
-          </Link>
-        </div>
+        
       </div>
 
       <h1 className="mx-auto text-center text-3xl font-mono font-bold my-10">

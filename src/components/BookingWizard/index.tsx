@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProgressBar from './ProgressBar';
 import type { BookingData } from './types';
+import Intro from './steps/0Intro'
 import StepEventType from './steps/1StepEventType';
 import StepShowType from './steps/2StepShowType';
 import StepShowDisciplines from './steps/5ShowDisciplines.tsx';
@@ -14,6 +15,7 @@ import StepContactDetails from './steps/10StepContactDetails';
 import StepShowtime from './steps/11StepShowtime';
 
 const steps = [
+  Intro,
   StepEventType,
   StepShowType,
   StepShowDisciplines,

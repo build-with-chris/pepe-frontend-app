@@ -3,7 +3,7 @@ import LogoImage from '../../assets/LogoPepe.png';
 import { Link } from 'react-router'
 
 export const Logo: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = (props) => (
-  <Link to="/">
+  <Link to="/home">
 
     <img
       src={LogoImage}

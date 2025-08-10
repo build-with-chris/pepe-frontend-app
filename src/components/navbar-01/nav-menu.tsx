@@ -39,9 +39,8 @@ export const NavMenu = ({ user: passedUser, ...props }: NavMenuExtProps) => {
           { label: 'Buchhaltung', to: '/buchhaltung' },
         ]
       : [
-          { label: 'Home', to: '/home' },
-          { label: 'Booking Assistent', to: '/anfragen' },
           { label: 'Künstler', to: '/kuenstler' },
+          { label: 'Booking Assistent', to: '/anfragen' },
           { label: 'Kontakt', to: '/kontakt' },
         ];
   }, [loggedIn, isAdmin]);
