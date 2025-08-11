@@ -14,8 +14,14 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
   };
 
   return (
-    <div className="w-full step flex flex-col items-center">
-      <h2 className="text-4xl font-bold text-center my-4">Wünsche & Sonderwünsche</h2>
+    <div className="w-full step flex flex-col items-center pb-28">
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Hast du besondere Wünsche oder Ideen für die Show?</h2>
+      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-4">
+        <p className="text-sm leading-relaxed text-center">
+          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
+          Besondere Wünsche helfen uns, die Show perfekt auf dein Event zuzuschneiden – von der Dramaturgie bis zu individuellen Highlights.
+        </p>
+      </div>
       <div className="w-full lg:w-2/3 mx-auto mb-6">
         <label htmlFor="wishes" className="block text-sm font-medium text-white-100">
           Hier kannst du deine Wünsche eintragen:
@@ -24,7 +30,7 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
           id="wishes"
           value={data.special_requests}
           onChange={handleChange}
-          placeholder="z.B. besondere Lichtwünsche, Story-Elemente, Überraschungsmomente"
+          placeholder="z.B. Aufteilung der Show in mehrere kleine Shows, Mixform aus Walking Act und Bühnenshow, bestimmtes Motto das getroffen werden soll"
           rows={4}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -46,6 +52,16 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
         ))}
       </div>
       
+      {/* Fixed footer CTA */}
+      <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
+        <button
+          type="button"
+          onClick={onNext}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg"
+        >
+          Weiter
+        </button>
+      </div>
     </div>
   );
 };

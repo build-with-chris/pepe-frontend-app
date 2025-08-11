@@ -23,7 +23,13 @@ const StepNumberGuestsAndStatus: React.FC<StepNumberGuestsAndStatusProps> = ({
 
   return (
     <div className="p-0 w-full mx-auto md:max-w-4/5 flex flex-col items-center">
-      <h2 className="text-4xl font-bold text-center mb-6">Planungsstatus</h2>
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie ist dein aktueller Planungsstatus?</h2>
+      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
+        <p className="text-sm leading-relaxed text-center">
+          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
+          Dein Planungsstatus hilft uns, die Dringlichkeit und Detailtiefe unserer Vorschläge anzupassen – ob du noch in der Ideenphase bist oder schon fast buchen möchtest.
+        </p>
+      </div>
 
       <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-4 w-full">
         {statusOptionsList.map(option => (

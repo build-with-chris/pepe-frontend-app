@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star } from 'lucide-react';
 
 export interface StepShowtimeProps {
   data: BookingData;
@@ -52,73 +52,79 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   };
 
   return (
-    <div className="step">
-      <h2 className="text-4xl font-bold text-center my-4">Showtime</h2>
+    <div className="step pb-28">
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Fast geschafft – sollen wir deine Anfrage jetzt an unsere Künstler senden?</h2>
+      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
+        <p className="text-sm leading-relaxed text-center">
+          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
+          Beim Klick auf <strong>Absenden</strong> geht deine Anfrage unverbindlich an unsere Künstler. Du erhältst innerhalb von 48 Stunden passende Angebote.
+        </p>
+      </div>
       <div className="w-2/3 mx-auto mb-6 bg-white border border-gray-200 rounded-lg shadow p-6">
         <h3 className="text-xl font-semibold mb-4">Ihre Daten im Überblick</h3>
         <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-gray-700">
           <div>
-            <dt className="font-medium">Event Typ</dt>
+            <dt className="font-semibold flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> Event Typ</dt>
             <dd>{data.event_type}</dd>
           </div>
           <div>
-            <dt className="font-medium">Show Typ</dt>
+            <dt className="font-semibold flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> Show Typ</dt>
             <dd>{data.show_type}</dd>
           </div>
           <div>
-            <dt className="font-medium">Disziplinen</dt>
+            <dt className="font-semibold flex items-center gap-2"><ListChecks className="h-4 w-4 text-blue-600" /> Disziplinen</dt>
             <dd>{data.disciplines.join(', ')}</dd>
           </div>
           <div>
-            <dt className="font-medium">Teamgröße</dt>
+            <dt className="font-semibold flex items-center gap-2"><Users className="h-4 w-4 text-blue-600" /> Anreisende Künstler</dt>
             <dd>{data.team_size} </dd>
           </div>
           <div>
-            <dt className="font-medium">Dauer</dt>
+            <dt className="font-semibold flex items-center gap-2"><Clock className="h-4 w-4 text-blue-600" /> Dauer</dt>
             <dd>{data.duration_minutes} Minuten</dd>
           </div>
           <div>
-            <dt className="font-medium">Adresse</dt>
+            <dt className="font-semibold flex items-center gap-2"><MapPin className="h-4 w-4 text-blue-600" /> Adresse</dt>
             <dd>{data.event_address}</dd>
           </div>
           <div>
-            <dt className="font-medium">Ort</dt>
+            <dt className="font-semibold flex items-center gap-2"><MapPin className="h-4 w-4 text-blue-600" /> Ort</dt>
             <dd>{data.is_indoor ? 'Indoor' : 'Outdoor'}</dd>
           </div>
           <div>
-            <dt className="font-medium">Datum & Uhrzeit</dt>
+            <dt className="font-semibold flex items-center gap-2"><Clock className="h-4 w-4 text-blue-600" /> Datum & Uhrzeit</dt>
             <dd>{data.event_date} um {data.event_time}</dd>
           </div>
           <div>
-            <dt className="font-medium">Gäste</dt>
+            <dt className="font-semibold flex items-center gap-2"><Users className="h-4 w-4 text-blue-600" /> Gäste</dt>
             <dd>{data.number_of_guests}</dd>
           </div>
           <div>
-            <dt className="font-medium">Planungsstatus</dt>
+            <dt className="font-semibold flex items-center gap-2"><Info className="h-4 w-4 text-blue-600" /> Planungsstatus</dt>
             <dd>{data.planning_status}</dd>
           </div>
           <div>
-            <dt className="font-medium">Licht benötigt</dt>
+            <dt className="font-semibold flex items-center gap-2"><Lightbulb className="h-4 w-4 text-blue-600" /> Licht benötigt</dt>
             <dd>{data.needs_light ? 'Ja' : 'Nein'}</dd>
           </div>
           <div>
-            <dt className="font-medium">Ton benötigt</dt>
+            <dt className="font-semibold flex items-center gap-2"><Mic className="h-4 w-4 text-blue-600" /> Ton benötigt</dt>
             <dd>{data.needs_sound ? 'Ja' : 'Nein'}</dd>
           </div>
           <div className="md:col-span-2">
-            <dt className="font-medium">Sonderwünsche</dt>
+            <dt className="font-semibold flex items-center gap-2"><Star className="h-4 w-4 text-blue-600" /> Sonderwünsche</dt>
             <dd>{data.special_requests || '–'}</dd>
           </div>
           <div>
-            <dt className="font-medium">Name</dt>
+            <dt className="font-semibold flex items-center gap-2"><User className="h-4 w-4 text-blue-600" /> Name</dt>
             <dd>{data.client_name}</dd>
           </div>
           <div>
-            <dt className="font-medium">E-Mail</dt>
+            <dt className="font-semibold flex items-center gap-2"><Mail className="h-4 w-4 text-blue-600" /> E-Mail</dt>
             <dd>{data.client_email}</dd>
           </div>
           <div className="md:col-span-2">
-            <dt className="font-medium">Newsletter-Rabatt</dt>
+            <dt className="font-semibold flex items-center gap-2"><Gift className="h-4 w-4 text-blue-600" /> Newsletter-Rabatt</dt>
             <dd>{data.newsletter_opt_in ? 'Ja (5% Rabatt)' : 'Nein'}</dd>
           </div>
         </dl>
@@ -141,13 +147,20 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
             )}
           </button>
         ) : (
-          <button
-            type="button"
-            onClick={() => window.location.assign('/')}
-            className="flex items-center px-6 py-3 bg-gray-500 text-white rounded-lg shadow cursor-pointer hover:bg-gray-600 transition-colors"
-          >
-            X
-          </button>
+          <div className="flex flex-col items-center text-center space-y-4">
+            <p className="text-lg font-semibold text-gray-700">
+              Vielen Dank für deine Anfrage! 🎉
+            </p>
+            <p className="text-sm text-gray-600 max-w-md">
+              Deine Anfrage wurde erfolgreich versendet. Schaue dir doch in der Zwischenzeit unsere Künstlerprofile an und entdecke weitere spannende Acts.
+            </p>
+            <a
+              href="/kuenstler"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-colors"
+            >
+              Zu unseren Künstlern
+            </a>
+          </div>
         )}
       </div>
       {response && (

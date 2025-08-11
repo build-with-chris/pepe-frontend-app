@@ -12,6 +12,7 @@ export interface StepContactDetailsProps {
 const StepContactDetails: React.FC<StepContactDetailsProps> = ({
   data,
   onChange,
+  onNext,
 }) => {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ client_name: e.target.value });
@@ -26,8 +27,14 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
   };
 
   return (
-    <div className="step flex flex-col items-center">
-      <h2 className="text-4xl font-bold text-center mt-4">Kontakt & Rabatt</h2>
+    <div className="step flex flex-col items-center pb-28">
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie dürfen wir dich für Rückfragen kontaktieren?</h2>
+      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
+        <p className="text-sm leading-relaxed text-center">
+          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
+          Damit wir dir die passenden Angebote zusenden und bei Rückfragen schnell reagieren können.
+        </p>
+      </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientName" className="block text-sm font-medium text-gray-700">
           Name
@@ -75,6 +82,16 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
             </p>
           </div>
         </div>
+      </div>
+      {/* Fixed footer CTA */}
+      <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
+        <button
+          type="button"
+          onClick={onNext}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg"
+        >
+          Weiter
+        </button>
       </div>
     </div>
   );

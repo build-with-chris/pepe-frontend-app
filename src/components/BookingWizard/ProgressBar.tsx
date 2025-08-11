@@ -15,6 +15,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   onPrev,
   onNext,
 }) => {
+  if (stepIndex < 0) {
+    return null;
+  }
   // Calculate which image to show based on current step
   const progressPercent =
   totalSteps > 0 ? ((stepIndex + 1) / totalSteps) * 100 : 0;

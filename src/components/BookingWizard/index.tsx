@@ -14,8 +14,8 @@ import StepWishes from './steps/9StepWishes';
 import StepContactDetails from './steps/10StepContactDetails';
 import StepShowtime from './steps/11StepShowtime';
 
+// Intro is rendered separately (not part of steps)
 const steps = [
-  Intro,
   StepEventType,
   StepShowType,
   StepShowDisciplines,
@@ -67,16 +67,27 @@ const BookingWizard: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('bookingStep', stepIndex.toString());
   }, [stepIndex]);
-  const CurrentStep = steps[stepIndex];
+  const CurrentStep = steps[stepIndex - 1];
 
   const onNext = () => {
-    if (stepIndex < steps.length - 1) {
+    // From Intro (0) -> first real step (1)
+    if (stepIndex === 0) {
+      setStepIndex(1);
+      return;
+    }
+    // Advance within real steps
+    if (stepIndex < steps.length) {
       setStepIndex(stepIndex + 1);
     }
   };
 
   const onPrev = () => {
-    if (stepIndex > 0) {
+    // From first real step back to Intro
+    if (stepIndex === 1) {
+      setStepIndex(0);
+      return;
+    }
+    if (stepIndex > 1) {
       setStepIndex(stepIndex - 1);
     }
   };
@@ -87,19 +98,30 @@ const BookingWizard: React.FC = () => {
 
   return (
     <div className="p-5 relative">
-    <ProgressBar
-      stepIndex={stepIndex}
-      totalSteps={steps.length}
-      onPrev={onPrev}
-      onNext={onNext}
-    />
-      <CurrentStep
-        data={data}
-        onChange={onChange}
-        onNext={onNext}
+    {stepIndex > 0 && (
+      <ProgressBar
+        stepIndex={stepIndex - 1}
+        totalSteps={steps.length}
         onPrev={onPrev}
-        
+        onNext={onNext}
       />
+    )}
+      {stepIndex === 0 ? (
+        <Intro
+          data={data}
+          onChange={onChange}
+          onNext={onNext}
+          onPrev={onPrev}
+          onStart={() => setStepIndex(1)}
+        />
+      ) : (
+        <CurrentStep
+          data={data}
+          onChange={onChange}
+          onNext={onNext}
+          onPrev={onPrev}
+        />
+      )}
       
     </div>
   );

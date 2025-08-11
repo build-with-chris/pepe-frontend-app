@@ -85,7 +85,13 @@ const StepLocation: React.FC<StepLocationProps> = ({
 
   return (
     <div className="step">
-      <h2 className='text-4xl text-center font-mono font-black'>Veranstaltungsort</h2>
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wo findet deine Veranstaltung statt?</h2>
+      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
+        <p className="text-sm leading-relaxed text-center">
+          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
+          Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.
+        </p>
+      </div>
       <div className="flex flex-col lg:flex-row lg:space-x-4 w-full lg:w-2/3 mx-auto mb-6">
       <div className="flex-1 mb-4">
         <label htmlFor="street" className="block text-sm font-medium text-gray-700">

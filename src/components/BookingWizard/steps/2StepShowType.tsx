@@ -19,7 +19,13 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
 
   return (
     <div className="step flex flex-col items-center">
-      <h2 className="text-4xl text-center mb-5 font-black font-mono">Show-Typ</h2>
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Welchen Show‑Typ stellst du dir vor?</h2>
+      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
+        <p className="text-sm leading-relaxed text-center">
+          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
+          Damit wir einschätzen können, ob ein flexibler Walking Act oder eine feste Bühnenshow besser zu deinem Event passt – und dir passende Vorschläge machen können.
+        </p>
+      </div>
       <div className="p-5 w-full lg:w-2/3 mx-auto grid grid-cols-2 gap-4 md:max-w-3/5">
         {options.map(option => (
           <OptionCard
