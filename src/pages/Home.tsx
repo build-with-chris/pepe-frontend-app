@@ -2,7 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import PepesParticles from "@/components/InteractivePepeParticles";
 import hero from "../assets/PepeHero.webp"
+import groupV1 from "../assets/Group V1.webp";
 import { useEffect, useState } from "react";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 export default function Home() {
   const [offset, setOffset] = useState(0);
@@ -49,11 +51,13 @@ export default function Home() {
         {/* Titel + Call-to-Action darunter */}
         
       </div>
-      <div className="relative z-20 flex flex-col items-center justify-center text-center px-4 py-8">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">
+
+      <ResizablePanelGroup direction="horizontal" className="w-full max-w-6xl mx-auto my-8 rounded-lg overflow-hidden border border-white/10">
+        <ResizablePanel defaultSize={50} minSize={30} className="flex flex-col justify-center px-6 py-8 bg-black/50">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white text-left">
             🎭 Finde jetzt den perfekten Künstler für dein Event
           </h2>
-          <p className="text-base md:text-lg text-gray-200 max-w-xl mb-6">
+          <p className="text-base md:text-lg text-gray-200 max-w-xl mb-6 text-left">
             Beantworte nur wenige kurze Fragen und erhalte unverbindlich erste Vorschläge und Preise.
           </p>
           <a href="/anfragen">
@@ -61,8 +65,14 @@ export default function Home() {
               Jetzt starten
             </button>
           </a>
-          <p className="text-xs text-gray-300 mt-2">Dauert weniger als 5&nbsp;Minuten</p>
-        </div>
+          <p className="text-xs text-gray-300 mt-2 text-left">Dauert weniger als 5&nbsp;Minuten</p>
+        </ResizablePanel>
+        <ResizableHandle withHandle className="bg-white/10 hover:bg-white/20 transition-colors" />
+        <ResizablePanel defaultSize={50} minSize={30} className="bg-black">
+          <img src={groupV1} alt="Show Vorschau" className="object-cover w-full h-full" />        
+          </ResizablePanel>
+      </ResizablePanelGroup>
+
       <h1 className="mx-auto text-center text-3xl font-mono font-bold my-10">
         Die besten Showacts für ihr Event
       </h1>

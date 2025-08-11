@@ -13,6 +13,11 @@ export default function Kuenstler(){
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [flippedId, setFlippedId] = useState<number | null>(null);
+  const handleFlip = (id: number) => {
+    setFlippedId(flippedId === id ? null : id);
+  };
+
   useEffect(() => {
     const baseUrl = import.meta.env.VITE_API_URL;
     const url = `${baseUrl}/api/artists`;
@@ -82,26 +87,39 @@ export default function Kuenstler(){
               <div className="col-span-full text-gray-300">Noch keine Künstler verfügbar.</div>
             )}
             {!loading && !error && artists.map(artist => (
-              <div key={artist.id} className="bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800">
-                <div className="relative w-full aspect-square bg-gray-800">
-                  {artist.profile_image_url ? (
-                    <img
-                      src={artist.profile_image_url}
-                      alt={artist.name}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                      Kein Bild
+              <div
+                key={artist.id}
+                className="relative aspect-[3/4] min-h-[340px] [perspective:1000px] cursor-pointer"
+                onClick={() => handleFlip(artist.id)}
+              >
+                <div className={`absolute inset-0 transition-transform duration-700 [transform-style:preserve-3d] ${flippedId === artist.id ? '[transform:rotateY(180deg)]' : ''}`}>
+                  {/* Front */}
+                  <div className="absolute inset-0 bg-gray-900 rounded-lg shadow-lg overflow-hidden border border-gray-800 [backface-visibility:hidden]">
+                    <div className="relative w-full aspect-square bg-gray-800">
+                      {artist.profile_image_url ? (
+                        <img
+                          src={artist.profile_image_url}
+                          alt={artist.name}
+                          className="absolute inset-0 w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                          Kein Bild
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold mb-2 text-white">{artist.name}</h2>
-                  <p className="text-sm text-gray-300 whitespace-pre-line line-clamp-4">
-                    {artist.bio?.trim() || 'Keine Bio hinterlegt.'}
-                  </p>
+                    <div className="p-4">
+                      <h2 className="text-xl font-semibold mb-2 text-white">{artist.name}</h2>
+                      <p className="text-sm text-gray-300 whitespace-pre-line line-clamp-4">
+                        {artist.bio?.trim() || 'Keine Bio hinterlegt.'}
+                      </p>
+                    </div>
+                  </div>
+                  {/* Back */}
+                  <div className="absolute inset-0 bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 [backface-visibility:hidden] [transform:rotateY(180deg)] flex items-center justify-center p-4">
+                    <p className="text-white text-center">Platzhaltertext für weitere Informationen</p>
+                  </div>
                 </div>
               </div>
             ))}
