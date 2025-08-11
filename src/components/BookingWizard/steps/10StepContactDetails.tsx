@@ -36,7 +36,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
         </p>
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
-        <label htmlFor="clientName" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="clientName" className="block text-sm font-medium text-neutral-200">
           Name <span className="text-red-500">*</span>
         </label>
         <input
@@ -50,7 +50,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
         />
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
-        <label htmlFor="clientEmail" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="clientEmail" className="block text-sm font-medium text-neutral-200">
           E-Mail <span className="text-red-500">*</span>
         </label>
         <input
@@ -62,7 +62,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           placeholder="name@beispiel.de"
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-gray-300 mt-1">
           Mit Angabe deiner E‑Mail-Adresse erlaubst du uns, dir unverbindliche Angebotsvorschläge zu dieser Anfrage zuzusenden. Du kannst dem jederzeit widersprechen.
         </p>
       </div>

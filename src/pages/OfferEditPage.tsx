@@ -19,13 +19,24 @@ export default function OfferEditPage() {
   const [artistNameById, setArtistNameById] = useState<Record<number, string>>({});
   const [artistStatuses, setArtistStatuses] = useState<Record<number, string>>({});
   const [artistGages, setArtistGages] = useState<Record<number, number | null>>({});
+  const [artistRemarks, setArtistRemarks] = useState<Record<number, string>>({});
 
   const allowedStatuses = ['angefragt','angeboten','akzeptiert','abgelehnt','storniert'] as const;
 
   // Neuer Handler: Admin ändert Status für EINEN Artist (per-artist status)
   async function handleArtistStatusChange(artistId: number, newStatus: string) {
     if (!reqId) return;
-    console.log('🛠️ handleArtistStatusChange →', { reqId, artistId, newStatus });
+    const remark = (artistRemarks[artistId] ?? '').trim();
+
+    // Bei Ablehnung: Bemerkung erforderlich
+    if (newStatus === 'abgelehnt' && remark.length === 0) {
+      alert('Bitte gib eine kurze Bemerkung an, warum abgelehnt wurde.');
+      // Select nicht umschalten, bis Bemerkung vorhanden
+      setArtistStatuses(prev => ({ ...prev }));
+      return;
+    }
+
+    console.log('🛠️ handleArtistStatusChange →', { reqId, artistId, newStatus, remark });
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/admin/requests/${reqId}/artist_status/${artistId}`,
@@ -35,7 +46,8 @@ export default function OfferEditPage() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ status: newStatus }),
+          // Bemerkung mitsenden (Backend kann "remark" oder "comment" akzeptieren)
+          body: JSON.stringify({ status: newStatus, remark, comment: remark }),
         }
       );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -322,6 +334,17 @@ export default function OfferEditPage() {
                     </option>
                   ))}
                 </select>
+                {/* Bemerkung an den Künstler (bei Ablehnung erforderlich) */}
+                <label className="block mt-3 text-sm font-medium">Bemerkung an den Künstler</label>
+                <textarea
+                  className="mt-1 w-full bg-gray-700 text-white p-2 rounded resize-y min-h-[72px]"
+                  placeholder="z. B. Termin bereits vergeben / Stil passt nicht zum Event / logistisch nicht machbar"
+                  value={artistRemarks[artistId] ?? ''}
+                  onChange={(e) => setArtistRemarks(prev => ({ ...prev, [artistId]: e.target.value }))}
+                />
+                { (artistStatuses[artistId] === 'abgelehnt') && !(artistRemarks[artistId]?.trim()) && (
+                  <p className="mt-1 text-xs text-red-400">Bei Ablehnung ist eine kurze Bemerkung erforderlich.</p>
+                ) }
                 <p className="mt-1 text-xs text-gray-400">(Status-Quelle: {artistStatuses[artistId] ? 'per-Artist' : 'Default'})</p>
               </div>
               );

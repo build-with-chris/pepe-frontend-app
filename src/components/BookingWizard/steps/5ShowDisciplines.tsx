@@ -8,21 +8,21 @@ export interface StepDisciplinesProps {
   onPrev: () => void;
 }
 
-const disciplinesOptions: string[] = [
-  'Zauberer',
-  'Cyr-Wheel',
-  'Bodenakrobatik',
-  'Luftakrobatik',
-  'Partnerakrobatik',
-  'Chinese Pole',
-  'Hula Hoop',
-  'Handstand',
-  'Contemporary Dance',
-  'Breakdance',
-  'Teeterboard',
-  'Jonglage',
-  'Moderation',
-  'Pantomime/Entertainment'
+const disciplinesOptions: { name: string; description: string }[] = [
+  { name: 'Zauberer', description: 'Illusionen, Tricks und magische Momente für jedes Publikum.' },
+  { name: 'Cyr-Wheel', description: 'Akrobatische Performance in einem großen rotierenden Rad.' },
+  { name: 'Bodenakrobatik', description: 'Beeindruckende akrobatische Bewegungen und Figuren am Boden.' },
+  { name: 'Luftakrobatik', description: 'Schwebende Kunststücke an Tuch, Trapez oder Reifen.' },
+  { name: 'Partnerakrobatik', description: 'Akrobatik zu zweit oder in der Gruppe mit spektakulären Hebefiguren.' },
+  { name: 'Chinese Pole', description: 'Kraftvolle Akrobatik und Tricks an der chinesischen Stange.' },
+  { name: 'Hula Hoop', description: 'Dynamische Shows mit rotierenden Reifen und viel Bewegung.' },
+  { name: 'Handstand', description: 'Kraft, Balance und Kontrolle bei Handstand-Performances.' },
+  { name: 'Contemporary Dance', description: 'Moderne Tanzkunst mit Ausdruck und Emotion.' },
+  { name: 'Breakdance', description: 'Urbane Tanzstile mit akrobatischen Moves und Powermoves.' },
+  { name: 'Teeterboard', description: 'Sprünge und Saltos auf dem federnden Brett.' },
+  { name: 'Jonglage', description: 'Kunstvolles Werfen und Fangen von Bällen, Keulen oder Ringen.' },
+  { name: 'Moderation', description: 'Professionelle und unterhaltsame Leitung durch das Programm.' },
+  { name: 'Pantomime/Entertainment', description: 'Wortlose Unterhaltung, Comedy und Interaktion.' }
 ];
 
 const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
@@ -51,23 +51,26 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
       </div>
       <div className="w-full overflow-auto px-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
         <div className="grid grid-cols-3 lg:grid-cols-4 gap-4">
-          {disciplinesOptions.map(option => (
+          {disciplinesOptions.map(({ name, description }) => (
             <div
-              key={option}
-              onClick={() => toggleDiscipline(option)}
-              className={`aspect-square w-2/3 relative cursor-pointer rounded-lg overflow-hidden ${
-                data.disciplines.includes(option)
+              key={name}
+              onClick={() => toggleDiscipline(name)}
+              className={`aspect-square w-2/3 relative cursor-pointer rounded-lg overflow-hidden group ${
+                data.disciplines.includes(name)
                   ? 'border-4 border-blue-500'
                   : 'border-2 border-transparent'
               }`}
             >
               <img
-                src={`/images/disciplines/${option.replace(/ /g, '_')}.webp`}
-                alt={option}
-                className="absolute inset-0 w-full h-full object-cover"
+                src={`/images/disciplines/${name.replace(/ /g, '_')}.webp`}
+                alt={name}
+                className="absolute inset-0 w-full h-full object-cover transition duration-200 group-hover:brightness-75"
               />
-              <div className="absolute bottom-0 w-full bg-black bg-opacity-50 py-1">
-                <span className="text-white text-center block text-sm">{option}</span>
+              <div className="absolute bottom-0 w-full bg-black/50 py-1 transition-opacity group-hover:opacity-0">
+                <span className="text-white text-center block text-sm">{name}</span>
+              </div>
+              <div className="absolute inset-x-3 bottom-3 bg-black/60 text-white rounded-md px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <p className="text-md text-center leading-snug">{description}</p>
               </div>
             </div>
           ))}

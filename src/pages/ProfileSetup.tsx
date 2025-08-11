@@ -364,18 +364,22 @@ export default function Profile() {
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Profil einrichten</h1>
-      {/* locked notice removed from top */}
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Profil einrichten</h1>
+        {locked && (
+          <button
+            type="button"
+            onClick={() => { setLocked(false); setSuccess(false); }}
+            className="text-sm font-medium text-blue-600 hover:underline"
+          >
+            Profil bearbeiten
+          </button>
+        )}
+      </div>
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {success && (
         <div className="mb-4 text-green-700 bg-green-100 border border-green-400 rounded p-3">
           Profil erfolgreich gespeichert!
-          <button
-            className="ml-4 text-green-900 underline"
-            onClick={() => navigate("/dashboard")}
-          >
-            Zum Dashboard
-          </button>
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -490,18 +494,6 @@ export default function Profile() {
           {locked ? "Profil gesperrt" : loading ? "Speichern..." : "Profil speichern"}
         </button>
       </form>
-      {locked && (
-        <div className="mt-6 p-4 bg-transparent border border-white rounded-md text-white shadow-[0_0_15px_rgba(255,255,255,0.15)]">
-          <p className="mb-2">✅ Profil ist abgeschlossen und an das Backend gesendet. Es ist aktuell gesperrt.</p>
-          <button
-            type="button"
-            className="underline"
-            onClick={() => { setLocked(false); setSuccess(false); }}
-          >
-            Profil bearbeiten
-          </button>
-        </div>
-      )}
       {backendDebug && (
         <div className="mt-4 p-3 bg-gray-100 border rounded text-xs whitespace-pre-wrap">
           <strong>Debug Log:</strong>

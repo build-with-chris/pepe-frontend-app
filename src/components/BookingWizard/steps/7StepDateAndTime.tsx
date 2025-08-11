@@ -40,7 +40,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
       </div>
       <div className="flex w-1/3 mx-auto mb-6 space-x-4">
         <div className="flex-1">
-          <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="eventDate" className="block text-sm font-medium text-neutral-200 mb-1">
             Datum
           </label>
           <div className="relative">
@@ -59,7 +59,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
           </div>
         </div>
         <div className="flex-1">
-          <label htmlFor="eventTime" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="eventTime" className="block text-sm font-medium text-neutral-200 mb-1">
             Uhrzeit
           </label>
           <div className="relative">
@@ -79,7 +79,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         </div>
       </div>
       <div className="w-1/3 mx-auto mb-6">
-        <label htmlFor="guests" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="guests" className="block text-sm font-medium text-neutral-200 mb-1">
           Anzahl der Gäste
         </label>
         <div className="flex flex-col space-y-2">

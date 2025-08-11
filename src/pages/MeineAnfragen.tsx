@@ -22,6 +22,7 @@ interface Anfrage {
   team_size: string | number;
   artist_gage?: number;           
   artist_offer_date?: string;    
+  admin_comment?: string; // Kommentar vom Admin (Backend: comment/artist_comment)
 }
 
 const statusDisplay: Record<string, string> = {
@@ -83,7 +84,11 @@ const MeineAnfragen: React.FC = () => {
         const data = await apiFetch(url);
         console.log('Rohdaten von /api/requests/requests:', data);
         // Erwartet ein Array direkt oder in { requests: [...] }
-        const list: Anfrage[] = Array.isArray(data) ? data : data.requests || [];
+        const rawList: any[] = Array.isArray(data) ? data : data.requests || [];
+        const list: Anfrage[] = rawList.map((item: any) => ({
+          ...item,
+          admin_comment: item.comment ?? item.artist_comment ?? undefined,
+        }));
         setAnfragen(list);
         console.log('🕵️‍♀️ Loaded requests with all fields:', list);
         console.log('🧐 Loaded statuses:', list.map(a => a.status));
@@ -243,6 +248,12 @@ const MeineAnfragen: React.FC = () => {
                     {anfrage.artist_offer_date && (
                       <div>Gesendet am: {formatDate(anfrage.artist_offer_date)}{' '}{formatTime(anfrage.artist_offer_date)}</div>
                     )}
+                    {anfrage.admin_comment && (
+                      <div className="mt-2 p-2 rounded border border-yellow-200 bg-yellow-50 text-yellow-800 text-sm">
+                        <span className="font-semibold">Kommentar:&nbsp;</span>
+                        {anfrage.admin_comment}
+                      </div>
+                    )}
                   </div>
                 ) : String(anfrage.status).toLowerCase() === 'angefragt' ? (
                   <div className="flex flex-col gap-2 w-full">
@@ -271,6 +282,12 @@ const MeineAnfragen: React.FC = () => {
                     )}
                     {anfrage.artist_offer_date && (
                       <div>Gesendet am: {formatDate(anfrage.artist_offer_date)}{' '}{formatTime(anfrage.artist_offer_date)}</div>
+                    )}
+                    {anfrage.admin_comment && (
+                      <div className="mt-2 p-2 rounded border border-yellow-200 bg-yellow-50 text-yellow-800 text-sm">
+                        <span className="font-semibold">Kommentar:&nbsp;</span>
+                        {anfrage.admin_comment}
+                      </div>
                     )}
                   </div>
                 )}
