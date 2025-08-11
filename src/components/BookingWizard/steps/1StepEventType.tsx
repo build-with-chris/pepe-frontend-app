@@ -17,11 +17,6 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
     { value: 'Streetshow', label: 'Streetshow', img: 'Streetshow' },
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({ event_type: e.target.value });
-    onNext();
-  };
-
   return (
     <div className="p-0 w-full mx-auto md:max-w-4/5">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Welchen Event‑Typ planst du?</h2>
@@ -33,22 +28,16 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
       </div>
       <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 w-full">
         {options.map(option => (
-          <div
+          <OptionCard
             key={option.value}
-            onClick={() => {
-              onChange({ event_type: option.value });
-              onNext();
-            }}
-          >
-            <OptionCard
-              name="event_type"
-              value={option.value}
-              label={option.label}
-              imgSrc={`/images/eventTypes/${option.img}.webp`}
-              checked={data.event_type === option.value}
-              onChange={val => onChange({ event_type: val })}
-            />
-          </div>
+            name="event_type"
+            value={option.value}
+            label={option.label}
+            imgSrc={`/images/eventTypes/${option.img}.webp`}
+            checked={data.event_type === option.value}
+            onChange={val => onChange({ event_type: val })}
+            onSelectNext={onNext}
+          />
         ))}
       </div>
     </div>

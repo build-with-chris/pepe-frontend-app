@@ -36,7 +36,6 @@ return (
   <Button
     variant="secondary"
     onClick={onPrev}
-    disabled={stepIndex === 0}
   >
     <ArrowLeft className="h-5 w-5" />
     <span className="ml-2 hidden md:inline">Zurück</span>

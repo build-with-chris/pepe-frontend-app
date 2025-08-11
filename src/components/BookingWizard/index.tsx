@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProgressBar from './ProgressBar';
 import type { BookingData } from './types';
-import Intro from './steps/0Intro'
+import Intro from './steps/0Intro.tsx'
 import StepEventType from './steps/1StepEventType';
 import StepShowType from './steps/2StepShowType';
 import StepShowDisciplines from './steps/5ShowDisciplines.tsx';

@@ -31,22 +31,23 @@ const StepNumberGuestsAndStatus: React.FC<StepNumberGuestsAndStatusProps> = ({
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-2 gap-4 w-full">
+      <div className="flex flex-col space-y-2 w-full max-w-xs">
         {statusOptionsList.map(option => (
-          <div
+          <button
             key={option.value}
+            type="button"
             onClick={() => {
               onChange({ planning_status: option.value });
               onNext();
             }}
-            className={`w-full aspect-square flex items-center justify-center p-4 border rounded-lg cursor-pointer ${
+            className={`w-full py-2 px-4 rounded-md border transition-colors duration-150 ${
               data.planning_status === option.value
-                ? 'bg-blue-800 border-2 border-blue-400 text-white text-xl'
-                : 'bg-gray-800 border-2 border-gray-600 text-gray-300 hover:bg-gray-700 text-xl'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
             }`}
           >
             {option.label}
-          </div>
+          </button>
         ))}
       </div>
 

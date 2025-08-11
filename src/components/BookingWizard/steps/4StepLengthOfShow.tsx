@@ -26,6 +26,16 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
       return () => clearTimeout(t);
     }
   }, [customMode, data.duration_minutes, onNext]);
+
+  // Ensure a default duration is set if none selected yet (preselect 5 minutes)
+  useEffect(() => {
+    if (!customMode && (!data.duration_minutes || data.duration_minutes < 1)) {
+      onChange({ duration_minutes: 5 });
+    }
+    // run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     onChange({ duration_minutes: isNaN(value) ? 0 : value });
@@ -46,7 +56,7 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
         </label>
         <select
           id="durationSelect"
-          value={customMode ? 'custom' : data.duration_minutes.toString()}
+          value={customMode ? 'custom' : (data.duration_minutes && data.duration_minutes > 0 ? data.duration_minutes.toString() : '5')}
           onChange={(e) => {
             const val = e.target.value;
             if (val === 'custom') {
@@ -104,7 +114,8 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
         <Button
           variant="default"
           onClick={onNext}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg"
+          disabled={!data.duration_minutes || data.duration_minutes < 1}
+          className={`text-white font-semibold py-3 px-8 rounded-full shadow-lg ${(!data.duration_minutes || data.duration_minutes < 1) ? 'bg-blue-600/60 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
         >
           Weiter
         </Button>

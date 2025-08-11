@@ -37,11 +37,12 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientName" className="block text-sm font-medium text-gray-700">
-          Name
+          Name <span className="text-red-500">*</span>
         </label>
         <input
           id="clientName"
           type="text"
+          required
           value={data.client_name}
           onChange={handleNameChange}
           placeholder="Dein Name"
@@ -61,6 +62,9 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           placeholder="name@beispiel.de"
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        <p className="text-xs text-gray-500 mt-1">
+          Mit Angabe deiner E‑Mail-Adresse erlaubst du uns, dir unverbindliche Angebotsvorschläge zu dieser Anfrage zuzusenden. Du kannst dem jederzeit widersprechen.
+        </p>
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
         <div className="flex items-center space-x-4 p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition">
@@ -88,7 +92,8 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
         <button
           type="button"
           onClick={onNext}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg"
+          disabled={!data.client_name || !data.client_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.client_email)}
+          className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${(!data.client_name || !data.client_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.client_email)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
         >
           Weiter
         </button>

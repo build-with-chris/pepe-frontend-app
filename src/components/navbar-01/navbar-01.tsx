@@ -5,11 +5,13 @@ import { NavigationSheet } from "./navigation-sheet";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar01Page = () => {
   const { user, setUser, setToken } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHomeOrArtists = location.pathname === '/home' || location.pathname === '/kuenstler';
 
   const handleLogout = async () => {
     try {
@@ -24,7 +26,7 @@ const Navbar01Page = () => {
 
   return (
     <div className="z-50">
-      <nav className="relative h-26 bg-black z-50">
+      <nav className={`${isHomeOrArtists ? 'absolute top-0 left-0' : 'relative'} w-full h-26 ${isHomeOrArtists ? 'bg-transparent' : 'bg-black'} z-50`}>
         <div className="h-full flex items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <Logo />
 

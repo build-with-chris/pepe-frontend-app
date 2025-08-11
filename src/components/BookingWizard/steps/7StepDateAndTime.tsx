@@ -35,7 +35,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
       <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
         <p className="text-sm leading-relaxed text-center">
           <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Datum und Uhrzeit helfen uns, die Verfügbarkeit der Künstler zu prüfen und die Planung optimal auf dein Event abzustimmen.
+          Datum und Uhrzeit helfen uns, die Verfügbarkeit der Künstler zu prüfen und die Planung optimal auf dein Event abzustimmen. Die ungefähre Gästeanzahl reicht vollkommen aus – so können wir besser einschätzen, welche Effekte und Showelemente am besten wirken.
         </p>
       </div>
       <div className="flex w-1/3 mx-auto mb-6 space-x-4">
@@ -51,12 +51,11 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
               onChange={handleDateChange}
               className="block w-full pr-10 border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <label htmlFor="eventDate">
-              <Calendar
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                aria-hidden="true"
-              />
-            </label>
+            <Calendar
+              onClick={() => (document.getElementById('eventDate') as HTMLInputElement)?.showPicker?.()}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+              aria-hidden="true"
+            />
           </div>
         </div>
         <div className="flex-1">
@@ -71,12 +70,11 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
               onChange={handleTimeChange}
               className="block w-full pr-10 border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <label htmlFor="eventTime">
-              <Clock
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                aria-hidden="true"
-              />
-            </label>
+            <Clock
+              onClick={() => (document.getElementById('eventTime') as HTMLInputElement)?.showPicker?.()}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+              aria-hidden="true"
+            />
           </div>
         </div>
       </div>
@@ -84,27 +82,30 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         <label htmlFor="guests" className="block text-sm font-medium text-gray-700 mb-1">
           Anzahl der Gäste
         </label>
-        <input
-          id="guests"
-          type="number"
-          min={1}
-          value={data.number_of_guests}
-          onChange={handleGuestsChange}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              onNext();
-            }
-          }}
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="flex flex-col space-y-2">
+          {[
+            { label: 'Unter 200', value: 199 },
+            { label: '200 - 500', value: 350 },
+            { label: 'Über 500', value: 501 },
+          ].map((option) => (
+            <button
+              key={option.label}
+              type="button"
+              onClick={() => onChange({ number_of_guests: option.value })}
+              className={`w-full py-2 px-4 rounded-md border transition-colors duration-150 ${data.number_of_guests === option.value ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       </div>
       {/* Fixed footer CTA */}
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
         <button
           type="button"
           onClick={onNext}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg"
+          disabled={!data.event_date || !data.event_time || !data.number_of_guests}
+          className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${(!data.event_date || !data.event_time || !data.number_of_guests) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
         >
           Weiter
         </button>

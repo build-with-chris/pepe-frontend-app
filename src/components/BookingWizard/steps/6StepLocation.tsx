@@ -84,7 +84,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
   };
 
   return (
-    <div className="step">
+    <div className="step pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wo findet deine Veranstaltung statt?</h2>
       <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
         <p className="text-sm leading-relaxed text-center">
@@ -134,35 +134,51 @@ const StepLocation: React.FC<StepLocationProps> = ({
         />
       </div>
       </div>
-      <div className="grid grid-cols-2 gap-4 w-full lg:w-2/3 mx-auto mb-6">
-        <OptionCard
-          name="is_indoor"
-          value="true"
-          label="Indoor"
-          imgSrc="/images/indoor.webp"
-          checked={hasSelection && data.is_indoor === true}
-          onChange={val => {
-            setHasSelection(true);
-            onChange({ is_indoor: val === 'true' });
-            if (street && postalCode && city) {
-              onNext();
-            }
-          }}
-        />
-        <OptionCard
-          name="is_indoor"
-          value="false"
-          label="Outdoor"
-          imgSrc="/images/outdoor.webp"
-          checked={hasSelection && data.is_indoor === false}
-          onChange={val => {
-            setHasSelection(true);
-            onChange({ is_indoor: val === 'true' });
-            if (street && postalCode && city) {
-              onNext();
-            }
-          }}
-        />
+      <div className="flex flex-wrap justify-center gap-4 w-full">
+        <div className="w-full max-w-[380px]">
+          <OptionCard
+            name="is_indoor"
+            value="true"
+            label="Indoor"
+            imgSrc="/images/indoor.webp"
+            checked={hasSelection && data.is_indoor === true}
+            onChange={val => {
+              setHasSelection(true);
+              onChange({ is_indoor: val === 'true' });
+              if (street && postalCode && city) {
+                onNext();
+              }
+            }}
+          />
+        </div>
+        <div className="w-full max-w-[380px]">
+          <OptionCard
+            name="is_indoor"
+            value="false"
+            label="Outdoor"
+            imgSrc="/images/outdoor.webp"
+            checked={hasSelection && data.is_indoor === false}
+            onChange={val => {
+              setHasSelection(true);
+              onChange({ is_indoor: val === 'true' });
+              if (street && postalCode && city) {
+                onNext();
+              }
+            }}
+          />
+        </div>
+      </div>
+      {/* Fixed footer CTA */}
+      <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
+        <button
+          type="button"
+          onClick={onNext}
+          disabled={!street || !postalCode || !city || !hasSelection}
+          className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${(!street || !postalCode || !city || !hasSelection) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
+          aria-label="Weiter zum nächsten Schritt"
+        >
+          Weiter
+        </button>
       </div>
     </div>
   );

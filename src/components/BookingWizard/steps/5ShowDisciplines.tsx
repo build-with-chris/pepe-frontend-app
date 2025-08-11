@@ -78,7 +78,8 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
         <button
           type="button"
           onClick={onNext}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg"
+          disabled={data.disciplines.length === 0}
+          className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${data.disciplines.length === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
           aria-label="Weiter zum nächsten Schritt"
         >
           Weiter

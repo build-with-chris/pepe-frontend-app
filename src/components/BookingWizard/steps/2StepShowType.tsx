@@ -12,11 +12,6 @@ export interface StepShowTypeProps {
 const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onPrev }) => {
   const options = ['Walking Act', 'Bühnen Show'];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({ show_type: e.target.value });
-    onNext();
-  };
-
   return (
     <div className="step flex flex-col items-center">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Welchen Show‑Typ stellst du dir vor?</h2>
@@ -26,7 +21,7 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
           Damit wir einschätzen können, ob ein flexibler Walking Act oder eine feste Bühnenshow besser zu deinem Event passt – und dir passende Vorschläge machen können.
         </p>
       </div>
-      <div className="p-5 w-full lg:w-2/3 mx-auto grid grid-cols-2 gap-4 md:max-w-3/5">
+      <div className="flex flex-wrap justify-center gap-4 w-full">
         {options.map(option => (
           <OptionCard
             key={option}
@@ -37,6 +32,7 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
             checked={data.show_type === option}
             onChange={val => onChange({ show_type: val })}
             onSelectNext={onNext}
+            autoAdvance={true}
           />
         ))}
       </div>

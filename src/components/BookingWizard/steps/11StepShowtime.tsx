@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
-import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star } from 'lucide-react';
+import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star, PartyPopper, CheckCircle2 } from 'lucide-react';
 
 export interface StepShowtimeProps {
   data: BookingData;
@@ -146,36 +146,50 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
               'Absenden'
             )}
           </button>
-        ) : (
-          <div className="flex flex-col items-center text-center space-y-4">
-            <p className="text-lg font-semibold text-gray-700">
-              Vielen Dank für deine Anfrage! 🎉
+        ) : null}
+      </div>
+      {response && (
+        <div ref={responseRef} className="relative w-full max-w-2xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-xl mt-8 p-8">
+          {/* Header */}
+          <div className="flex flex-col items-center text-center">
+            <span className="inline-flex items-center gap-2 text-green-600 mb-2">
+              <CheckCircle2 className="h-5 w-5" />
+              <span className="text-sm font-semibold uppercase tracking-wide">Anfrage versendet  🎉</span>
+            </span>
+            <h3 className="text-2xl md:text-3xl font-extrabold mb-2 flex items-center gap-2">
+              Vielen Dank für deine Anfrage
+            </h3>
+            <p className="text-sm md:text-base text-gray-600 max-w-md">
+              Deine Anfrage wurde erfolgreich versendet. Schau dich in der Zwischenzeit gern bei unseren Kü nstlern um und entdecke weitere spannende Acts.
             </p>
-            <p className="text-sm text-gray-600 max-w-md">
-              Deine Anfrage wurde erfolgreich versendet. Schaue dir doch in der Zwischenzeit unsere Künstlerprofile an und entdecke weitere spannende Acts.
-            </p>
+          </div>
+
+          {/* Highlights */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
+            <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
+              <div className="text-xs text-gray-500">Verfügbare Artisten</div>
+              <div className="text-xl font-bold text-blue-700">{response.num_available_artists}</div>
+            </div>
+            <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
+              <div className="text-xs text-gray-500">Voraussichtlicher Preis</div>
+              <div className="text-xl font-bold text-blue-700">{response.price_min}€ – {response.price_max}€</div>
+            </div>
+            <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
+              <div className="text-xs text-gray-500">Gebündeltes Angebot</div>
+              <div className="text-xl font-bold text-blue-700">in 48h per Mail</div>
+            </div>
+          </div>
+
+          {/* Link */}
+          <div className="text-center mt-6">
             <a
               href="/kuenstler"
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition-colors"
             >
+              <PartyPopper className="h-5 w-5" />
               Zu unseren Künstlern
             </a>
           </div>
-        )}
-      </div>
-      {response && (
-        <div ref={responseRef} className="relative w-2/3 mx-auto bg-white border border-gray-200 
-        rounded-lg shadow mt-6 p-6">
-          <h3 className="text-xl font-semibold mb-4">Anfrage erhalten!</h3>
-          <p className="text-gray-700 leading-relaxed">
-            Am {new Date(data.event_date).toLocaleDateString('de-DE')} haben wir 
-            {" "}{response.num_available_artists} verfügbare{response.num_available_artists > 1 ? '' : 'n'} 
-            {" "}Artist{response.num_available_artists > 1 ? 's' : ''} 
-            {" "}für Ihren Event. Der Preis wird voraussichtlich zwischen 
-            {" "}{response.price_min}€ und {response.price_max}€ 
-            {" "}liegen. Ihre Anfrage geht nun an unsere Künstler raus 
-            {" "}– innerhalb von 48 Stunden erhalten Sie ein gesammeltes Angebot.
-          </p>
         </div>
       )}
       {error && (
