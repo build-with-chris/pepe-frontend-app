@@ -8,6 +8,9 @@ interface Artist {
   profile_image_url?: string | null;
   bio?: string | null;
   disciplines?: string[] | null;
+  gallery?: string[] | null;
+  gallery_urls?: string[] | null;
+  instagram?: string | null;
 }
 
 export default function Kuenstler(){
@@ -34,6 +37,11 @@ export default function Kuenstler(){
           profile_image_url: a.profile_image_url ?? a.image_url ?? null,
           bio: a.bio ?? null,
           disciplines: a.disciplines ?? null,
+          // Galerie-Felder aus dem Backend
+          gallery: Array.isArray(a.gallery) ? a.gallery : null,
+          gallery_urls: Array.isArray(a.gallery_urls) ? a.gallery_urls : [],
+          // Social
+          instagram: a.instagram ?? null,
         }));
         setArtists(mapped);
       } catch (e: any) {

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +14,7 @@ if (import.meta.env.DEV) {
 }
 
 const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || 'profiles';
+const LOCALSTORAGE_KEY_GUIDELINES = "guidelinesAccepted";
 
 const disciplinesOptions = [
   "Zauberer",
@@ -84,6 +89,23 @@ export default function Profile() {
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [bio, setBio] = useState<string>('');
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  // Galerie-Fotos
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [galleryUrls, setGalleryUrls] = useState<string[]>([]);
+  // Guidelines Popup (erstes Login)
+  const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
+  const [guidelinesChecked, setGuidelinesChecked] = useState(false);
+
+
+  useEffect(() => {
+    try {
+      const accepted = localStorage.getItem(LOCALSTORAGE_KEY_GUIDELINES) === "true";
+      if (!accepted) setIsGuidelinesOpen(true);
+    } catch {
+      // falls localStorage nicht verfügbar ist, einfach anzeigen
+      setIsGuidelinesOpen(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -135,6 +157,7 @@ export default function Profile() {
         setPriceMax(me.price_max ?? 900);
         setBio(me.bio || '');
         setProfileImageUrl(me.profile_image_url || null);
+        setGalleryUrls(Array.isArray(me.gallery_urls) ? me.gallery_urls : []);
         if (me.id) {
           setBackendArtistId(String(me.id));
           setLocked(true);
@@ -289,6 +312,7 @@ export default function Profile() {
             else ext = 'jpg';
           }
           const path = `artist/${effectiveId}/${Date.now()}.${ext}`;
+      
 
           console.groupCollapsed('📤 Upload profile image');
           console.log('Bucket:', PROFILE_BUCKET);
@@ -303,6 +327,8 @@ export default function Profile() {
               // Wichtig: kein Upsert -> benötigt nur INSERT-Policy
               upsert: false,
             });
+
+
 
           if (uploadError) {
             console.error('❌ Supabase upload error:', uploadError);
@@ -322,10 +348,53 @@ export default function Profile() {
         }
       }
 
+
+      // Galerie-Fotos via Supabase hochladen (bis zu 3)
+      let mergedGalleryUrls = [...galleryUrls]; // vorhandene behalten
+      if (galleryFiles.length > 0) {
+        try {
+          const uploaded: string[] = [];
+          for (let i = 0; i < galleryFiles.length; i++) {
+            const file = galleryFiles[i];
+            // Dateiendung bestimmen
+            let ext = (file.name.split('.').pop() || '').toLowerCase();
+            if (!ext || ext.length > 5) {
+              const mime = file.type;
+              if (mime === 'image/jpeg' || mime === 'image/jpg') ext = 'jpg';
+              else if (mime === 'image/png') ext = 'png';
+              else if (mime === 'image/webp') ext = 'webp';
+              else ext = 'jpg';
+            }
+            const path = `artist/${effectiveId}/gallery/${Date.now()}-${i}.${ext}`;
+
+            const { error: uploadErr } = await supabase.storage
+              .from(PROFILE_BUCKET)
+              .upload(path, file, {
+                contentType: file.type || `image/${ext}`,
+                upsert: false,
+              });
+
+            if (uploadErr) {
+              console.warn('Galerie-Upload fehlgeschlagen:', uploadErr);
+              continue;
+            }
+            const { data: pub } = supabase.storage.from(PROFILE_BUCKET).getPublicUrl(path);
+            if (pub?.publicUrl) uploaded.push(pub.publicUrl);
+          }
+          if (uploaded.length > 0) {
+            mergedGalleryUrls = [...mergedGalleryUrls, ...uploaded].slice(0, 3); // max. 3
+            setGalleryUrls(mergedGalleryUrls);
+            setGalleryFiles([]); // Auswahl zurücksetzen
+          }
+        } catch (galleryErr) {
+          console.warn('Fehler beim Galerie-Upload:', galleryErr);
+        }
+      }
       // Backend: Bild-URL & Bio synchronisieren (nur URL senden, wenn Upload/URL vorhanden)
       try {
         const payload: any = { bio: (bio ?? '').toString() };
         if (imageUrl) payload.profile_image_url = imageUrl;
+        payload.gallery_urls = mergedGalleryUrls;
         const resp = await fetch(`${baseUrl}/api/artists/me/profile`, {
           method: 'PATCH',
           headers: {
@@ -360,6 +429,18 @@ export default function Profile() {
     setDisciplines((prev) =>
       prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]
     );
+  };
+
+  const handleAcceptGuidelines = () => {
+  try {
+    localStorage.setItem(LOCALSTORAGE_KEY_GUIDELINES, "true");
+  } catch {}
+  setIsGuidelinesOpen(false);
+  };
+
+  const handleLaterGuidelines = () => {
+    // kein Flag setzen -> erscheint beim nächsten Besuch erneut
+    setIsGuidelinesOpen(false);
   };
 
   return (
@@ -477,6 +558,49 @@ export default function Profile() {
           )}
         </div>
         <div>
+  <label className="block mb-1 font-medium">Weitere Fotos (max. 3)</label>
+  <input
+    type="file"
+    accept="image/*"
+    multiple
+    onChange={(e) => {
+      if (!e.target.files) return;
+      const files = Array.from(e.target.files).slice(0, 3); // max. 3 Bilder
+      setGalleryFiles(files);
+    }}
+    disabled={locked}
+    className="w-full"
+  />
+
+  {/* Bereits gespeicherte Galerie-Bilder aus dem Backend */}
+  {galleryUrls.length > 0 && (
+    <div className="mt-2 grid grid-cols-3 gap-2">
+      {galleryUrls.map((url, i) => (
+        <img
+          key={i}
+          src={url}
+          alt={`Galerie ${i + 1}`}
+          className="h-24 w-full object-cover rounded"
+        />
+      ))}
+    </div>
+  )}
+
+  {/* Neue (noch nicht hochgeladene) Bilder als Vorschau */}
+  {galleryFiles.length > 0 && (
+    <div className="mt-2 grid grid-cols-3 gap-2">
+      {galleryFiles.map((file, i) => (
+        <img
+          key={i}
+          src={URL.createObjectURL(file)}
+          alt={`Neu ${i + 1}`}
+          className="h-24 w-full object-cover rounded"
+        />
+      ))}
+    </div>
+  )}
+</div>
+        <div>
           <label className="block mb-1 font-medium">Über mich</label>
           <textarea
             value={bio}
@@ -500,6 +624,108 @@ export default function Profile() {
           <div>{backendDebug}</div>
         </div>
       )}
+      <Dialog open={isGuidelinesOpen} onOpenChange={setIsGuidelinesOpen}>
+  <DialogContent className="max-w-xl sm:max-w-2xl text-left">
+    <DialogHeader>
+      <DialogTitle>Willkommen bei PepeShows 🎪</DialogTitle>
+      <DialogDescription>
+        Ein kurzer Überblick, wie die Plattform funktioniert – deine Rechte und unsere Standards.
+      </DialogDescription>
+    </DialogHeader>
+
+    {/* TL;DR */}
+    <div className="rounded-md bg-white/5 border border-white/10 p-3 text-sm text-gray-200">
+      <strong>Kurz gesagt:</strong> Fair, sicher, transparent. Du entscheidest über Anfragen &amp; Gagen,
+      wir kümmern uns um Matching, Vertrag &amp; Support. Medien bleiben deine – wir nutzen sie nur zur
+      Bewerbung. Bitte antworte auf Anfragen innerhalb von <strong>24–48 h</strong> und halte
+      Sicherheits‑/Venue‑Regeln ein.
+    </div>
+
+    {/* Volltext – scrollbar */}
+    <ScrollArea className="max-h-[50vh] rounded-md border border-white/10 p-4 space-y-4">
+      <section>
+        <h4 className="font-semibold mb-1">So funktioniert’s</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-200">
+          <li><strong>Anfrage:</strong> Veranstalter nennen Datum, Ort, Rahmen.</li>
+          <li><strong>Matching:</strong> Vorschläge nach Disziplin, Stil, Verfügbarkeit.</li>
+          <li><strong>Angebot &amp; Zusage:</strong> Du setzt Konditionen, wir koordinieren Details.</li>
+          <li><strong>Auftritt &amp; Abrechnung:</strong> Betreuung bis Abschluss &amp; Feedback.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h4 className="font-semibold mb-1">Deine Rechte</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-200">
+          <li>Transparente Infos vor Zusage.</li>
+          <li>Freie Annahme/Ablehnung von Anfragen.</li>
+          <li>Eigene Gagen; wir helfen bei der Kalkulation.</li>
+          <li>Du bearbeitest/löschst Profil, Medien, Links jederzeit.</li>
+          <li>Schneller, persönlicher Support.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h4 className="font-semibold mb-1">Unsere Standards</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-200">
+          <li>Zuverlässigkeit: Bestätigte Termine sind verbindlich.</li>
+          <li>Antwortzeit: <strong>24–48 h</strong>.</li>
+          <li>Professionalität &amp; Sicherheit (Rider, Venue‑Regeln).</li>
+          <li>Fair Play: keine Umgehung vereinbarter Prozesse.</li>
+          <li>Respekt &amp; Inklusion.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h4 className="font-semibold mb-1">Honorar &amp; Gebühren</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-200">
+          <li>Gage + Reisekosten/Spesen transparent im Angebot.</li>
+          <li>Service‑Fee separat ausgewiesen.</li>
+          <li>Zahlung i. d. R. nach Auftritt; Anzahlung möglich.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h4 className="font-semibold mb-1">Storno &amp; Ausfälle</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-200">
+          <li>Kundenseitig: Staffelung je nach Terminabstand.</li>
+          <li>Artistenseitig: nur aus wichtigem Grund – Ersatzsuche durch uns.</li>
+          <li>Höhere Gewalt: fairer Ausgleich nach Vertrag.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h4 className="font-semibold mb-1">Medien &amp; Datenschutz</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-200">
+          <li>Deine Medien bleiben dein Eigentum.</li>
+          <li>Nutzung durch uns nur zur Bewerbung von dir/der Plattform.</li>
+          <li>Datenexport &amp; -löschung jederzeit möglich.</li>
+        </ul>
+      </section>
+
+      <div className="text-xs text-gray-400">
+        Vollständige Bedingungen: <a href="/artist-guidelines" className="underline">/artist‑guidelines</a>
+      </div>
+    </ScrollArea>
+
+    {/* Zustimmung */}
+    <div className="flex items-start gap-3 pt-2">
+      <Checkbox id="agree" checked={guidelinesChecked} onCheckedChange={(v) => setGuidelinesChecked(Boolean(v))} />
+      <label htmlFor="agree" className="text-sm text-gray-200 select-none">
+        Ich habe die Plattform‑Regeln gelesen und akzeptiere sie.
+      </label>
+    </div>
+
+    {/* Actions */}
+    <div className="flex justify-end gap-2">
+      <Button variant="ghost" onClick={handleLaterGuidelines}>
+        Später lesen
+      </Button>
+      <Button onClick={handleAcceptGuidelines} disabled={!guidelinesChecked}>
+        Akzeptieren &amp; weiter
+      </Button>
+    </div>
+  </DialogContent>
+</Dialog>
     </div>
   );
 }

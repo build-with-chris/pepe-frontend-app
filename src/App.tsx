@@ -20,6 +20,8 @@ import KuenstlerVerwaltung from './pages/Artists';
 import OfferEditPage from './pages/OfferEditPage';
 import Buchhaltung from './pages/Buchhaltung'
 import NotFound from './pages/404';
+import ArtistGuidlines from './pages/ArtistGuidlines.tsx';
+
 
 function App() {
   const location = useLocation();
@@ -58,6 +60,7 @@ function App() {
           />
         </Route>
         <Route path="*" element={<NotFound />} />
+        <Route path="/artist-guidelines" element={<ArtistGuidlines />} />
       </Routes>
     {!['/anfragen', '/login', '/signup'].includes(location.pathname) && <Footer />}
     </div>

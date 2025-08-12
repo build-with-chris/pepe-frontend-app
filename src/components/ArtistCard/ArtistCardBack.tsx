@@ -1,4 +1,3 @@
-import React from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 export interface Artist {
@@ -8,7 +7,9 @@ export interface Artist {
   bio?: string | null;
   disciplines?: string[] | null;
   gallery?: string[] | null;
+  gallery_urls?: string[] | null;
   quote?: string | null;
+  instagram?: string | null;
 }
 
 interface ArtistCardBackProps {
@@ -17,7 +18,8 @@ interface ArtistCardBackProps {
 }
 
 const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
-  const images = (artist.gallery ?? []).filter(Boolean);
+  const images = [...(artist.gallery ?? []), ...(artist.gallery_urls ?? [])].filter(Boolean);
+
 
   const quote =
     artist?.quote?.trim() ||
@@ -28,22 +30,40 @@ const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
   return (
     <div className="absolute inset-0 bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col">
       {/* Carousel */}
-      <div className="relative w-full h-44 md:h-52 bg-gray-900">
+      <div
+        className="relative w-full h-60 md:h-80 bg-gray-900"
+        onClick={(e) => e.stopPropagation()}
+      >
         {images.length > 0 ? (
-          <Carousel className="w-full h-full">
+          <Carousel
+            className="w-full h-full"
+          >
             <CarouselContent>
               {images.map((src, idx) => (
                 <CarouselItem key={idx} className="flex items-center justify-center">
                   <img
                     src={src}
                     alt={`${artist.name} – Bild ${idx + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-black"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
                   />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2" />
-            <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2" />
+            <>
+              <CarouselPrevious
+                className="absolute left-2 top-1/2 -translate-y-1/2"
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+              />
+              <CarouselNext
+                className="absolute right-2 top-1/2 -translate-y-1/2"
+                onMouseDown={(e) => e.stopPropagation()}
+                onTouchStart={(e) => e.stopPropagation()}
+              />
+            </>
           </Carousel>
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400">
@@ -90,24 +110,26 @@ const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
         </div>
 
         {/* Instagram Link */}
-        <a
-          href={(artist as any).instagram || "#"}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="absolute bottom-3 right-3 text-pink-400 hover:text-pink-300"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-6 h-6"
+        {artist.instagram && (
+          <a
+            href={artist.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-3 right-3 text-pink-400 hover:text-pink-300"
+            onClick={(e) => e.stopPropagation()}
           >
-            <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 1.5A4 4 0 0 0 3.5 7.5v9A4 4 0 0 0 7.5 20.5h9a4 4 0 0 0 4-4v-9a4 4 0 0 0-4-4h-9zm4.5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm5.25-.75a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5z" />
-          </svg>
-        </a>
-      </div>
-    </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6"
+            >
+              <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm0 1.5A4 4 0 0 0 3.5 7.5v9A4 4 0 0 0 7.5 20.5h9a4 4 0 0 0 4-4v-9a4 4 0 0 0-4-4h-9zm4.5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm5.25-.75a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5z" />
+            </svg>
+          </a>
+        )}
+        </div>
+        </div>
   );
 };
 
