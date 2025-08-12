@@ -55,9 +55,7 @@ export default function Home() {
             <div className="relative w-full max-w-[1080px] aspect-[8/3] overflow-hidden">
               <PepesParticles />
             </div>
-          </div>
-          {/* Titel + Call-to-Action darunter */}
-          
+          </div>          
         </div>
       </div>
 
@@ -65,6 +63,15 @@ export default function Home() {
       <div className="block md:hidden w-full flex items-center justify-center py-8 px-4">
         <img src={pepeMobile} alt="Pepe" className="max-w-full h-auto" />
       </div>
+
+      <h3
+        className="mx-auto max-w-3xl px-4 text-center text-white text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight tracking-tight [text-wrap:balance] mt-8 md:mt-12 mb-4"
+      >
+        Wir bringen <span className="font-bold text-white/90">außergewöhnliche Künstler</span> und <span className="font-bold text-white/90">unvergessliche Showmomente</span> auf Ihre Bühne.
+        <span className="block mt-2 text-base md:text-lg lg:text-xl font-normal text-gray-200">
+          Ob Firmenfeier, Gala oder Messe – mit uns wird Ihr Event zum Highlight, über das man noch lange spricht.
+        </span>
+      </h3>
 
       {/* Desktop/Tablet: horizontal layout */}
       <div className="hidden md:block">
@@ -74,7 +81,7 @@ export default function Home() {
         >
           <ResizablePanel defaultSize={50} minSize={30} className="flex flex-col justify-center px-6 py-8 bg-black/50 w-full">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 text-white text-left">
-              🎭 Finde jetzt den perfekten Künstler
+              Finde jetzt den perfekten Künstler
             </h2>
             <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-200 max-w-2xl mb-8 text-left">
               Beantworte nur wenige kurze Fragen und erhalte unverbindlich erste Vorschläge und Preise.
@@ -105,8 +112,6 @@ export default function Home() {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
             </Carousel>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -129,6 +134,8 @@ export default function Home() {
           <p className="text-xs text-gray-300 mt-2 text-left">Dauert &lt; 5&nbsp;Minuten</p>
         </div>
       </div>
+
+
 
       <h1 className="mx-auto text-center text-4xl md:text-5xl font-bold tracking-tight my-12">
         Die besten Showacts für dein Event

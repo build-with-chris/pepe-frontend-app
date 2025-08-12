@@ -1,7 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, CirclePlay } from "lucide-react";
-import React from "react";
 const Hero03 = () => {
   return (
     <div className="min-h-screen w-full flex flex-col gap-10 items-center justify-center px-6 py-16">

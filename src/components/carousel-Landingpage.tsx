@@ -5,8 +5,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+
 } from "@/components/ui/carousel"
 
 import slide1 from "@/assets/landingpage/slide1.png";
@@ -46,8 +45,6 @@ export function CarouselOrientation() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="absolute top-1/2 left-2 -translate-y-1/2" />
-      <CarouselNext     className="absolute top-1/2 right-2 -translate-y-1/2" />
     </Carousel>
   )
 }

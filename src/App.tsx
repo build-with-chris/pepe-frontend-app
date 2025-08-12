@@ -4,7 +4,6 @@ import Anfragen from './pages/Anfragen';
 import Kuenstler from './pages/Kuenstler';
 import {Login} from './components/login-form'
 import SignUp from './components/SignUp'
-import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
 import { ProtectedRoute } from './components/ProtectedRoute.tsx';
 import Footer from './components/footer-04/footer-04'
