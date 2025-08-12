@@ -1,6 +1,7 @@
 import React from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
+import InfoBox from '../Infobox';
 
 export interface StepEventTypeProps {
   data: BookingData;
@@ -20,12 +21,14 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
   return (
     <div className="p-0 w-full mx-auto md:max-w-4/5">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Welchen Event‑Typ planst du?</h2>
-      <div className="w-full max-w-2xl mx-auto bg-gray-200 text-gray-800 rounded-lg p-3 mb-6">
-        <p className="text-sm leading-relaxed text-center">
-          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Damit wir dir die passendsten Künstler vorschlagen können – mit Referenzen, die zu deinem Event passen.
-        </p>
-      </div>
+      <InfoBox
+        title="Warum wir das fragen"
+        text={
+          <>
+            Damit wir dir die <span className="font-medium">passendsten Künstler</span> vorschlagen können – mit Referenzen, die optimal zu deinem Event passen und dich inspirieren.
+          </>
+        }
+      />
       <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 w-full">
         {options.map(option => (
           <OptionCard

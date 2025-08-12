@@ -1,8 +1,7 @@
-
-
 import React from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
+import InfoBox from '../Infobox';
 
 export interface StepArtistCountProps {
   data: BookingData;
@@ -30,12 +29,12 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
   return (
     <div className="step">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie viele Artists möchtest du buchen?</h2>
-      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
-        <p className="text-sm leading-relaxed text-center">
-          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Die Anzahl der Künstler beeinflusst den Ablauf, die Showdynamik und den Preis. So können wir dir ein passendes Angebot kalkulieren.
-        </p>
-      </div>
+      <InfoBox
+        title="Warum wir das fragen"
+        text={
+          <>Die Anzahl der Künstler beeinflusst den Ablauf, die Showdynamik und den Preis. So können wir dir ein passendes Angebot kalkulieren.</>
+        }
+      />
       <div className="grid grid-cols-3 gap-4 w-full lg:w-2/3 mx-auto">
         {options.map(option => (
           <OptionCard

@@ -1,4 +1,5 @@
 import React from 'react';
+import InfoBox from '../Infobox';
 import type { BookingData } from '../types';
 
 export interface StepDisciplinesProps {
@@ -43,12 +44,12 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
     <div className="step flex flex-col items-center pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Welche Disziplinen interessieren dich?</h2>
       <p className="text-sm text-white-200 text-center mb-2">(Mehrfachauswahl möglich)</p>
-      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
-        <p className="text-sm leading-relaxed text-center">
-          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Jede Disziplin bringt eigene Requisiten, Anforderungen und Effekte mit. So können wir dir gezielt Künstler empfehlen, die genau das bieten, was dich begeistert.
-        </p>
-      </div>
+      <InfoBox
+        title="Warum wir das fragen"
+        text={
+          <>Jede Disziplin bringt eigene Requisiten, Anforderungen und Effekte mit. So können wir dir gezielt Künstler empfehlen, die genau das bieten, was dich begeistert.</>
+        }
+      />
       <div className="w-full overflow-auto px-4" style={{ maxHeight: 'calc(100vh - 200px)' }}>
         <div className="grid grid-cols-3 lg:grid-cols-4 gap-4">
           {disciplinesOptions.map(({ name, description }) => (

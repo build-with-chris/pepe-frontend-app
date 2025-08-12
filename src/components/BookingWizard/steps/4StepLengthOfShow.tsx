@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { BookingData } from '../types';
 import { Button } from '../../ui/button';
+import InfoBox from '../Infobox';
 
 export interface StepLengthOfShowProps {
   data: BookingData;
@@ -44,14 +45,14 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
   return (
     <div className="step pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie lange soll die Show dauern?</h2>
-      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
-        <p className="text-sm leading-relaxed text-center">
-          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Die Showdauer beeinflusst Dramaturgie, Energielevel und Preis. So können wir dir einen Ablauf empfehlen, der perfekt zu deinem Event passt.
-        </p>
-      </div>
+      <InfoBox
+        title="Warum wir das fragen"
+        text={
+          <>Die Showdauer beeinflusst Dramaturgie, Energielevel und Preis. So können wir dir einen Ablauf empfehlen, der perfekt zu deinem Event passt.</>
+        }
+      />
       <div className="input-group w-2/3 md:w-2/5 mx-auto flex flex-col items-center justify-center my-4">
-        <label htmlFor="durationSelect" className="block w-full text-center text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="durationSelect" className="block w-full text-center text-sm font-medium text-neutral-200 mb-2">
           Dauer auswählen:
         </label>
         <select

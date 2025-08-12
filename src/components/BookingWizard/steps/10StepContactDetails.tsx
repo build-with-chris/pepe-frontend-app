@@ -1,6 +1,7 @@
 import React from 'react';
 import type { BookingData } from '../types';
 import { Mail } from 'lucide-react';
+import InfoBox from '../Infobox';
 
 export interface StepContactDetailsProps {
   data: BookingData;
@@ -29,12 +30,12 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
   return (
     <div className="step flex flex-col items-center pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie dürfen wir dich für Rückfragen kontaktieren?</h2>
-      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
-        <p className="text-sm leading-relaxed text-center">
-          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Damit wir dir die passenden Angebote zusenden und bei Rückfragen schnell reagieren können.
-        </p>
-      </div>
+      <InfoBox
+        title="Warum wir das fragen"
+        text={
+          <>Damit wir dir die passenden Angebote zusenden und bei Rückfragen schnell reagieren können.</>
+        }
+      />
       <div className="w-full lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientName" className="block text-sm font-medium text-neutral-200">
           Name <span className="text-red-500">*</span>

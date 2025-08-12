@@ -3,6 +3,8 @@ import { Calendar as CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import type { BookingData } from '../types';
+import InfoBox from '../Infobox';
+
 
 export interface StepDateAndTimeProps {
   data: BookingData;
@@ -68,12 +70,12 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
     <div className="step flex flex-col items-center pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wann findet deine Veranstaltung statt?</h2>
 
-      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
-        <p className="text-sm leading-relaxed text-center">
-          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Datum und Uhrzeit helfen uns, die Verfügbarkeit der Künstler zu prüfen und die Planung optimal auf dein Event abzustimmen. Die ungefähre Gästeanzahl reicht vollkommen aus – so können wir besser einschätzen, welche Effekte und Showelemente am besten wirken.
-        </p>
-      </div>
+           <InfoBox
+        title="Warum wir das fragen"
+        text={
+          <>Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.</>
+        }
+      />
 
       {/* Calendar + Time slots */}
       <div className="relative w-full max-w-5xl grid grid-cols-1 md:[grid-template-columns:1fr_220px_220px] gap-4 md:gap-6 mb-6 items-stretch">

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BookingData } from '../types';
+import InfoBox from '../Infobox';
 
 export interface StepWishesProps {
   data: BookingData;
@@ -16,23 +17,23 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
   return (
     <div className="w-full step flex flex-col items-center pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Hast du besondere Wünsche oder Ideen für die Show?</h2>
-      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-4">
-        <p className="text-sm leading-relaxed text-center">
-          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Besondere Wünsche helfen uns, die Show perfekt auf dein Event zuzuschneiden – von der Dramaturgie bis zu individuellen Highlights.
-        </p>
-      </div>
+      <InfoBox
+        title="Warum wir das fragen"
+        text={
+          <>Besondere Wünsche helfen uns, die Show perfekt auf dein Event zuzuschneiden – von der Dramaturgie bis zu individuellen Highlights.</>
+        }
+      />
       <div className="w-full lg:w-2/3 mx-auto mb-6">
-        <label htmlFor="wishes" className="block text-sm font-medium text-white-100">
+        <label htmlFor="wishes" className="block text-lg font-semibold text-white-100 mb-2 text-left w-4/5 mx-auto">
           Hier kannst du deine Wünsche eintragen:
         </label>
         <textarea
           id="wishes"
           value={data.special_requests}
           onChange={handleChange}
-          placeholder="z.B. Aufteilung der Show in mehrere kleine Shows, Mixform aus Walking Act und Bühnenshow, bestimmtes Motto das getroffen werden soll"
-          rows={4}
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder={`z.B. Aufteilung der Show in mehrere kleine Shows\nMixform aus Walking Act und Bühnenshow\nbestimmtes Motto das getroffen werden soll`}
+          rows={8}
+          className="mt-1 block w-4/5 mx-auto border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
       <div className="flex flex-wrap justify-center items-center gap-6 w-full lg:w-2/3 mx-auto mb-6">

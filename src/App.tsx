@@ -19,7 +19,7 @@ import AnstehendeGigs from './pages/PendingGigs';
 import KuenstlerVerwaltung from './pages/Artists';
 import OfferEditPage from './pages/OfferEditPage';
 import Buchhaltung from './pages/Buchhaltung'
-
+import NotFound from './pages/404';
 
 function App() {
   const location = useLocation();
@@ -57,6 +57,7 @@ function App() {
             element={<OfferEditPage />}
           />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     {!['/anfragen', '/login', '/signup'].includes(location.pathname) && <Footer />}
     </div>

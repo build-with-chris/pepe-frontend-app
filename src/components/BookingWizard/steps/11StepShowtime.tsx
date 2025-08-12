@@ -3,6 +3,7 @@ import confetti from 'canvas-confetti';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
 import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star, PartyPopper, CheckCircle2 } from 'lucide-react';
+import InfoBox from '../Infobox';
 
 export interface StepShowtimeProps {
   data: BookingData;
@@ -54,15 +55,18 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   return (
     <div className="step pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Fast geschafft – sollen wir deine Anfrage jetzt an unsere Künstler senden?</h2>
-      <div className="w-full max-w-2xl mx-auto bg-gray-100 text-gray-700 rounded-lg p-3 mb-6">
-        <p className="text-sm leading-relaxed text-center">
-          <span className="font-semibold">Warum wir das fragen:&nbsp;</span>
-          Beim Klick auf <strong>Absenden</strong> geht deine Anfrage unverbindlich an unsere Künstler. Du erhältst innerhalb von 48 Stunden passende Angebote.
-        </p>
-      </div>
-      <div className="w-2/3 mx-auto mb-6 bg-white border border-gray-200 rounded-lg shadow p-6">
+      <InfoBox
+        title="Was passiert als nächstes"
+        text={
+          <>
+            Beim Klick auf <strong>Absenden</strong> geht deine Anfrage unverbindlich an unsere Künstler. 
+            Du erhältst innerhalb von 48 Stunden passende Angebote.
+          </>
+        }
+      />
+      <div className="w-full max-w-2xl mx-auto mb-6 bg-white border border-gray-200 rounded-lg shadow p-5 sm:p-6 break-words">
         <h3 className="text-xl font-semibold mb-4">Ihre Daten im Überblick</h3>
-        <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-gray-700">
+        <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-gray-700 break-words">
           <div>
             <dt className="font-semibold flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> Event Typ</dt>
             <dd>{data.event_type}</dd>
@@ -121,7 +125,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           </div>
           <div>
             <dt className="font-semibold flex items-center gap-2"><Mail className="h-4 w-4 text-blue-600" /> E-Mail</dt>
-            <dd>{data.client_email}</dd>
+            <dd className="break-all">{data.client_email}</dd>
           </div>
           <div className="md:col-span-2">
             <dt className="font-semibold flex items-center gap-2"><Gift className="h-4 w-4 text-blue-600" /> Newsletter-Rabatt</dt>
