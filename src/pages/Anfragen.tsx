@@ -9,7 +9,6 @@ import StepArtistCount from '../components/BookingWizard/steps/3StepArtistCount'
 import StepLengthOfShow from '../components/BookingWizard/steps/4StepLengthOfShow';
 import StepLocation from '../components/BookingWizard/steps/6StepLocation';
 import StepDateAndTime from '../components/BookingWizard/steps/7StepDateAndTime';
-import StepNumberGuestsAndStatus from '../components/BookingWizard/steps/8Status.tsx';
 import StepWishes from '../components/BookingWizard/steps/9StepWishes';
 import StepContactDetails from '../components/BookingWizard/steps/10StepContactDetails';
 import StepShowtime from '../components/BookingWizard/steps/11StepShowtime';
@@ -23,7 +22,6 @@ const steps = [
   StepLengthOfShow,
   StepLocation,
   StepDateAndTime,
-  StepNumberGuestsAndStatus,
   StepWishes,
   StepContactDetails,
   StepShowtime

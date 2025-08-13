@@ -2,6 +2,12 @@ import React from 'react';
 import type { BookingData } from '../types';
 import InfoBox from '../Infobox';
 import { Button } from '@/components/ui/button';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 export interface StepNumberGuestsAndStatusProps {
   data: BookingData;
@@ -26,12 +32,6 @@ const StepNumberGuestsAndStatus: React.FC<StepNumberGuestsAndStatusProps> = ({
   return (
     <div className="p-0 w-full mx-auto md:max-w-4/5 flex flex-col items-center">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie ist dein aktueller Planungsstatus?</h2>
-      <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>Dein Planungsstatus hilft uns, die Dringlichkeit und Detailtiefe unserer Vorschläge anzupassen – ob du noch in der Ideenphase bist oder schon fast buchen möchtest.</>
-        }
-      />
 
       <div className="grid grid-cols-1 gap-4 w-full max-w-sm">
         {statusOptionsList.map(option => (
@@ -47,6 +47,30 @@ const StepNumberGuestsAndStatus: React.FC<StepNumberGuestsAndStatusProps> = ({
             {option.label}
           </Button>
         ))}
+      </div>
+
+      {/* Erklärung – Desktop & Tablet */}
+      <div className="hidden md:block w-full max-w-sm mt-4">
+        <InfoBox
+          title="Warum wir das fragen"
+          text={
+            <>Dein Planungsstatus hilft uns, die Dringlichkeit und Detailtiefe unserer Vorschläge anzupassen – ob du noch in der Ideenphase bist oder schon fast buchen möchtest.</>
+          }
+        />
+      </div>
+
+      {/* Erklärung – Mobile: nur Accordion */}
+      <div className="md:hidden w-full max-w-sm mt-3">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="why-planning-status">
+            <AccordionTrigger>
+              Warum wir nach dem Planungsstatus fragen
+            </AccordionTrigger>
+            <AccordionContent>
+              Dein Planungsstatus hilft uns, die Dringlichkeit und Detailtiefe unserer Vorschläge anzupassen – ob du noch in der Ideenphase bist oder schon fast buchen möchtest.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   );

@@ -2,6 +2,12 @@ import React from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
 import InfoBox from '../Infobox';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@/components/ui/accordion';
 
 export interface StepShowTypeProps {
   data: BookingData;
@@ -16,12 +22,7 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
   return (
     <div className="step flex flex-col items-center">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Welchen Show‑Typ stellst du dir vor?</h2>
-      <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>Damit wir einschätzen können, ob ein flexibler Walking Act oder eine feste Bühnenshow besser zu deinem Event passt – und dir passende Vorschläge machen können.</>
-        }
-      />
+      
       <div className="flex flex-wrap justify-center gap-4 w-full">
         {options.map(option => (
           <OptionCard
@@ -36,6 +37,26 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
             autoAdvance={true}
           />
         ))}
+      </div>
+      <div className="hidden md:block w-full mt-7">
+        <InfoBox
+          title="Warum wir das fragen"
+          text={
+            <>Damit wir einschätzen können, ob ein flexibler Walking Act oder eine feste Bühnenshow besser zu deinem Event passt – und dir passende Vorschläge machen können.</>
+          }
+        />
+      </div>
+      <div className="md:hidden mt-5 w-full">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="showtype-info">
+            <AccordionTrigger>
+              Warum wir nach dem Show‑Typ fragen
+            </AccordionTrigger>
+            <AccordionContent>
+              Damit wir einschätzen können, ob ein flexibler Walking Act oder eine feste Bühnenshow besser zu deinem Event passt – und dir passende Vorschläge machen können.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   );

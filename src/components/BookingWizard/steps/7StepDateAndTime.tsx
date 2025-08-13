@@ -1,9 +1,16 @@
 import React from 'react';
 import { Calendar as CalendarIcon } from 'lucide-react';
+import { Clock as ClockIcon, Users as UsersIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import type { BookingData } from '../types';
 import InfoBox from '../Infobox';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 
 export interface StepDateAndTimeProps {
@@ -68,14 +75,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
 
   return (
     <div className="step flex flex-col items-center pb-28">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wann findet deine Veranstaltung statt?</h2>
-
-           <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.</>
-        }
-      />
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold mb-10">Wann findet deine Veranstaltung statt?</h2>
 
       {/* Calendar + Time slots */}
       <div className="relative w-full max-w-5xl grid grid-cols-1 md:[grid-template-columns:1fr_220px_220px] gap-4 md:gap-6 mb-6 items-stretch">
@@ -101,7 +101,10 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         </div>
 
         <div className="rounded-lg border border-white/10 bg-white/5 p-3 md:p-4 max-h-[500px] overflow-y-auto no-scrollbar min-w-0 flex flex-col">
-          <div className="mb-3 text-white text-base md:text-lg font-semibold tracking-wide">Uhrzeit wählen</div>
+          <div className="mb-3 text-white text-base md:text-lg font-semibold tracking-wide flex items-center justify-center gap-2">
+            <ClockIcon className="h-5 w-5 text-white" />
+            Uhrzeit wählen
+          </div>
           <div className="h-px bg-white/10 -mt-2 mb-3" />
           <div className="grid gap-2">
             {timeSlots.map((time) => (
@@ -117,7 +120,10 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
           </div>
         </div>
         <div className="rounded-lg border border-white/10 bg-white/5 p-3 md:p-4 min-w-0">
-          <div className="mb-3 text-white text-base md:text-lg font-semibold tracking-wide">Gäste</div>
+          <div className="mb-3 text-white text-base md:text-lg font-semibold tracking-wide flex items-center justify-center gap-2">
+            <UsersIcon className="h-5 w-5 text-white" />
+            Gästeanzahl
+          </div>
           <div className="h-px bg-white/10 -mt-2 mb-3" />
           <div className="grid gap-2">
             {[
@@ -139,6 +145,32 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         </div>
       </div>
 
+      {/* Erklärung – Desktop & Tablet */}
+      <div className="hidden md:block w-full max-w-5xl mt-4">
+        <InfoBox
+          title="Warum wir das fragen"
+          text={
+            <>
+              Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.
+            </>
+          }
+        />
+      </div>
+
+      {/* Erklärung – Mobile: nur Accordion */}
+      <div className="md:hidden w-full max-w-5xl mt-3 px-4">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="why-date-time">
+            <AccordionTrigger>
+              Warum wir nach Datum, Uhrzeit & Gästezahl fragen
+            </AccordionTrigger>
+            <AccordionContent>
+              Die Location und der Zeitpunkt beeinflussen Verfügbarkeit, Logistik und Technik. Mit der Gästezahl können wir Größe und Set‑up passend planen – so bekommst du die besten Vorschläge.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
       {/* Summary */}
       <div className="text-sm text-neutral-200 mb-4">
         {data.event_date && data.event_time ? (
@@ -153,13 +185,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
 
       {/* Fixed footer CTA */}
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center gap-3">
-        <button
-          type="button"
-          onClick={onPrev}
-          className="bg-white/10 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-white/20"
-        >
-          Zurück
-        </button>
+        
         <button
           type="button"
           onClick={onNext}

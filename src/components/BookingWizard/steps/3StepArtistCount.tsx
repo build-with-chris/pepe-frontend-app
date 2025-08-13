@@ -2,6 +2,12 @@ import React from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
 import InfoBox from '../Infobox';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 export interface StepArtistCountProps {
   data: BookingData;
@@ -26,16 +32,14 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
     onChange({ team_size: Number(e.target.value) });
   };
 
-  return (
+   return (
     <div className="step">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie viele Artists möchtest du buchen?</h2>
-      <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>Die Anzahl der Künstler beeinflusst den Ablauf, die Showdynamik und den Preis. So können wir dir ein passendes Angebot kalkulieren.</>
-        }
-      />
-      <div className="grid grid-cols-3 gap-4 w-full lg:w-2/3 mx-auto">
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">
+        Wie viele Artists möchtest du buchen?
+      </h2>
+
+      {/* Auswahlkarten */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full lg:w-2/3 mx-auto">
         {options.map(option => (
           <OptionCard
             key={option.value}
@@ -48,7 +52,34 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
           />
         ))}
       </div>
-      
+
+      {/* Erklärung – Desktop & Tablet: InfoBox unter den Optionen */}
+      <div className="hidden md:block w-full lg:w-2/3 mx-auto mt-4">
+        <InfoBox
+          title="Warum wir das fragen"
+          text={
+            <>
+              Die Anzahl der Künstler beeinflusst den Ablauf, die Showdynamik und den Preis.
+              So können wir dir ein passendes Angebot kalkulieren.
+            </>
+          }
+        />
+      </div>
+
+      {/* Erklärung – Mobile: nur Accordion unter den Optionen */}
+      <div className="md:hidden w-full lg:w-2/3 mx-auto mt-3">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="why-artist-count">
+            <AccordionTrigger>
+              Warum wir nach der Anzahl der Artists fragen
+            </AccordionTrigger>
+            <AccordionContent>
+              Die Anzahl der Künstler beeinflusst den Ablauf, die Showdynamik und den Preis.
+              So können wir dir ein passendes Angebot kalkulieren.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
     </div>
   );
 };

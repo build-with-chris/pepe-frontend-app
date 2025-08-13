@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import type { BookingData } from '../types';
 import { Button } from '../../ui/button';
 import InfoBox from '../Infobox';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 export interface StepLengthOfShowProps {
   data: BookingData;
@@ -45,14 +51,8 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
   return (
     <div className="step pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie lange soll die Show dauern?</h2>
-      <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>Die Showdauer beeinflusst Dramaturgie, Energielevel und Preis. So können wir dir einen Ablauf empfehlen, der perfekt zu deinem Event passt.</>
-        }
-      />
       <div className="input-group w-2/3 md:w-2/5 mx-auto flex flex-col items-center justify-center my-4">
-        <label htmlFor="durationSelect" className="block w-full text-center text-sm font-medium text-neutral-200 mb-2">
+        <label htmlFor="durationSelect" className="block w-full text-center text-sm font-medium text-black mb-2">
           Dauer auswählen:
         </label>
         <select
@@ -109,6 +109,29 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
             </Button>
           </>
         )}
+      </div>
+      {/* Erklärung – Desktop & Tablet */}
+      <div className="hidden md:block w-full md:w-3/5 lg:w-2/5 mx-auto mt-3">
+        <InfoBox
+          title="Warum wir das fragen"
+          text={
+            <>Die Showdauer beeinflusst Dramaturgie, Energielevel und Preis. So können wir dir einen Ablauf empfehlen, der perfekt zu deinem Event passt.</>
+          }
+        />
+      </div>
+
+      {/* Erklärung – Mobile: nur Accordion */}
+      <div className="md:hidden w-full md:w-3/5 lg:w-2/5 mx-auto mt-3">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="why-length">
+            <AccordionTrigger>
+              Warum wir nach der Showdauer fragen
+            </AccordionTrigger>
+            <AccordionContent>
+              Die Showdauer beeinflusst Dramaturgie, Energielevel und Preis. So können wir dir einen Ablauf empfehlen, der perfekt zu deinem Event passt.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
       {/* Fixed footer CTA */}
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">

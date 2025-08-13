@@ -2,6 +2,13 @@ import React from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
 import InfoBox from '../Infobox';
+// NEU: Accordion von shadcn
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 export interface StepEventTypeProps {
   data: BookingData;
@@ -20,15 +27,10 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
 
   return (
     <div className="p-0 w-full mx-auto md:max-w-4/5">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Welchen Event‑Typ planst du?</h2>
-      <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>
-            Damit wir dir die <span className="font-medium">passendsten Künstler</span> vorschlagen können – mit Referenzen, die optimal zu deinem Event passen und dich inspirieren.
-          </>
-        }
-      />
+      <h2 className="text-3xl md:text-4xl text-center mb-7 font-extrabold">
+        Welchen Event‑Typ planst du?
+      </h2>
+
       <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 w-full">
         {options.map(option => (
           <OptionCard
@@ -42,6 +44,34 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
             onSelectNext={onNext}
           />
         ))}
+      </div>
+
+      <div className="hidden md:block">
+        <div className="mt-7">
+          <InfoBox
+            title="Warum wir das fragen"
+            text={
+              <>
+                Damit wir dir die <span className="font-medium">passendsten Künstler</span> vorschlagen können – mit Referenzen, die optimal zu deinem Event passen und dich inspirieren.
+              </>
+            }
+          />
+        </div>
+      </div>
+
+      {/* Zusätzlich MOBIL als Accordion (Tablet/Desktop ausgeblendet) */}
+      <div className="md:hidden mt-5">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="why-event-type">
+            <AccordionTrigger>
+              Warum wir nach dem Event‑Typ fragen
+            </AccordionTrigger>
+            <AccordionContent>
+              Damit wir dir die <span className="font-medium">passendsten Künstler</span> vorschlagen können – mit Referenzen,
+              die optimal zu deinem Event passen und dich inspirieren.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   );

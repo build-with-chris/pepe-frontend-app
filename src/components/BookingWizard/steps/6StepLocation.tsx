@@ -2,6 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
 import InfoBox from '../Infobox';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 export interface StepLocationProps {
   data: BookingData;
@@ -86,15 +92,9 @@ const StepLocation: React.FC<StepLocationProps> = ({
 
   return (
     <div className="step pb-28">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wo findet deine Veranstaltung statt?</h2>
-      <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.</>
-        }
-      />
-      <div className="flex flex-col lg:flex-row lg:space-x-4 w-full lg:w-2/3 mx-auto mb-6">
-      <div className="flex-1 mb-4">
+      <h2 className="text-3xl mb-10 md:text-4xl text-center mb-3 font-extrabold">Wo findet deine Veranstaltung statt?</h2>
+      <div className="flex flex-col lg:flex-row lg:space-x-4 w-full max-w-[800px] mx-auto mb-6">
+      <div className="w-full lg:w-1/2 mb-4">
         <label htmlFor="street" className="block text-sm font-medium text-neutral-200">
           Straße
         </label>
@@ -107,7 +107,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="flex-1 mb-4">
+      <div className="w-full lg:w-1/4 mb-4">
         <label htmlFor="postalCode" className="block text-sm font-medium text-neutral-200">
           PLZ
         </label>
@@ -120,7 +120,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="flex-1 mb-4">
+      <div className="w-full lg:w-1/4 mb-4">
         <label htmlFor="city" className="block text-sm font-medium text-neutral-200">
           Stadt <span className="text-red-500">*</span>
         </label>
@@ -169,6 +169,33 @@ const StepLocation: React.FC<StepLocationProps> = ({
           />
         </div>
       </div>
+
+      {/* Erklärung – Desktop & Tablet */}
+      <div className="hidden md:block w-full lg:w-2/3 mx-auto mt-4">
+        <InfoBox
+          title="Warum wir das fragen"
+          text={
+            <>
+              Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.
+            </>
+          }
+        />
+      </div>
+
+      {/* Erklärung – Mobile: nur Accordion */}
+      <div className="md:hidden w-full lg:w-2/3 mx-auto mt-3 px-4">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="why-location">
+            <AccordionTrigger>
+              Warum wir nach der Location fragen
+            </AccordionTrigger>
+            <AccordionContent>
+              Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
       {/* Fixed footer CTA */}
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
         <button

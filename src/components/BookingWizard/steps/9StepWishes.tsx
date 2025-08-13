@@ -1,6 +1,12 @@
 import React from 'react';
 import type { BookingData } from '../types';
 import InfoBox from '../Infobox';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "@/components/ui/accordion";
 
 export interface StepWishesProps {
   data: BookingData;
@@ -16,13 +22,7 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
 
   return (
     <div className="w-full step flex flex-col items-center pb-28">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Hast du besondere Wünsche oder Ideen für die Show?</h2>
-      <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>Besondere Wünsche helfen uns, die Show perfekt auf dein Event zuzuschneiden – von der Dramaturgie bis zu individuellen Highlights.</>
-        }
-      />
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold mb-10">Hast du besondere Wünsche oder Ideen für die Show?</h2>
       <div className="w-full lg:w-2/3 mx-auto mb-6">
         <label htmlFor="wishes" className="block text-lg font-semibold text-white-100 mb-2 text-left w-4/5 mx-auto">
           Hier kannst du deine Wünsche eintragen:
@@ -53,6 +53,30 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
         ))}
       </div>
       
+      {/* Erklärung – Desktop & Tablet */}
+      <div className="hidden md:block w-full lg:w-2/3 mx-auto mt-2">
+        <InfoBox
+          title="Warum wir das fragen"
+          text={
+            <>Besondere Wünsche helfen uns, die Show perfekt auf dein Event zuzuschneiden – von der Dramaturgie bis zu individuellen Highlights.</>
+          }
+        />
+      </div>
+
+      {/* Erklärung – Mobile: nur Accordion */}
+      <div className="md:hidden w-full lg:w-2/3 mx-auto mt-2 px-4">
+        <Accordion type="single" collapsible>
+          <AccordionItem value="why-wishes">
+            <AccordionTrigger>
+              Warum wir nach deinen Wünschen fragen
+            </AccordionTrigger>
+            <AccordionContent>
+              Besondere Wünsche helfen uns, die Show perfekt auf dein Event zuzuschneiden – von der Dramaturgie bis zu individuellen Highlights.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
+
       {/* Fixed footer CTA */}
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
         <button
