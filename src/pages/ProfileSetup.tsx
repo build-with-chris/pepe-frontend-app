@@ -147,7 +147,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Profil einrichten</h1>
         {locked && (
@@ -169,46 +169,53 @@ export default function Profile() {
           Profil erfolgreich gespeichert!
         </div>
       )}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Name */}
-        <div>
-          <label className="block mb-1 font-medium">Name*</label>
-          <input
-            type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-            required
-            disabled={locked}
-          />
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Basisdaten */}
+        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm md:col-span-2">
+          <h2 className="text-lg font-semibold mb-4 text-black">Basisdaten</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Name */}
+            <div>
+              <label className="block mb-1 font-medium text-black">Name*</label>
+              <input
+                type="text"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                className="w-full border px-3 py-2 rounded text-black"
+                required
+                disabled={locked}
+              />
+            </div>
+            {/* Adresse */}
+            <div>
+              <label className="block mb-1 font-medium text-black">Adresse*</label>
+              <input
+                type="text"
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+                className="w-full border px-3 py-2 rounded text-black"
+                required
+                disabled={locked}
+              />
+            </div>
+            {/* Telefonnummer */}
+            <div>
+              <label className="block mb-1 font-medium text-black">Telefonnummer*</label>
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={e => setPhoneNumber(e.target.value)}
+                className="w-full border px-3 py-2 rounded text-black"
+                required
+                disabled={locked}
+              />
+            </div>
+          </div>
         </div>
-        {/* Adresse */}
-        <div>
-          <label className="block mb-1 font-medium">Adresse*</label>
-          <input
-            type="text"
-            value={address}
-            onChange={e => setAddress(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-            required
-            disabled={locked}
-          />
-        </div>
-        {/* Telefonnummer */}
-        <div>
-          <label className="block mb-1 font-medium">Telefonnummer*</label>
-          <input
-            type="tel"
-            value={phoneNumber}
-            onChange={e => setPhoneNumber(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-            required
-            disabled={locked}
-          />
-        </div>
+
         {/* Disziplinen */}
-        <div>
-          <label className="block mb-1 font-medium">Disziplinen*</label>
+        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm md:col-span-2">
+          <h2 className="text-lg font-semibold mb-4 text-black">Disziplinen</h2>
           <div className="flex flex-wrap gap-2">
             {disciplinesOptions.map(d => (
               <button
@@ -216,45 +223,68 @@ export default function Profile() {
                 key={d}
                 onClick={() => toggleDiscipline(d)}
                 disabled={locked}
-                className={`px-3 py-1 border rounded ${
-                  disciplines.includes(d) ? "bg-blue-600 text-white" : "bg-white text-black"
-                }`}
+                className={`px-3 py-1 border rounded ${disciplines.includes(d) ? "bg-blue-600 text-black" : "bg-white text-black"}`}
               >
                 {d}
               </button>
             ))}
           </div>
         </div>
-        {/* Preis */}
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <label className="block mb-1 font-medium">Preis (min)*</label>
-            <input
-              type="number"
-              value={priceMin}
-              onChange={e => setPriceMin(Number(e.target.value))}
-              className="w-full border px-3 py-2 rounded"
-              min={0}
-              required
-              disabled={locked}
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block mb-1 font-medium">Preis (max)*</label>
-            <input
-              type="number"
-              value={priceMax}
-              onChange={e => setPriceMax(Number(e.target.value))}
-              className="w-full border px-3 py-2 rounded"
-              min={priceMin}
-              required
-              disabled={locked}
-            />
+
+        {/* Preise */}
+        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm md:col-span-2">
+          <h2 className="text-lg font-semibold mb-4 text-black">Preisrahmen</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-1 font-medium text-black">Preis (min)*</label>
+              <input
+                type="number"
+                value={priceMin}
+                onChange={e => setPriceMin(Number(e.target.value))}
+                className="w-full border px-3 py-2 rounded text-black"
+                min={0}
+                required
+                disabled={locked}
+              />
+              <p className="mt-1 text-sm text-black">
+                Realistischer Richtwert für ein Teamevent (ca. 150 Personen, 5‑Minuten‑Act, ohne Anfahrtskosten). Nur Gage + ggf. Material.
+              </p>
+            </div>
+            <div>
+              <label className="block mb-1 font-medium text-black">Preis (max)*</label>
+              <input
+                type="number"
+                value={priceMax}
+                onChange={e => setPriceMax(Number(e.target.value))}
+                className="w-full border px-3 py-2 rounded text-black"
+                min={priceMin}
+                required
+                disabled={locked}
+              />
+              <p className="mt-1 text-sm text-black">
+                Oberer Rahmen für denselben Event‑Case (150 Gäste, 5‑Minuten‑Act, ohne Anfahrt).
+              </p>
+            </div>
           </div>
         </div>
+
         {/* Profilbild */}
-        <div>
-          <label className="block mb-1 font-medium">Profilbild</label>
+        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm">
+          <h2 className="text-lg font-semibold mb-4 text-black">Profilbild</h2>
+          <div className="mb-3 rounded-md border-2 border-dashed border-gray-300 bg-white p-3">
+            <p className="text-sm font-medium text-black">Bitte so hochladen:</p>
+            <ul className="list-disc list-inside text-sm text-black">
+              <li>Gesicht sichtbar</li>
+              <li>Quadratisches Format</li>
+              <li>Am liebsten WebP (
+                <a href="https://ezgif.com/png-to-webp" target="_blank" rel="noreferrer" className="underline">PNG → WebP</a>
+                )
+              </li>
+              <li>
+                <a href="https://ezgif.com/jpg-to-webp" target="_blank" rel="noreferrer" className="underline">JPG → WebP</a>
+              </li>
+            </ul>
+          </div>
           <input
             type="file"
             accept="image/*"
@@ -262,36 +292,62 @@ export default function Profile() {
             disabled={locked}
             className="w-full"
           />
+          <button
+            type="button"
+            onClick={() => document.querySelector<HTMLInputElement>('input[type="file"][accept="image/*"]')?.click()}
+            disabled={locked}
+            className="mt-2 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            Profilbild hochladen
+          </button>
           {profileImageUrl && (
             <img src={profileImageUrl} alt="Profilbild" className="mt-2 h-24 rounded object-cover" />
           )}
         </div>
+
         {/* Galerie */}
-        <GalleryUploader
-          locked={locked}
-          galleryUrls={galleryUrls}
-          setGalleryUrls={setGalleryUrls}
-          galleryFiles={galleryFiles}
-          setGalleryFiles={setGalleryFiles}
-        />
+        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm">
+          <h2 className="text-lg font-semibold mb-4 text-black">Galerie</h2>
+          <p className="text-sm mb-2 text-black">Divers, Format 4:3 (breiter als höher). Idealerweise WebP.</p>
+          <button
+            type="button"
+            onClick={() => document.querySelector<HTMLInputElement>('input[type="file"][multiple]')?.click()}
+            disabled={locked}
+            className="mb-2 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          >
+            Galerie-Bilder hochladen
+          </button>
+          <GalleryUploader
+            locked={locked}
+            galleryUrls={galleryUrls}
+            setGalleryUrls={setGalleryUrls}
+            galleryFiles={galleryFiles}
+            setGalleryFiles={setGalleryFiles}
+          />
+        </div>
+
         {/* Über mich */}
-        <div>
-          <label className="block mb-1 font-medium">Über mich</label>
+        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm md:col-span-2">
+          <h2 className="text-lg font-semibold mb-2 text-black">Über mich</h2>
+          <p className="mb-2 text-sm text-black">Dieser Text erscheint auf der Homepage unter deiner Karte. Sei kreativ, aber halte dich kurz.</p>
           <textarea
             value={bio}
             onChange={e => setBio(e.target.value)}
             disabled={locked}
-            className="w-full border px-3 py-2 rounded h-24"
+            className="w-full border px-3 py-2 rounded h-28 text-black"
           />
         </div>
+
         {/* Submit */}
-        <button
-          type="submit"
-          disabled={loading || locked}
-          className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-50"
-        >
-          {locked ? "Profil gesperrt" : loading ? "Speichern..." : "Profil speichern"}
-        </button>
+        <div className="md:col-span-2">
+          <button
+            type="submit"
+            disabled={loading || locked}
+            className="w-full bg-green-600 text-white py-3 rounded-lg disabled:opacity-50"
+          >
+            {locked ? "Profil gesperrt" : loading ? "Speichern..." : "Profil speichern"}
+          </button>
+        </div>
       </form>
       {backendDebug && (
         <div className="mt-4 p-3 bg-gray-100 border rounded text-xs whitespace-pre-wrap">

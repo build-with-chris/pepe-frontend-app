@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import Kontakt from "./Kontakt";
 import Artist1 from "@/assets/Slider/Artist-1.webp";
 import Artist2 from "@/assets/Slider/Artist-2.webp";
 import Artist3 from "@/assets/Slider/Artist-3.webp";
@@ -166,6 +167,9 @@ export default function Home() {
           Firmenfeier, Festival oder Kulturprojekt – wir finden den passenden Act und machen dein Event unvergesslich.
         </p>
       </section>
+
+      <Kontakt maxWidthClass="max-w-5xl" />
     </>
+
   );
 }

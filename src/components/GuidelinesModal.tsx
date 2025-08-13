@@ -30,27 +30,27 @@ export default function GuidelinesModal({ openInitially }: GuidelinesModalProps)
       <DialogContent className="max-w-xl sm:max-w-2xl text-left">
         <DialogHeader>
           <DialogTitle>Willkommen bei PepeShows 🎪</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-black">
             Ein kurzer Überblick, wie die Plattform funktioniert – deine Rechte und unsere Standards.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="rounded-md bg-white/5 border border-white/10 p-3 text-sm text-gray-200">
+        <div className="rounded-md bg-white border border-gray-300 p-3 text-sm text-black">
           <strong>Kurz gesagt:</strong> Fair, sicher, transparent. Du entscheidest über Anfragen &amp; Gagen,
           wir kümmern uns um Matching, Vertrag &amp; Support. Medien bleiben deine – wir nutzen sie nur zur Bewerbung.
           Bitte antworte innerhalb von <strong>24–48 h</strong> und beachte Sicherheits‑/Venue‑Regeln.
         </div>
 
-        <ScrollArea className="max-h-[50vh] rounded-md border border-white/10 p-4 space-y-4">
+        <ScrollArea className="max-h-[50vh] rounded-md border border-gray-300 p-4 space-y-4">
           {/* … (deine Abschnitte wie schon gebaut) … */}
-          <div className="text-xs text-gray-400">
+          <div className="text-xs text-black">
             Vollständige Bedingungen: <a href="/artist-guidelines" className="underline">/artist‑guidelines</a>
           </div>
         </ScrollArea>
 
         <div className="flex items-start gap-3 pt-2">
           <Checkbox id="agree" checked={checked} onCheckedChange={(v) => setChecked(Boolean(v))} />
-          <label htmlFor="agree" className="text-sm text-gray-200 select-none">
+          <label htmlFor="agree" className="text-sm text-black select-none">
             Ich habe die Plattform‑Regeln gelesen und akzeptiere sie.
           </label>
         </div>

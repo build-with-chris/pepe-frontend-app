@@ -1,8 +1,10 @@
 
 
 import React, { useState } from 'react';
-
-const Kontakt: React.FC = () => {
+interface KontaktProps {
+  maxWidthClass?: string;
+}
+const Kontakt: React.FC<KontaktProps> = ({ maxWidthClass = "max-w-xl" }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -18,7 +20,7 @@ const Kontakt: React.FC = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6">
+    <div className={`${maxWidthClass} mx-auto p-6`}>
       <h1 className="text-3xl font-semibold mb-6 text-center">Kontaktiere uns</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

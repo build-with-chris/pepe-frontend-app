@@ -23,7 +23,7 @@ export default function GalleryUploader({
 
   return (
     <div>
-      <label className="block mb-1 font-medium">Weitere Fotos (max. 3)</label>
+      <label className="block mb-1 font-medium text-black">Weitere Fotos (max. 3)</label>
       <input
         type="file"
         accept="image/*"

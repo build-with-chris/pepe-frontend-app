@@ -36,7 +36,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/anfragen" element={<Anfragen />} />
         <Route path="/kuenstler" element={<Kuenstler />} />
-        <Route path="/kontakt" element={<Kontakt />} />
+        <Route path="/kontakt" element={<Kontakt maxWidthClass='max-w-xl' />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
