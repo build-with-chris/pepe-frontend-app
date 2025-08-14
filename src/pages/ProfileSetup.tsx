@@ -7,6 +7,7 @@ import { uploadProfileImage, uploadGalleryImages } from "@/lib/storage/upload";
 import { useNavigate } from "react-router-dom";
 
 const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || "profiles";
+const baseUrl = import.meta.env.VITE_API_URL;
 
 const disciplinesOptions = [
   "Zauberer",
@@ -46,6 +47,8 @@ export default function Profile() {
   const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
   const [galleryUrls, setGalleryUrls] = useState<string[]>([]);
   const [success, setSuccess] = useState(false);
+  const [approvalStatus, setApprovalStatus] = useState<'approved' | 'pending' | 'rejected' | 'unsubmitted'>('unsubmitted');
+  const [rejectionReason, setRejectionReason] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -54,13 +57,21 @@ export default function Profile() {
   useEffect(() => {
     const loadProfile = async () => {
       if (!user || !token) return;
-      const baseUrl = import.meta.env.VITE_API_URL;
       try {
-        const res = await fetch(`${baseUrl}/api/artists/me`, {
-          headers: { Authorization: `Bearer ${token}` },
+        let res = await fetch(`${baseUrl}/api/artists/me`, {
+        headers: { Authorization: `Bearer ${token}` },
         });
-        if (!res.ok) return;
-        const me = await res.json();
+        if (res.status === 403 || res.status === 404) {
+          await fetch(`${baseUrl}/api/artists/me/ensure`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          }).catch(() => {});
+          res = await fetch(`${baseUrl}/api/artists/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        }
+      if (!res.ok) return;
+      const me = await res.json();
         setName(me.name || "");
         setAddress(me.address || "");
         setPhoneNumber(me.phone_number || "");
@@ -70,16 +81,22 @@ export default function Profile() {
         setBio(me.bio || "");
         setProfileImageUrl(me.profile_image_url || null);
         setGalleryUrls(Array.isArray(me.gallery_urls) ? me.gallery_urls : []);
+        setApprovalStatus((me.approval_status as any) ?? 'unsubmitted');
+        setRejectionReason(me.rejection_reason ?? null);
         if (me.id) {
-          setBackendArtistId(String(me.id));
-          setLocked(true);
-        }
+        setBackendArtistId(String(me.id));
+        const st = (me.approval_status as string) || 'unsubmitted';
+        setLocked(st === 'pending' || st === 'approved');   
+      }
       } catch (err) {
         setBackendDebug(`Load backend profile failed: ${err}`);
       }
     };
     loadProfile();
   }, [user, token]);
+
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +110,15 @@ export default function Profile() {
       setError("Das Minimum darf nicht größer als das Maximum sein.");
       return;
     }
+
+    if (!backendArtistId) {
+      const ensured = await fetch(`${baseUrl}/api/artists/me/ensure`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    }).then(r => r.ok ? r.json() : null).catch(() => null);
+    if (ensured?.id) setBackendArtistId(String(ensured.id));
+    }
+
 
     setLoading(true);
     try {
@@ -119,10 +145,24 @@ export default function Profile() {
         setGalleryUrls
       );
 
-      const payload: any = { bio: bio.toString(), gallery_urls: mergedGalleryUrls };
+      const nextStatus = approvalStatus === 'approved' ? 'approved' : 'pending';
+
+      // ALLE Felder mitsenden!
+      const payload: any = {
+        name,
+        address,
+        phone_number: phoneNumber,
+        price_min: priceMin,
+        price_max: priceMax,
+        disciplines,                    // array of strings
+        bio: bio.toString(),
+        gallery_urls: mergedGalleryUrls,
+        approval_status: nextStatus,
+      };
       if (imageUrl) payload.profile_image_url = imageUrl;
 
-      await fetch(`${baseUrl}/api/artists/me/profile`, {
+      // speichern + Rückgabe prüfen
+      const saveRes = await fetch(`${baseUrl}/api/artists/me/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +171,30 @@ export default function Profile() {
         body: JSON.stringify(payload),
       });
 
+      if (!saveRes.ok) {
+        const t = await saveRes.text();
+        throw new Error(`Save failed: ${saveRes.status} ${t}`);
+      }
+
+      const saved = await saveRes.json().catch(() => null);
+
+      // UI aus Serverantwort aktualisieren (stellt sicher, dass wir sehen, was wirklich gespeichert wurde)
+      if (saved) {
+        setName(saved.name || "");
+        setAddress(saved.address || "");
+        setPhoneNumber(saved.phone_number || "");
+        setDisciplines(Array.isArray(saved.disciplines) ? saved.disciplines : []);
+        setPriceMin(saved.price_min ?? priceMin);
+        setPriceMax(saved.price_max ?? priceMax);
+        setBio(saved.bio || "");
+        setProfileImageUrl(saved.profile_image_url || imageUrl || null);
+        setGalleryUrls(Array.isArray(saved.gallery_urls) ? saved.gallery_urls : mergedGalleryUrls);
+        setApprovalStatus((saved.approval_status as any) ?? nextStatus);
+        setRejectionReason(saved.rejection_reason ?? null);
+      }
+
       setSuccess(true);
+      if (nextStatus === 'pending') setRejectionReason(null);
       setLocked(true);
     } catch (err: any) {
       setError("Profil speichern fehlgeschlagen.");
@@ -167,6 +230,35 @@ export default function Profile() {
       {success && (
         <div className="mb-4 text-green-700 bg-green-100 border border-green-400 rounded p-3">
           Profil erfolgreich gespeichert!
+        </div>
+      )}
+      {approvalStatus !== 'approved' && (
+        <div
+          className={`mb-4 rounded-lg border p-4 ${
+            approvalStatus === 'rejected'
+              ? 'bg-red-50 border-red-300 text-red-800'
+              : 'bg-amber-50 border-amber-300 text-amber-900'
+          }`}
+        >
+          {approvalStatus === 'pending' && (
+            <p>
+              Dein Profil ist <strong>zur Prüfung eingereicht</strong>. Ein Admin schaut es sich zeitnah an. Solange es nicht freigegeben ist, wirst du nicht als Künstler gelistet und erhältst keine Anfragen.
+            </p>
+          )}
+          {approvalStatus === 'rejected' && (
+            <div>
+              <p className="font-semibold">Dein Profil wurde leider abgelehnt.</p>
+              {rejectionReason && (
+                <p className="mt-1"><span className="font-medium">Grund:</span> {rejectionReason}</p>
+              )}
+              <p className="mt-2">Passe dein Profil an und reiche es erneut ein.</p>
+            </div>
+          )}
+          {approvalStatus === 'unsubmitted' && (
+            <p>
+              Reiche dein Profil zur <strong>Freigabe</strong> ein. Erst nach Freigabe wirst du auf der Künstlerseite angezeigt und kannst Anfragen erhalten.
+            </p>
+          )}
         </div>
       )}
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -223,7 +315,7 @@ export default function Profile() {
                 key={d}
                 onClick={() => toggleDiscipline(d)}
                 disabled={locked}
-                className={`px-3 py-1 border rounded ${disciplines.includes(d) ? "bg-blue-600 text-black" : "bg-white text-black"}`}
+                className={`px-3 py-1 border rounded ${disciplines.includes(d) ? "bg-blue-600 text-white" : "bg-white text-black"}`}
               >
                 {d}
               </button>
@@ -345,7 +437,15 @@ export default function Profile() {
             disabled={loading || locked}
             className="w-full bg-green-600 text-white py-3 rounded-lg disabled:opacity-50"
           >
-            {locked ? "Profil gesperrt" : loading ? "Speichern..." : "Profil speichern"}
+            {locked
+              ? "Profil gesperrt"
+              : loading
+                ? "Speichern..."
+                : approvalStatus === 'approved'
+                  ? 'Änderungen speichern'
+                  : approvalStatus === 'pending'
+                    ? 'Zur Prüfung eingereicht'
+                    : 'Zur Prüfung einreichen'}
           </button>
         </div>
       </form>

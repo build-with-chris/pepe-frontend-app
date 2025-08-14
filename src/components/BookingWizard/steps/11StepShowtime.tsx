@@ -17,6 +17,18 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const isGroup = Number(data.team_size) === 3;
+
+  // Map Gästezahl (intern evtl. 199 / 350 / 501) auf verständliche Buckets für die Anzeige
+  const guestsValue = Number(data.number_of_guests);
+  const guestsLabel = isNaN(guestsValue)
+    ? String(data.number_of_guests ?? "")
+    : guestsValue >= 501
+      ? ">500"
+      : guestsValue >= 200
+        ? "200–500"
+        : "<200";
+
   useEffect(() => {
     if (responseRef.current && response) {
       responseRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -81,7 +93,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           </div>
           <div>
             <dt className="font-semibold flex items-center gap-2"><Users className="h-4 w-4 text-blue-600" /> Anreisende Künstler</dt>
-            <dd>{data.team_size} </dd>
+            <dd>{Number(data.team_size) === 3 ? 'Gruppe' : data.team_size}</dd>
           </div>
           <div>
             <dt className="font-semibold flex items-center gap-2"><Clock className="h-4 w-4 text-blue-600" /> Dauer</dt>
@@ -101,7 +113,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           </div>
           <div>
             <dt className="font-semibold flex items-center gap-2"><Users className="h-4 w-4 text-blue-600" /> Gäste</dt>
-            <dd>{data.number_of_guests}</dd>
+            <dd>{guestsLabel}</dd>
           </div>
           <div>
             <dt className="font-semibold flex items-center gap-2"><Info className="h-4 w-4 text-blue-600" /> Planungsstatus</dt>
@@ -163,26 +175,34 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
             <h3 className="text-2xl md:text-3xl font-extrabold mb-2 flex items-center gap-2">
               Vielen Dank für deine Anfrage
             </h3>
-            <p className="text-sm md:text-base text-gray-600 max-w-md">
-              Deine Anfrage wurde erfolgreich versendet. Schau dich in der Zwischenzeit gern bei unseren Kü nstlern um und entdecke weitere spannende Acts.
-            </p>
+            {isGroup ? (
+              <p className="text-sm md:text-base text-gray-600 max-w-md">
+                Wir haben deine Anfrage erhalten und sind bereits in der Abstimmung. Da eine Gruppe etwas komplexer zu buchen ist, können wir an dieser Stelle noch keine Preisauskunft geben. Dein Angebot erhältst du wie gewohnt innerhalb von 48 Stunden per E‑Mail.
+              </p>
+            ) : (
+              <p className="text-sm md:text-base text-gray-600 max-w-md">
+                Deine Anfrage wurde erfolgreich versendet. Schau dich in der Zwischenzeit gern bei unseren Künstlern um und entdecke weitere spannende Acts.
+              </p>
+            )}
           </div>
 
           {/* Highlights */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
-            <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
-              <div className="text-xs text-gray-500">Verfügbare Artisten</div>
-              <div className="text-xl font-bold text-blue-700">{response.num_available_artists}</div>
+          {!isGroup && (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
+              <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
+                <div className="text-xs text-gray-500">Verfügbare Artisten</div>
+                <div className="text-xl font-bold text-blue-700">{response.num_available_artists}</div>
+              </div>
+              <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
+                <div className="text-xs text-gray-500">Voraussichtlicher Preis</div>
+                <div className="text-xl font-bold text-blue-700">{response.price_min}€ – {response.price_max}€</div>
+              </div>
+              <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
+                <div className="text-xs text-gray-500">Gebündeltes Angebot</div>
+                <div className="text-xl font-bold text-blue-700">in 48h per Mail</div>
+              </div>
             </div>
-            <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
-              <div className="text-xs text-gray-500">Voraussichtlicher Preis</div>
-              <div className="text-xl font-bold text-blue-700">{response.price_min}€ – {response.price_max}€</div>
-            </div>
-            <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
-              <div className="text-xs text-gray-500">Gebündeltes Angebot</div>
-              <div className="text-xl font-bold text-blue-700">in 48h per Mail</div>
-            </div>
-          </div>
+          )}
 
           {/* Link */}
           <div className="text-center mt-6">

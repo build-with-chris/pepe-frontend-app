@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+import { Calendar } from "@/components/ui/calendar";
 import { useAuth } from '@/context/AuthContext';
 
 function useBackendArtistId(supabase: any, user: any, token: string | null) {
@@ -18,11 +17,13 @@ function useBackendArtistId(supabase: any, user: any, token: string | null) {
     try {
       const supabaseUserId = user?.id || user?.sub;
       const email = user?.email;
+      console.log("[useBackendArtistId] supabaseUserId:", supabaseUserId, "user.email:", email);
       const { data, error } = await supabase
         .from('profiles')
         .select('backend_artist_id')
         .eq('user_id', supabaseUserId)
         .maybeSingle();
+      console.log("[useBackendArtistId] Supabase profile fetch result:", { data, error });
       setProfileFetchTried(true);
       if (!error && data?.backend_artist_id) {
         setBackendArtistId(data.backend_artist_id);
@@ -31,18 +32,26 @@ function useBackendArtistId(supabase: any, user: any, token: string | null) {
       }
       setProfileMissingBackendArtistId(true);
       if (email) {
+        console.log("[useBackendArtistId] No backend_artist_id found, fetching artists from backend for email:", email);
         const res = await fetch(`${import.meta.env.VITE_API_URL}/api/artists`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
           const artists = await res.json();
+          console.log("[useBackendArtistId] Artists fetched from backend:", artists);
           const match = artists.find((a: any) => a.email && a.email.toLowerCase() === email.toLowerCase());
           if (match) {
             setBackendArtistId(match.id);
             setProfileMissingBackendArtistId(false);
             // upsert for next time
-            await supabase.from('profiles').upsert({ user_id: supabaseUserId, backend_artist_id: match.id });
+            const upsertResult = await supabase.from('profiles').upsert({ user_id: supabaseUserId, backend_artist_id: match.id });
+            console.log("[useBackendArtistId] Upserted backend_artist_id to Supabase profile:", upsertResult);
+          } else {
+            console.log("[useBackendArtistId] No matching artist found for email:", email);
           }
+        } else {
+          const text = await res.text();
+          console.warn("[useBackendArtistId] Failed to fetch artists from backend. Status:", res.status, "Response:", text);
         }
       }
     } catch (e) {
@@ -91,10 +100,25 @@ const CalendarPage: React.FC = () => {
       return d >= startOfToday;
     });
   }, [available, startOfToday]);
+  
+// Baut ein lokales Datum aus 'YYYY-MM-DD' (vermeidet UTC-Shift), robust gegen null/undefiniert
+const toLocalDate = (iso: string | null | undefined) => {
+  if (!iso || typeof iso !== "string") return null;
+  const parts = iso.split("-");
+  if (parts.length < 3) return null;
+  const [y, m, d] = parts.map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(y, m - 1, d);
+};
 
-  const availableDates = futureAvailable.map((s) => new Date(s.date));
-  const modifiers = { available: availableDates };
-  const modifiersClassNames = { available: 'bg-green-500/80 text-white rounded-full transition-colors' };
+  const availableDates = (futureAvailable ?? []).map((s) => toLocalDate(s.date)).filter(Boolean) as Date[];
+  // Matcher for blocked days: only future/today days NOT in available
+  const blockedMatcher = (date: Date) => {
+    if (date < startOfToday) return false;
+    const iso = formatISODate(date);
+    return !(available ?? []).some((s) => s.date === iso);
+  };
+  const modifiers = { available: availableDates, blocked: blockedMatcher };
   const disabledDays = { before: startOfToday };
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -105,6 +129,8 @@ const CalendarPage: React.FC = () => {
 
   // Merkt sich, für welches Datum (ISO) wir bereits automatisch Verfügbarkeit sichergestellt haben
   const lastEnsuredIsoRef = useRef<string | null>(null);
+  // prevent flooding the API with concurrent add requests for the same day
+  const inFlightAdd = useRef<Set<string>>(new Set());
 
   const getDateRange = (start: Date, end: Date) => {
     const dates: Date[] = [];
@@ -116,16 +142,48 @@ const CalendarPage: React.FC = () => {
     return dates;
   };
 
-  // lokale YYYY-MM-DD Formatierung, vermeidet UTC Off-by-One
-  const formatISODate = (d: Date) => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
-  };
+// lokale YYYY-MM-DD Formatierung, vermeidet UTC Off-by-One, robust gegen null
+const formatISODate = (d: Date | null | undefined) => {
+  if (!d || !(d instanceof Date) || isNaN(d.getTime())) return "";
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
+
+  
 
   const { backendArtistId, loadingArtistId, profileFetchTried, profileMissingBackendArtistId, refreshArtistId } =
     useBackendArtistId(supabase, user, token);
+
+  // Stellt sicher, dass ein Artist im Backend existiert und synchronisiert die ID in Supabase.profile
+    const ensureAndSyncArtistId = async () => {
+      if (!token) return null;
+      try {
+        console.log("[ensureAndSyncArtistId] About to call /api/artists/me/ensure with token (prefix):", token.slice(0, 8) + "...");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/artists/me/ensure`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        });
+        const text = await res.text();
+        console.log("[ensureAndSyncArtistId] Response status:", res.status, "Text:", text);
+        if (!res.ok) {
+          console.warn('ensure failed', res.status, text);
+          return null;
+        }
+        const data = JSON.parse(text);
+        if (data?.id && supabase && supabaseUserId) {
+          // schreibe die ID ins Supabase-Profil, damit wir sie stabil haben
+          const upsertResult = await supabase.from('profiles').upsert({ user_id: supabaseUserId, backend_artist_id: data.id });
+          console.log("[ensureAndSyncArtistId] Upserted backend_artist_id into Supabase profile:", upsertResult);
+          await refreshArtistId();
+        }
+        return data;
+      } catch (e) {
+        console.warn('ensure error', e);
+        return null;
+      }
+    };
 
   useEffect(() => {
     console.log("DEBUG: user object:", user);
@@ -149,6 +207,24 @@ const CalendarPage: React.FC = () => {
     }
   }, [token]);
 
+  // Wenn das Profil geladen wurde, aber keine backendArtistId vorhanden ist, Artist erzwingen & danach Verfügbarkeit neu laden
+  useEffect(() => {
+    console.log("[useEffect] token:", token ? token.slice(0, 8) + "..." : null, "backendArtistId:", backendArtistId, "profileFetchTried:", profileFetchTried, "profileMissingBackendArtistId:", profileMissingBackendArtistId);
+    if (!token) return;
+    if (!profileFetchTried) return;
+    if (!backendArtistId && profileMissingBackendArtistId) {
+      ensureAndSyncArtistId().then(() => {
+        // nach dem Sync neu laden (falls vorher leer)
+        fetchAvailability();
+      });
+    }
+    // Ergänzung: fetchAvailability immer nach Laden der backendArtistId aufrufen
+    if (backendArtistId) {
+      fetchAvailability();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, backendArtistId, profileFetchTried, profileMissingBackendArtistId]);
+
   const fetchAvailability = async () => {
     if (!token) return;
     console.log('fetchAvailability for artist', backendArtistId);
@@ -158,7 +234,7 @@ const CalendarPage: React.FC = () => {
       const url = backendArtistId
         ? `${import.meta.env.VITE_API_URL}/api/availability?artist_id=${backendArtistId}`
         : `${import.meta.env.VITE_API_URL}/api/availability`;
-      console.log('Fetching availability from URL:', url);
+      console.log('[fetchAvailability] Fetching from URL:', url, 'token (prefix):', token.slice(0, 8) + '...', 'backendArtistId:', backendArtistId);
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -187,7 +263,7 @@ const CalendarPage: React.FC = () => {
       console.log('Sample dates from backend', data.slice(0, 10).map(d => d.date));
       console.log(
         'Normalized selected dates for DayPicker',
-        data.map(d => formatISODate(new Date(d.date)))
+        data.map(d => formatISODate(toLocalDate(d.date)))
       );
       setAvailable(data);
     } catch (err: any) {
@@ -199,53 +275,60 @@ const CalendarPage: React.FC = () => {
   };
 
   const addAvailability = async (date: Date) => {
-  if (!token) return;
-  const iso = formatISODate(date);
-  if (available.some((s) => s.date === iso)) return; // schon vorhanden
+    if (!token) return;
+    const iso = formatISODate(date);
+    // avoid duplicate/concurrent requests for the same date
+    if (inFlightAdd.current.has(iso)) return;
+    // Robust: prüfe, ob available existiert
+    if (!Array.isArray(available) ? false : (available ?? []).some((s) => s.date === iso)) return; // schon vorhanden
 
-  // Optimistischer Eintrag (temporär)
-  const tempSlot: AvailabilitySlot = { id: -Date.now(), date: iso };
-  setAvailable((prev) => [...prev, tempSlot]);
-
-  try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/availability`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(backendArtistId ? { date: iso, artist_id: backendArtistId } : { date: iso }),
-    });
-    const text = await res.text();
-    if (!res.ok) {
-      console.error("addAvailability failed", res.status, text);
-      // Rückgängig machen
-      setAvailable((prev) => prev.filter((s) => s.id !== tempSlot.id));
-      throw new Error(`Add failed: ${res.status} ${text}`);
-    }
-
-    let newSlot: AvailabilitySlot;
+    // Optimistischer Eintrag (temporär)
+    const tempSlot: AvailabilitySlot = { id: -Date.now(), date: iso };
+    setAvailable((prev) => [...(prev ?? []), tempSlot]);
+    inFlightAdd.current.add(iso);
     try {
-      newSlot = JSON.parse(text);
-    } catch (parseErr) {
-      console.warn("Could not parse created availability, using fallback", parseErr, text);
-      newSlot = { id: tempSlot.id, date: iso }; // behalte temporären Eintrag
-    }
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/availability`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(backendArtistId ? { date: iso, artist_id: backendArtistId } : { date: iso }),
+      });
+      const text = await res.text();
+      if (!res.ok) {
+        console.error("addAvailability failed", res.status, text);
+        // Rückgängig machen
+        setAvailable((prev) => (prev ?? []).filter((s) => s.id !== tempSlot.id));
+        throw new Error(`Add failed: ${res.status} ${text}`);
+      }
 
-    setAvailable((prev) => {
-      const withoutTemp = prev.filter((s) => s.id !== tempSlot.id && s.date !== iso);
-      return [...withoutTemp, newSlot];
-    });
-  } catch (err: any) {
-    console.error("addAvailability error", err);
-    setError("Verfügbarkeit konnte nicht hinzugefügt werden.");
-  }
-};
+      let newSlot: AvailabilitySlot;
+      try {
+        newSlot = JSON.parse(text);
+      } catch (parseErr) {
+        console.warn("Could not parse created availability, using fallback", parseErr, text);
+        newSlot = { id: tempSlot.id, date: iso }; // behalte temporären Eintrag
+      }
+
+      setAvailable((prev) => {
+        const withoutTemp = (prev ?? []).filter((s) => s.id !== tempSlot.id && s.date !== iso);
+        return [...withoutTemp, newSlot];
+      });
+    } catch (err: any) {
+      console.error("addAvailability error", err);
+      setError("Verfügbarkeit konnte nicht hinzugefügt werden.");
+      // rollback optimistic insert if necessary
+      setAvailable((prev) => (prev ?? []).filter((s) => s.date !== iso && s.id !== tempSlot.id));
+    } finally {
+      inFlightAdd.current.delete(iso);
+    }
+  };
 
   const removeAvailability = async (slot: AvailabilitySlot) => {
     if (!token) return;
-    // optimistische Entfernung direkt
-    setAvailable((prev) => prev.filter((s) => s.id !== slot.id));
+    // Robust: prüfe, ob available existiert
+    setAvailable((prev) => (prev ?? []).filter((s) => s.id !== slot.id));
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/availability/${slot.id}`, {
         method: "DELETE",
@@ -256,53 +339,57 @@ const CalendarPage: React.FC = () => {
         throw new Error(`Remove failed: ${res.status} ${text}`);
       }
     } catch (err: any) {
-      console.error("removeAvailability error", err);
-      setError("Verfügbarkeit konnte nicht entfernt werden.");
+      // Fange Netzwerkfehler besser ab, inkl. evtl. response text
+      let message = "Verfügbarkeit konnte nicht entfernt werden.";
+      if (err && err.message) message += " " + err.message;
+      setError(message);
       // im Fehlerfall zurückrollen
-      setAvailable((prev) => [...prev, slot]);
+      setAvailable((prev) => [...(prev ?? []), slot]);
     }
   };
 
-  useEffect(() => {
-    if (!backendArtistId || loadingArtistId) return; // wait for artist linkage
-    fetchAvailability();
-  }, [token, backendArtistId, loadingArtistId]);
-
-  // Stelle sicher, dass immer "heute + 365" als verfügbar markiert ist (falls noch nicht vorhanden)
+  // Stelle sicher, dass der Tag heute+365 existiert (ein stabiler „Grenzmarker“)
   useEffect(() => {
     if (!token) return;
-    if (!backendArtistId || loadingArtistId) return;
+    if (loadingArtistId) return;
 
     const oneYearAhead = new Date(startOfToday);
     oneYearAhead.setDate(oneYearAhead.getDate() + 365);
     const iso = formatISODate(oneYearAhead);
 
-    // Nur einmal pro Datum versuchen (verhindert Mehrfach-POSTs)
     if (lastEnsuredIsoRef.current === iso) return;
 
-    const exists = available.some((s) => s.date === iso);
+    const exists = (available ?? []).some((s) => s.date === iso);
     if (exists) {
       lastEnsuredIsoRef.current = iso;
       return;
     }
 
-    console.log('🟢 Auto-Availability: adding', iso, 'for artist', backendArtistId);
+    console.log('🟢 Auto-Availability: adding', iso, 'for artist', backendArtistId ?? '(current user)');
     lastEnsuredIsoRef.current = iso;
     (async () => {
       try {
-        await addAvailability(oneYearAhead);
+        try {
+          await addAvailability(oneYearAhead);
+        } catch (e) {
+          // Fehler pro Add-Aufruf abfangen
+          console.warn('Auto-Availability failed for', iso, e);
+          lastEnsuredIsoRef.current = null;
+        }
       } catch (e) {
-        console.warn('Auto-Availability failed for', iso, e);
-        // Beim Fehler erlauben wir einen erneuten Versuch (z. B. nach Reload)
+        // catch block für den outer try
+        console.warn('Auto-Availability outer error for', iso, e);
         lastEnsuredIsoRef.current = null;
       }
     })();
-  }, [token, backendArtistId, loadingArtistId, startOfToday, available]);
+  }, [token, loadingArtistId, startOfToday, available, backendArtistId]);
+
+  // (removed effect that ensured all days from today to today+365 as available)
 
   // helper to check if date is available
   const isAvailable = (date: Date) => {
     const iso = formatISODate(date);
-    return available.some((s) => s.date === iso);
+    return (available ?? []).some((s) => s.date === iso);
   };
 
  const handleDayClick = async (date: Date | undefined, _: any, event?: React.MouseEvent) => {
@@ -329,9 +416,9 @@ const CalendarPage: React.FC = () => {
     // gleicher Tag: sofort toggeln (einzeln) ohne await, optimistisches UI
     if (date.getTime() === rangeStart.getTime()) {
       const iso = formatISODate(date);
-      const already = available.some((s) => s.date === iso);
+      const already = (available ?? []).some((s) => s.date === iso);
       if (already) {
-        const slot = available.find((s) => s.date === iso);
+        const slot = (available ?? []).find((s) => s.date === iso);
         if (slot) {
           removeAvailability(slot);
         }
@@ -350,7 +437,7 @@ const CalendarPage: React.FC = () => {
 };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Buchungskalender</h1>
       {error && (
         <div className="mb-2 text-red-600 flex items-center gap-3">
@@ -380,19 +467,21 @@ const CalendarPage: React.FC = () => {
           </button>
         </div>
       )}
-      <div className="text-sm mb-2 flex items-center gap-2">
+      <div className="text-sm mb-4 flex items-center justify-center gap-2">
         <div className="inline-block w-3 h-3 bg-green-500 rounded-full" />
         <div>Verfügbare Tage</div>
       </div>
-      <DayPicker
-        mode="multiple"
-        selected={availableDates}
-        numberOfMonths={1}
-        onDayClick={handleDayClick as any}
-        modifiers={modifiers}
-        modifiersClassNames={modifiersClassNames}
-        disabled={disabledDays}
-      />
+      <div className="w-full flex justify-center">
+        <Calendar
+          mode="multiple"
+          numberOfMonths={1}
+          onDayClick={handleDayClick as any}
+          modifiers={modifiers}
+          disabled={disabledDays}
+          initialFocus
+          className="mx-auto w-full max-w-[28rem] md:max-w-[36rem] [--cell-size:2.25rem] md:[--cell-size:2.75rem] lg:[--cell-size:3rem]"
+        />
+      </div>
       <div className="mt-4">
         {rangeStart && !rangeEnd && (
           <div className="mb-2">
@@ -409,12 +498,12 @@ const CalendarPage: React.FC = () => {
           (() => {
             const datesInRange = getDateRange(rangeStart, rangeEnd);
             const isoRange = datesInRange.map(d => formatISODate(d));
-            const availableInRange = isoRange.filter(d => available.some(s => s.date === d));
+            const availableInRange = isoRange.filter(d => (available ?? []).some(s => s.date === d));
             const allAvailable = availableInRange.length === isoRange.length;
             const noneAvailable = availableInRange.length === 0;
             const title = `${rangeStart.toLocaleDateString()} bis ${rangeEnd.toLocaleDateString()}`;
             return (
-              <div className="mb-3 p-3 border rounded bg-gray-800 text-white flex flex-col gap-2">
+              <div className="mb-3 p-3 border border-white/30 rounded bg-transparent text-foreground flex flex-col gap-2">
                 <div>Ausgewählter Zeitraum: <strong>{title}</strong></div>
                 <div className="flex gap-2">
                   {allAvailable && (
@@ -426,7 +515,7 @@ const CalendarPage: React.FC = () => {
                         try {
                           // alle entfernen
                           for (const iso of isoRange) {
-                            const slot = available.find(s => s.date === iso);
+                            const slot = (available ?? []).find(s => s.date === iso);
                             if (slot) await removeAvailability(slot);
                           }
                         } finally {
@@ -448,7 +537,7 @@ const CalendarPage: React.FC = () => {
                         try {
                           // alle hinzufügen
                           for (const iso of isoRange) {
-                            await addAvailability(new Date(iso));
+                            await addAvailability(toLocalDate(iso) as Date);
                           }
                         } finally {
                           setProcessingRange(false);
@@ -469,8 +558,8 @@ const CalendarPage: React.FC = () => {
                           setProcessingRange(true);
                           try {
                             for (const iso of isoRange) {
-                              if (!available.some(s => s.date === iso)) {
-                                await addAvailability(new Date(iso));
+                              if (!(available ?? []).some(s => s.date === iso)) {
+                                await addAvailability(toLocalDate(iso) as Date);
                               }
                             }
                           } finally {
@@ -489,7 +578,7 @@ const CalendarPage: React.FC = () => {
                           setProcessingRange(true);
                           try {
                             for (const iso of isoRange) {
-                              const slot = available.find(s => s.date === iso);
+                              const slot = (available ?? []).find(s => s.date === iso);
                               if (slot) await removeAvailability(slot);
                             }
                           } finally {

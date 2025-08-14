@@ -29,9 +29,7 @@ export default function SplashScreen() {
   useEffect(() => {
     if (!showPrompt) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        navigate('/home');
-      }
+      navigate('/home');
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);

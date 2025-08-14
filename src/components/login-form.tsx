@@ -30,6 +30,10 @@ export function Login({
     e.preventDefault();
     console.log("handleSignIn triggered", { email, password });
     setLoading(true);
+    const API = import.meta.env.VITE_API_URL;
+    if (!API) {
+      console.warn("VITE_API_URL is not set – requests will fail.");
+    }
     try {
       // Authenticate with Supabase
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
@@ -48,7 +52,7 @@ export function Login({
       }
       const token = session.access_token;
       // Verify Supabase JWT with backend
-      const verifyRes = await fetch(`${import.meta.env.VITE_API_URL}/auth/verify`, {
+      const verifyRes = await fetch(`${API}/auth/verify`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,10 +74,41 @@ export function Login({
         email: supUser.email || undefined,
         role: (supUser.app_metadata as any)?.role || undefined,
       });
+      // Ensure an Artist row exists / is linked for this Supabase user
+      try {
+        const ensureRes = await fetch(`${API}/api/artists/me/ensure`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!ensureRes.ok) {
+          const t = await ensureRes.text().catch(() => "");
+          console.warn("/api/artists/me/ensure failed:", ensureRes.status, t);
+        }
+      } catch (e) {
+        console.warn("ensure request error", e);
+      }
+      // Immediately verify that the artist is now resolvable
+      let meOk = false;
+      try {
+        const meRes = await fetch(`${API}/api/artists/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const meText = await meRes.text();
+        console.log("/api/artists/me status=", meRes.status, "body=", meText);
+        meOk = meRes.ok;
+      } catch (e) {
+        console.warn("/api/artists/me request error", e);
+      }
       const role = (supUser.app_metadata as any)?.role;
       if (role === 'admin') {
         navigate('/admin');
       } else {
+        if (!meOk) {
+          alert("Dein Profil konnte nicht geladen werden. Bitte versuche es erneut oder kontaktiere den Support.");
+        }
         navigate('/profile');
       }
     } catch (err) {
