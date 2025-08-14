@@ -62,7 +62,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/artist-guidelines" element={<ArtistGuidlines />} />
       </Routes>
-    {!['/anfragen', '/login', '/signup'].includes(location.pathname) && <Footer />}
+    {!['/anfragen', '/login', '/signup', '/buchhaltung', '/profile', '/kalender', '/meine-gigs', '/meine-anfragen'].includes(location.pathname) && <Footer />}
     </div>
   )
 }

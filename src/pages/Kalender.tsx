@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Calendar } from "@/components/ui/calendar";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { useAuth } from '@/context/AuthContext';
 
 function useBackendArtistId(supabase: any, user: any, token: string | null) {
@@ -438,7 +439,25 @@ const formatISODate = (d: Date | null | undefined) => {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Buchungskalender</h1>
+      <div className="mx-auto w-full max-w-[28rem] md:max-w-[36rem]">
+        <h1 className="text-2xl font-bold mb-4 text-white">Buchungskalender</h1>
+        <Accordion type="single" collapsible className="mb-5 rounded-md border border-white/40 bg-transparent">
+          <AccordionItem value="guide">
+            <AccordionTrigger className="px-4 text-white">Kurz erklärt</AccordionTrigger>
+            <AccordionContent className="px-4 pb-4 leading-relaxed text-white">
+              <p className="mb-2">
+                Nach deinem Login setzen wir automatisch <strong>365 Tage</strong> auf <span className="text-green-400 font-medium">verfügbar</span>. Außerdem rutscht jeden Tag der Zeitraum um einen Tag nach vorn – so bleibt immer ein Jahr im Voraus verfügbar.
+              </p>
+              <p className="mb-2">
+                <strong>Tag blockieren:</strong> Klicke auf einen Tag, um ihn auf <span className="text-red-400 font-medium">nicht verfügbar</span> zu setzen. Wähle zwei Daten, um einen ganzen Zeitraum zu markieren.
+              </p>
+              <p className="mb-0">
+                <strong>Zurück auf verfügbar:</strong> Wenn du einen rot markierten Tag wieder aktivierst, wird er direkt gespeichert. Die <span className="text-green-400 font-medium">grüne</span> Hervorhebung siehst du ggf. erst nach einem kurzen Seiten-Refresh oder wenn du zwischen den Menüpunkten wechselst.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </div>
       {error && (
         <div className="mb-2 text-red-600 flex items-center gap-3">
           <div>{error}</div>
@@ -467,27 +486,23 @@ const formatISODate = (d: Date | null | undefined) => {
           </button>
         </div>
       )}
-      <div className="text-sm mb-4 flex items-center justify-center gap-2">
-        <div className="inline-block w-3 h-3 bg-green-500 rounded-full" />
-        <div>Verfügbare Tage</div>
+      <div className="mx-auto w-full max-w-[28rem] md:max-w-[36rem] text-sm mb-4 flex items-center justify-center gap-6 text-white">
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-3 h-3 rounded-full bg-green-500/90" />
+          <span>Verfügbar</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-500/80" />
+          <span>Nicht verfügbar</span>
+        </div>
       </div>
-      <div className="w-full flex justify-center">
-        <Calendar
-          mode="multiple"
-          numberOfMonths={1}
-          onDayClick={handleDayClick as any}
-          modifiers={modifiers}
-          disabled={disabledDays}
-          initialFocus
-          className="mx-auto w-full max-w-[28rem] md:max-w-[36rem] [--cell-size:2.25rem] md:[--cell-size:2.75rem] lg:[--cell-size:3rem]"
-        />
-      </div>
-      <div className="mt-4">
+      {/* Range actions — now shown above the calendar for better visibility */}
+      <div className="mx-auto w-full max-w-[28rem] md:max-w-[36rem]">
         {rangeStart && !rangeEnd && (
-          <div className="mb-2">
-            <strong>Enddatum wählen.</strong>
+          <div className="mb-3 p-3 border border-white/30 rounded bg-transparent text-white flex items-center justify-between gap-2">
+            <div><strong>Enddatum wählen.</strong></div>
             <button
-              className="ml-4 underline text-sm"
+              className="underline text-sm"
               onClick={() => { setRangeStart(null); setRangeEnd(null); }}
             >
               Abbrechen
@@ -503,9 +518,9 @@ const formatISODate = (d: Date | null | undefined) => {
             const noneAvailable = availableInRange.length === 0;
             const title = `${rangeStart.toLocaleDateString()} bis ${rangeEnd.toLocaleDateString()}`;
             return (
-              <div className="mb-3 p-3 border border-white/30 rounded bg-transparent text-foreground flex flex-col gap-2">
+              <div className="mb-3 p-3 border border-white/30 rounded bg-transparent text-white flex flex-col gap-2">
                 <div>Ausgewählter Zeitraum: <strong>{title}</strong></div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2 items-center">
                   {allAvailable && (
                     <button
                       className="px-3 py-1 bg-red-600 rounded"
@@ -513,7 +528,6 @@ const formatISODate = (d: Date | null | undefined) => {
                       onClick={async () => {
                         setProcessingRange(true);
                         try {
-                          // alle entfernen
                           for (const iso of isoRange) {
                             const slot = (available ?? []).find(s => s.date === iso);
                             if (slot) await removeAvailability(slot);
@@ -535,7 +549,6 @@ const formatISODate = (d: Date | null | undefined) => {
                       onClick={async () => {
                         setProcessingRange(true);
                         try {
-                          // alle hinzufügen
                           for (const iso of isoRange) {
                             await addAvailability(toLocalDate(iso) as Date);
                           }
@@ -604,6 +617,18 @@ const formatISODate = (d: Date | null | undefined) => {
           })()
         )}
       </div>
+      <div className="w-full flex justify-center">
+        <Calendar
+          mode="multiple"
+          numberOfMonths={1}
+          onDayClick={handleDayClick as any}
+          modifiers={modifiers}
+          disabled={disabledDays}
+          initialFocus
+          className="mx-auto w-full max-w-[28rem] md:max-w-[36rem] [--cell-size:2.25rem] md:[--cell-size:2.75rem] lg:[--cell-size:3rem]"
+        />
+      </div>
+      {/* Range panel moved above the calendar */}
       {error && error.startsWith("Fehler beim Laden: 500") && (
         <div className="mt-2 text-sm text-yellow-700">
           Wenn weiterhin 500 kommt: Backend-Logs checken oder Token prüfen.

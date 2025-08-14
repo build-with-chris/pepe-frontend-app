@@ -185,8 +185,8 @@ function CalendarDayButton({
         // Base: transparent, square, compact
         "flex aspect-square size-auto w-full min-w-(--cell-size) items-center justify-center rounded-md text-xs font-normal bg-transparent text-white",
         // Show subtle green/red directly on the button when provided by parent modifiers
-        (modifiers as any).available && "bg-green-500/20 ring-1 ring-green-500/25 text-foreground text-white font-bold",
-        (modifiers as any).blocked && "bg-red-500/15 ring-1 ring-red-500/20 text-foreground/90 text-white font-bol",
+        (modifiers as any).available && "bg-green-500/40 ring-1 ring-green-500/25 text-foreground text-white font-black",
+        (modifiers as any).blocked && "bg-red-500/25 ring-1 ring-red-500/20 text-foreground/90 text-white font-black",
         // Selected & range endpoints take precedence visually
         (modifiers.selected && !modifiers.range_middle && !modifiers.range_start && !modifiers.range_end) && "bg-primary text-primary-foreground",
         (modifiers.range_start || modifiers.range_end) && "bg-primary text-primary-foreground",
@@ -197,7 +197,7 @@ function CalendarDayButton({
         // Outside days slightly dimmed
         modifiers.outside && "text-foreground/60",
         // Subtle hover only when not otherwise highlighted
-        !modifiers.selected && !modifiers.range_middle && !modifiers.range_start && !modifiers.range_end && "hover:bg-white/10",
+        !modifiers.selected && !modifiers.range_middle && !modifiers.range_start && !modifiers.range_end && "hover:bg-white/20 text-white",
         // Disabled state
         modifiers.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className
