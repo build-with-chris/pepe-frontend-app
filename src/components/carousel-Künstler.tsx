@@ -14,7 +14,6 @@ import slide2 from "@/assets/kuenstlerpage/slide2.webp";
 import slide2Lg from "@/assets/kuenstlerpage/slide2-lg.webp";
 import slide3 from "@/assets/kuenstlerpage/slide3.webp";
 import slide3Lg from "@/assets/kuenstlerpage/slide3-lg.webp";
-import slide4 from "@/assets/kuenstlerpage/slide4.webp";
 import slide5 from "@/assets/kuenstlerpage/slide5.webp";
 import slide6 from "@/assets/kuenstlerpage/slide6.webp";
 import slide7 from "@/assets/kuenstlerpage/slide7.webp";
@@ -23,7 +22,6 @@ const slides = [
   { small: slide1, large: slide1Lg },
   { small: slide2, large: slide2Lg },
   { small: slide3, large: slide3Lg },
-  { small: slide4, large: slide4 },
   { small: slide5, large: slide5 },
   { small: slide6, large: slide6 },
   { small: slide7, large: slide7 },

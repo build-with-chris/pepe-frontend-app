@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CarouselOrientation } from "@/components/carousel-Landingpage";
+import { CarouselOrientation } from "@/components/carousel-Künstler";
 import ArtistCard from "@/components/ArtistCard/ArtistCard";
 
 interface Artist {
