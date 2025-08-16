@@ -17,7 +17,7 @@ export interface StepShowTypeProps {
 }
 
 const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onPrev }) => {
-  const options = ['Walking Act', 'Bühnen Show'];
+  const options = ['Live-Interaktion', 'Bühnen Show'];
 
   return (
     <div className="step flex flex-col items-center">

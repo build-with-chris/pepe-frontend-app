@@ -34,10 +34,25 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
     return `${y}-${m}-${day}`;
   };
 
+  // Compute defaultMonth and selected Date from stored string
+  const selectedDate = React.useMemo(() => {
+    if (!data.event_date) return undefined;
+    const [y, m, d] = data.event_date.split('-').map((v) => parseInt(v, 10));
+    if (!y || !m || !d) return undefined;
+    return new Date(y, m - 1, d);
+  }, [data.event_date]);
+
+  const [selectedDay, setSelectedDay] = React.useState<Date | undefined>(selectedDate);
+
+  React.useEffect(() => {
+    setSelectedDay(selectedDate);
+  }, [selectedDate]);
+
   // Calendar selection handler
   const handleCalendarSelect = (selected?: Date) => {
     if (!selected) return;
     onChange({ event_date: toISODate(selected) });
+    setSelectedDay(selected);
   };
 
   // Time slot builder (12:00 -> 24:00 in 30-min steps, last slot 23:30)
@@ -65,14 +80,6 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
     return d < today;
   };
 
-  // Compute defaultMonth and selected Date from stored string
-  const selectedDate = React.useMemo(() => {
-    if (!data.event_date) return undefined;
-    const [y, m, d] = data.event_date.split('-').map((v) => parseInt(v, 10));
-    if (!y || !m || !d) return undefined;
-    return new Date(y, m - 1, d);
-  }, [data.event_date]);
-
   return (
     <div className="step flex flex-col items-center pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold mb-10">Wann findet deine Veranstaltung statt?</h2>
@@ -87,11 +94,14 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
           <div className="h-px bg-white/10 -mt-2 mb-3" />
           <Calendar
             mode="single"
-            selected={selectedDate}
+            selected={selectedDay}
             onSelect={handleCalendarSelect}
-            defaultMonth={selectedDate || new Date()}
+            defaultMonth={selectedDay || new Date()}
             disabled={isPast}
             showOutsideDays={false}
+            classNames={{
+              day: "hover:bg-blue-500 hover:text-white data-[selected]:bg-white data-[selected]:text-black data-[selected]:hover:bg-white/90 rounded-md overflow-hidden font-black"
+            }}
             className="bg-transparent p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
             formatters={{
               formatWeekdayName: (date) =>
@@ -145,33 +155,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         </div>
       </div>
 
-      {/* Erklärung – Desktop & Tablet */}
-      <div className="hidden md:block w-full max-w-5xl mt-4">
-        <InfoBox
-          title="Warum wir das fragen"
-          text={
-            <>
-              Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.
-            </>
-          }
-        />
-      </div>
 
-      {/* Erklärung – Mobile: nur Accordion */}
-      <div className="md:hidden w-full max-w-5xl mt-3 px-4">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="why-date-time">
-            <AccordionTrigger>
-              Warum wir nach Datum, Uhrzeit & Gästezahl fragen
-            </AccordionTrigger>
-            <AccordionContent>
-              Die Location und der Zeitpunkt beeinflussen Verfügbarkeit, Logistik und Technik. Mit der Gästezahl können wir Größe und Set‑up passend planen – so bekommst du die besten Vorschläge.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-
-      {/* Summary */}
       <div className="text-sm text-neutral-200 mb-4">
         {data.event_date && data.event_time ? (
           <>
@@ -183,7 +167,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         )}
       </div>
 
-      {/* Fixed footer CTA */}
+
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center gap-3">
         
         <button

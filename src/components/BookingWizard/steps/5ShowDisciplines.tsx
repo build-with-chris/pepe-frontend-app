@@ -52,12 +52,12 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
       <p className="text-sm text-white-200 text-center mb-2">(Mehrfachauswahl möglich)</p>
       
       <div className="w-full px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto justify-items-center">
           {disciplinesOptions.map(({ name, description }) => (
             <div
               key={name}
               onClick={() => toggleDiscipline(name)}
-              className={`aspect-square w-full sm:w-2/3 relative cursor-pointer rounded-lg overflow-hidden group ${
+              className={`aspect-square w-full relative cursor-pointer rounded-lg overflow-hidden group ${
                 data.disciplines.includes(name)
                   ? 'border-4 border-blue-500'
                   : 'border-2 border-transparent'
@@ -78,17 +78,7 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
           ))}
         </div>
       </div>
-    <div className="hidden md:block w-full mt-3 px-4">
-      <InfoBox
-        title="Warum wir das fragen"
-        text={
-          <>
-            Jede Disziplin bringt eigene Requisiten, Anforderungen und Effekte mit.
-            So können wir dir gezielt Künstler empfehlen, die genau das bieten, was dich begeistert.
-          </>
-        }
-      />
-    </div>
+
     {/* Erklärung – Mobile nur als Accordion */}
     <div className="md:hidden w-full mt-3 px-4">
       <Accordion type="single" collapsible>

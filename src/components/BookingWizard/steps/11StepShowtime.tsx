@@ -66,7 +66,11 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
 
   return (
     <div className="step pb-28">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Fast geschafft – sollen wir deine Anfrage jetzt an unsere Künstler senden?</h2>
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">
+        Fast geschafft – sollen wir deine Anfrage jetzt
+        <br />
+        an unsere Künstler senden?
+      </h2>
       <InfoBox
         title="Was passiert als nächstes"
         text={
@@ -76,9 +80,9 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           </>
         }
       />
-      <div className="w-full max-w-2xl mx-auto mb-6 bg-white border border-gray-200 rounded-lg shadow p-5 sm:p-6 break-words">
-        <h3 className="text-xl font-semibold mb-4">Ihre Daten im Überblick</h3>
-        <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-gray-700 break-words">
+      <div className="w-full max-w-2xl mx-auto mb-6 bg-stone-50 border border-gray-200 rounded-lg shadow p-5 sm:p-6 break-words">
+        <h3 className="text-xl font-semibold mb-4 text-black ">Ihre Daten im Überblick</h3>
+        <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-stone-700 break-words">
           <div>
             <dt className="font-semibold flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> Event Typ</dt>
             <dd>{data.event_type}</dd>
@@ -165,11 +169,11 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         ) : null}
       </div>
       {response && (
-        <div ref={responseRef} className="relative w-full max-w-2xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-xl mt-8 p-8">
+        <div ref={responseRef} className="relative w-full max-w-2xl mx-auto bg-stone-50 border border-gray-200 rounded-2xl shadow-xl mt-8 p-8">
           {/* Header */}
           <div className="flex flex-col items-center text-center">
             <span className="inline-flex items-center gap-2 text-green-600 mb-2">
-              <CheckCircle2 className="h-5 w-5" />
+              <CheckCircle2 className="h-5 w-5" /> 
               <span className="text-sm font-semibold uppercase tracking-wide">Anfrage versendet  🎉</span>
             </span>
             <h3 className="text-2xl md:text-3xl font-extrabold mb-2 flex items-center gap-2">

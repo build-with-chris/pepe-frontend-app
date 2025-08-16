@@ -272,6 +272,12 @@ export default function AdminInvoicesPage() {
                     </span>
                   </td>
                   <td className="py-2 pr-4 whitespace-nowrap flex items-center gap-2">
+                    <button
+                      onClick={() => openInvoice(inv.id)}
+                      className="px-2 py-1 rounded border border-white/20 hover:bg-white/10"
+                      title="Datei öffnen"
+                    >Öffnen</button>
+
                     {inv.status !== 'paid' && (
                       <button
                         onClick={() => patchInvoice(inv.id, { status: 'paid' })}

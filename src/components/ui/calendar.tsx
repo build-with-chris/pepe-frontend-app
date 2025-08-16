@@ -88,7 +88,7 @@ function Calendar({
           "text-[0.8rem] select-none text-muted-foreground",
           defaultClassNames.week_number
         ),
-        day: "relative w-full h-full p-0 text-center aspect-square select-none",
+        day: "relative w-full h-full p-0 text-center aspect-square select-none rounded-lg overflow-hidden",
         range_start: "rounded-l-md",
         range_middle: "rounded-none",
         range_end: "rounded-r-md",
@@ -182,23 +182,15 @@ function CalendarDayButton({
       data-range-middle={modifiers.range_middle}
       aria-pressed={!!modifiers.selected}
       className={cn(
-        // Base: transparent, square, compact
-        "flex aspect-square size-auto w-full min-w-(--cell-size) items-center justify-center rounded-md text-xs font-normal bg-transparent text-white",
-        // Show subtle green/red directly on the button when provided by parent modifiers
+        "flex aspect-square size-auto w-full min-w-(--cell-size) items-center justify-center text-xs font-black bg-transparent text-white rounded-lg overflow-hidden transition-colors focus-visible:outline-none focus-visible:ring-0",
         (modifiers as any).available && "bg-green-500/40 ring-1 ring-green-500/25 text-foreground text-white font-black",
         (modifiers as any).blocked && "bg-red-500/25 ring-1 ring-red-500/20 text-foreground/90 text-white font-black",
-        // Selected & range endpoints take precedence visually
-        (modifiers.selected && !modifiers.range_middle && !modifiers.range_start && !modifiers.range_end) && "bg-primary text-primary-foreground",
-        (modifiers.range_start || modifiers.range_end) && "bg-primary text-primary-foreground",
-        // Range middle
+        (modifiers.selected && !modifiers.range_middle) && "bg-white text-black hover:bg-white/90 focus:bg-white/90 rounded-lg overflow-hidden",
+        (modifiers.range_start || modifiers.range_end) && "bg-white text-black hover:bg-white/90 focus:bg-white/90 rounded-lg overflow-hidden",
         modifiers.range_middle && "bg-accent text-accent-foreground",
-        // Today indicator when not selected (keeps a fine ring)
         modifiers.today && !modifiers.selected && "ring-1 ring-primary",
-        // Outside days slightly dimmed
         modifiers.outside && "text-foreground/60",
-        // Subtle hover only when not otherwise highlighted
-        !modifiers.selected && !modifiers.range_middle && !modifiers.range_start && !modifiers.range_end && "hover:bg-white/20 text-white",
-        // Disabled state
+        !modifiers.selected && !modifiers.range_middle && !modifiers.range_start && !modifiers.range_end && "hover:bg-blue-500 hover:text-white",
         modifiers.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className
       )}

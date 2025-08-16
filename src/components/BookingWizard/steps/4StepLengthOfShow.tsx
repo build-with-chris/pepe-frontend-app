@@ -23,18 +23,8 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
   onPrev,
 }) => {
   const [customMode, setCustomMode] = useState(false);
-  useEffect(() => {
-    if (!customMode) return;
-    const minutes = data.duration_minutes;
-    if (typeof minutes === 'number' && minutes >= 1) {
-      const t = setTimeout(() => {
-        onNext();
-      }, 300);
-      return () => clearTimeout(t);
-    }
-  }, [customMode, data.duration_minutes, onNext]);
+  const [customValue, setCustomValue] = useState(data.duration_minutes?.toString() || '');
 
-  // Ensure a default duration is set if none selected yet (preselect 5 minutes)
   useEffect(() => {
     if (!customMode && (!data.duration_minutes || data.duration_minutes < 1)) {
       onChange({ duration_minutes: 5 });
@@ -42,6 +32,12 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
     // run once on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (customMode) {
+      setCustomValue(data.duration_minutes?.toString() || '');
+    }
+  }, [customMode, data.duration_minutes]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
@@ -85,10 +81,13 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
             <input
               type="number"
               min={1}
-              value={data.duration_minutes || ''}
+              value={customValue}
               onChange={(e) => {
+                setCustomValue(e.target.value);
                 const v = parseInt(e.target.value, 10);
-                onChange({ duration_minutes: isNaN(v) ? 0 : v });
+                if (!isNaN(v) && v >= 0) {
+                  onChange({ duration_minutes: v });
+                }
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -99,14 +98,6 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
               placeholder="Minuten"
               className="block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
             />
-            <Button
-              variant="default"
-              onClick={onNext}
-              disabled={data.duration_minutes < 1}
-              className="mt-4"
-            >
-              Weiter
-            </Button>
           </>
         )}
       </div>

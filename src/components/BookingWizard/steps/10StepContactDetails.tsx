@@ -2,12 +2,8 @@ import React from 'react';
 import type { BookingData } from '../types';
 import { Mail } from 'lucide-react';
 import InfoBox from '../Infobox';
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Info } from "lucide-react";
 
 export interface StepContactDetailsProps {
   data: BookingData;
@@ -73,14 +69,26 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
         </p>
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
-        <label htmlFor="planningStatus" className="block text-sm font-medium text-black">
-          Planungsstatus <span className="text-xs text-black/70">(optional)</span>
-        </label>
+        <div className="flex items-center space-x-2">
+          <label htmlFor="planningStatus" className="block text-sm font-medium text-white">
+            Planungsstatus <span className="text-xs text-white/70">(optional)</span>
+          </label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button type="button" aria-label="Info zum Planungsstatus" className="text-white/70 hover:text-white">
+                <Info className="w-4 h-4" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent side="top" align="end" className="max-w-sm bg-black text-white text-sm p-4 rounded-lg border border-white/20 shadow-lg">
+              Der Planungsstatus hilft uns, das Angebot <b>individueller</b> zu gestalten. Je nach Stand gehen wir mehr in die <b>Detailtiefe</b> und erstellen entweder ein Angebot, das man <b>direkt buchen</b> kann ("schneller Bedarf"), oder eines, das nach <b>abgestimmt</b> werden kann ("Angebotsvergleich").
+            </PopoverContent>
+          </Popover>
+        </div>
         <select
           id="planningStatus"
           value={(data as any).planning_status || ""}
           onChange={handlePlanningChange}
-          className="mt-1 block w-full border border-white rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-white bg-black text-white"
+          className="mt-1 block w-full border border-white rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-white/70 bg-black text-white/70"
         >
           <option value="">Bitte auswählen …</option>
           <option value="Erstplanung">Erstplanung</option>
@@ -111,28 +119,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
         </div>
       </div>
       {/* Erklärung – Desktop & Tablet */}
-      <div className="hidden md:block w-full lg:w-1/3 mx-auto mt-2">
-        <InfoBox
-          title="Warum wir das fragen"
-          text={
-            <>Damit wir dir die passenden Angebote zusenden und bei Rückfragen schnell reagieren können.</>
-          }
-        />
-      </div>
-
-      {/* Erklärung – Mobile: nur Accordion */}
-      <div className="md:hidden w-full lg:w-1/3 mx-auto mt-2 px-4">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="why-contact">
-            <AccordionTrigger>
-              Warum wir nach deinen Kontaktdaten fragen
-            </AccordionTrigger>
-            <AccordionContent>
-              Damit wir dir die passenden Angebote zusenden und bei Rückfragen schnell reagieren können.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
+     
       {/* Fixed footer CTA */}
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
         <button
