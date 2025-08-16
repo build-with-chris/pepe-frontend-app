@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { Upload } from 'lucide-react';
 
 // Konfiguration für den Storage-Bucket (default: invoices)
 const INVOICE_BUCKET = import.meta.env.VITE_SUPABASE_INVOICES_BUCKET || 'invoices';
@@ -54,6 +55,7 @@ export default function Buhaltung() {
   const [regError, setRegError] = useState<string | null>(null);
 
   const [uid, setUid] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // 1) Eigenen Artist laden (für artistId)
   useEffect(() => {
@@ -325,22 +327,39 @@ export default function Buhaltung() {
           <p className="text-sm text-gray-300 mb-3">
             Lade hier deine Rechnungen zu bestätigten Gigs hoch (PDF, JPG, PNG, WEBP). Dateien werden im privaten Ordner <code>user/&lt;deine-UID&gt;</code> gespeichert.
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Hidden file input */}
             <input
+              ref={fileInputRef}
               type="file"
               multiple
               accept="application/pdf,image/jpeg,image/png,image/webp"
               onChange={onUpload}
               disabled={!artistId || uploading}
-              className="block text-sm"
+              className="hidden"
             />
+
+            {/* Visible upload button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={!artistId || uploading}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded border border-gray-700 disabled:opacity-50"
+            >
+              <Upload className="w-4 h-4" />
+              Rechnung hochladen
+            </button>
+
+            <span className="text-xs text-gray-400">PDF, JPG, PNG, WEBP • mehrere Dateien möglich</span>
+
             <button
               type="button"
               onClick={() => artistId && listInvoices(artistId)}
-              className="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm"
+              className="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm border border-gray-700"
             >
               Liste aktualisieren
             </button>
+
             {uploading && <span className="text-gray-400 text-sm">Lade hoch…</span>}
           </div>
           {invError && <p className="text-red-400 text-sm mt-2">{invError}</p>}

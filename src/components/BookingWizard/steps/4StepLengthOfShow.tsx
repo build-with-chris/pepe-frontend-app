@@ -101,29 +101,7 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
           </>
         )}
       </div>
-      {/* Erklärung – Desktop & Tablet */}
-      <div className="hidden md:block w-full md:w-3/5 lg:w-2/5 mx-auto mt-3">
-        <InfoBox
-          title="Warum wir das fragen"
-          text={
-            <>Die Showdauer beeinflusst Dramaturgie, Energielevel und Preis. So können wir dir einen Ablauf empfehlen, der perfekt zu deinem Event passt.</>
-          }
-        />
-      </div>
-
-      {/* Erklärung – Mobile: nur Accordion */}
-      <div className="md:hidden w-full md:w-3/5 lg:w-2/5 mx-auto mt-3">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="why-length">
-            <AccordionTrigger>
-              Warum wir nach der Showdauer fragen
-            </AccordionTrigger>
-            <AccordionContent>
-              Die Showdauer beeinflusst Dramaturgie, Energielevel und Preis. So können wir dir einen Ablauf empfehlen, der perfekt zu deinem Event passt.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
+        
       {/* Fixed footer CTA */}
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
         <Button

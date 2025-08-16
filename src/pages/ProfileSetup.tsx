@@ -5,6 +5,7 @@ import GuidelinesModal from "@/components/GuidelinesModal";
 import GalleryUploader from "@/components/GalleryUploader";
 import { uploadProfileImage, uploadGalleryImages } from "@/lib/storage/upload";
 import { useNavigate } from "react-router-dom";
+import { Pencil } from "lucide-react";
 
 const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || "profiles";
 const baseUrl = import.meta.env.VITE_API_URL;
@@ -194,6 +195,7 @@ export default function Profile() {
       }
 
       setSuccess(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
       if (nextStatus === 'pending') setRejectionReason(null);
       setLocked(true);
     } catch (err: any) {
@@ -210,7 +212,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 text-white">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Profil einrichten</h1>
         {locked && (
@@ -220,15 +222,17 @@ export default function Profile() {
               setLocked(false);
               setSuccess(false);
             }}
-            className="text-sm font-medium text-blue-600 hover:underline"
+            className="inline-flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-md border border-gray-700 shadow"
+            aria-label="Profil bearbeiten"
           >
+            <Pencil className="w-4 h-4" />
             Profil bearbeiten
           </button>
         )}
       </div>
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {success && (
-        <div className="mb-4 text-green-700 bg-green-100 border border-green-400 rounded p-3">
+        <div className="mb-4 text-green-300 bg-green-900/20 border border-green-700 rounded p-3">
           Profil erfolgreich gespeichert!
         </div>
       )}
@@ -263,41 +267,41 @@ export default function Profile() {
       )}
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Basisdaten */}
-        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm md:col-span-2">
-          <h2 className="text-lg font-semibold mb-4 text-black">Basisdaten</h2>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm md:col-span-2">
+          <h2 className="text-lg font-semibold mb-4 text-gray-300">Basisdaten</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Name */}
             <div>
-              <label className="block mb-1 font-medium text-black">Name*</label>
+              <label className="block mb-1 font-medium text-gray-300">Name*</label>
               <input
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                className="w-full border px-3 py-2 rounded text-black"
+                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
                 required
                 disabled={locked}
               />
             </div>
             {/* Adresse */}
             <div>
-              <label className="block mb-1 font-medium text-black">Adresse*</label>
+              <label className="block mb-1 font-medium text-gray-300">Adresse*</label>
               <input
                 type="text"
                 value={address}
                 onChange={e => setAddress(e.target.value)}
-                className="w-full border px-3 py-2 rounded text-black"
+                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
                 required
                 disabled={locked}
               />
             </div>
             {/* Telefonnummer */}
             <div>
-              <label className="block mb-1 font-medium text-black">Telefonnummer*</label>
+              <label className="block mb-1 font-medium text-gray-300">Telefonnummer*</label>
               <input
                 type="tel"
                 value={phoneNumber}
                 onChange={e => setPhoneNumber(e.target.value)}
-                className="w-full border px-3 py-2 rounded text-black"
+                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
                 required
                 disabled={locked}
               />
@@ -306,8 +310,8 @@ export default function Profile() {
         </div>
 
         {/* Disziplinen */}
-        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm md:col-span-2">
-          <h2 className="text-lg font-semibold mb-4 text-black">Disziplinen</h2>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm md:col-span-2">
+          <h2 className="text-lg font-semibold mb-4 text-gray-300">Disziplinen</h2>
           <div className="flex flex-wrap gap-2">
             {disciplinesOptions.map(d => (
               <button
@@ -315,7 +319,7 @@ export default function Profile() {
                 key={d}
                 onClick={() => toggleDiscipline(d)}
                 disabled={locked}
-                className={`px-3 py-1 border rounded ${disciplines.includes(d) ? "bg-blue-600 text-white" : "bg-white text-black"}`}
+                className={`px-3 py-1 border rounded ${disciplines.includes(d) ? "bg-blue-600 text-white border-blue-500" : "bg-gray-800 text-white border-gray-700 hover:bg-gray-700"}`}
               >
                 {d}
               </button>
@@ -324,36 +328,36 @@ export default function Profile() {
         </div>
 
         {/* Preise */}
-        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm md:col-span-2">
-          <h2 className="text-lg font-semibold mb-4 text-black">Preisrahmen</h2>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm md:col-span-2">
+          <h2 className="text-lg font-semibold mb-4 text-gray-300">Preisrahmen</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block mb-1 font-medium text-black">Preis (min)*</label>
+              <label className="block mb-1 font-medium text-gray-300">Preis (min)*</label>
               <input
                 type="number"
                 value={priceMin}
                 onChange={e => setPriceMin(Number(e.target.value))}
-                className="w-full border px-3 py-2 rounded text-black"
+                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
                 min={0}
                 required
                 disabled={locked}
               />
-              <p className="mt-1 text-sm text-black">
+              <p className="mt-1 text-sm text-gray-400">
                 Realistischer Richtwert für ein Teamevent (ca. 150 Personen, 5‑Minuten‑Act, ohne Anfahrtskosten). Nur Gage + ggf. Material.
               </p>
             </div>
             <div>
-              <label className="block mb-1 font-medium text-black">Preis (max)*</label>
+              <label className="block mb-1 font-medium text-gray-300">Preis (max)*</label>
               <input
                 type="number"
                 value={priceMax}
                 onChange={e => setPriceMax(Number(e.target.value))}
-                className="w-full border px-3 py-2 rounded text-black"
+                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
                 min={priceMin}
                 required
                 disabled={locked}
               />
-              <p className="mt-1 text-sm text-black">
+              <p className="mt-1 text-sm text-gray-400">
                 Oberer Rahmen für denselben Event‑Case (150 Gäste, 5‑Minuten‑Act, ohne Anfahrt).
               </p>
             </div>
@@ -361,19 +365,19 @@ export default function Profile() {
         </div>
 
         {/* Profilbild */}
-        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4 text-black">Profilbild</h2>
-          <div className="mb-3 rounded-md border-2 border-dashed border-gray-300 bg-white p-3">
-            <p className="text-sm font-medium text-black">Bitte so hochladen:</p>
-            <ul className="list-disc list-inside text-sm text-black">
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm">
+          <h2 className="text-lg font-semibold mb-4 text-gray-300">Profilbild</h2>
+          <div className="mb-3 rounded-md border-2 border-dashed border-gray-700 bg-gray-800 p-3">
+            <p className="text-sm font-medium text-gray-300">Bitte so hochladen:</p>
+            <ul className="list-disc list-inside text-sm text-gray-400">
               <li>Gesicht sichtbar</li>
               <li>Quadratisches Format</li>
               <li>Am liebsten WebP (
-                <a href="https://ezgif.com/png-to-webp" target="_blank" rel="noreferrer" className="underline">PNG → WebP</a>
+                <a href="https://ezgif.com/png-to-webp" target="_blank" rel="noreferrer" className="text-blue-300 hover:underline">PNG → WebP</a>
                 )
               </li>
               <li>
-                <a href="https://ezgif.com/jpg-to-webp" target="_blank" rel="noreferrer" className="underline">JPG → WebP</a>
+                <a href="https://ezgif.com/jpg-to-webp" target="_blank" rel="noreferrer" className="text-blue-300 hover:underline">JPG → WebP</a>
               </li>
             </ul>
           </div>
@@ -388,7 +392,7 @@ export default function Profile() {
             type="button"
             onClick={() => document.querySelector<HTMLInputElement>('input[type="file"][accept="image/*"]')?.click()}
             disabled={locked}
-            className="mt-2 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+            className="mt-2 inline-flex items-center px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded disabled:opacity-50"
           >
             Profilbild hochladen
           </button>
@@ -398,14 +402,14 @@ export default function Profile() {
         </div>
 
         {/* Galerie */}
-        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4 text-black">Galerie</h2>
-          <p className="text-sm mb-2 text-black">Divers, Format 4:3 (breiter als höher). Idealerweise WebP.</p>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm">
+          <h2 className="text-lg font-semibold mb-4 text-gray-300">Galerie</h2>
+          <p className="text-sm mb-2 text-gray-400">Divers, Format 4:3 (breiter als höher). Idealerweise WebP.</p>
           <button
             type="button"
             onClick={() => document.querySelector<HTMLInputElement>('input[type="file"][multiple]')?.click()}
             disabled={locked}
-            className="mb-2 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+            className="mb-2 inline-flex items-center px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded disabled:opacity-50"
           >
             Galerie-Bilder hochladen
           </button>
@@ -419,14 +423,14 @@ export default function Profile() {
         </div>
 
         {/* Über mich */}
-        <div className="bg-stone-100 border border-gray-200 rounded-lg p-5 shadow-sm md:col-span-2">
-          <h2 className="text-lg font-semibold mb-2 text-black">Über mich</h2>
-          <p className="mb-2 text-sm text-black">Dieser Text erscheint auf der Homepage unter deiner Karte. Sei kreativ, aber halte dich kurz.</p>
+        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm md:col-span-2">
+          <h2 className="text-lg font-semibold mb-2 text-gray-300">Über mich</h2>
+          <p className="mb-2 text-sm text-gray-400">Dieser Text erscheint auf der Homepage unter deiner Karte. Sei kreativ, aber halte dich kurz.</p>
           <textarea
             value={bio}
             onChange={e => setBio(e.target.value)}
             disabled={locked}
-            className="w-full border px-3 py-2 rounded h-28 text-black"
+            className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2 h-28"
           />
         </div>
 
@@ -435,7 +439,7 @@ export default function Profile() {
           <button
             type="submit"
             disabled={loading || locked}
-            className="w-full bg-green-600 text-white py-3 rounded-lg disabled:opacity-50"
+            className="w-full bg-gray-800 hover:bg-gray-700 text-white py-3 rounded-lg disabled:opacity-50"
           >
             {locked
               ? "Profil gesperrt"
@@ -450,7 +454,7 @@ export default function Profile() {
         </div>
       </form>
       {backendDebug && (
-        <div className="mt-4 p-3 bg-gray-100 border rounded text-xs whitespace-pre-wrap">
+        <div className="mt-4 p-3 bg-gray-900 border border-gray-800 rounded text-xs whitespace-pre-wrap text-gray-300">
           <strong>Debug Log:</strong>
           <div>{backendDebug}</div>
         </div>

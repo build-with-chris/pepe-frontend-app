@@ -45,13 +45,13 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
           />
         </div>
 
-        {/* Needs: Light & Sound (stacked, aligned with textarea) */}
-        <div className="flex flex-col gap-4 mb-8">
+        {/* Needs: Light & Sound (side by side, aligned with textarea) */}
+        <div className="flex flex-row justify-between gap-6 mb-8">
           {[
             { key: 'light', label: 'Licht benötigt', field: 'needs_light', checked: data.needs_light, price: '450€', hint: 'Sorgt für Atmosphäre und dramaturgische Akzente.' },
             { key: 'sound', label: 'Musikanlage benötigt', field: 'needs_sound', checked: data.needs_sound, price: '450€', hint: 'Klarer, tragfähiger Sound – optional mit Headset.' },
           ].map(option => (
-            <label key={option.key} className="flex flex-col gap-1 cursor-pointer">
+            <label key={option.key} className="flex-1 flex flex-col gap-1 cursor-pointer">
               <span className="flex items-center gap-3">
                 <input
                   type="checkbox"

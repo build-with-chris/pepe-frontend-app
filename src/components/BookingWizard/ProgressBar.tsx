@@ -23,7 +23,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   totalSteps > 0 ? ((stepIndex + 1) / totalSteps) * 100 : 0;
 
 return (
-  <div className="w-4/5 mx-auto px-4 py-2">
+  <div className="lg:w-4/5 md:w-4/5 mx-auto px-4 py-2 sm:w-full">
     {/* Ladebalken */}
     <div className="w-full bg-gray-200 rounded-full h-4">
       <div

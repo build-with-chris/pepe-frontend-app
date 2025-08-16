@@ -93,7 +93,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
   return (
     <div className="step pb-28">
       <h2 className="text-3xl mb-10 md:text-4xl text-center mb-3 font-extrabold">Wo findet deine Veranstaltung statt?</h2>
-      <div className="flex flex-col lg:flex-row lg:space-x-4 w-full max-w-[800px] mx-auto mb-6">
+      <div className="flex flex-col lg:flex-row lg:space-x-4 w-full max-w-[800px] mx-auto px-4 mb-6">
       <div className="w-full lg:w-1/2 mb-4">
         <label htmlFor="street" className="block text-sm font-medium text-neutral-200">
           Straße
@@ -135,66 +135,43 @@ const StepLocation: React.FC<StepLocationProps> = ({
         />
       </div>
       </div>
-      <div className="flex flex-wrap justify-center gap-4 w-full">
-        <div className="w-full max-w-[380px]">
-          <OptionCard
-            name="is_indoor"
-            value="true"
-            label="Indoor"
-            imgSrc="/images/indoor.webp"
-            checked={hasSelection && data.is_indoor === true}
-            onChange={val => {
-              setHasSelection(true);
-              onChange({ is_indoor: val === 'true' });
-              if (street && postalCode && city) {
-                onNext();
-              }
-            }}
-          />
-        </div>
-        <div className="w-full max-w-[380px]">
-          <OptionCard
-            name="is_indoor"
-            value="false"
-            label="Outdoor"
-            imgSrc="/images/outdoor.webp"
-            checked={hasSelection && data.is_indoor === false}
-            onChange={val => {
-              setHasSelection(true);
-              onChange({ is_indoor: val === 'true' });
-              if (street && postalCode && city) {
-                onNext();
-              }
-            }}
-          />
+      <div className="w-full max-w-[800px] mx-auto px-4 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full">
+            <OptionCard
+              name="is_indoor"
+              value="true"
+              label="Indoor"
+              imgSrc="/images/indoor.webp"
+              checked={hasSelection && data.is_indoor === true}
+              onChange={val => {
+                setHasSelection(true);
+                onChange({ is_indoor: val === 'true' });
+                if (street && postalCode && city) {
+                  onNext();
+                }
+              }}
+            />
+          </div>
+          <div className="w-full">
+            <OptionCard
+              name="is_indoor"
+              value="false"
+              label="Outdoor"
+              imgSrc="/images/outdoor.webp"
+              checked={hasSelection && data.is_indoor === false}
+              onChange={val => {
+                setHasSelection(true);
+                onChange({ is_indoor: val === 'true' });
+                if (street && postalCode && city) {
+                  onNext();
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Erklärung – Desktop & Tablet */}
-      <div className="hidden md:block w-full lg:w-2/3 mx-auto mt-4">
-        <InfoBox
-          title="Warum wir das fragen"
-          text={
-            <>
-              Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.
-            </>
-          }
-        />
-      </div>
-
-      {/* Erklärung – Mobile: nur Accordion */}
-      <div className="md:hidden w-full lg:w-2/3 mx-auto mt-3 px-4">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="why-location">
-            <AccordionTrigger>
-              Warum wir nach der Location fragen
-            </AccordionTrigger>
-            <AccordionContent>
-              Die Location beeinflusst, welche Künstler logistisch passen und ob besondere technische Anforderungen bestehen. So können wir dir die bestmöglichen Vorschläge machen.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
 
       {/* Fixed footer CTA */}
       <div className="fixed bottom-0 inset-x-0 px-4 py-4 bg-black/60 backdrop-blur-sm flex justify-center">
