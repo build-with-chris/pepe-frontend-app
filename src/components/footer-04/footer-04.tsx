@@ -7,7 +7,7 @@ import {InstagramIcon} from "lucide-react";
 
 const mainLinks = [
   { title: "Mediamaterial", href: "/mediamaterial" },
-  { title: "Shows & Formate", href: "/shows" },
+  { title: "Shows & Formate", href: "/shows&formate" },
   { title: "Buchen", href: "/anfragen" },
   { title: "Referenzen", href: "/referenzen" },
   { title: "FAQ", href: "/faq" },

@@ -70,7 +70,7 @@ export default function Home() {
         className="mx-auto max-w-3xl px-4 text-center text-white text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight tracking-tight [text-wrap:balance] mt-8 md:mt-12 mb-4"
       >
         Wir bringen <span className="font-bold text-white/90">außergewöhnliche Künstler</span> und <span className="font-bold text-white/90">unvergessliche Showmomente</span> auf Ihre Bühne.
-        <span className="block mt-2 text-base md:text-lg lg:text-xl font-normal text-gray-200">
+        <span className="block mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
           Ob Firmenfeier, Gala oder Messe – mit uns wird Ihr Event zum Highlight, über das man noch lange spricht.
         </span>
       </h3>
@@ -81,11 +81,11 @@ export default function Home() {
           direction="horizontal"
           className="w-full max-w-6xl mx-auto my-8 rounded-lg overflow-hidden border border-white/10"
         >
-          <ResizablePanel defaultSize={50} minSize={30} className="flex flex-col justify-center px-6 py-8 bg-black/50 w-full">
+          <ResizablePanel defaultSize={80} minSize={40} className="flex flex-col justify-center px-6 py-8 bg-black/50 w-full">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 text-white text-left">
               Finde jetzt den perfekten Künstler
             </h2>
-            <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-200 max-w-2xl mb-8 text-left">
+            <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">
               Beantworte nur wenige kurze Fragen und erhalte unverbindlich erste Vorschläge und Preise.
             </p>
             <a href="/anfragen">
@@ -93,10 +93,10 @@ export default function Home() {
                 Jetzt starten
               </button>
             </a>
-            <p className="text-xs text-gray-300 mt-2 text-left">Dauert weniger als 5&nbsp;Minuten</p>
+            <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">Dauert weniger als 5&nbsp;Minuten</p>
           </ResizablePanel>
           <ResizableHandle withHandle className="bg-white/10 hover:bg-white/20 transition-colors" />
-          <ResizablePanel defaultSize={50} minSize={30} className="bg-black w-full min-h-[420px]">
+          <ResizablePanel defaultSize={30} minSize={15} className="bg-black w-full min-h-[420px]">
             <Carousel
               className="h-full min-h-[420px]"
               opts={{ loop: true }}
@@ -125,7 +125,7 @@ export default function Home() {
           <h2 className="text-xl font-bold mb-3 text-white text-left">
             🎭 Finde jetzt den perfekten Künstler
           </h2>
-          <p className="text-sm text-gray-200 mb-4 text-left">
+          <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
             Beantworte wenige kurze Fragen und erhalte unverbindliche Vorschläge & Preise.
           </p>
           <a href="/anfragen">
@@ -133,11 +133,15 @@ export default function Home() {
               Jetzt starten
             </button>
           </a>
-          <p className="text-xs text-gray-300 mt-2 text-left">Dauert &lt; 5&nbsp;Minuten</p>
+          <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">
+            Dauert &lt; 5&nbsp;Minuten
+          </p>
         </div>
       </div>
 
-      <Blog7 />
+      <div className="container w-full md:w-2/3 mx-auto">
+        <Blog7 />
+      </div>
       <div className="container w-full md:w-2/3 mx-auto">
       <Gallery23 />
       

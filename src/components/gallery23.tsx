@@ -9,35 +9,35 @@ import { Button } from "@/components/ui/button";
 const images = [
   {
     id: 1,
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random5.jpeg",
-    title: "Gala-Abende",
     code: "#0031",
+    title: "Gala-Abende",
+    image: "/images/eventTypes/Firmenfeier.webp",
   },
   {
     id: 2,
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random11.jpeg",
-    title: "Firmenfeiern",
-    code: "#0030",
+    code: "#0045",
+    title: "Jubiläen",
+    image: "/images/eventTypes/Incentive.webp",
   },
   {
     id: 3,
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random13.jpeg",
-    title: "Festivals",
-    code: "#0032",
+    code: "#0023",
+    title: "Firmenfeiern",
+    image: "/images/disciplines/Moderation.webp",
   },
   {
     id: 4,
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random1.jpeg",
-    title: "Jubiläen",
-    code: "#0033",
+    code: "#0007",
+    title: "Festivals",
+    image: "/images/disciplines/Luftakrobatik.webp",
   },
   {
     id: 5,
-    src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random2.jpeg",
+    code: "#0003",
     title: "Weihnachtsfeiern",
-    code: "#0033",
+    image: "/images/teamSizes/Solo.webp",
   },
-];
+]
 
 const Gallery23 = () => {
   const [activeImage, setActiveImage] = useState<number | null>(1);
@@ -99,9 +99,7 @@ const Gallery23 = () => {
                       exit={{ opacity: 0, y: 20 }}
                       className="absolute flex h-full w-full flex-col items-end justify-end px-4 pb-5"
                     >
-                      <p className="text-left text-xs text-white/70">
-                        {image.code}
-                      </p>
+                    
                       <h3 className="text-3xl font-bold text-white">
                         {image.title.split(" ")[0]}
                         <span className="font-playfair italic">
@@ -109,17 +107,12 @@ const Gallery23 = () => {
                           {image.title.split(" ")[1]}{" "}
                         </span>
                       </h3>
-                      <Button
-                        variant="secondary"
-                        className="mt-3 flex w-fit items-center justify-center gap-2 rounded-full bg-white text-black hover:bg-gray-200 text-xs"
-                      >
-                        Add to Cart <ShoppingCart size={14} />
-                      </Button>
+               
                     </motion.div>
                   )}
                 </AnimatePresence>
                 <img
-                  src={image.src}
+                  src={image.image}
                   className="size-full object-cover"
                   alt={image.title}
                 />

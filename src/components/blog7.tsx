@@ -1,4 +1,6 @@
 import { ArrowRight } from "lucide-react";
+import LogoPepe from '../assets/LogoPepe.png'
+import PepeArts from '../assets/Pepearts.png'
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,7 +32,6 @@ interface Blog7Props {
 }
 
 const Blog7 = ({
-  tagline = "Seit 15 Jahren – von Künstlern für dich.",
   heading = "Pepes Dreifaltigkeit",
   description = "Pepe wurde in München gegründet, um die Zirkusszene zu pushen. Heute sind wir ein starkes Netzwerk mit Base in der Stadt. Unsere Base? Der Pepe Geodome im Ostpark – hier trifft sich unser Kernteam regelmäßig zum Profitraining und für neue Ideen.",
   buttonText = "Mehr über uns",
@@ -45,7 +46,7 @@ const Blog7 = ({
       author: "Pepe Team",
       published: "1 Jan 2025",
       url: "/anfragen",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-dark-1.svg",
+      image: LogoPepe,
     },
     {
       id: "post-2",
@@ -55,8 +56,8 @@ const Blog7 = ({
       label: "Kultur",
       author: "Pepe Team",
       published: "1 Jan 2025",
-      url: "/",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-dark-1.svg",
+      url: "www.pepearts.de",
+      image: PepeArts,
     },
     {
       id: "post-3",
@@ -67,7 +68,7 @@ const Blog7 = ({
       author: "Pepe Team",
       published: "1 Jan 2025",
       url: "/",
-      image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-dark-1.svg",
+      image: "https://media.vrbo.com/lodging/108000000/107050000/107047700/107047637/7571fd4e.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill",
     },
   ],
 }: Blog7Props) => {
@@ -75,9 +76,6 @@ const Blog7 = ({
     <section className="py-10">
       <div className="container mx-auto flex flex-col items-center gap-16 lg:px-16">
         <div className="text-center">
-          <Badge variant="secondary" className="mb-6">
-            {tagline}
-          </Badge>
           <h2 className="mb-3 text-3xl font-semibold text-pretty md:mb-4 md:text-4xl lg:mb-6 lg:max-w-3xl lg:text-5xl">
             {heading}
           </h2>
@@ -97,7 +95,7 @@ const Blog7 = ({
               key={post.id}
               className="grid grid-rows-[auto_auto_1fr_auto] pt-0"
             >
-              <div className="aspect-16/9 w-full">
+              <div className="aspect-16/9 w-full bg-black overflow-hidden flex items-center justify-center">
                 <a
                   href={post.url}
                   target="_blank"
@@ -106,7 +104,7 @@ const Blog7 = ({
                   <img
                     src={post.image}
                     alt={post.title}
-                    className="h-full w-full object-cover object-center"
+                    className="h-[70%] w-auto object-contain object-center mx-auto"
                   />
                 </a>
               </div>

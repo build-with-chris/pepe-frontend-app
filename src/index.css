@@ -119,6 +119,13 @@
   }
 }
 
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+    font-family: "futura-pt", sans-serif;
+  }
+}
+
 [data-page="home"] body,
 [data-page="home"] #root {
   background: transparent !important;
