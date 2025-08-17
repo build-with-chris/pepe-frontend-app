@@ -21,6 +21,7 @@ import OfferEditPage from './pages/OfferEditPage';
 import Buchhaltung from './pages/Buchhaltung'
 import NotFound from './pages/404';
 import ArtistGuidlines from './pages/ArtistGuidlines.tsx';
+import Mediamaterial from './pages/Mediamaterial.tsx'
 
 
 function App() {
@@ -35,8 +36,10 @@ function App() {
         <Route path="/splash" element={<SplashScreen />} />
         <Route path="/home" element={<Home />} />
         <Route path="/anfragen" element={<Anfragen />} />
+        <Route path="/kontakt" element={<Kontakt />} />
+        
         <Route path="/kuenstler" element={<Kuenstler />} />
-        <Route path="/kontakt" element={<Kontakt maxWidthClass='max-w-xl' />} />
+        <Route path="/mediamaterial" element={<Mediamaterial />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />

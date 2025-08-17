@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import Kontakt from "./Kontakt";
+import { Gallery23 } from "@/components/gallery23";
+import { Blog7 } from "@/components/blog7";
 import Artist1 from "@/assets/Slider/Artist-1.webp";
 import Artist2 from "@/assets/Slider/Artist-2.webp";
 import Artist3 from "@/assets/Slider/Artist-3.webp";
@@ -136,39 +137,11 @@ export default function Home() {
         </div>
       </div>
 
-
-
-      <h1 className="mx-auto text-center text-4xl md:text-5xl font-bold tracking-tight my-12">
-        Die besten Showacts für dein Event
-      </h1>
-
-      <section className="px-6 py-8 md:py-12 max-w-5xl mx-auto space-y-5 text-gray-200">
-        <p className="text-2xl md:text-3xl font-semibold text-white">
-          Seit 15 Jahren – von Künstlern für dich.
-        </p>
-        <p className="text-lg md:text-xl leading-relaxed">
-          Pepe wurde in München gegründet, um die Zirkusszene zu pushen. Heute sind wir ein starkes Netzwerk mit Base in der Stadt.
-        </p>
-        <p className="text-lg md:text-xl leading-relaxed">
-          Unsere Base? Der <span className="font-semibold">Pepe Geodome im Ostpark</span> – hier trifft sich unser Kernteam regelmäßig zum Profitraining und für neue Ideen.
-        </p>
-        <ul className="list-disc pl-6 space-y-2 text-lg md:text-xl leading-relaxed">
-          <li>
-            <span className="font-semibold">PepeShows</span> – kommerzielle Auftritte für Events aller Größen.
-          </li>
-          <li>
-            <span className="font-semibold">Pepe Arts</span> – kulturelle Projekte und Kooperationen.
-          </li>
-          <li>
-            <span className="font-semibold">Pepe Dome</span> – unsere Ausbildungsstätte und Ort für Wachstum.
-          </li>
-        </ul>
-        <p className="text-white text-lg md:text-xl leading-relaxed">
-          Firmenfeier, Festival oder Kulturprojekt – wir finden den passenden Act und machen dein Event unvergesslich.
-        </p>
-      </section>
-
-      <Kontakt maxWidthClass="max-w-5xl" />
+      <Blog7 />
+      <div className="container w-full md:w-2/3 mx-auto">
+      <Gallery23 />
+      
+      </div>
     </>
 
   );

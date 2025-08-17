@@ -147,12 +147,14 @@ export default function InteractivePepeParticles() {
 
       resize();
 
-      // Konfigurationsvariablen
-      const repulseRadius = 250;
-      const maxRepulseForce = 1;
-      const returnStrength = 0.05;
-      const noiseAmplitude = 0.02;
-      const damping = 0.8;
+      // Konfigurationsvariablen (reaktiver & stärker)
+      const REPULSE_RADIUS = 420;         // früher reagieren (vorher ~100)
+      const REPULSE_BASE = 12000;         // Grundstärke der Repulsion (inverse square)
+      const MAX_REPULSE_FORCE = 20;       // Obergrenze pro Frame
+      const CURSOR_SPEED_BOOST = 0.9;     // Verstärkung je nach Cursor-Geschwindigkeit
+      const RETURN_STRENGTH = 0.02;       // Rückstellfeder (proportional zur Distanz)
+      const IDLE_NOISE = 0.018;           // leichtes Rauschen für Lebendigkeit
+      const DAMPING = 0.96;               // weniger Dämpfung => längerer Nachlauf
       let frameCount = 0;
 
       const animate = () => {
@@ -179,15 +181,13 @@ export default function InteractivePepeParticles() {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist > 0 && dist < 100) {
+          if (dist > 0 && dist < REPULSE_RADIUS) {
             // Basisrepulsion (inverse square with softening)
-            const base = 3000;
-            let h = base / (dist * dist + 0.0001);
+            let h = REPULSE_BASE / (dist * dist + 0.0001);
             // Geschwindigkeit des Cursors
             const speed = Math.sqrt(lastMouse.vx * lastMouse.vx + lastMouse.vy * lastMouse.vy);
-            h *= 1 + Math.min(speed * 0.7, 1); // boost bei schnelleren Bewegungen
-            const maxForce = 12;
-            if (h > maxForce) h = maxForce;
+            h *= 1 + Math.min(speed * CURSOR_SPEED_BOOST, 1); // boost bei schnelleren Bewegungen
+            if (h > MAX_REPULSE_FORCE) h = MAX_REPULSE_FORCE;
             const normX = dx / dist;
             const normY = dy / dist;
             p.vx += normX * h;
@@ -199,18 +199,18 @@ export default function InteractivePepeParticles() {
           const by = p.baseY - p.y;
           const bDist = Math.sqrt(bx * bx + by * by);
           if (bDist > 0) {
-            const g = bDist * 0.02;
+            const g = bDist * RETURN_STRENGTH;
             p.vx += (bx / bDist) * g;
             p.vy += (by / bDist) * g;
           }
 
           // leichtes idle-noise
-          p.vx += (Math.random() - 0.5) * 0.015;
-          p.vy += (Math.random() - 0.5) * 0.015;
+          p.vx += (Math.random() - 0.5) * IDLE_NOISE;
+          p.vy += (Math.random() - 0.5) * IDLE_NOISE;
 
           // Dämpfung
-          p.vx *= 0.92;
-          p.vy *= 0.92;
+          p.vx *= DAMPING;
+          p.vy *= DAMPING;
 
           p.x += p.vx;
           p.y += p.vy;

@@ -6,11 +6,34 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 const Navbar01Page = () => {
   const { user, setUser, setToken } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [show, setShow] = useState(true);
+  const [lastY, setLastY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      // Immer sichtbar nahe am Seitenanfang
+      if (y < 8) {
+        setShow(true);
+      } else {
+        // Kleines Hochscrollen → sofort zeigen
+        if (y < lastY - 2) setShow(true);
+        // Spürbares Runterscrollen → ausblenden
+        if (y > lastY + 6) setShow(false);
+      }
+      setLastY(y);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [lastY]);
+
   const isHomeOrArtists = location.pathname === '/home' || location.pathname === '/kuenstler';
 
   const handleLogout = async () => {
@@ -26,7 +49,12 @@ const Navbar01Page = () => {
 
   return (
     <div className="z-50">
-      <nav className={`${isHomeOrArtists ? 'absolute top-0 left-0' : 'relative'} w-full h-26 ${isHomeOrArtists ? 'bg-transparent' : 'bg-black'} z-50`}>
+      <nav
+        className={`fixed top-0 left-0 right-0 w-full h-26 z-50 transition-transform duration-300 ${
+          show ? 'translate-y-0' : '-translate-y-full'
+        } ${isHomeOrArtists ? 'bg-transparent' : 'bg-black/90 backdrop-blur'}
+        `}
+      >
         <div className="h-full flex items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <Logo />
 
@@ -63,6 +91,7 @@ const Navbar01Page = () => {
           </div>
         </div>
       </nav>
+      {!isHomeOrArtists && <div className="h-26" />}
     </div>
   );
 };
