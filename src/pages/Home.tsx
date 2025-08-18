@@ -12,6 +12,9 @@ import { Blog7 } from "@/components/blog7";
 import Artist1 from "@/assets/Slider/Artist-1.webp";
 import Artist2 from "@/assets/Slider/Artist-2.webp";
 import Artist3 from "@/assets/Slider/Artist-3.webp";
+import { Hero27 } from "@/components/hero27";
+import { Cta10 } from "@/components/cta10";
+
 
 export default function Home() {
   const [offset, setOffset] = useState(0);
@@ -66,14 +69,7 @@ export default function Home() {
         <img src={pepeMobile} alt="Pepe" className="max-w-full h-auto" />
       </div>
 
-      <h3
-        className="mx-auto max-w-3xl px-4 text-center text-white text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight tracking-tight [text-wrap:balance] mt-8 md:mt-12 mb-4"
-      >
-        Wir bringen <span className="font-bold text-white/90">außergewöhnliche Künstler</span> und <span className="font-bold text-white/90">unvergessliche Showmomente</span> auf Ihre Bühne.
-        <span className="block mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
-          Ob Firmenfeier, Gala oder Messe – mit uns wird Ihr Event zum Highlight, über das man noch lange spricht.
-        </span>
-      </h3>
+      <Hero27 />
 
       {/* Desktop/Tablet: horizontal layout */}
       <div className="hidden md:block">
@@ -139,10 +135,11 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="container w-full md:w-2/3 mx-auto">
-        <Blog7 />
+      
+      <div className="container w-full md:w-4/5 mx-auto">
+        <Cta10 />
       </div>
-      <div className="container w-full md:w-2/3 mx-auto">
+      <div className="container w-full md:w-4/5 mx-auto">
       <Gallery23 />
       
       </div>

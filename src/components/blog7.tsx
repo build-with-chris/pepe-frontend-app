@@ -79,7 +79,7 @@ const Blog7 = ({
           <h2 className="mb-3 text-3xl font-semibold text-pretty md:mb-4 md:text-4xl lg:mb-6 lg:max-w-3xl lg:text-5xl">
             {heading}
           </h2>
-          <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
+          <p className="text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
             {description}
           </p>
           <Button variant="link" className="w-full sm:w-auto" asChild>

@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ShoppingCart } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -42,6 +42,16 @@ const images = [
 const Gallery23 = () => {
   const [activeImage, setActiveImage] = useState<number | null>(1);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveImage((prev) => {
+        if (prev === null) return 0;
+        return (prev + 1) % images.length;
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="bg-black text-white py-10">
       <div className="container overflow-hidden p-10">
@@ -53,7 +63,7 @@ const Gallery23 = () => {
           <div className="flex h-142 flex-col justify-center">
             <h1 className="max-w-lg font-calSans text-white">
               <span className="block text-3xl md:hidden">Exzellenz statt Mittelmaß</span>
-              <span className="hidden md:block text-5xl">Wir glauben nicht an Mittelmaß – bei uns gibt es Exzellenz.</span>
+              <span className="hidden md:block text-4xl">Wir glauben nicht an Mittelmaß – bei uns gibt es Exzellenz.</span>
             </h1>
             <p className="text-md mt-10 max-w-md text-gray-300">
               Wir erschaffen Momente, die im Kopf und im Herzen bleiben.

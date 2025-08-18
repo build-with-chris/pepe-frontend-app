@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { CarouselOrientation } from "@/components/carousel-Künstler";
 import ArtistCard from "@/components/ArtistCard/ArtistCard";
+import { Hero228 } from '@/components/hero228';
+import { Hero87 } from '@/components/hero87';
+
 
 interface Artist {
   id: number;
@@ -57,35 +60,11 @@ export default function Kuenstler(){
       <div>
 
         <div className="relative h-[400px] md:h-[600px] lg:h-[800px] overflow-hidden flex items-start justify-center">
-          <CarouselOrientation />
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <h2 className="font-bold text-white text-center">
-              <span className="block text-3xl sm:hidden mt-24">Event-Magie</span>
-              <span className="hidden sm:block text-4xl md:text-6xl">Wir machen Ihr Event<br />unvergesslich</span>
-            </h2>
-          </div>
+          <Hero228 />
+          
         </div>
         <div className="container mx-auto p-6 text-white">
-          <section className="intro mb-3">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-3">Unsere Künstler</h1>
-            <div className="space-y-2 text-base md:text-lg text-gray-200 leading-relaxed">
-              <p>
-                Unsere Künstler stammen aus renommierten Zirkusschulen in ganz Europa und jede:r präsentiert
-                seine einzigartige Art, sich auf der Bühne zu zeigen.
-              </p>
-              <p>
-                Unser Netzwerk erstreckt sich jedoch über die ganze Welt.
-              </p>
-              <p>
-                Als Pepe Collective trainieren wir regelmäßig gemeinsam in München und sorgen für
-                nahtlose Übergänge in unseren Darbietungen.
-              </p>
-              <p>
-                Wenn du dir nicht sicher bist, ob unsere Künstler zu deinem Event passen, dann
-                besuche uns einfach und lerne deinen Favoriten persönlich kennen.
-              </p>
-            </div>
-          </section>
+        <Hero87 />
 
           <section className="artist-cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading && (
