@@ -71,11 +71,13 @@ export default function Home() {
 
       <Hero27 />
 
+      <div className="h-[2px] w-4/5 mx-auto my-12 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+
       {/* Desktop/Tablet: horizontal layout */}
       <div className="hidden md:block">
         <ResizablePanelGroup
           direction="horizontal"
-          className="w-full max-w-6xl mx-auto my-8 rounded-lg overflow-hidden border border-white/10"
+          className="w-full max-w-7xl mx-auto my-8 rounded-lg overflow-hidden "
         >
           <ResizablePanel defaultSize={80} minSize={40} className="flex flex-col justify-center px-6 py-8 bg-black/50 w-full">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 text-white text-left">
@@ -135,11 +137,14 @@ export default function Home() {
         </div>
       </div>
 
-      
-      <div className="container w-full md:w-4/5 mx-auto">
+            
+      <div className="container w-full md:w-2/3 mx-auto">
         <Cta10 />
       </div>
+      <div className="h-12 bg-gradient-to-b from-black via-gray-900 to-black" />
+ 
       <div className="container w-full md:w-4/5 mx-auto">
+
       <Gallery23 />
       
       </div>

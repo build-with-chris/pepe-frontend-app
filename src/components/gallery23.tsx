@@ -5,7 +5,7 @@ import { ArrowRight, ShoppingCart } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-
+import { Logos3 } from "@/components/logos3";
 const images = [
   {
     id: 1,
@@ -53,19 +53,15 @@ const Gallery23 = () => {
   }, []);
 
   return (
-    <section className="bg-black text-white py-10">
+    <section className="bg-black text-white mb-10">
       <div className="container overflow-hidden p-10">
-        <div className="relative flex flex-col items-center justify-between gap-12 border border-white/20 bg-black p-10 py-20 md:flex-row">
-          <DashedBorderV className="absolute -top-10 -left-px h-[150%] w-px" />
-          <DashedBorderH className="absolute -top-px -left-10 h-px w-[150%]" />
-          <DashedBorderV className="absolute -top-10 -right-px h-[150%] w-px" />
-          <DashedBorderH className="absolute -bottom-px -left-12 h-px w-[150%]" />
-          <div className="flex h-142 flex-col justify-center">
+        <div className="relative flex flex-col items-center justify-between gap-12  bg-black p-10 py-20 md:flex-row">
+          <div className="flex h-142 flex-col justify-center items-center text-center w-full md:w-1/2">
             <h1 className="max-w-lg font-calSans text-white">
               <span className="block text-3xl md:hidden">Exzellenz statt Mittelmaß</span>
               <span className="hidden md:block text-4xl">Wir glauben nicht an Mittelmaß – bei uns gibt es Exzellenz.</span>
             </h1>
-            <p className="text-md mt-10 max-w-md text-gray-300">
+            <p className="text-md mt-10 max-w-2xl text-gray-300">
               Wir erschaffen Momente, die im Kopf und im Herzen bleiben.
             </p>
             <Link to="/kontakt">
@@ -77,8 +73,11 @@ const Gallery23 = () => {
                 <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:rotate-0" />
               </Button>
             </Link>
+            <div className="mt-8 w-full md:max-w-[36rem] md:self-center overflow-hidden">
+              <Logos3 />
+            </div>
           </div>
-          <div className="flex flex-col items-center justify-center gap-1">
+          <div className="flex flex-col items-center justify-center gap-1 w-full md:w-1/2">
             {images.map((image, index) => (
               <motion.div
                 key={image.id}

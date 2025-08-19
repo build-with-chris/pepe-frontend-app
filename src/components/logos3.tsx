@@ -22,7 +22,7 @@ interface Logos3Props {
 }
 
 const Logos3 = ({
-  heading = "Vertrauen schenken uns diese Marken",
+  heading = "Diese Kunden vertrauen auf Pepe",
   logos = [
     {
       id: "logo-porsche",

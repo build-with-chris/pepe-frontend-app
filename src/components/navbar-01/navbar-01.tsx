@@ -74,12 +74,12 @@ const Navbar01Page = () => {
               </div>
             ) : (
               <div className="w-auto max-w-xs md:max-w-none">
-                <Link to="/login">
+                <Link to="/anfragen">
                   <Button
                     variant="secondary"
                     className="text-sm px-3 py-1.5 md:text-base md:px-5 md:py-2.5"
                   >
-                    Sign In
+                    Booking Assistent
                   </Button>
                 </Link>
               </div>

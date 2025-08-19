@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 
 interface Cta10Props {
-  heading: string;
-  description: string;
+  heading?: string;
+  description?: string;
   buttons?: {
     primary?: {
       text: string;
@@ -26,9 +26,9 @@ const Cta10 = ({
   },
 }: Cta10Props) => {
   return (
-    <section className="py-32 bg-black text-white">
+    <section className="py-16 bg-black text-white">
       <div className="container">
-        <div className="bg-black border border-white/10 flex w-full flex-col gap-16 overflow-hidden rounded-lg p-8 md:rounded-xl lg:flex-row lg:items-center lg:p-12">
+        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-8 flex w-full flex-col gap-16 overflow-hidden rounded-lg p-8 md:rounded-xl lg:flex-row lg:items-center lg:p-12">
           <div className="flex-1">
             <h3 className="mb-3 text-2xl font-semibold text-white md:mb-4 md:text-4xl lg:mb-6">
               {heading}

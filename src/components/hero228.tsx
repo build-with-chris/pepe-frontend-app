@@ -43,19 +43,15 @@ const Hero228 = () => {
     { id: 11, image: "public/images/Künstler/Artist11.webp", name: "Artist 11" },
   ];
 
-
   const getRotation = useCallback(
     (index: number) => {
-      const n = testimonials.length;
-      const curr = current % n;
-      const next = (curr + 1) % n;
-      const next2 = (curr + 2) % n;
-      if (index === curr) return "md:-rotate-45 md:translate-x-40 md:scale-75 md:relative";
-      if (index === next) return "md:rotate-0 md:z-10 md:relative";
-      if (index === next2) return "md:rotate-45 md:-translate-x-40 md:scale-75 md:relative";
-      return "md:opacity-60";
+      if (index === current)
+        return "md:-rotate-45 md:translate-x-40 md:scale-75 md:relative";
+      if (index === current + 1) return "md:rotate-0 md:z-10 md:relative";
+      if (index === current + 2)
+        return "md:rotate-45 md:-translate-x-40 md:scale-75 md:relative";
     },
-    [current, testimonials.length],
+    [current],
   );
 
   const scrollbarBars = useMemo(
@@ -98,27 +94,34 @@ const Hero228 = () => {
 
         <Carousel
           className="max-w-5xl"
-          opts={{ loop: true, align: "start", containScroll: "keepSnaps" }}
           plugins={[
             Autoplay({
               delay: 2000,
-              stopOnInteraction: false,
-              stopOnMouseEnter: false,
-              stopOnFocusIn: false,
+              stopOnInteraction: true,
             }),
           ]}
           setApi={setApi}
         >
           <CarouselContent>
-            {testimonials.map((_, index) => (
+            {Array.from({
+              length: isMobile ? testimonials.length : testimonials.length + 2,
+            }).map((_, index) => (
               <CarouselItem key={index} className="my-10 md:basis-1/3">
                 <div
                   className={`h-105 w-full transition-transform duration-500 ease-in-out ${getRotation(index)}`}
                 >
                   <img
-                    src={testimonials[index].image}
+                    src={
+                      index == testimonials.length
+                        ? testimonials[0].image
+                        : index == testimonials.length + 1
+                          ? testimonials[1].image
+                          : index == testimonials.length + 2
+                            ? testimonials[2].image
+                            : testimonials[index].image
+                    }
                     className="h-full w-full object-cover"
-                    alt={testimonials[index].name}
+                    alt=""
                   />
                 </div>
               </CarouselItem>

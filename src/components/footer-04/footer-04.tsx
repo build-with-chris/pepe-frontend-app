@@ -41,7 +41,11 @@ const Footer04Page = () => {
               <ul className="grid grid-cols-2 gap-2">
                 {mainLinks.map(({ title, href }) => (
                   <li key={title}>
-                    <Link to={href} className={`${linkBase} ${linkMain} py-1`}>
+                    <Link
+                      to={href}
+                      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                      className={`${linkBase} ${linkMain} py-1`}
+                    >
                       {title}
                     </Link>
                   </li>
@@ -54,7 +58,11 @@ const Footer04Page = () => {
               <ul className="space-y-2">
                 {legalLinks.map(({ title, href }) => (
                   <li key={title}>
-                    <Link to={href} className={`${linkBase} ${linkLegal} py-1`}>
+                    <Link
+                      to={href}
+                      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                      className={`${linkBase} ${linkLegal} py-1`}
+                    >
                       {title}
                     </Link>
                   </li>
