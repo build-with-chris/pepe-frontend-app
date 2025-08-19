@@ -21,7 +21,7 @@ const Contact2 = ({
   web = { label: "pepeshows.de", url: "https://pepeshows.de" },
 }: Contact2Props) => {
   return (
-    <section className="py-32">
+    <section className="py-32 w-full md:w-4/5 mx-auto">
       <div className="container">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-10 lg:flex-row lg:gap-20">
           <div className="mx-auto flex max-w-sm flex-col justify-between gap-10">

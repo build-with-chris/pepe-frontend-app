@@ -8,7 +8,6 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/componen
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Gallery23 } from "@/components/gallery23";
-import { Blog7 } from "@/components/blog7";
 import Artist1 from "@/assets/Slider/Artist-1.webp";
 import Artist2 from "@/assets/Slider/Artist-2.webp";
 import Artist3 from "@/assets/Slider/Artist-3.webp";
@@ -139,7 +138,16 @@ export default function Home() {
 
             
       <div className="container w-full md:w-2/3 mx-auto">
-        <Cta10 />
+        <Cta10
+          heading="PepeShows – mehr als eine Künstlervermittlung"
+          description={`Wir kreieren kommerzielle Shows, fördern Kultur und betreiben unsere eigene Base.\n So vereinen wir Erfahrung, Netzwerk und Leidenschaft – und machen PepeShows zu echten Experten für unvergessliche Erlebnisse.`}
+          buttons={{
+            primary: {
+              text: "Zur Agentur",
+              url: "/agentur",
+            },
+          }}
+        />
       </div>
       <div className="h-12 bg-gradient-to-b from-black via-gray-900 to-black" />
  

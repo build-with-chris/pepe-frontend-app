@@ -14,26 +14,20 @@ interface Cta10Props {
     };
   };
 }
-
 const Cta10 = ({
-  heading = "PepeShows – mehr als eine Künstlervermittlung",
-  description = "Wir kreieren kommerzielle Shows, fördern Kultur und betreiben unsere eigene Base. So vereinen wir Erfahrung, Netzwerk und Leidenschaft – und machen PepeShows zu echten Experten für unvergessliche Erlebnisse.",
-  buttons = {
-    primary: {
-      text: "Zur Agentur",
-      url: "/agentur",
-    },
-  },
+  heading,
+  description,
+  buttons,
 }: Cta10Props) => {
   return (
-    <section className="py-16 bg-black text-white">
-      <div className="container">
-        <div className="bg-white/5 backdrop-blur-sm rounded-lg p-8 flex w-full flex-col gap-16 overflow-hidden rounded-lg p-8 md:rounded-xl lg:flex-row lg:items-center lg:p-12">
+    <section className="py-16 bg-black text-white ">
+      <div className="w-full ">
+        <div className="bg-white/5 lg:flex-row backdrop-blur-sm rounded-lg p-8 flex w-full flex-col gap-16 overflow-hidden rounded-lg p-8 md:rounded-xl lg:items-center lg:p-12 ">
           <div className="flex-1">
             <h3 className="mb-3 text-2xl font-semibold text-white md:mb-4 md:text-4xl lg:mb-6">
               {heading}
             </h3>
-            <p className="max-w-xl text-white/70 lg:text-lg">
+            <p className="w-full text-white/70 lg:text-xl whitespace-pre-line">
               {description}
             </p>
           </div>

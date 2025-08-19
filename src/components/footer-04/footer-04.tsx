@@ -8,11 +8,11 @@ import {InstagramIcon} from "lucide-react";
 const mainLinks = [
   { title: "Mediamaterial", href: "/mediamaterial" },
   { title: "Shows & Formate", href: "/shows&formate" },
-  { title: "Buchen", href: "/anfragen" },
   { title: "Referenzen", href: "/referenzen" },
   { title: "FAQ", href: "/faq" },
   { title: "Agentur & Team", href: "/agentur" },
   { title: "Kontakt", href: "/kontakt" },
+  { title: "Artist Log-in", href: "/login" },
 ];
 
 const legalLinks = [
@@ -38,7 +38,7 @@ const Footer04Page = () => {
           <nav aria-label="Footer" className="md:col-span-2 grid grid-cols-2 gap-6">
             <div>
               <h6 className="mb-3 text-xs uppercase tracking-wider text-white/60">Navigation</h6>
-              <ul className="grid grid-cols-2 gap-2">
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {mainLinks.map(({ title, href }) => (
                   <li key={title}>
                     <Link
@@ -89,7 +89,7 @@ const Footer04Page = () => {
               </li>
             </ul>
             <div className="mt-8 max-w-xs">
-              <h6 className="font-semibold text-white/90">Angebote & Shows</h6>
+              <h6 className="font-semibold text-white/90">Newsletter</h6>
               <form className="mt-4 flex items-center gap-2">
                 <Input
                   type="email"
