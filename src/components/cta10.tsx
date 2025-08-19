@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 
 interface Cta10Props {
@@ -13,11 +14,13 @@ interface Cta10Props {
       url: string;
     };
   };
+  rightAddon?: React.ReactNode; // optional Zusatz-Element rechts neben dem Primary-Button (z. B. Lottie)
 }
 const Cta10 = ({
   heading,
   description,
   buttons,
+  rightAddon,
 }: Cta10Props) => {
   return (
     <section className="py-16 bg-black text-white ">
@@ -31,15 +34,22 @@ const Cta10 = ({
               {description}
             </p>
           </div>
-          <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            {buttons.secondary && (
-              <Button variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
-                <a href={buttons.secondary.url}>{buttons.secondary.text}</a>
-              </Button>
-            )}
-            {buttons.primary && (
+          <div className="flex items-center gap-2 flex-col sm:flex-row">
+            {buttons?.primary && (
               <Button asChild size="lg" className="bg-white text-black hover:bg-gray-200">
                 <a href={buttons.primary.url}>{buttons.primary.text}</a>
+              </Button>
+            )}
+
+            {rightAddon && (
+              <span className="ml-5 inline-flex items-center select-none pointer-events-none">
+                {rightAddon}
+              </span>
+            )}
+
+            {buttons?.secondary && (
+              <Button variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
+                <a href={buttons.secondary.url}>{buttons.secondary.text}</a>
               </Button>
             )}
           </div>

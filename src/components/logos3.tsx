@@ -73,7 +73,8 @@ const Logos3 = ({
     <section className="bg-black text-white pt-10 pb-20 mb-10">
       <div className="w-full flex justify-center">
         <h1 className="my-6 text-2xl font-bold text-center lg:text-4xl text-white">
-          {heading}
+          <span className="block sm:inline">Diese Kunden</span>{" "}
+          <span className="block sm:inline">vertrauen auf Pepe</span>
         </h1>
       </div>
       <div className="pt-10 md:pt-16 lg:pt-20">

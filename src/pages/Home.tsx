@@ -4,7 +4,7 @@ import PepesParticles from "@/components/InteractivePepeParticles";
 import hero from "../assets/PepeHero.webp"
 import pepeMobile from "../assets/PEPE.png";
 import { useEffect, useState } from "react";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle, AnimatedArrow } from "@/components/ui/resizable";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Gallery23 } from "@/components/gallery23";
@@ -85,11 +85,14 @@ export default function Home() {
             <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">
               Beantworte nur wenige kurze Fragen und erhalte unverbindlich erste Vorschläge und Preise.
             </p>
+            <div className="flex flex-row gap-4">
             <a href="/anfragen">
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md transition-colors duration-200">
                 Jetzt starten
               </button>
             </a>
+            <AnimatedArrow />
+            </div>
             <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">Dauert weniger als 5&nbsp;Minuten</p>
           </ResizablePanel>
           <ResizableHandle withHandle className="bg-white/10 hover:bg-white/20 transition-colors" />
@@ -130,6 +133,7 @@ export default function Home() {
               Jetzt starten
             </button>
           </a>
+          <AnimatedArrow />
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">
             Dauert &lt; 5&nbsp;Minuten
           </p>

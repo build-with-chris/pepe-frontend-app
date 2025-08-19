@@ -1,3 +1,4 @@
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -31,14 +32,25 @@ const Team10 = () => {
   return (
     <section className=" py-32">
       <div className="container">
-        <div className="max-w-xl">
-          <h2 className="mb-5 text-4xl md:text-5xl">Unser Team & Netzwerk</h2>
-          <p className="mb-12 text-muted-foreground md:text-lg">
-            Bei PepeShows vereinen wir erfahrene Artisten, kreative Köpfe und starke Persönlichkeiten. Gemeinsam erschaffen wir unvergessliche Showmomente – von Solo-Acts bis hin zu großen Ensembleproduktionen.
-          </p>
-          <Link to="/signup">
-            <Button size="lg">Als Artist registrieren</Button>
-          </Link>
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between">
+          <div className="max-w-xl">
+            <h2 className="mb-5 text-4xl md:text-5xl">Unser Team & Netzwerk</h2>
+            <p className="mb-12 text-muted-foreground md:text-lg">
+              Bei PepeShows vereinen wir erfahrene Artisten, kreative Köpfe und starke Persönlichkeiten. Gemeinsam erschaffen wir unvergessliche Showmomente – von Solo-Acts bis hin zu großen Ensembleproduktionen.
+            </p>
+            <Link to="/signup">
+              <Button size="lg">Als Artist registrieren</Button>
+            </Link>
+          </div>
+          <div className="mt-10 lg:mt-0 lg:ml-12 w-full max-w-sm">
+            <div className="rounded-full bg-stone-600 p-2 flex items-center justify-center">
+              <DotLottieReact
+                src="https://lottie.host/3edc2d4f-1b3f-47f0-baa3-49612e82c139/22dFCNJuHi.lottie"
+                loop
+                autoplay
+              />
+            </div>
+          </div>
         </div>
         <div className="mt-20 grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 md:gap-8 lg:grid-cols-4">
           {members.map((member, idx) => (

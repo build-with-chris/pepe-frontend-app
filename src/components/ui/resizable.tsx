@@ -3,6 +3,7 @@ import { GripVerticalIcon } from "lucide-react"
 import * as ResizablePrimitive from "react-resizable-panels"
 
 import { cn } from "@/lib/utils"
+import { DotLottieReact } from "@lottiefiles/dotlottie-react"
 
 function ResizablePanelGroup({
   className,
@@ -61,3 +62,22 @@ function ResizableHandle({
 }
 
 export { ResizablePanelGroup, ResizablePanel, ResizableHandle }
+
+export function AnimatedArrow() {
+  // Inline-Variante: direkt rechts neben dem Button platzieren
+  return (
+    <span className="inline-flex items-center align-middle ml-2 pointer-events-none select-none" aria-hidden>
+      <DotLottieReact
+        src="https://lottie.host/1985d394-ec30-49ec-8af2-308f5d0dcbbf/9r4qtGep4f.lottie"
+        loop
+        autoplay
+        style={{
+          width: "56px",
+          height: "56px",
+          transform: "rotate(-270deg)",
+          filter: "invert(1) brightness(15)",
+        }}
+      />
+    </span>
+  )
+}
