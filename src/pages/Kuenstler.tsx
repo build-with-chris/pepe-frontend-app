@@ -18,9 +18,44 @@ interface Artist {
 }
 
 export default function Kuenstler(){
+  const DISCIPLINES = [
+    "Zauberer",
+    "Cyr-Wheel",
+    "Bodenakrobatik",
+    "Luftakrobatik",
+    "Partnerakrobatik",
+    "Chinese Pole",
+    "Hula Hoop",
+    "Handstand",
+    "Contemporary Dance",
+    "Breakdance",
+    "Teeterboard",
+    "Jonglage",
+    "Moderation",
+    "Pantomime/Entertainment",
+  ] as const;
+
   const [artists, setArtists] = useState<Artist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
+  const toggleFilter = (d: string) => {
+    setActiveFilters(prev =>
+      prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]
+    );
+  };
+  const clearFilters = () => setActiveFilters([]);
+
+  const filteredArtists = React.useMemo(() => {
+    if (!activeFilters.length) return artists;
+    const set = new Set(activeFilters.map(s => s.toLowerCase()));
+    return artists.filter(a => {
+      const discs = (a.disciplines || []).map(x => (x || "").toLowerCase());
+      // match if any artist discipline contains any selected filter (substring allows variants)
+      return discs.some(d => Array.from(set).some(sel => d.includes(sel)));
+    });
+  }, [artists, activeFilters]);
 
 
 
@@ -80,6 +115,48 @@ export default function Kuenstler(){
           </div>
         </div>
 
+          {/* Filterleiste nach Disziplin */}
+          <div className="mb-6">
+            <div className="flex flex-wrap gap-2 items-center">
+              <button
+                type="button"
+                onClick={clearFilters}
+                className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
+                  activeFilters.length === 0
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent text-white border-white/30 hover:bg-white/10"
+                }`}
+              >
+                Alle
+              </button>
+              <div className="flex-1">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                  {DISCIPLINES.map((d) => {
+                    const active = activeFilters.includes(d);
+                    return (
+                      <button
+                        key={d}
+                        type="button"
+                        onClick={() => toggleFilter(d)}
+                        className={`px-3 py-1.5 rounded-full border text-sm whitespace-nowrap transition-colors ${
+                          active
+                            ? "bg-white text-black border-white"
+                            : "bg-transparent text-white border-white/30 hover:bg-white/10"
+                        }`}
+                        aria-pressed={active}
+                      >
+                        {d}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <span className="text-sm text-white/70 whitespace-nowrap">
+                {filteredArtists.length} Ergebnis{filteredArtists.length === 1 ? "" : "se"}
+              </span>
+            </div>
+          </div>
+
           <section className="artist-cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading && (
               <div className="col-span-full text-gray-300">Lade Künstler…</div>
@@ -87,10 +164,10 @@ export default function Kuenstler(){
             {error && (
               <div className="col-span-full text-red-400">{error}</div>
             )}
-            {!loading && !error && artists.length === 0 && (
+            {!loading && !error && filteredArtists.length === 0 && (
               <div className="col-span-full text-gray-300">Noch keine Künstler verfügbar.</div>
             )}
-            {!loading && !error && artists.map(artist => (
+            {!loading && !error && filteredArtists.map(artist => (
               <ArtistCard key={artist.id} artist={artist} />
             ))}
           </section>

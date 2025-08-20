@@ -15,6 +15,15 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 const Hero228 = () => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
@@ -29,19 +38,21 @@ const Hero228 = () => {
 
   const isMobile = useIsMobile();
 
-  const testimonials = [
-    { id: 1, image: "public/images/Künstler/Artist1.webp", name: "Artist 1" },
-    { id: 2, image: "public/images/Künstler/Artist2.webp", name: "Artist 2" },
-    { id: 3, image: "public/images/Künstler/Artist3.webp", name: "Artist 3" },
-    { id: 4, image: "public/images/Künstler/Artist4.webp", name: "Artist 4" },
-    { id: 5, image: "public/images/Künstler/Artist5.webp", name: "Artist 5" },
-    { id: 6, image: "public/images/Künstler/Artist6.webp", name: "Artist 6" },
-    { id: 7, image: "public/images/Künstler/Artist7.webp", name: "Artist 7" },
-    { id: 8, image: "public/images/Künstler/Artist8.webp", name: "Artist 8" },
-    { id: 9, image: "public/images/Künstler/Artist9.webp", name: "Artist 9" },
-    { id: 10, image: "public/images/Künstler/Artist10.webp", name: "Artist 10" },
-    { id: 11, image: "public/images/Künstler/Artist11.webp", name: "Artist 11" },
+  const baseTestimonials = [
+    { id: 1, image: "public/images/Hero228/Artist1.webp", name: "Artist 1" },
+    { id: 2, image: "public/images/Hero228/Artist2.webp", name: "Artist 2" },
+    { id: 3, image: "public/images/Hero228/Artist3.webp", name: "Artist 3" },
+    { id: 4, image: "public/images/Hero228/Artist4.webp", name: "Artist 4" },
+    { id: 5, image: "public/images/Hero228/Artist5.webp", name: "Artist 5" },
+    { id: 6, image: "public/images/Hero228/Artist6.webp", name: "Artist 6" },
+    { id: 7, image: "public/images/Hero228/Artist7.webp", name: "Artist 7" },
+    { id: 8, image: "public/images/Hero228/Artist8.webp", name: "Artist 8" },
+    { id: 9, image: "public/images/Hero228/Artist9.webp", name: "Artist 9" },
+    { id: 10, image: "public/images/Hero228/Artist10.webp", name: "Artist 10" },
+    { id: 11, image: "public/images/Hero228/Artist11.webp", name: "Artist 11" },
   ];
+
+  const testimonials = React.useMemo(() => shuffleArray(baseTestimonials), []);
 
   const getRotation = useCallback(
     (index: number) => {

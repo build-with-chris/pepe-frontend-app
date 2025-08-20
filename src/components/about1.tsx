@@ -16,6 +16,7 @@ const About1 = () => {
           </p>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
+      
           <img
             src={AboutImage1}
             alt="PepeShows Performance"
@@ -29,45 +30,10 @@ const About1 = () => {
           </div>
         </div>
         <div className="flex flex-col gap-6 md:gap-20">
-          <div className="max-w-xl">
-            <h2 className="mb-2.5 text-3xl font-semibold">
-              So läuft’s mit Pepe – in 4 Schritten
-            </h2>
-            <p className="text-white/70">
-              Transparent, schnell, professionell. Vom ersten Briefing bis zur Applaus‑Zugabe.
-            </p>
           </div>
-          <div className="grid gap-10 md:grid-cols-4">
-            <div className="flex flex-col">
-              <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-white/10">
-                <span className="text-sm">1</span>
-              </div>
-              <h3 className="mt-2 mb-3 text-lg font-semibold">Briefing</h3>
-              <p className="text-white/70">Booking‑Assistent (⏱️ ~5 Min). Anlass, Bühne, Budget – wir verstehen den Rahmen.</p>
-            </div>
-            <div className="flex flex-col">
-              <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-white/10">
-                <span className="text-sm">2</span>
-              </div>
-              <h3 className="mt-2 mb-3 text-lg font-semibold">Kuratierung</h3>
-              <p className="text-white/70">3 passende Vorschläge – oft in <span className="whitespace-nowrap">24 h</span>. Solo‑Act oder Ensemble.</p>
-            </div>
-            <div className="flex flex-col">
-              <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-white/10">
-                <span className="text-sm">3</span>
-              </div>
-              <h3 className="mt-2 mb-3 text-lg font-semibold">Proben & Technik</h3>
-              <p className="text-white/70">Ablauf, Musik, Kostüm. Optional: Licht, Ton, Bühne. Wir koordinieren Künstler & Venue.</p>
-            </div>
-            <div className="flex flex-col">
-              <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-white/10">
-                <span className="text-sm">4</span>
-              </div>
-              <h3 className="mt-2 mb-3 text-lg font-semibold">Showtime</h3>
-              <p className="text-white/70">Anreise, Aufbau, Soundcheck – alles im Plan. Sie genießen die Show, wir liefern die Magie.</p>
-            </div>
-          </div>
-        </div>
+          <h2 className="text-3xl font-semibold text-white">
+            Unsere Ausrichtung – Shows, die wirken
+          </h2>
         <div className="grid gap-6 md:grid-cols-3">
           <div className="rounded-2xl bg-white/5 p-6">
             <h3 className="text-xl font-semibold mb-2">Solo‑Act</h3>
