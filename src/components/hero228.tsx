@@ -39,17 +39,17 @@ const Hero228 = () => {
   const isMobile = useIsMobile();
 
   const baseTestimonials = [
-    { id: 1, image: "public/images/Hero228/Artist1.webp", name: "Artist 1" },
-    { id: 2, image: "public/images/Hero228/Artist2.webp", name: "Artist 2" },
-    { id: 3, image: "public/images/Hero228/Artist3.webp", name: "Artist 3" },
-    { id: 4, image: "public/images/Hero228/Artist4.webp", name: "Artist 4" },
-    { id: 5, image: "public/images/Hero228/Artist5.webp", name: "Artist 5" },
-    { id: 6, image: "public/images/Hero228/Artist6.webp", name: "Artist 6" },
-    { id: 7, image: "public/images/Hero228/Artist7.webp", name: "Artist 7" },
-    { id: 8, image: "public/images/Hero228/Artist8.webp", name: "Artist 8" },
-    { id: 9, image: "public/images/Hero228/Artist9.webp", name: "Artist 9" },
-    { id: 10, image: "public/images/Hero228/Artist10.webp", name: "Artist 10" },
-    { id: 11, image: "public/images/Hero228/Artist11.webp", name: "Artist 11" },
+    { id: 1, image: "/images/Hero228/Artist1.webp", name: "Artist 1" },
+    { id: 2, image: "/images/Hero228/Artist2.webp", name: "Artist 2" },
+    { id: 3, image: "/images/Hero228/Artist3.webp", name: "Artist 3" },
+    { id: 4, image: "/images/Hero228/Artist4.webp", name: "Artist 4" },
+    { id: 5, image: "/images/Hero228/Artist5.webp", name: "Artist 5" },
+    { id: 6, image: "/images/Hero228/Artist6.webp", name: "Artist 6" },
+    { id: 7, image: "/images/Hero228/Artist7.webp", name: "Artist 7" },
+    { id: 8, image: "/images/Hero228/Artist8.webp", name: "Artist 8" },
+    { id: 9, image: "/images/Hero228/Artist9.webp", name: "Artist 9" },
+    { id: 10, image: "/images/Hero228/Artist10.webp", name: "Artist 10" },
+    { id: 11, image: "/images/Hero228/Artist11.webp", name: "Artist 11" },
   ];
 
   const testimonials = React.useMemo(() => shuffleArray(baseTestimonials), []);
@@ -119,7 +119,7 @@ const Hero228 = () => {
             }).map((_, index) => (
               <CarouselItem key={index} className="my-10 md:basis-1/3">
                 <div
-                  className={`h-105 w-full transition-transform duration-500 ease-in-out ${getRotation(index)}`}
+                  className={`w-full aspect-[4/5] md:aspect-[3/4] overflow-hidden rounded-lg transition-transform duration-500 ease-in-out ${getRotation(index)}`}
                 >
                   <img
                     src={
@@ -139,20 +139,7 @@ const Hero228 = () => {
             ))}
           </CarouselContent>
           <div className="absolute right-0 bottom-0 flex w-full translate-y-full flex-col items-center justify-center gap-2">
-            <div className="flex gap-2">{scrollbarBars}</div>
-            <AnimatePresence mode="popLayout" initial={false}>
-              <motion.p
-                key={current}
-                className="w-full text-lg font-medium"
-                initial={{ opacity: 0, y: 20, scale: 0.9, filter: "blur(5px)" }}
-                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-                exit={{ opacity: 0, y: -20, scale: 0.9, filter: "blur(5px)" }}
-                transition={{ duration: 0.5 }}
-              >
-                {testimonials[current]?.name}
-              </motion.p>
-            </AnimatePresence>
-            <div className="flex gap-2">{scrollbarBars}</div>
+     
           </div>
         </Carousel>
       </div>

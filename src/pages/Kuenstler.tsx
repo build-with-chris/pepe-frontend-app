@@ -93,13 +93,13 @@ export default function Kuenstler(){
   }, []);
 
     return (
-      <div>
+      <div className="pt-20 md:pt-24 lg:pt-28">
 
-        <div className="relative h-[400px] md:h-[600px] lg:h-[800px] overflow-hidden flex items-start justify-center">
+        <div className="relative h-[560px] md:h-[640px] lg:h-[800px] overflow-hidden flex items-center justify-center mb-8">
           <Hero228 />
           
         </div>
-        <div className="container mx-auto p-6 text-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-white relative z-10">
         <Hero87 />
         <div className="relative flex flex-col items-center text-center text-white my-8">
           <div className="pointer-events-none absolute -top-10">
@@ -145,7 +145,14 @@ export default function Kuenstler(){
                         }`}
                         aria-pressed={active}
                       >
-                        {d}
+                        <span className="block sm:hidden">
+                          {d === "Pantomime/Entertainment"
+                            ? "Pantomime"
+                            : d === "Contemporary Dance"
+                              ? "Contemporary"
+                              : d}
+                        </span>
+                        <span className="hidden sm:block">{d}</span>
                       </button>
                     );
                   })}
