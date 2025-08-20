@@ -3,6 +3,7 @@ import { CarouselOrientation } from "@/components/carousel-Künstler";
 import ArtistCard from "@/components/ArtistCard/ArtistCard";
 import { Hero228 } from '@/components/hero228';
 import { Hero87 } from '@/components/hero87';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 
 interface Artist {
@@ -65,6 +66,19 @@ export default function Kuenstler(){
         </div>
         <div className="container mx-auto p-6 text-white">
         <Hero87 />
+        <div className="relative flex flex-col items-center text-center text-white my-8">
+          <div className="pointer-events-none absolute -top-10">
+            <DotLottieReact
+              src="https://lottie.host/e86a7557-375e-4cf6-abc0-c8f0d034b637/mQay5cJDVU.lottie"
+              loop
+              autoplay
+              style={{ width: 96, height: 96, filter: "brightness(2)" }}
+            />
+          </div>
+          <div className="text-xl md:text-3xl italic">
+            "Wo Kunst zu Magie wird"
+          </div>
+        </div>
 
           <section className="artist-cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading && (
