@@ -159,6 +159,8 @@ export default function Home() {
             </div>
             <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">Dauert weniger als 5&nbsp;Minuten</p>
           </ResizablePanel>
+          
+
           <ResizableHandle
             withHandle
             withLottie={rightSize <= 30.5}
@@ -173,16 +175,32 @@ export default function Home() {
               setApi={setCarouselApi}
             >
               <CarouselContent className="h-full">
-                {activeArtists.map((artist, i) => (
-                  <CarouselItem key={i} className="h-full">
+                {rightSize >= THRESHOLD ? (
+                  <CarouselItem className="h-full">
                     <div className="relative w-full h-full">
-                      <img src={artist.src} alt={artist.name} className="absolute inset-0 w-full h-full object-cover" />
-                      <div className="absolute inset-x-0 bottom-0 bg-black/30 text-white text-xs px-3 py-2">
-                        {artist.name}
+                      <div className="absolute inset-0 w-full h-full overflow-hidden">
+                        <iframe
+                          src="https://www.youtube.com/embed/NdsfmLY8Xb8?rel=0&modestbranding=1&autoplay=1&mute=1&loop=1&playlist=NdsfmLY8Xb8&playsinline=1"
+                          title="PepeShows Short"
+                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          className="w-full h-full"
+                        />
                       </div>
                     </div>
                   </CarouselItem>
-                ))}
+                ) : (
+                  activeArtists.map((artist, i) => (
+                    <CarouselItem key={i} className="h-full">
+                      <div className="relative w-full h-full">
+                        <img src={artist.src} alt={artist.name} className="absolute inset-0 w-full h-full object-cover" />
+                        <div className="absolute inset-x-0 bottom-0 bg-black/30 text-white text-xs px-3 py-2">
+                          {artist.name}
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))
+                )}
               </CarouselContent>
             </Carousel>
           </ResizablePanel>

@@ -5,70 +5,37 @@ import React from "react";
 
 const Gallery25 = () => {
   const column1Images = [
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw1.jpeg",
-      alt: "Gallery Image 1",
-      height: "23rem",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw2.jpeg",
-      alt: "Gallery Image 2",
-      height: "28rem",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw3.jpeg",
-      alt: "Gallery Image 3",
-      height: "12rem",
-    },
+    { src: "/images/Gallery25/23rem1.webp", alt: "23rem1", height: "23rem" },
+    { src: "/images/Gallery25/28rem1.webp", alt: "28rem1", height: "28rem" },
+    { src: "/images/Gallery25/12rem1.webp", alt: "12rem1", height: "12rem" },
+    { src: "/images/Gallery25/32rem4.webp", alt: "32rem4", height: "32rem" },
+    { src: "/images/Gallery25/13rem3.webp", alt: "13rem3", height: "13rem" },
+    { src: "/images/Gallery25/22rem2.webp", alt: "22rem2", height: "22rem" },
   ];
 
   const column2Images = [
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw4.jpeg",
-      alt: "Gallery Image 4",
-      height: "13rem",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw5.jpeg",
-      alt: "Gallery Image 5",
-      height: "32rem",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw6.jpeg",
-      alt: "Gallery Image 6",
-      height: "18rem",
-    },
+    { src: "/images/Gallery25/13rem1.webp", alt: "13rem1", height: "13rem" },
+    { src: "/images/Gallery25/32rem1.webp", alt: "32rem1", height: "32rem" },
+    { src: "/images/Gallery25/18rem1.webp", alt: "18rem1", height: "18rem" },
+    { src: "/images/Gallery25/22.5rem2.png", alt: "22.5rem2", height: "22.5rem" },
+    { src: "/images/Gallery25/32rem5.webp", alt: "32rem5", height: "32rem" },
+    { src: "/images/Gallery25/12rem2.webp", alt: "12rem2", height: "12rem" },
   ];
 
   const column3Images = [
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw7.jpeg",
-      alt: "Gallery Image 7",
-      height: "32rem",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw8.jpeg",
-      alt: "Gallery Image 8",
-      height: "32rem",
-    },
+    { src: "/images/Gallery25/32rem2.webp", alt: "32rem2", height: "32rem" },
+    { src: "/images/Gallery25/32rem3.webp", alt: "32rem3", height: "32rem" },
+    { src: "/images/Gallery25/23rem2.webp", alt: "23rem2", height: "23rem" },
+    { src: "/images/Gallery25/28rem2.webp", alt: "28rem2", height: "28rem" },
+    { src: "/images/Gallery25/18rem2.webp", alt: "18rem2", height: "18rem" },
   ];
 
   const column4Images = [
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw9.jpeg",
-      alt: "Gallery Image 9",
-      height: "13rem",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw10.jpeg",
-      alt: "Gallery Image 10",
-      height: "22.5rem",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw11.jpeg",
-      alt: "Gallery Image 11",
-      height: "22rem",
-    },
+    { src: "/images/Gallery25/13rem2.webp", alt: "13rem2", height: "13rem" },
+    { src: "/images/Gallery25/22.5rem1.png", alt: "22.5rem1", height: "22.5rem" },
+    { src: "/images/Gallery25/22rem1.webp", alt: "22rem1", height: "22rem" },
+    { src: "/images/Gallery25/13rem4.webp", alt: "13rem4", height: "13rem" },
+    { src: "/images/Gallery25/32rem6.webp", alt: "32rem6", height: "32rem" },
   ];
 
   return (
@@ -197,133 +164,6 @@ const Gallery25 = () => {
                 />
               </motion.div>
             ))}
-            <div className="h-17 w-full rounded-2xl bg-muted"></div>
-          </div>
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {/* Column 1 */}
-          <div className="grid gap-4">
-            {column1Images.map((image, index) => (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  scale: 0.9,
-                  y: 50,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  scale: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                }}
-                key={index}
-                className="w-full overflow-hidden rounded-2xl bg-muted"
-                style={{ height: image.height }}
-              >
-                <img
-                  className="h-full w-full rounded-2xl object-cover"
-                  src={image.src}
-                  alt={image.alt}
-                />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Column 2 */}
-          <div className="grid gap-4">
-            {column2Images.map((image, index) => (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  scale: 0.9,
-                  y: -50,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  scale: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                }}
-                key={index}
-                className="w-full overflow-hidden rounded-2xl bg-muted"
-                style={{ height: image.height }}
-              >
-                <img
-                  className="h-full w-full rounded-2xl object-cover"
-                  src={image.src}
-                  alt={image.alt}
-                />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Column 3 */}
-          <div className="grid gap-4">
-            {column3Images.map((image, index) => (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  scale: 0.9,
-                  y: 50,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  scale: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                }}
-                key={index}
-                className="w-full overflow-hidden rounded-2xl bg-muted"
-                style={{ height: image.height }}
-              >
-                <img
-                  className="h-full w-full rounded-2xl object-cover"
-                  src={image.src}
-                  alt={image.alt}
-                />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Column 4 */}
-          <div className="grid gap-4">
-            {column4Images.map((image, index) => (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  scale: 0.9,
-                  y: -50,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  scale: 1,
-                  y: 0,
-                }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.1,
-                }}
-                key={index}
-                className="w-full overflow-hidden rounded-2xl bg-muted"
-                style={{ height: image.height }}
-              >
-                <img
-                  className="h-full w-full rounded-2xl object-cover"
-                  src={image.src}
-                  alt={image.alt}
-                />
-              </motion.div>
-            ))}
-            <div className="h-17 w-full rounded-2xl bg-muted"></div>
           </div>
         </div>
       </div>
