@@ -1,9 +1,11 @@
 import { CircleArrowRight, Files, Settings } from "lucide-react";
+import AboutImage1 from "/images/About1/About1.1.webp";
+import AboutImage2 from "/images/About1/About1.2.webp";
 
 const About1 = () => {
   return (
     <section className="py-32 bg-black text-white">
-      <div className="container flex flex-col gap-28">
+      <div className="container flex flex-col gap-28 px-4 sm:px-6 lg:px-0">
         <div className="flex flex-col gap-7">
           <h1 className="text-4xl font-semibold lg:text-5xl [text-wrap:balance]">
             Shows & Formate – klar geplant, stark gespielt
@@ -15,8 +17,8 @@ const About1 = () => {
         </div>
         <div className="grid gap-6 md:grid-cols-2">
           <img
-            src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg"
-            alt="placeholder"
+            src={AboutImage1}
+            alt="PepeShows Performance"
             className="size-full max-h-96 rounded-2xl object-cover"
           />
           <div className="flex flex-col justify-between gap-10 rounded-2xl bg-white/5 backdrop-blur-sm p-10">
@@ -120,8 +122,8 @@ const About1 = () => {
           </div>
           <div>
             <img
-              src="https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg"
-              alt="placeholder"
+              src={AboutImage2}
+              alt="PepeShows Beratung"
               className="mb-6 max-h-36 w-full rounded-xl object-cover"
             />
             <p className="text-white/70 mb-4">
