@@ -15,36 +15,31 @@ import {
 
 const carouselItems = [
   {
-    image:
-      "https://images.unsplash.com/photo-1589100787575-fad1dcaa9d17?q=80&w=1953&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/images/Galery14/Luft.webp",
     title: "Luftakrobatik",
     description:
       "Schwerelos & elegant: Luftshows, die Galas und Firmenfeiern veredeln – mit eigenem, schnell aufbaubarem Rig.",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1698516923130-8845104b6224?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/images/Galery14/Feuershow.webp",
     title: "Feuershow",
     description:
       "Epische Bilder, präzise Choreo, maximale Gänsehaut – für Outdoor-Momente, die niemand vergisst.",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1647517649508-855580038bfd?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/images/Galery14/Jonglage.webp",
     title: "Jonglage & Variety",
     description:
       "Tempo, Timing, Interaktion: von Close-up bis Bühne – perfekt für Übergänge & Opening-Acts.",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1586869871566-d8e41dd50318?q=80&w=1970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/images/Galery14/CustomActs.webp",
     title: "Custom Acts",
     description:
       "Brandfarben, Produkt-Motive, Show-Dauer: Wir bauen den Act um deinen Anlass herum.",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1588065394015-68bf7e40738d?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image: "/images/Galery14/Firmenevent.webp",
     title: "Firmen-Events",
     description:
       "Sommerfest, Weihnachtsfeier, Jubiläum – wir liefern Idee, Cast & Ablauf aus einer Hand.",
