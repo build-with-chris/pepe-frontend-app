@@ -39,9 +39,13 @@ function ResizablePanel({
 function ResizableHandle({
   withHandle,
   className,
+  withLottie,
+  lottieSrc,
   ...props
 }: React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> & {
   withHandle?: boolean
+  withLottie?: boolean
+  lottieSrc?: string
 }) {
   return (
     <ResizablePrimitive.PanelResizeHandle
@@ -57,6 +61,16 @@ function ResizableHandle({
           <GripVerticalIcon className="size-3 text-black" />
         </div>
       )}
+      {withLottie && (
+        <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex items-center justify-center">
+          <DotLottieReact
+            src={lottieSrc || "https://lottie.host/da09d1f8-6469-4592-a1af-2bd5570a30b5/pQjA8tzdWc.lottie"}
+            loop
+            autoplay
+            style={{ width: "60px", height: "60px", filter: "invert(1) brightness(2)" }}
+          />
+        </div>
+      )}
     </ResizablePrimitive.PanelResizeHandle>
   )
 }
@@ -64,7 +78,20 @@ function ResizableHandle({
 export { ResizablePanelGroup, ResizablePanel, ResizableHandle }
 
 export function AnimatedArrow() {
-  // Inline-Variante: direkt rechts neben dem Button platzieren
+  const [isMobile, setIsMobile] = React.useState(false)
+
+  React.useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)") // Tailwind 'sm' breakpoint
+    const onChange = (e: MediaQueryListEvent | MediaQueryList) => setIsMobile('matches' in e ? e.matches : (e as MediaQueryList).matches)
+    // Initial
+    onChange(mq)
+    // Listen
+    mq.addEventListener ? mq.addEventListener('change', onChange as (ev: MediaQueryListEvent) => void) : mq.addListener(onChange as any)
+    return () => {
+      mq.removeEventListener ? mq.removeEventListener('change', onChange as (ev: MediaQueryListEvent) => void) : mq.removeListener(onChange as any)
+    }
+  }, [])
+
   return (
     <span className="inline-flex items-center align-middle ml-2 pointer-events-none select-none" aria-hidden>
       <DotLottieReact
@@ -74,8 +101,8 @@ export function AnimatedArrow() {
         style={{
           width: "56px",
           height: "56px",
-          transform: "rotate(-270deg)",
           filter: "invert(1) brightness(15)",
+          transform: `rotate(${isMobile ? -180 : -270}deg)`,
         }}
       />
     </span>

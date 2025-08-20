@@ -27,10 +27,10 @@ const Hero27 = () => {
           {/* CTAs */}
           <div className="flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
             <a href="/mediamaterial" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto bg-white/80 text-black hover:bg-gray-200">Mediamaterial</Button>
+              <Button className="w-full sm:w-auto bg-white/80 text-black hover:bg-gray-200 cursor-pointer">Mediamaterial</Button>
             </a>
             <a href="/shows&formate" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto bg-white/80 text-black hover:bg-gray-200">Shows & Formate</Button>
+              <Button className="w-full sm:w-auto bg-white/80 text-black hover:bg-gray-200  cursor-pointer">Shows & Formate</Button>
             </a>
           </div>
         </div>

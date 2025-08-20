@@ -4,6 +4,7 @@ import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
 import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star, PartyPopper, CheckCircle2 } from 'lucide-react';
 import InfoBox from '../Infobox';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 export interface StepShowtimeProps {
   data: BookingData;
@@ -14,8 +15,10 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const responseRef = useRef<HTMLDivElement>(null);
 
   const [response, setResponse] = useState<any>(null);
+  const [pendingResponse, setPendingResponse] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showAnim, setShowAnim] = useState(false);
 
   const isGroup = Number(data.team_size) === 3;
 
@@ -43,23 +46,35 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
+    setShowAnim(true);
+    const startTime = Date.now();
     try {
       const res = await postRequest(data);
-      setResponse(res);
+      setPendingResponse(res);
 
-      // 👉 Notify the wizard to clear its cached data and also clear here as a fallback
-      try {
-        window.dispatchEvent(new Event('booking:submitted'));
-        localStorage.removeItem('bookingData');
-        localStorage.removeItem('bookingStep');
-        console.log('🧹 Booking wizard cache cleared after submit (Step 11)');
-      } catch (e) {
-        console.warn('Could not clear wizard cache:', e);
-      }
+      // ensure at least 5 seconds delay
+      const elapsed = Date.now() - startTime;
+      const waitTime = elapsed < 5000 ? 5000 - elapsed : 0;
+      setTimeout(() => {
+        setResponse(res);
+
+        // 👉 Notify the wizard to clear its cached data and also clear here as a fallback
+        try {
+          window.dispatchEvent(new Event('booking:submitted'));
+          localStorage.removeItem('bookingData');
+          localStorage.removeItem('bookingStep');
+          console.log('🧹 Booking wizard cache cleared after submit (Step 11)');
+        } catch (e) {
+          console.warn('Could not clear wizard cache:', e);
+        }
+
+        setShowAnim(false);
+        setLoading(false);
+      }, waitTime);
     } catch (err: any) {
       console.error('❌ postRequest failed:', err);
       setError(err.message || 'Ein Fehler ist aufgetreten');
-    } finally {
+      setShowAnim(false);
       setLoading(false);
     }
   };
@@ -168,7 +183,17 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           </button>
         ) : null}
       </div>
-      {response && (
+      {showAnim && (
+        <div className="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 z-[1000]">
+          <DotLottieReact
+            src="https://lottie.host/f1618824-5547-4c31-80af-8c201d095f8c/klnukhE8Er.lottie"
+            loop
+            autoplay
+            style={{ width: 96, height: 96 }}
+          />
+        </div>
+      )}
+      {response && !showAnim && (
         <div ref={responseRef} className="relative w-full max-w-2xl mx-auto bg-stone-50 border border-gray-200 rounded-2xl shadow-xl mt-8 p-8">
           {/* Header */}
           <div className="flex flex-col items-center text-center">
@@ -176,7 +201,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
               <CheckCircle2 className="h-5 w-5" /> 
               <span className="text-sm font-semibold uppercase tracking-wide">Anfrage versendet  🎉</span>
             </span>
-            <h3 className="text-2xl md:text-3xl font-extrabold mb-2 flex items-center gap-2">
+            <h3 className="text-2xl md:text-3xl font-extrabold mb-2 flex items-center gap-2 text-black">
               Vielen Dank für deine Anfrage
             </h3>
             {isGroup ? (
