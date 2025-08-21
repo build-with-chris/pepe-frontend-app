@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Download, FileText, Image as ImageIcon, Video, FolderDown, Link as LinkIcon } from "lucide-react";
+import { Download, FileText, Image as ImageIcon, Video, FolderDown, Link as LinkIcon, Info } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 
@@ -52,9 +52,9 @@ export default function Mediamaterial() {
             <MediaCard
               title="Logos (SVG/PNG)"
               description="Farbig, Schwarz, Weiß – mit/ohne Hintergrund."
-              preview="/media/general/logo-preview.png"
+              preview="/src/assets/LogoPepe.png"
               downloads={[
-                { label: "Logo‑Pack (ZIP)", href: "/media/general/logos/pepe-logos.zip" },
+                { label: "Logo‑Pack (ZIP)", href: "src/assets/Logos/PepeLogos.zip" },
                 { label: "Brand‑Guide (PDF)", href: "/media/general/brand-guide.pdf" },
               ]}
             />
@@ -63,7 +63,7 @@ export default function Mediamaterial() {
             <MediaCard
               title="Titel- / Headerbild"
               description="High‑Res Header für Plakate, Websites & Social."
-              preview="/media/general/title-image.jpg"
+              preview="src/assets/PEPE.png"
               downloads={[
                 { label: "Header 16:9 (JPG)", href: "/media/general/header-16x9.jpg" },
                 { label: "Header 4:5 (JPG)", href: "/media/general/header-4x5.jpg" },
@@ -74,10 +74,10 @@ export default function Mediamaterial() {
             <MediaCard
               title="Pressemappe / Fact Sheet"
               description="Kurzvorstellung, USP, Kontakt & Rider."
-              icon="file"
+              preview={<Info className="h-16 w-16 text-gray-500 mx-auto" />}
               downloads={[
                 { label: "Pressemappe (PDF)", href: "/media/general/pressemappe.pdf" },
-                { label: "Technik‑Rider (PDF)", href: "/media/general/technik-rider.pdf" },
+                { label: "Technik‑Rider (Seite)", href: "/technical-rider", external: true },
               ]}
             />
 
@@ -184,7 +184,7 @@ type DownloadLink = { label: string; href: string; external?: boolean };
 function MediaCard(props: {
   title: string;
   description: string;
-  preview?: string; // Bild-Pfad
+  preview?: string | JSX.Element; // Bild-Pfad oder JSX Element
   video?: string; // Video-Pfad
   icon?: "file";
   downloads: DownloadLink[];
@@ -195,14 +195,20 @@ function MediaCard(props: {
     <div className="rounded-2xl border border-gray-800 bg-[#0b0b0b] p-5 w-full text-center">
       <div className="mb-4 overflow-hidden rounded-xl">
         {preview ? (
-          <AspectRatio ratio={16 / 9}>
-            <img
-              src={preview}
-              alt={`${title} Vorschau`}
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
-          </AspectRatio>
+          typeof preview === "string" ? (
+            <AspectRatio ratio={16 / 9}>
+              <img
+                src={preview}
+                alt={`${title} Vorschau`}
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </AspectRatio>
+          ) : (
+            <div className="flex h-40 items-center justify-center">
+              {preview}
+            </div>
+          )
         ) : video ? (
           <AspectRatio ratio={16 / 9}>
             <video

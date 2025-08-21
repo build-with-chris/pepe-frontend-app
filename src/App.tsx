@@ -30,6 +30,7 @@ import Datenschutz from './pages/Datenschutz.tsx';
 import AGB from './pages/AGB.tsx';
 import Gallerie from './pages/Galerie.tsx'
 import Mediamaterial from './pages/Mediamaterial.tsx';
+import TechnicalRider from './pages/TechnicalRider.tsx';
 
 function App() {
   const location = useLocation();
@@ -59,6 +60,8 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/technical-rider" element={<TechnicalRider />} />
+
       
         <Route element={<ProtectedRoute />}>
           <Route path="/buchhaltung" element={<Buchhaltung />} />
