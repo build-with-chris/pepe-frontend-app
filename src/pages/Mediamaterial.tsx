@@ -18,8 +18,8 @@ export default function Mediamaterial() {
               <ImageIcon className="h-6 w-6 stroke-white" />
               <span className="text-white text-lg font-bold">Mediamaterial</span>
             </div>
-            <h1 className="text-white mt-6 text-5xl font-semibold leading-tight md:text-6xl">
-              Alles für eure Promo – an einem Ort
+            <h1 className="text-white mt-6 text-5xl font-semibold leading-tight md:text-6xl whitespace-pre-line">
+              Alles für eure Promo –{"\n"} an einem Ort
             </h1>
             <p className="text-gray-300 mt-4 text-xl md:text-2xl">
               Logos, Titelbilder, Pressetexte und Trailer. Dazu optional Pakete je Disziplin, damit ihr genau das bewerben könnt, was ihr gebucht habt.
