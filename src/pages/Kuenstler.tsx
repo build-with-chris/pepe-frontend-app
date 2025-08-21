@@ -91,6 +91,28 @@ export default function Kuenstler(){
     })();
   }, []);
 
+  useEffect(() => {
+    const target = document.getElementById("kuenstler-quote");
+    if (!target) return;
+
+    const handler = (e: Event) => {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    // try to find a button or link that says "Künstler kennenlernen"
+    const candidates = Array.from(document.querySelectorAll<HTMLButtonElement | HTMLAnchorElement>('button, a'));
+    const trigger = candidates.find(el => el.textContent?.trim().toLowerCase() === "künstler kennenlernen");
+
+    if (trigger) {
+      trigger.addEventListener("click", handler);
+    }
+
+    return () => {
+      if (trigger) trigger.removeEventListener("click", handler);
+    };
+  }, []);
+
     return (
       <div className="pt-20 md:pt-24 lg:pt-28">
 
@@ -100,7 +122,7 @@ export default function Kuenstler(){
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-white relative z-10">
         <Hero87 />
-        <div className="relative flex flex-col items-center text-center text-white my-8">
+        <div id="kuenstler-quote" className="relative flex flex-col items-center text-center text-white my-8">
           <div className="pointer-events-none absolute -top-10">
             <DotLottieReact
               src="https://lottie.host/e86a7557-375e-4cf6-abc0-c8f0d034b637/mQay5cJDVU.lottie"

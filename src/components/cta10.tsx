@@ -23,7 +23,7 @@ const Cta10 = ({
   rightAddon,
 }: Cta10Props) => {
   return (
-    <section className="py-16 bg-black text-white ">
+    <section className="md:py-16 bg-black text-white ">
       <div className="w-full ">
         <div className="bg-white/5 lg:flex-row backdrop-blur-sm rounded-lg p-8 flex w-full flex-col gap-16 overflow-hidden rounded-lg p-8 md:rounded-xl lg:items-center lg:p-12 ">
           <div className="flex-1">

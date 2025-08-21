@@ -70,46 +70,48 @@ const Logos3 = ({
 }: Logos3Props) => {
   const marqueeLogos = [...logos, ...logos, ...logos];
   return (
-    <section className="bg-black text-white pt-10 pb-20 mb-10">
-      <div className="w-full flex justify-center">
-        <h1 className="my-6 text-2xl font-bold text-center lg:text-4xl text-white">
-          <span className="block sm:inline">Diese Kunden</span>{" "}
-          <span className="block sm:inline">vertrauen auf Pepe</span>
-        </h1>
-      </div>
-      <div className="pt-10 md:pt-16 lg:pt-20">
-        <div className="relative mx-auto flex items-center justify-center w-full max-w-none">
-          <Carousel
-            opts={{ loop: true, align: "start", containScroll: "keepSnaps" }}
-            plugins={[
-              AutoScroll({
-                playOnInit: true,
-                stopOnInteraction: false,
-                stopOnMouseEnter: false,
-                stopOnFocusIn: false,
-                speed: 1.2,
-              }),
-            ]}
-          >
-            <CarouselContent className="ml-0">
-              {marqueeLogos.map((logo, i) => (
-                <CarouselItem
-                  key={`${logo.id}-${i}`}
-                  className="flex basis-1/3 justify-center pl-0 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
-                >
-                  <div className="mx-6 md:mx-8 lg:mx-10 flex shrink-0 items-center justify-center">
-                    <div>
-                      <img
-                        src={logo.image}
-                        alt={logo.description}
-                        className={logo.className}
-                      />
+    <section className="bg-black text-white pt-10 pb-20 mb-10 overflow-hidden">
+      <div className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-5xl px-4">
+        <div className="w-full flex justify-center">
+          <h1 className="my-6 text-xl sm:text-2xl lg:text-4xl font-bold text-center text-white">
+            <span className="block sm:inline">Diese Kunden</span>{" "}
+            <span className="block sm:inline">vertrauen auf Pepe</span>
+          </h1>
+        </div>
+        <div className="pt-8 md:pt-12 lg:pt-16">
+          <div className="relative mx-auto flex items-center justify-center w-full max-w-none">
+            <Carousel
+              opts={{ loop: true, align: "start", containScroll: "keepSnaps" }}
+              plugins={[
+                AutoScroll({
+                  playOnInit: true,
+                  stopOnInteraction: false,
+                  stopOnMouseEnter: false,
+                  stopOnFocusIn: false,
+                  speed: 1.2,
+                }),
+              ]}
+            >
+              <CarouselContent className="ml-0">
+                {marqueeLogos.map((logo, i) => (
+                  <CarouselItem
+                    key={`${logo.id}-${i}`}
+                    className="flex basis-1/3 justify-center pl-0 sm:basis-1/4 md:basis-1/5 lg:basis-1/6"
+                  >
+                    <div className="mx-6 md:mx-8 lg:mx-10 flex shrink-0 items-center justify-center">
+                      <div>
+                        <img
+                          src={logo.image}
+                          alt={logo.description}
+                          className={(logo.className ? logo.className + " " : "") + "max-h-8 sm:max-h-10 md:max-h-12 w-auto"}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+          </div>
         </div>
       </div>
     </section>
