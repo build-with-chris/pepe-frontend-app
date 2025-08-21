@@ -31,6 +31,8 @@ import AGB from './pages/AGB.tsx';
 import Gallerie from './pages/Galerie.tsx'
 import Mediamaterial from './pages/Mediamaterial.tsx';
 import TechnicalRider from './pages/TechnicalRider.tsx';
+import Brandguide from './pages/Brandguid.tsx';
+import Pressemappe from './pages/Pressemappe.tsx';
 
 function App() {
   const location = useLocation();
@@ -61,6 +63,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/technical-rider" element={<TechnicalRider />} />
+        <Route path="/brandguide" element={<Brandguide />} />
+        <Route path="/pressemappe" element={<Pressemappe />} />
 
       
         <Route element={<ProtectedRoute />}>

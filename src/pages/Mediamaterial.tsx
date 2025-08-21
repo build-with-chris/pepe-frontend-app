@@ -55,7 +55,7 @@ export default function Mediamaterial() {
               preview="/src/assets/LogoPepe.png"
               downloads={[
                 { label: "Logo‑Pack (ZIP)", href: "src/assets/Logos/PepeLogos.zip" },
-                { label: "Brand‑Guide (PDF)", href: "/media/general/brand-guide.pdf" },
+                { label: "Brand‑Guide (Seite)", href: "/brandguide", external: true },
               ]}
             />
 
@@ -65,8 +65,8 @@ export default function Mediamaterial() {
               description="High‑Res Header für Plakate, Websites & Social."
               preview="src/assets/PEPE.png"
               downloads={[
-                { label: "Header 16:9 (JPG)", href: "/media/general/header-16x9.jpg" },
-                { label: "Header 4:5 (JPG)", href: "/media/general/header-4x5.jpg" },
+                { label: "Header 16:9 (JPG)", href: "/images/Brandguide/Header Pepe 16:9.jpg" },
+                { label: "Header 5:4 (JPG)", href: "/images/Brandguide/Header Pepe 5:4.jpg" },
               ]}
             />
 
@@ -76,22 +76,11 @@ export default function Mediamaterial() {
               description="Kurzvorstellung, USP, Kontakt & Rider."
               preview={<Info className="h-16 w-16 text-gray-500 mx-auto" />}
               downloads={[
-                { label: "Pressemappe (PDF)", href: "/media/general/pressemappe.pdf" },
+                { label: "Pressemappe (Seite)", href: "/pressemappe", external: true },
                 { label: "Technik‑Rider (Seite)", href: "/technical-rider", external: true },
               ]}
             />
 
-            {/* Social Templates */}
-            <MediaCard
-              title="Social‑Media Vorlagen"
-              description="Feed & Story‑Templates als editierbare Dateien."
-              preview="/media/general/social-templates-preview.jpg"
-              downloads={[
-                { label: "Instagram Story (PSD)", href: "/media/general/ig-story.psd" },
-                { label: "Instagram Feed (PSD)", href: "/media/general/ig-feed.psd" },
-                { label: "Canva‑Vorlagen (Link)", href: "https://www.canva.com/", external: true },
-              ]}
-            />
 
             {/* Trailer (Kurzclip) */}
             <MediaCard
