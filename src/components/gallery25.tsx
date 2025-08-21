@@ -14,7 +14,7 @@ const Gallery25 = () => {
   ];
 
   const column2Images = [
-    { src: "/images/Gallery25/13rem1.webp", alt: "13rem1", height: "13rem" },
+    { src: "/images/Gallery25/13rem1.svg", alt: "13rem1", height: "13rem" },
     { src: "/images/Gallery25/32rem1.webp", alt: "32rem1", height: "32rem" },
     { src: "/images/Gallery25/18rem1.webp", alt: "18rem1", height: "18rem" },
     { src: "/images/Gallery25/22.5rem2.png", alt: "22.5rem2", height: "22.5rem" },
