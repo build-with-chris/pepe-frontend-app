@@ -1,0 +1,111 @@
+{
+  "hero27": {
+    "title": "Wir bringen <1>außergewöhnliche Künstler</1> und <3>unvergessliche Showmomente</3> auf Ihre Bühne.",
+    "subtitle": "Ob Firmenfeier, Gala oder Messe – mit uns wird Ihr Event zum Highlight, über das man noch lange spricht.",
+    "usp": {
+      "custom": "Maßgeschneidert",
+      "experience": "15+ Jahre Erfahrung",
+      "europe": "Europaweit",
+      "fair": "Fair & transparent"
+    },
+    "cta": {
+      "media": "Mediamaterial",
+      "shows": "Shows & Formate"
+    }
+  },
+  
+  "home": {
+      "findArtistTitle": "Finde jetzt den perfekten Künstler",
+      "findArtistSubtitle": "Beantworte nur wenige kurze Fragen und erhalte unverbindlich erste Vorschläge und Preise.",
+      "findArtistButton": "Jetzt starten",
+      "findArtistTime": "Dauert weniger als 5 Minuten",
+      "cta": {
+          "heading": "PepeShows – mehr als eine Künstlervermittlung",
+          "description": "Wir kreieren kommerzielle Shows, fördern Kultur und betreiben unsere eigene Base.\nSo vereinen wir Erfahrung, Netzwerk und Leidenschaft – und machen PepeShows zu echten Experten für unvergessliche Erlebnisse.",
+          "button": "Zur Agentur"
+        }
+    }, 
+
+    "gallery23": {
+  "headingMobile": "Exzellenz statt Mittelmaß",
+  "headingDesktop": "Wir glauben nicht an Mittelmaß – bei uns gibt es Exzellenz.",
+  "subtitle": "Wir erschaffen Momente, die im Kopf und im Herzen bleiben.",
+  "cta": "Lass uns reden",
+  "images": {
+    "1": "Gala-Abende",
+    "2": "Jubiläen",
+    "3": "Firmenfeiern",
+    "4": "Festivals",
+    "5": "Weihnachtsfeiern"
+  }
+    },
+
+    "logos3": {
+        "heading": "Diese Kunden vertrauen auf Pepe"
+    },
+
+    "gallery23": {
+        "headingMobile": "Exzellenz statt Mittelmaß",
+        "headingDesktop": "Wir glauben nicht an Mittelmaß – bei uns gibt es Exzellenz.",
+        "subtitle": "Wir erschaffen Momente, die im Kopf und im Herzen bleiben.",
+        "cta": "Lass uns reden",
+        "images": {
+            "1": "Gala-Abende",
+            "2": "Jubiläen",
+            "3": "Firmenfeiern",
+            "4": "Festivals",
+            "5": "Weihnachtsfeiern"
+        }
+        }, 
+
+    "footer": {
+        "navigation": "Navigation",
+        "legal": "Rechtliches",
+        "mainLinks": {
+            "mediamaterial": "Mediamaterial",
+            "showsAndFormate": "Shows & Formate",
+            "referenzen": "Referenzen",
+            "faq": "FAQ",
+            "agenturUndTeam": "Agentur & Team",
+            "kontakt": "Kontakt",
+            "artistLogin": "Artist Log-in"
+        },
+        "legalLinks": {
+            "impressum": "Impressum",
+            "datenschutz": "Datenschutz",
+            "agb": "AGB"
+        },
+        "newsletter": {
+            "title": "Newsletter",
+            "placeholder": "Email hier eingeben",
+            "button": "Anmelden"
+        },
+        "copyright": "PepeShows. Alle Rechte vorbehalten."
+        },
+
+    "nav": {
+        "admin": {
+            "dashboard": "Dashboard",
+            "invoices": "Rechnungen",
+            "upcomingGigs": "Anstehende Gigs",
+            "artists": "Künstler"
+        },
+        "user": {
+            "profile": "Profil",
+            "calendar": "Kalender",
+            "requests": "Anfragen",
+            "myGigs": "Meine Gigs",
+            "accounting": "Buchhaltung"
+        },
+        "public": {
+            "artists": "Künstler",
+            "shows": "Shows",
+            "gallery": "Galerie",
+            "contact": "Kontakt"
+        }
+        }
+
+
+
+
+}

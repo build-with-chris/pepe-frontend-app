@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Navbar01Page = () => {
   const { user, setUser, setToken } = useAuth();
@@ -14,6 +15,11 @@ const Navbar01Page = () => {
   const location = useLocation();
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
+
+  const { i18n } = useTranslation();
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -84,8 +90,41 @@ const Navbar01Page = () => {
                 </Link>
               </div>
             )}
-            {/* Mobile Menu */}
-            <div className="md:hidden">
+            {/* Language Switcher (desktop) */}
+            <div className="hidden md:flex items-center gap-2 text-white">
+              <button
+                onClick={() => changeLanguage("de")}
+                className={`text-xs md:text-sm px-2 py-1 rounded ${i18n.language?.startsWith("de") ? "underline" : "opacity-80 hover:opacity-100"}`}
+                aria-label="Deutsch"
+              >
+                DE
+              </button>
+              <span className="text-white/40">|</span>
+              <button
+                onClick={() => changeLanguage("en")}
+                className={`text-xs md:text-sm px-2 py-1 rounded ${i18n.language?.startsWith("en") ? "underline" : "opacity-80 hover:opacity-100"}`}
+                aria-label="English"
+              >
+                EN
+              </button>
+            </div>
+            {/* Language Switcher (mobile) */}
+            <div className="md:hidden flex items-center gap-2 text-white">
+              <button
+                onClick={() => changeLanguage("de")}
+                className={`text-xs px-2 py-1 rounded ${i18n.language?.startsWith("de") ? "underline" : "opacity-80 hover:opacity-100"}`}
+                aria-label="Deutsch"
+              >
+                DE
+              </button>
+              <span className="text-white/40">|</span>
+              <button
+                onClick={() => changeLanguage("en")}
+                className={`text-xs px-2 py-1 rounded ${i18n.language?.startsWith("en") ? "underline" : "opacity-80 hover:opacity-100"}`}
+                aria-label="English"
+              >
+                EN
+              </button>
               <NavigationSheet />
             </div>
           </div>

@@ -1,0 +1,108 @@
+{
+  "hero27": {
+    "title": "We bring <1>extraordinary artists</1> and <3>unforgettable show moments</3> to your stage.",
+    "subtitle": "Whether it's a corporate party, gala or trade fair – with us your event becomes the highlight everyone talks about.",
+    "usp": {
+      "custom": "Tailor-made",
+      "experience": "15+ years of experience",
+      "europe": "Europe-wide",
+      "fair": "Fair & transparent"
+    },
+    "cta": {
+      "media": "Media material",
+      "shows": "Shows & Formats"
+    }
+  },
+  "home": {
+    "findArtistTitle": "Find the perfect artist now",
+    "findArtistSubtitle": "Answer just a few short questions and receive non-binding initial suggestions and prices.",
+    "findArtistButton": "Start now",
+    "findArtistTime": "Takes less than 5 minutes",
+    "cta": {
+      "heading": "PepeShows – more than just an artist agency",
+      "description": "We create commercial shows, promote culture, and run our own base.\nThis way we combine experience, network, and passion – making PepeShows true experts for unforgettable experiences.",
+      "button": "To the agency"
+    }
+  },
+
+  "gallery23": {
+    "headingMobile": "Excellence over average",
+    "headingDesktop": "We don’t believe in average – with us it’s excellence.",
+    "subtitle": "We create moments that stay in your head and your heart.",
+    "cta": "Let’s talk",
+    "images": {
+        "1": "Gala evenings",
+        "2": "Anniversaries",
+        "3": "Corporate events",
+        "4": "Festivals",
+        "5": "Christmas parties"
+    }
+    }, 
+
+    "logos3": {
+        "heading": "These clients trust Pepe"
+        }, 
+
+    "gallery23": {
+        "headingMobile": "Excellence over average",
+        "headingDesktop": "We don’t believe in average – with us it’s excellence.",
+        "subtitle": "We create moments that stay in your head and your heart.",
+        "cta": "Let’s talk",
+        "images": {
+            "1": "Gala evenings",
+            "2": "Anniversaries",
+            "3": "Corporate events",
+            "4": "Festivals",
+            "5": "Christmas parties"
+        }
+        },
+
+    "footer": {
+        "navigation": "Navigation",
+        "legal": "Legal",
+        "mainLinks": {
+            "mediamaterial": "Media Material",
+            "showsAndFormate": "Shows & Formats",
+            "referenzen": "References",
+            "faq": "FAQ",
+            "agenturUndTeam": "Agency & Team",
+            "kontakt": "Contact",
+            "artistLogin": "Artist Log-in"
+        },
+        "legalLinks": {
+            "impressum": "Imprint",
+            "datenschutz": "Privacy Policy",
+            "agb": "Terms & Conditions"
+        },
+        "newsletter": {
+            "title": "Newsletter",
+            "placeholder": "Enter your email here",
+            "button": "Subscribe"
+        },
+        "copyright": "PepeShows. All rights reserved."
+        },
+
+        
+    "nav": {
+        "admin": {
+            "dashboard": "Dashboard",
+            "invoices": "Invoices",
+            "upcomingGigs": "Upcoming Gigs",
+            "artists": "Artists"
+        },
+        "user": {
+            "profile": "Profile",
+            "calendar": "Calendar",
+            "requests": "Requests",
+            "myGigs": "My Gigs",
+            "accounting": "Accounting"
+        },
+        "public": {
+            "artists": "Artists",
+            "shows": "Shows",
+            "gallery": "Gallery",
+            "contact": "Contact"
+        }
+        }
+}
+

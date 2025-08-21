@@ -10,6 +10,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { Gallery23 } from "@/components/gallery23";
 import { Hero27 } from "@/components/hero27";
 import { Cta10 } from "@/components/cta10";
+import { useTranslation } from "react-i18next";
 
 const THRESHOLD = 45; // %
 
@@ -29,6 +30,8 @@ function rotateArray<T>(arr: T[], startIndex: number): T[] {
 }
 
 export default function Home() {
+  const { t } = useTranslation();
+
   const [offset, setOffset] = useState(0);
   const [rightSize, setRightSize] = useState(20); // sync with right panel defaultSize
   const startOffset = -90; // start lower on the page
@@ -129,20 +132,20 @@ export default function Home() {
         >
           <ResizablePanel defaultSize={80} minSize={40} className="flex flex-col justify-center px-6 py-8 bg-black/50 w-full">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5 text-white text-left">
-              Finde jetzt den perfekten Künstler
+              {t("home.findArtistTitle")}
             </h2>
             <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">
-              Beantworte nur wenige kurze Fragen und erhalte unverbindlich erste Vorschläge und Preise.
+              {t("home.findArtistSubtitle")}
             </p>
             <div className="flex flex-row gap-4">
             <a href="/anfragen">
               <button className="bg-[#3c4a8f] hover:bg-[#2d366d] text-white font-semibold px-6 py-3 rounded-md transition-colors duration-200 cursor-pointer">
-                Jetzt starten
+                {t("home.findArtistButton")}
               </button>
             </a>
             <AnimatedArrow />
             </div>
-            <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">Dauert weniger als 5&nbsp;Minuten</p>
+            <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">{t("home.findArtistTime")}</p>
           </ResizablePanel>
           
 
@@ -194,19 +197,19 @@ export default function Home() {
       <div className="block md:hidden w-full mx-auto my-6 px-4">
         <div className="bg-black/50 rounded-lg p-6">
           <h2 className="text-xl font-bold mb-3 text-white text-left">
-            🎭 Finde jetzt den perfekten Künstler
+            {t("home.findArtistTitle")}
           </h2>
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
-            Beantworte wenige kurze Fragen und erhalte unverbindliche Vorschläge & Preise.
+            {t("home.findArtistSubtitle")}
           </p>
           <a href="/anfragen">
             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-md transition-colors duration-200">
-              Jetzt starten
+              {t("home.findArtistButton")}
             </button>
           </a>
           <AnimatedArrow />
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">
-            Dauert &lt; 5&nbsp;Minuten
+            {t("home.findArtistTime")}
           </p>
         </div>
       </div>
@@ -214,11 +217,11 @@ export default function Home() {
             
       <div className="container w-full md:w-2/3 mx-auto">
         <Cta10
-          heading="PepeShows – mehr als eine Künstlervermittlung"
-          description={`Wir kreieren kommerzielle Shows, fördern Kultur und betreiben unsere eigene Base.\n So vereinen wir Erfahrung, Netzwerk und Leidenschaft – und machen PepeShows zu echten Experten für unvergessliche Erlebnisse.`}
+          heading={t("home.cta.heading")}
+          description={t("home.cta.description")}
           buttons={{
             primary: {
-              text: "Zur Agentur",
+              text: t("home.cta.button"),
               url: "/agentur",
             },
           }}

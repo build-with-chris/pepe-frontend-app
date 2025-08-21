@@ -6,40 +6,19 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Logos3 } from "@/components/logos3";
-const images = [
-  {
-    id: 1,
-    code: "#0031",
-    title: "Gala-Abende",
-    image: "/images/eventTypes/Firmenfeier.webp",
-  },
-  {
-    id: 2,
-    code: "#0045",
-    title: "Jubiläen",
-    image: "/images/eventTypes/Incentive.webp",
-  },
-  {
-    id: 3,
-    code: "#0023",
-    title: "Firmenfeiern",
-    image: "/images/disciplines/Moderation.webp",
-  },
-  {
-    id: 4,
-    code: "#0007",
-    title: "Festivals",
-    image: "/images/disciplines/Luftakrobatik.webp",
-  },
-  {
-    id: 5,
-    code: "#0003",
-    title: "Weihnachtsfeiern",
-    image: "/images/teamSizes/Solo.webp",
-  },
-]
+import { useTranslation } from "react-i18next";
 
 const Gallery23 = () => {
+  const { t } = useTranslation();
+
+  const images = [
+    { id: 1, code: "#0031", title: t("gallery23.images.1"), image: "/images/eventTypes/Firmenfeier.webp" },
+    { id: 2, code: "#0045", title: t("gallery23.images.2"), image: "/images/eventTypes/Incentive.webp" },
+    { id: 3, code: "#0023", title: t("gallery23.images.3"), image: "/images/disciplines/Moderation.webp" },
+    { id: 4, code: "#0007", title: t("gallery23.images.4"), image: "/images/disciplines/Luftakrobatik.webp" },
+    { id: 5, code: "#0003", title: t("gallery23.images.5"), image: "/images/teamSizes/Solo.webp" },
+  ];
+
   const [activeImage, setActiveImage] = useState<number | null>(1);
 
   useEffect(() => {
@@ -58,18 +37,18 @@ const Gallery23 = () => {
         <div className="relative flex flex-col items-center justify-between gap-12  bg-black p-10 py-20 md:flex-row">
           <div className="flex h-142 flex-col justify-center items-center text-center w-full md:w-1/2">
             <h1 className="max-w-lg font-calSans text-white">
-              <span className="block text-3xl md:hidden">Exzellenz statt Mittelmaß</span>
-              <span className="hidden md:block text-4xl">Wir glauben nicht an Mittelmaß – bei uns gibt es Exzellenz.</span>
+              <span className="block text-3xl md:hidden">{t("gallery23.headingMobile")}</span>
+              <span className="hidden md:block text-4xl">{t("gallery23.headingDesktop")}</span>
             </h1>
             <p className="text-md mt-10 max-w-2xl text-gray-300">
-              Wir erschaffen Momente, die im Kopf und im Herzen bleiben.
+              {t("gallery23.subtitle")}
             </p>
             <Link to="/kontakt">
               <Button
                 variant="secondary"
                 className="group mt-10 flex w-fit items-center justify-center gap-2 rounded-full tracking-tight bg-white text-black hover:bg-gray-200"
               >
-                Lass uns reden
+                {t("gallery23.cta")}
                 <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:rotate-0" />
               </Button>
             </Link>

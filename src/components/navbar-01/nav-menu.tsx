@@ -7,6 +7,7 @@ import {
 import type { NavigationMenuProps } from "@radix-ui/react-navigation-menu";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
 
 interface NavMenuExtProps extends NavigationMenuProps {
@@ -19,32 +20,34 @@ export const NavMenu = ({ user: passedUser, ...props }: NavMenuExtProps) => {
   const loggedIn = Boolean(user);
   const isAdmin = user?.role === 'admin';
 
+  const { t } = useTranslation();
+
 
   const menuItems = useMemo(() => {
     console.log('🧭 NavMenu - computing menuItems, isAdmin=', isAdmin, 'loggedIn=', loggedIn);
     if (isAdmin) {
       return [
-        { label: 'Dashboard', to: '/admin' },
-        { label: 'Rechnungen', to: '/admin/rechnungen' },
-        { label: 'Anstehende Gigs', to: '/admin/anstehende-gigs' },
-        { label: 'Künstler', to: '/admin/kuenstler' },
+        { label: t("nav.admin.dashboard"), to: '/admin' },
+        { label: t("nav.admin.invoices"), to: '/admin/rechnungen' },
+        { label: t("nav.admin.upcomingGigs"), to: '/admin/anstehende-gigs' },
+        { label: t("nav.admin.artists"), to: '/admin/kuenstler' },
       ];
     }
     return loggedIn
       ? [
-          { label: 'Profil', to: '/profile' },
-          { label: 'Kalender', to: '/kalender' },
-          { label: 'Anfragen', to: '/meine-anfragen' },
-          { label: 'Meine Gigs', to: '/meine-gigs' },
-          { label: 'Buchhaltung', to: '/buchhaltung' },
+          { label: t("nav.user.profile"), to: '/profile' },
+          { label: t("nav.user.calendar"), to: '/kalender' },
+          { label: t("nav.user.requests"), to: '/meine-anfragen' },
+          { label: t("nav.user.myGigs"), to: '/meine-gigs' },
+          { label: t("nav.user.accounting"), to: '/buchhaltung' },
         ]
       : [
-          { label: 'Künstler', to: '/kuenstler' },
-          { label: 'Shows', to: '/shows&formate' },
-          { label: 'Galerie', to: '/galerie' },
-          { label: 'Kontakt', to: '/kontakt' },
+          { label: t("nav.public.artists"), to: '/kuenstler' },
+          { label: t("nav.public.shows"), to: '/shows&formate' },
+          { label: t("nav.public.gallery"), to: '/galerie' },
+          { label: t("nav.public.contact"), to: '/kontakt' },
         ];
-  }, [loggedIn, isAdmin]);
+  }, [loggedIn, isAdmin, t]);
 
   return (
     <NavigationMenu {...props}>

@@ -32,6 +32,7 @@ import Mediamaterial from './pages/Mediamaterial.tsx';
 import TechnicalRider from './pages/TechnicalRider.tsx';
 import Brandguide from './pages/Brandguid.tsx';
 import Pressemappe from './pages/Pressemappe.tsx';
+import "./i18n"
 
 function App() {
   const location = useLocation();
