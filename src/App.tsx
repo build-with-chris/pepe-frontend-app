@@ -21,15 +21,15 @@ import OfferEditPage from './pages/OfferEditPage';
 import Buchhaltung from './pages/Buchhaltung'
 import NotFound from './pages/404';
 import ArtistGuidlines from './pages/ArtistGuidlines.tsx';
-import Mediamaterial from './pages/Mediamaterial.tsx'
 import { Faq1 } from './components/faq1.tsx';
 import Shows from './pages/Shows.tsx';
 import Agentur from './pages/Agentur.tsx';
 import Referenzen from './pages/Referenzen.tsx';
 import Impressum from './pages/Impressum.tsx';
 import Datenschutz from './pages/Datenschutz.tsx';
-import AGB   
- from './pages/AGB.tsx';
+import AGB from './pages/AGB.tsx';
+import Gallerie from './pages/Galerie.tsx'
+import Mediamaterial from './pages/Mediamaterial.tsx';
 
 function App() {
   const location = useLocation();
@@ -45,12 +45,13 @@ function App() {
         <Route path="/anfragen" element={<Anfragen />} />
         <Route path="/kontakt" element={<Kontakt />} />
         <Route path="/faq" element={<Faq1 />} />
+        <Route path="/galerie" element={<Gallerie />} />
+        <Route path="/mediamaterial" element={<Mediamaterial />} />
 
         <Route path="/shows&formate" element={<Shows />} />
         <Route path="/referenzen" element={<Referenzen />} />
         
         <Route path="/kuenstler" element={<Kuenstler />} />
-        <Route path="/mediamaterial" element={<Mediamaterial />} />
         <Route path="/agentur" element={<Agentur />} />
         <Route path="/impressum" element={<Impressum />} />
         <Route path="/datenschutz" element={<Datenschutz />} />

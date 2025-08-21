@@ -41,7 +41,7 @@ export const NavMenu = ({ user: passedUser, ...props }: NavMenuExtProps) => {
       : [
           { label: 'Künstler', to: '/kuenstler' },
           { label: 'Shows', to: '/shows&formate' },
-          { label: 'Galerie', to: '/mediamaterial' },
+          { label: 'Galerie', to: '/galerie' },
           { label: 'Kontakt', to: '/kontakt' },
         ];
   }, [loggedIn, isAdmin]);
