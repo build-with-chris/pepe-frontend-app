@@ -4,64 +4,9 @@ import HeroLinks from "/images/Hero37/HeroLinks.webp";
 import HeroMitte from "/images/Hero37/HeroMitte.webp";
 import HeroRechts from "/images/Hero37/HeroRechts.webp";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 
 const Hero37 = () => {
-  const [showVideo, setShowVideo] = useState(true);
-  const playCountRef = useRef(0);
-
-  useEffect(() => {
-    if (!showVideo) return;
-    function createPlayer() {
-      // @ts-ignore
-      const YTGlobal = (window as any).YT;
-      if (!YTGlobal || !YTGlobal.Player) return;
-      // Create player in the placeholder div
-      // @ts-ignore
-      const player = new YTGlobal.Player("heroVideo", {
-        width: "100%",
-        height: "100%",
-        videoId: "KpHKDa7XZe8",
-        playerVars: {
-          autoplay: 1,
-          mute: 1,
-          rel: 0,
-          modestbranding: 1,
-          playsinline: 1,
-          controls: 0,
-          loop: 0,
-        },
-        events: {
-          onReady: (e: any) => {
-            try { e.target.playVideo(); } catch {}
-          },
-          onStateChange: (e: any) => {
-            // 0 = ended
-            // @ts-ignore
-            const ENDED = (window as any).YT?.PlayerState?.ENDED ?? 0;
-            if (e.data === ENDED) {
-              playCountRef.current += 1;
-              if (playCountRef.current >= 1) {
-                try { e.target.stopVideo(); e.target.destroy(); } catch {}
-                setShowVideo(false);
-              }
-            }
-          },
-        },
-      });
-    }
-
-    // If API not loaded, load it and attach callback
-    if (!(window as any).YT || !(window as any).YT.Player) {
-      (window as any).onYouTubeIframeAPIReady = () => createPlayer();
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.body.appendChild(tag);
-    } else {
-      createPlayer();
-    }
-  }, [showVideo]);
-
   return (
     <section className="overflow-hidden bg-black text-white pt-20">
       <div className="container flex flex-col items-center text-center">
@@ -119,21 +64,12 @@ const Hero37 = () => {
             className="absolute inset-0 z-20 m-auto flex w-4/5 max-w-[16rem] translate-x-[-75%] translate-y-[10%] scale-[0.85] rotate-[-15deg] justify-center rounded-lg border border-white/20 bg-white/10 opacity-60 md:w-[22rem] md:max-w-[22rem] md:translate-x-[-90%] md:translate-y-[-10%] md:scale-100"
             style={{ aspectRatio: "29/36", objectFit: "cover" }}
           />
-          {showVideo ? (
-            <div
-              className="hidden md:block absolute inset-0 z-10 m-auto w-full max-w-[28rem] rounded-lg border border-white/20 bg-white/10 overflow-hidden"
-              style={{ aspectRatio: "16/9" }}
-            >
-              <div id="heroVideo" className="w-full h-full" />
-            </div>
-          ) : (
-            <img
-              src={HeroMitte}
-              alt="Hero Mitte"
-              className="hidden md:block absolute inset-0 z-10 m-auto w-full max-w-[28rem] rounded-lg border border-white/20 bg-white/10"
-              style={{ aspectRatio: "29/36", objectFit: "cover" }}
-            />
-          )}
+          <img
+            src={HeroMitte}
+            alt="Hero Mitte"
+            className="hidden md:block absolute inset-0 z-10 m-auto w-full max-w-[28rem] rounded-lg border border-white/20 bg-white/10"
+            style={{ aspectRatio: "29/36", objectFit: "cover" }}
+          />
           <img
             src={HeroMitte}
             alt="Hero Mitte"

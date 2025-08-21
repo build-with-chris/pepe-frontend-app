@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { CarouselOrientation } from "@/components/carousel-Künstler";
 import ArtistCard from "@/components/ArtistCard/ArtistCard";
 import { Hero228 } from '@/components/hero228';
 import { Hero87 } from '@/components/hero87';

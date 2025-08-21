@@ -46,33 +46,6 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
         ))}
       </div>
 
-      <div className="hidden md:block">
-        <div className="mt-7">
-          <InfoBox
-            title="Warum wir das fragen"
-            text={
-              <>
-                Damit wir dir die <span className="font-medium">passendsten Künstler</span> vorschlagen können – mit Referenzen, die optimal zu deinem Event passen und dich inspirieren.
-              </>
-            }
-          />
-        </div>
-      </div>
-
-      {/* Zusätzlich MOBIL als Accordion (Tablet/Desktop ausgeblendet) */}
-      <div className="md:hidden mt-5">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="why-event-type">
-            <AccordionTrigger>
-              Warum wir nach dem Event‑Typ fragen
-            </AccordionTrigger>
-            <AccordionContent>
-              Damit wir dir die <span className="font-medium">passendsten Künstler</span> vorschlagen können – mit Referenzen,
-              die optimal zu deinem Event passen und dich inspirieren.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
     </div>
   );
 };

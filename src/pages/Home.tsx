@@ -37,21 +37,16 @@ export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const artistImagesSmall = [
-    { src: "/images/Slider/Artist-1.webp", name: "Carmen" },
-    { src: "/images/Slider/Artist-2.webp", name: "Jonas" },
-    { src: "/images/Slider/Artist-3.webp", name: "Sophie" },
-  ];
-
-  // new large variants (adjust paths/case to your folder structure)
-  const artistImagesLarge = [
-    { src: "/images/Slider/Artist1Large.webp", name: "Carmen" },
-    { src: "/images/Slider/Artist2Large.webp", name: "Jonas" },
-    { src: "/images/Slider/Artist3Large.webp", name: "Sophie" },
-    // ...füge hier deine weiteren Artists ein (Artist4Large, Artist5Large, ...)
+    { src: "/images/Slider/Artist1.webp", name: "Carmen" },
+    { src: "/images/Slider/Artist2.webp", name: "Jonas" },
+    { src: "/images/Slider/Artist3.webp", name: "Sophie" },
+    { src: "/images/Slider/Artist4.webp", name: "Dani" },
+    { src: "/images/Slider/Artist5.webp", name: "Jakob" },
+    { src: "/images/Slider/Artist6.webp", name: "Jaward" },
+    { src: "/images/Slider/Artist7.webp", name: "Michi" },
   ];
 
   const shuffledSmall = useMemo(() => shuffleArray(artistImagesSmall), []);
-  const shuffledLarge = useMemo(() => shuffleArray(artistImagesLarge), []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -81,19 +76,9 @@ export default function Home() {
     };
   }, [carouselApi]);
 
-  const currentSmallName = useMemo(() => {
-    if (!shuffledSmall.length) return undefined;
-    const idx = currentIndex % shuffledSmall.length;
-    return shuffledSmall[idx]?.name;
-  }, [currentIndex, shuffledSmall]);
-
   const activeArtists = useMemo(() => {
-    if (rightSize >= THRESHOLD) {
-      const idx = shuffledLarge.findIndex(a => a.name === currentSmallName);
-      return idx >= 0 ? rotateArray(shuffledLarge, idx) : shuffledLarge;
-    }
     return shuffledSmall;
-  }, [rightSize, shuffledLarge, shuffledSmall, currentSmallName]);
+  }, [rightSize, shuffledSmall]);
 
   return (
     <>
@@ -177,16 +162,14 @@ export default function Home() {
               <CarouselContent className="h-full">
                 {rightSize >= THRESHOLD ? (
                   <CarouselItem className="h-full">
-                    <div className="relative w-full h-full">
-                      <div className="absolute inset-0 w-full h-full overflow-hidden">
-                        <iframe
-                          src="https://www.youtube.com/embed/NdsfmLY8Xb8?rel=0&modestbranding=1&autoplay=1&mute=1&loop=1&playlist=NdsfmLY8Xb8&playsinline=1"
-                          title="PepeShows Short"
-                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          allowFullScreen
-                          className="w-full h-full"
-                        />
-                      </div>
+                    <div className="absolute inset-0 w-full h-full overflow-hidden">
+                      <video
+                        src="videos/Video Home.webm"
+                        autoPlay
+                        playsInline
+                        aria-label="PepeShows Vorschauvideo"
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </CarouselItem>
                 ) : (

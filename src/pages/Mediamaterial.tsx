@@ -173,8 +173,8 @@ type DownloadLink = { label: string; href: string; external?: boolean };
 function MediaCard(props: {
   title: string;
   description: string;
-  preview?: string | JSX.Element; // Bild-Pfad oder JSX Element
-  video?: string; // Video-Pfad
+  preview?: string | React.ReactNode; 
+  video?: string;
   icon?: "file";
   downloads: DownloadLink[];
 }) {

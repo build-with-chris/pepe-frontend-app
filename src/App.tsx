@@ -9,7 +9,6 @@ import { ProtectedRoute } from './components/ProtectedRoute.tsx';
 import Footer from './components/footer-04/footer-04'
 import Navbar01Page from './components/navbar-01/navbar-01';
 import Profile from './pages/ProfileSetup.tsx'
-import SplashScreen from './pages/SplashScreen';
 import CalendarPage from './pages/Kalender';
 import Kontakt from './pages/Kontakt';
 import MyGigs from './pages/MyGigs';
@@ -42,8 +41,7 @@ function App() {
     <div className="bg-black text-white min-h-screen">
       {location.pathname !== '/splash' && <Navbar01Page />}
       <Routes>
-        <Route path="/" element={<Navigate to="/splash" replace />} />
-        <Route path="/splash" element={<SplashScreen />} />
+        <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/anfragen" element={<Anfragen />} />
         <Route path="/kontakt" element={<Kontakt />} />

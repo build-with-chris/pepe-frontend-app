@@ -38,26 +38,7 @@ const StepShowType: React.FC<StepShowTypeProps> = ({ data, onChange, onNext, onP
           />
         ))}
       </div>
-      <div className="hidden md:block w-full mt-7">
-        <InfoBox
-          title="Warum wir das fragen"
-          text={
-            <>Damit wir einschätzen können, ob ein flexibler Walking Act oder eine feste Bühnenshow besser zu deinem Event passt – und dir passende Vorschläge machen können.</>
-          }
-        />
-      </div>
-      <div className="md:hidden mt-5 w-full">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="showtype-info">
-            <AccordionTrigger>
-              Warum wir nach dem Show‑Typ fragen
-            </AccordionTrigger>
-            <AccordionContent>
-              Damit wir einschätzen können, ob ein flexibler Walking Act oder eine feste Bühnenshow besser zu deinem Event passt – und dir passende Vorschläge machen können.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
+   
     </div>
   );
 };

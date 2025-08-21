@@ -63,6 +63,9 @@ const About1 = () => {
             </ul>
           </div>
         </div>
+
+        
+
         <div className="grid gap-4 md:grid-cols-3">
           <div className="rounded-xl bg-white/5 p-4 text-white/80">
             <span className="block text-sm">Lead Time</span>
@@ -85,13 +88,19 @@ const About1 = () => {
             <h2 className="mb-2.5 text-3xl font-semibold">
               Welches Format passt zu Ihrem Event?
             </h2>
+            <div className="flex justify-center md:mt-10 md:-ml-20">
+              <video
+                src="/videos/Short Trailer.webm"
+                muted
+                autoPlay
+                loop
+                playsInline
+                className="w-full max-w-2xl h-auto object-cover rounded-2xl"
+              />
+            </div>
           </div>
-          <div>
-            <img
-              src={AboutImage2}
-              alt="PepeShows Beratung"
-              className="mb-6 max-h-36 w-full rounded-xl object-cover"
-            />
+          <div className="md:mt-35">
+     
             <p className="text-white/70 mb-4">
               Nutzen Sie den Booking‑Assistenten für eine schnelle, unverbindliche Anfrage –
               oder buchen Sie direkt einen kurzen Beratungscall. Wir empfehlen das passende Format.

@@ -52,34 +52,6 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
           />
         ))}
       </div>
-
-      {/* Erklärung – Desktop & Tablet: InfoBox unter den Optionen */}
-      <div className="hidden md:block w-full lg:w-2/3 mx-auto mt-4">
-        <InfoBox
-          title="Warum wir das fragen"
-          text={
-            <>
-              Die Anzahl der Künstler beeinflusst den Ablauf, die Showdynamik und den Preis.
-              So können wir dir ein passendes Angebot kalkulieren.
-            </>
-          }
-        />
-      </div>
-
-      {/* Erklärung – Mobile: nur Accordion unter den Optionen */}
-      <div className="md:hidden w-full lg:w-2/3 mx-auto mt-3">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="why-artist-count">
-            <AccordionTrigger>
-              Warum wir nach der Anzahl der Artists fragen
-            </AccordionTrigger>
-            <AccordionContent>
-              Die Anzahl der Künstler beeinflusst den Ablauf, die Showdynamik und den Preis.
-              So können wir dir ein passendes Angebot kalkulieren.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
     </div>
   );
 };
