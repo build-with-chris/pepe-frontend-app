@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { useTranslation } from "react-i18next";
 
 export interface StepLocationProps {
   data: BookingData;
@@ -21,6 +22,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
   onChange,
   onNext,
 }) => {
+  const { t } = useTranslation();
   // Separate address fields: Straße, PLZ, Stadt
   const [street, setStreet] = useState<string>('');
   const [postalCode, setPostalCode] = useState<string>('');
@@ -92,37 +94,37 @@ const StepLocation: React.FC<StepLocationProps> = ({
 
   return (
     <div className="step pb-28">
-      <h2 className="text-3xl mb-10 md:text-4xl text-center mb-3 font-extrabold">Wo findet deine Veranstaltung statt?</h2>
+      <h2 className="text-3xl mb-10 md:text-4xl text-center mb-3 font-extrabold">{t('booking.location.heading')}</h2>
       <div className="flex flex-col lg:flex-row lg:space-x-4 w-full max-w-[800px] mx-auto px-4 mb-6">
       <div className="w-full lg:w-1/2 mb-4">
         <label htmlFor="street" className="block text-sm font-medium text-neutral-200">
-          Straße
+          {t('booking.location.streetLabel')}
         </label>
         <input
           id="street"
           type="text"
           value={street}
           onChange={e => { const v = e.target.value; setStreet(v); updateAddress(v, postalCode, city); }}
-          placeholder="Musterstraße 1"
+          placeholder={t('booking.location.streetPlaceholder')}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
       <div className="w-full lg:w-1/4 mb-4">
         <label htmlFor="postalCode" className="block text-sm font-medium text-neutral-200">
-          PLZ
+          {t('booking.location.postalLabel')}
         </label>
         <input
           id="postalCode"
           type="text"
           value={postalCode}
           onChange={e => { const v = e.target.value; setPostalCode(v); updateAddress(street, v, city); }}
-          placeholder="12345"
+          placeholder={t('booking.location.postalPlaceholder')}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
       <div className="w-full lg:w-1/4 mb-4">
         <label htmlFor="city" className="block text-sm font-medium text-neutral-200">
-          Stadt <span className="text-red-500">*</span>
+          {t('booking.location.cityLabel')} <span className="text-red-500">*</span>
         </label>
         <input
           id="city"
@@ -130,7 +132,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
           required
           value={city}
           onChange={e => { const v = e.target.value; setCity(v); updateAddress(street, postalCode, v); }}
-          placeholder="Musterstadt"
+          placeholder={t('booking.location.cityPlaceholder')}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
@@ -141,7 +143,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
             <OptionCard
               name="is_indoor"
               value="true"
-              label="Indoor"
+              label={t('booking.location.indoor')}
               imgSrc="/images/indoor.webp"
               checked={hasSelection && data.is_indoor === true}
               onChange={val => {
@@ -157,7 +159,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
             <OptionCard
               name="is_indoor"
               value="false"
-              label="Outdoor"
+              label={t('booking.location.outdoor')}
               imgSrc="/images/outdoor.webp"
               checked={hasSelection && data.is_indoor === false}
               onChange={val => {
@@ -180,9 +182,9 @@ const StepLocation: React.FC<StepLocationProps> = ({
           onClick={onNext}
           disabled={!street || !postalCode || !city || !hasSelection}
           className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${(!street || !postalCode || !city || !hasSelection) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
-          aria-label="Weiter zum nächsten Schritt"
+          aria-label={t('booking.location.next')}
         >
-          Weiter
+          {t('booking.location.next')}
         </button>
       </div>
     </div>

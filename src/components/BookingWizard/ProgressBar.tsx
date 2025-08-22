@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 
 interface ProgressBarProps {
   stepIndex: number;
@@ -15,6 +16,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   onPrev,
   onNext,
 }) => {
+  const { t } = useTranslation();
   if (stepIndex < 0) {
     return null;
   }
@@ -36,12 +38,13 @@ return (
   <Button
     variant="secondary"
     onClick={onPrev}
+    aria-label={t('booking.progress.backAria')}
   >
     <ArrowLeft className="h-5 w-5" />
-    <span className="ml-2 hidden md:inline">Zurück</span>
+    <span className="ml-2 hidden md:inline">{t('booking.progress.back')}</span>
   </Button>
   <span className="text-sm font-medium whitespace-nowrap ml-auto">
-    Schritt {stepIndex + 1} von {totalSteps}
+    {t('booking.progress.stepOf', { current: stepIndex + 1, total: totalSteps })}
   </span>
 </div>
   </div>

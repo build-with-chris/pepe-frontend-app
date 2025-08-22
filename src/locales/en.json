@@ -94,7 +94,237 @@
           "liveInteraction": "Live interaction",
           "stageShow": "Stage show"
         }
+      },
+      "disciplines": {
+    "heading": "Which disciplines are you interested in?",
+    "multi": "(Multiple selection possible)",
+    "why": {
+      "title": "Why we ask about disciplines",
+      "body": "Each discipline comes with its own props, requirements and effects. This helps us recommend artists who deliver exactly what excites you."
+    },
+    "next": "Next",
+    "options": {
+      "zauberer": {
+        "label": "Magician",
+        "description": "Illusions, tricks and magical moments for any audience."
+      },
+      "cyrWheel": {
+        "label": "Cyr wheel",
+        "description": "Acrobatic performance inside a large rotating wheel."
+      },
+      "bodenakrobatik": {
+        "label": "Floor acrobatics",
+        "description": "Impressive acrobatic movements and figures on the floor."
+      },
+      "luftakrobatik": {
+        "label": "Aerial acrobatics",
+        "description": "Floating feats on silks, trapeze or hoop."
+      },
+      "partnerakrobatik": {
+        "label": "Partner acrobatics",
+        "description": "Duos or groups with spectacular lifts and balances."
+      },
+      "chinesePole": {
+        "label": "Chinese pole",
+        "description": "Powerful acrobatics and tricks on the Chinese pole."
+      },
+      "hulaHoop": {
+        "label": "Hula hoop",
+        "description": "Dynamic shows with rotating hoops and lots of movement."
+      },
+      "handstand": {
+        "label": "Handstand",
+        "description": "Strength, balance and control in handstand performances."
+      },
+      "contemporaryDance": {
+        "label": "Contemporary dance",
+        "description": "Modern dance with expression and emotion."
+      },
+      "breakdance": {
+        "label": "Breakdance",
+        "description": "Urban dance styles with acrobatics and powermoves."
+      },
+      "teeterboard": {
+        "label": "Teeterboard",
+        "description": "Jumps and somersaults on the spring board."
+      },
+      "jonglage": {
+        "label": "Juggling",
+        "description": "Artful throwing and catching of balls, clubs or rings."
+      },
+      "moderation": {
+        "label": "Hosting",
+        "description": "Professional and entertaining guidance through the program."
+      },
+      "pantomimeEntertainment": {
+        "label": "Pantomime/Entertainment",
+        "description": "Wordless entertainment, comedy and interaction."
       }
+    }
+  },
+  "location": {
+    "heading": "Where is your event taking place?",
+    "streetLabel": "Street",
+    "streetPlaceholder": "Example Street 1",
+    "postalLabel": "Postal code",
+    "postalPlaceholder": "12345",
+    "cityLabel": "City",
+    "cityPlaceholder": "Example City",
+    "indoor": "Indoor",
+    "outdoor": "Outdoor",
+    "next": "Next"
+  },
+  "length": {
+    "heading": "How long should the show be?",
+    "selectLabel": "Select duration:",
+    "opt5": "5 minutes",
+    "opt10": "10 minutes",
+    "opt15": "15 minutes",
+    "opt20": "20 minutes",
+    "custom": "Other …",
+    "placeholderMinutes": "Minutes",
+    "next": "Next"
+  },
+  "progress": {
+    "back": "Back",
+    "backAria": "Go back one step",
+    "stepOf": "Step {{current}} of {{total}}"
+  },
+  "dateTime": {
+    "heading": "When is your event taking place?",
+    "pickDate": "Pick a date",
+    "pickTime": "Pick a time",
+    "guestsLabel": "Number of guests",
+    "guests": {
+      "options": {
+        "under200": "Under 200",
+        "between200and500": "200 – 500",
+        "over500": "Over 500"
+      }
+    },
+    "confirmPrefix": "Your appointment:",
+    "at": "at",
+    "oclock": "o’clock.",
+    "pickBoth": "Please select a date and a time.",
+    "next": "Next"
+  },
+
+  "wishes": {
+    "heading": "Do you have any special wishes or ideas for the show?",
+    "label": "You can enter your wishes here:",
+    "placeholder": "e.g. split the show into several short segments\nmix of walking act and stage show\na specific theme to match",
+    "moreInfo": "More info",
+    "next": "Next",
+    "options": {
+      "light": {
+        "label": "Lighting required",
+        "price": "€450",
+        "hint": "Creates atmosphere and dramaturgical accents."
+      },
+      "sound": {
+        "label": "Sound system required",
+        "price": "€450",
+        "hint": "Clear, powerful sound – headset optional."
+      }
+    },
+    "popover": {
+      "sound": {
+        "body": "For a professional performance, <strong>quality sound</strong> is essential. Depending on the room or venue, different system sizes are needed so the music is <strong>clear</strong> everywhere. For <strong>hosting, magic</strong> or other speech-heavy acts, we recommend adding a <strong>headset microphone</strong> from <strong>~50 people</strong> so the audience can hear you in every corner.",
+        "toggleAdd": "Add sound",
+        "toggleRemove": "Remove sound"
+      },
+      "light": {
+        "body": "<strong>Lighting</strong> creates <strong>dramaturgy</strong>: it sets highlights, builds tension and turns a good event into a <strong>great</strong> one. Moods can be steered precisely – from elegant warm-up to a goosebump finale.",
+        "toggleAdd": "Add lighting",
+        "toggleRemove": "Remove lighting"
+      }
+    }
+  },
+  "contact": {
+    "heading": "How can we contact you for questions?",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "name@example.com",
+    "emailNote": "By providing your email address, you allow us to send non-binding offer suggestions regarding this request. You can opt out at any time.",
+    "optional": "(optional)",
+    "planning": {
+      "label": "Planning status",
+      "aria": "Info about planning status",
+      "popover": "Your planning status helps us tailor the offer <b>more precisely</b>. Depending on where you are, we go into more <b>detail</b> and either create an offer you can <b>book immediately</b> (\"urgent need\") or one to be <b>aligned</b> (\"comparing offers\").",
+      "placeholder": "Please select …",
+      "options": {
+        "initial": "Initial planning",
+        "compare": "Comparing offers",
+        "ready": "Ready to book",
+        "urgent": "Urgent need"
+      }
+    },
+    "newsletter": {
+      "label": "Subscribe to newsletter (5% discount on this request)",
+      "desc": "We’ll keep you posted on new acts, venues and events. No spam, promise!"
+    },
+    "next": "Next"
+  },
+  "showtime": {
+    "heading": {
+      "line1": "Almost there – shall we send your request",
+      "line2": "to our artists now?"
+    },
+    "infobox": {
+      "title": "What happens next",
+      "body": {
+        "part1": "By clicking",
+        "submit": "Submit",
+        "part2": "your request will be sent non-bindingly to our artists. You’ll receive suitable offers within 48 hours."
+      }
+    },
+    "summary": {
+      "title": "Your details at a glance",
+      "labels": {
+        "eventType": "Event type",
+        "showType": "Show type",
+        "disciplines": "Disciplines",
+        "teamSize": "Artists traveling",
+        "duration": "Duration",
+        "address": "Address",
+        "venueType": "Venue type",
+        "datetime": "Date & time",
+        "guests": "Guests",
+        "planning": "Planning status",
+        "light": "Lighting required",
+        "sound": "Sound required",
+        "special": "Special requests",
+        "name": "Name",
+        "email": "Email",
+        "newsletter": "Newsletter discount"
+      },
+      "minutes": "minutes",
+      "indoor": "Indoor",
+      "outdoor": "Outdoor",
+      "at": "at",
+      "none": "–",
+      "newsletterYes": "Yes (5% off)",
+      "newsletterNo": "No"
+    },
+    "actions": {
+      "sending": "Sending…",
+      "submit": "Submit"
+    },
+    "success": {
+      "badge": "Request sent 🎉",
+      "title": "Thank you for your request",
+      "groupNote": "We’ve received your request and are already coordinating. Group bookings are a bit more complex, so we can’t give a price here yet. You’ll receive your offer within 48 hours by email.",
+      "note": "Your request has been sent successfully. In the meantime, feel free to browse our artists and discover more exciting acts.",
+      "highlights": {
+        "available": "Available artists",
+        "price": "Estimated price",
+        "bundle": "Bundled offer",
+        "bundleValue": "via email in 48h"
+      },
+      "ctaArtists": "Explore our artists"
+    }
+  }
     },
   
     "bookingIntro": {
@@ -163,6 +393,10 @@
         },
         "contact": { "title": "Contact", "help": "Questions about usage? We’re happy to help." }
       }
+    },
+    "common": {
+    "yes": "Yes",
+    "no": "No"
     },
   
     "contact": {

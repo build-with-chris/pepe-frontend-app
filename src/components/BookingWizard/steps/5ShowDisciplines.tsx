@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { useTranslation } from "react-i18next";
 
 export interface StepDisciplinesProps {
   data: BookingData;
@@ -15,67 +16,73 @@ export interface StepDisciplinesProps {
   onPrev: () => void;
 }
 
-const disciplinesOptions: { name: string; description: string }[] = [
-  { name: 'Zauberer', description: 'Illusionen, Tricks und magische Momente für jedes Publikum.' },
-  { name: 'Cyr-Wheel', description: 'Akrobatische Performance in einem großen rotierenden Rad.' },
-  { name: 'Bodenakrobatik', description: 'Beeindruckende akrobatische Bewegungen und Figuren am Boden.' },
-  { name: 'Luftakrobatik', description: 'Schwebende Kunststücke an Tuch, Trapez oder Reifen.' },
-  { name: 'Partnerakrobatik', description: 'Akrobatik zu zweit oder in der Gruppe mit spektakulären Hebefiguren.' },
-  { name: 'Chinese Pole', description: 'Kraftvolle Akrobatik und Tricks an der chinesischen Stange.' },
-  { name: 'Hula Hoop', description: 'Dynamische Shows mit rotierenden Reifen und viel Bewegung.' },
-  { name: 'Handstand', description: 'Kraft, Balance und Kontrolle bei Handstand-Performances.' },
-  { name: 'Contemporary Dance', description: 'Moderne Tanzkunst mit Ausdruck und Emotion.' },
-  { name: 'Breakdance', description: 'Urbane Tanzstile mit akrobatischen Moves und Powermoves.' },
-  { name: 'Teeterboard', description: 'Sprünge und Saltos auf dem federnden Brett.' },
-  { name: 'Jonglage', description: 'Kunstvolles Werfen und Fangen von Bällen, Keulen oder Ringen.' },
-  { name: 'Moderation', description: 'Professionelle und unterhaltsame Leitung durch das Programm.' },
-  { name: 'Pantomime/Entertainment', description: 'Wortlose Unterhaltung, Comedy und Interaktion.' }
-];
-
 const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
   data,
   onChange,
   onNext,
   onPrev,
 }) => {
-  const toggleDiscipline = (discipline: string) => {
-    const selected = data.disciplines.includes(discipline);
+  const { t } = useTranslation();
+
+  const options: { value: string; img: string; labelKey: string; descKey: string }[] = [
+    { value: 'Zauberer', img: 'Zauberer', labelKey: 'booking.disciplines.options.zauberer.label', descKey: 'booking.disciplines.options.zauberer.description' },
+    { value: 'Cyr-Wheel', img: 'Cyr-Wheel', labelKey: 'booking.disciplines.options.cyrWheel.label', descKey: 'booking.disciplines.options.cyrWheel.description' },
+    { value: 'Bodenakrobatik', img: 'Bodenakrobatik', labelKey: 'booking.disciplines.options.bodenakrobatik.label', descKey: 'booking.disciplines.options.bodenakrobatik.description' },
+    { value: 'Luftakrobatik', img: 'Luftakrobatik', labelKey: 'booking.disciplines.options.luftakrobatik.label', descKey: 'booking.disciplines.options.luftakrobatik.description' },
+    { value: 'Partnerakrobatik', img: 'Partnerakrobatik', labelKey: 'booking.disciplines.options.partnerakrobatik.label', descKey: 'booking.disciplines.options.partnerakrobatik.description' },
+    { value: 'Chinese Pole', img: 'Chinese_Pole', labelKey: 'booking.disciplines.options.chinesePole.label', descKey: 'booking.disciplines.options.chinesePole.description' },
+    { value: 'Hula Hoop', img: 'Hula_Hoop', labelKey: 'booking.disciplines.options.hulaHoop.label', descKey: 'booking.disciplines.options.hulaHoop.description' },
+    { value: 'Handstand', img: 'Handstand', labelKey: 'booking.disciplines.options.handstand.label', descKey: 'booking.disciplines.options.handstand.description' },
+    { value: 'Contemporary Dance', img: 'Contemporary_Dance', labelKey: 'booking.disciplines.options.contemporaryDance.label', descKey: 'booking.disciplines.options.contemporaryDance.description' },
+    { value: 'Breakdance', img: 'Breakdance', labelKey: 'booking.disciplines.options.breakdance.label', descKey: 'booking.disciplines.options.breakdance.description' },
+    { value: 'Teeterboard', img: 'Teeterboard', labelKey: 'booking.disciplines.options.teeterboard.label', descKey: 'booking.disciplines.options.teeterboard.description' },
+    { value: 'Jonglage', img: 'Jonglage', labelKey: 'booking.disciplines.options.jonglage.label', descKey: 'booking.disciplines.options.jonglage.description' },
+    { value: 'Moderation', img: 'Moderation', labelKey: 'booking.disciplines.options.moderation.label', descKey: 'booking.disciplines.options.moderation.description' },
+    { value: 'Pantomime/Entertainment', img: 'Pantomime_Entertainment', labelKey: 'booking.disciplines.options.pantomimeEntertainment.label', descKey: 'booking.disciplines.options.pantomimeEntertainment.description' }
+  ];
+
+  const toggleDiscipline = (value: string) => {
+    const selected = data.disciplines.includes(value);
     const newList = selected
-      ? data.disciplines.filter(d => d !== discipline)
-      : [...data.disciplines, discipline];
+      ? data.disciplines.filter(d => d !== value)
+      : [...data.disciplines, value];
     onChange({ disciplines: newList });
   };
 
   return (
     <div className="step flex flex-col items-center pb-28">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Welche Disziplinen interessieren dich?</h2>
-      <p className="text-sm text-white-200 text-center mb-2">(Mehrfachauswahl möglich)</p>
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">{t('booking.disciplines.heading')}</h2>
+      <p className="text-sm text-white-200 text-center mb-2">{t('booking.disciplines.multi')}</p>
       
       <div className="w-full px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto justify-items-center">
-          {disciplinesOptions.map(({ name, description }) => (
-            <div
-              key={name}
-              onClick={() => toggleDiscipline(name)}
-              className={`aspect-square w-full relative cursor-pointer rounded-lg overflow-hidden group ${
-                data.disciplines.includes(name)
-                  ? 'border-4 border-blue-500'
-                  : 'border-2 border-transparent'
-              }`}
-            >
-              <img
-                src={`/images/disciplines/${name.replace(/ /g, '_')}.webp`}
-                alt={name}
-                className="absolute inset-0 w-full h-full object-cover transition duration-200 group-hover:brightness-75"
-              />
-              <div className="absolute bottom-0 w-full bg-black/50 py-1 transition-opacity group-hover:opacity-0">
-                <span className="text-white text-center block text-sm">{name}</span>
+          {options.map((opt) => {
+            const label = t(opt.labelKey);
+            const desc = t(opt.descKey);
+            const isSelected = data.disciplines.includes(opt.value);
+            return (
+              <div
+                key={opt.value}
+                onClick={() => toggleDiscipline(opt.value)}
+                className={`aspect-square w-full relative cursor-pointer rounded-lg overflow-hidden group ${
+                  isSelected ? 'border-4 border-blue-500' : 'border-2 border-transparent'
+                }`}
+              >
+                <img
+                  src={`/images/disciplines/${opt.img}.webp`
+                  }
+                  alt={label}
+                  className="absolute inset-0 w-full h-full object-cover transition duration-200 group-hover:brightness-75"
+                />
+                <div className="absolute bottom-0 w-full bg-black/50 py-1 transition-opacity group-hover:opacity-0">
+                  <span className="text-white text-center block text-sm">{label}</span>
+                </div>
+                <div className="absolute inset-x-3 bottom-3 bg-black/60 text-white rounded-md px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <p className="text-md text-center leading-snug">{desc}</p>
+                </div>
               </div>
-              <div className="absolute inset-x-3 bottom-3 bg-black/60 text-white rounded-md px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                <p className="text-md text-center leading-snug">{description}</p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -84,11 +91,10 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
       <Accordion type="single" collapsible>
         <AccordionItem value="why-disciplines">
           <AccordionTrigger>
-            Warum wir nach den Disziplinen fragen
+            {t('booking.disciplines.why.title')}
           </AccordionTrigger>
           <AccordionContent>
-            Jede Disziplin bringt eigene Requisiten, Anforderungen und Effekte mit.
-            So können wir dir gezielt Künstler empfehlen, die genau das bieten, was dich begeistert.
+            {t('booking.disciplines.why.body')}
           </AccordionContent>
         </AccordionItem>
       </Accordion>
@@ -100,9 +106,9 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
           onClick={onNext}
           disabled={data.disciplines.length === 0}
           className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${data.disciplines.length === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
-          aria-label="Weiter zum nächsten Schritt"
+          aria-label={t('booking.disciplines.next')}
         >
-          Weiter
+          {t('booking.disciplines.next')}
         </button>
       </div>
     </div>

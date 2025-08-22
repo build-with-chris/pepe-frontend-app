@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { useTranslation } from "react-i18next";
 
 export interface StepLengthOfShowProps {
   data: BookingData;
@@ -24,6 +25,7 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
 }) => {
   const [customMode, setCustomMode] = useState(false);
   const [customValue, setCustomValue] = useState(data.duration_minutes?.toString() || '');
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!customMode && (!data.duration_minutes || data.duration_minutes < 1)) {
@@ -46,10 +48,10 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
 
   return (
     <div className="step pb-28">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie lange soll die Show dauern?</h2>
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">{t('booking.length.heading')}</h2>
       <div className="input-group w-2/3 md:w-2/5 mx-auto flex flex-col items-center justify-center my-4">
         <label htmlFor="durationSelect" className="block w-full text-center text-sm font-medium text-black mb-2">
-          Dauer auswählen:
+          {t('booking.length.selectLabel')}
         </label>
         <select
           id="durationSelect"
@@ -68,13 +70,13 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
           }}
           className="block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
         >
-          <option value="5">5 Minuten</option>
-          <option value="10">10 Minuten</option>
-          <option value="15">15 Minuten</option>
+          <option value="5">{t('booking.length.opt5')}</option>
+          <option value="10">{t('booking.length.opt10')}</option>
+          <option value="15">{t('booking.length.opt15')}</option>
           {data.team_size !== 1 && (
-            <option value="20">20 Minuten</option>
+            <option value="20">{t('booking.length.opt20')}</option>
           )}
-          <option value="custom">Andere...</option>
+          <option value="custom">{t('booking.length.custom')}</option>
         </select>
         {customMode && (
           <>
@@ -95,7 +97,7 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
                   if (!isNaN(v) && v >= 1) onNext();
                 }
               }}
-              placeholder="Minuten"
+              placeholder={t('booking.length.placeholderMinutes')}
               className="block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
             />
           </>
@@ -110,7 +112,7 @@ const StepLengthOfShow: React.FC<StepLengthOfShowProps> = ({
           disabled={!data.duration_minutes || data.duration_minutes < 1}
           className={`text-white font-semibold py-3 px-8 rounded-full shadow-lg ${(!data.duration_minutes || data.duration_minutes < 1) ? 'bg-blue-600/60 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
         >
-          Weiter
+          {t('booking.length.next')}
         </Button>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { Mail } from 'lucide-react';
 import InfoBox from '../Infobox';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export interface StepContactDetailsProps {
   data: BookingData;
@@ -17,6 +18,8 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
   onChange,
   onNext,
 }) => {
+  const { t } = useTranslation();
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ client_name: e.target.value });
   };
@@ -36,10 +39,10 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
 
   return (
     <div className="step flex flex-col items-center pb-28">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">Wie dürfen wir dich für Rückfragen kontaktieren?</h2>
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">{t('booking.contact.heading')}</h2>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientName" className="block text-sm font-medium text-white">
-          Name <span className="text-red-500">*</span>
+          {t('booking.contact.nameLabel')} <span className="text-red-500">*</span>
         </label>
         <input
           id="clientName"
@@ -47,13 +50,13 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           required
           value={data.client_name}
           onChange={handleNameChange}
-          placeholder="Dein Name"
+          placeholder={t('booking.contact.namePlaceholder')}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
         <label htmlFor="clientEmail" className="block text-sm font-medium text-white">
-          E-Mail <span className="text-red-500">*</span>
+          {t('booking.contact.emailLabel')} <span className="text-red-500">*</span>
         </label>
         <input
           id="clientEmail"
@@ -61,26 +64,26 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           required
           value={data.client_email}
           onChange={handleEmailChange}
-          placeholder="name@beispiel.de"
+          placeholder={t('booking.contact.emailPlaceholder')}
           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <p className="text-xs text-gray-300 mt-1">
-          Mit Angabe deiner E‑Mail-Adresse erlaubst du uns, dir unverbindliche Angebotsvorschläge zu dieser Anfrage zuzusenden. Du kannst dem jederzeit widersprechen.
+          {t('booking.contact.emailNote')}
         </p>
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
         <div className="flex items-center space-x-2">
           <label htmlFor="planningStatus" className="block text-sm font-medium text-white">
-            Planungsstatus <span className="text-xs text-white/70">(optional)</span>
+            {t('booking.contact.planning.label')} <span className="text-xs text-white/70">{t('booking.contact.optional')}</span>
           </label>
           <Popover>
             <PopoverTrigger asChild>
-              <button type="button" aria-label="Info zum Planungsstatus" className="text-white/70 hover:text-white">
+              <button type="button" aria-label={t('booking.contact.planning.aria')} className="text-white/70 hover:text-white">
                 <Info className="w-4 h-4" />
               </button>
             </PopoverTrigger>
             <PopoverContent side="top" align="end" className="max-w-sm bg-black text-white text-sm p-4 rounded-lg border border-white/20 shadow-lg">
-              Der Planungsstatus hilft uns, das Angebot <b>individueller</b> zu gestalten. Je nach Stand gehen wir mehr in die <b>Detailtiefe</b> und erstellen entweder ein Angebot, das man <b>direkt buchen</b> kann ("schneller Bedarf"), oder eines, das nach <b>abgestimmt</b> werden kann ("Angebotsvergleich").
+              {t('booking.contact.planning.popover')}
             </PopoverContent>
           </Popover>
         </div>
@@ -90,11 +93,11 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           onChange={handlePlanningChange}
           className="mt-1 block w-full border border-white rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-white/70 bg-black text-white/70"
         >
-          <option value="">Bitte auswählen …</option>
-          <option value="Erstplanung">Erstplanung</option>
-          <option value="Angebotsvergleich">Angebotsvergleich</option>
-          <option value="Bereit zum Buchen">Bereit zum Buchen</option>
-          <option value="schneller Bedarf">schneller Bedarf</option>
+          <option value="">{t('booking.contact.planning.placeholder')}</option>
+          <option value="Erstplanung">{t('booking.contact.planning.options.initial')}</option>
+          <option value="Angebotsvergleich">{t('booking.contact.planning.options.compare')}</option>
+          <option value="Bereit zum Buchen">{t('booking.contact.planning.options.ready')}</option>
+          <option value="schneller Bedarf">{t('booking.contact.planning.options.urgent')}</option>
         </select>
       </div>
       <div className="w-full lg:w-1/3 mx-auto mb-6">
@@ -109,11 +112,10 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           <Mail className="h-6 w-6 text-blue-600 animate-bounce" />
           <div className="flex-1">
             <label htmlFor="newsletter" className="text-sm font-medium text-white">
-              Newsletter abonnieren (5% Rabatt auf diese Anfrage)
+              {t('booking.contact.newsletter.label')}
             </label>
             <p className="text-xs text-white/80 mt-1">
-              Wir informieren dich über neueste Acts, Showorte und Veranstaltungen.
-              Kein Spam, versprochen!
+              {t('booking.contact.newsletter.desc')}
             </p>
           </div>
         </div>
@@ -126,9 +128,10 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           type="button"
           onClick={onNext}
           disabled={!data.client_name || !data.client_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.client_email)}
+          aria-label={t('booking.contact.next')}
           className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${(!data.client_name || !data.client_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.client_email)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
         >
-          Weiter
+          {t('booking.contact.next')}
         </button>
       </div>
     </div>

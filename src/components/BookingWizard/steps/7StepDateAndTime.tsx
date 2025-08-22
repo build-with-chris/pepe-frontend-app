@@ -12,6 +12,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 
+import { useTranslation } from "react-i18next";
 
 export interface StepDateAndTimeProps {
   data: BookingData;
@@ -26,6 +27,8 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
   onNext,
   onPrev,
 }) => {
+  const { t, i18n } = useTranslation();
+
   // Helper: turn Date -> 'YYYY-MM-DD'
   const toISODate = (d: Date) => {
     const y = d.getFullYear();
@@ -82,14 +85,14 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
 
   return (
     <div className="step flex flex-col items-center pb-28">
-      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold mb-10">Wann findet deine Veranstaltung statt?</h2>
+      <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold mb-10">{t('booking.dateTime.heading')}</h2>
 
       {/* Calendar + Time slots */}
       <div className="relative w-full max-w-5xl grid grid-cols-1 md:[grid-template-columns:1fr_220px_220px] gap-4 md:gap-6 mb-6 items-stretch">
         <div className="flex flex-col items-center rounded-lg border border-white/10 bg-white/5 p-3 md:p-4 min-w-0">
           <div className="flex items-center gap-2 mb-3 text-white">
             <CalendarIcon className="h-5 w-5" />
-            <span className="text-base md:text-lg font-semibold tracking-wide">Datum wählen</span>
+            <span className="text-base md:text-lg font-semibold tracking-wide">{t('booking.dateTime.pickDate')}</span>
           </div>
           <div className="h-px bg-white/10 -mt-2 mb-3" />
           <Calendar
@@ -105,7 +108,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
             className="bg-transparent p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
             formatters={{
               formatWeekdayName: (date) =>
-                date.toLocaleString('de-DE', { weekday: 'short' }),
+                date.toLocaleString(i18n.language || 'de-DE', { weekday: 'short' }),
             }}
           />
         </div>
@@ -113,7 +116,7 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         <div className="rounded-lg border border-white/10 bg-white/5 p-3 md:p-4 max-h-[500px] overflow-y-auto no-scrollbar min-w-0 flex flex-col">
           <div className="mb-3 text-white text-base md:text-lg font-semibold tracking-wide flex items-center justify-center gap-2">
             <ClockIcon className="h-5 w-5 text-white" />
-            Uhrzeit wählen
+            {t('booking.dateTime.pickTime')}
           </div>
           <div className="h-px bg-white/10 -mt-2 mb-3" />
           <div className="grid gap-2">
@@ -132,14 +135,14 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         <div className="rounded-lg border border-white/10 bg-white/5 p-3 md:p-4 min-w-0">
           <div className="mb-3 text-white text-base md:text-lg font-semibold tracking-wide flex items-center justify-center gap-2">
             <UsersIcon className="h-5 w-5 text-white" />
-            Gästeanzahl
+            {t('booking.dateTime.guestsLabel')}
           </div>
           <div className="h-px bg-white/10 -mt-2 mb-3" />
           <div className="grid gap-2">
             {[
-              { label: 'Unter 200', value: 199 },
-              { label: '200 - 500', value: 350 },
-              { label: 'Über 500', value: 501 },
+              { label: t('booking.dateTime.guests.options.under200'), value: 199 },
+              { label: t('booking.dateTime.guests.options.between200and500'), value: 350 },
+              { label: t('booking.dateTime.guests.options.over500'), value: 501 },
             ].map((option) => (
               <Button
                 key={option.label}
@@ -159,11 +162,14 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
       <div className="text-sm text-neutral-200 mb-4">
         {data.event_date && data.event_time ? (
           <>
-            Dein Termin: <span className="font-medium">{new Date(data.event_date).toLocaleDateString('de-DE', { weekday: 'long', day: 'numeric', month: 'long' })}</span> um{' '}
-            <span className="font-medium">{data.event_time}</span> Uhr.
+            {t('booking.dateTime.confirmPrefix')}{' '}
+            <span className="font-medium">{new Date(data.event_date).toLocaleDateString(i18n.language || 'de-DE', { weekday: 'long', day: 'numeric', month: 'long' })}</span>{' '}
+            {t('booking.dateTime.at')}{' '}
+            <span className="font-medium">{data.event_time}</span>{' '}
+            {t('booking.dateTime.oclock')}
           </>
         ) : (
-          <>Bitte wähle ein Datum und eine Uhrzeit.</>
+          <>{t('booking.dateTime.pickBoth')}</>
         )}
       </div>
 
@@ -174,13 +180,14 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
           type="button"
           onClick={onNext}
           disabled={!data.event_date || !data.event_time || !data.number_of_guests}
+          aria-label={t('booking.dateTime.next')}
           className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${
             !data.event_date || !data.event_time || !data.number_of_guests
               ? 'opacity-50 cursor-not-allowed'
               : 'hover:bg-blue-700'
           }`}
         >
-          Weiter
+          {t('booking.dateTime.next')}
         </button>
       </div>
     </div>
