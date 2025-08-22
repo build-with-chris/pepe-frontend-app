@@ -2,44 +2,45 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Link } from "react-router-dom";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const members = [
-  { name: "Michi Heiduk", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp", role: "CEO" },
-  { name: "Chris Hermann", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp", role: "CEO" },
+  { id: "michiHeiduk", name: "Michi Heiduk", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp" },
+  { id: "chrisHermann", name: "Chris Hermann", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp" },
 
-  { name: "Daniela Meier", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp", role: "Handstand, Contortion, Luft, Hulla" },
-  { name: "Jakob Vöckler", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp", role: "Chienise Pole, Free Running" },
-  { name: "Jonas Dürrbeck", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp", role: "Chienise Pole, Handstand, Akrobatik" },
-  { name: "Carmen Lück", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-7.webp", role: "Akrobatuk, Cyr" },
-  { name: "Lukas Brandl", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-8.webp", role: "Zauberei, Jonglage" },
-  { name: "Thomas Dietz", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp", role: "Jonglage" },
-  { name: "Oles Koval", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp", role: "Zauberei" },
-  { name: "Julian Bellini", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp", role: "Objekttheater" },
-  { name: "Jawad Rajpoot", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp", role: "Breakdance, Cyr wheel" },
-  { name: "Serhard Perhat", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-7.webp", role: "Breakdance" },
-  { name: "Flo", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-8.webp", role: "Chinese Pole, Partnerakrobatik" },
-  { name: "Henry Hernandez", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp", role: "Feuershow" },
-  { name: "Gabriel Drouin", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp", role: "Cyr wheel" },
-  { name: "Svetlana Wotschel", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp", role: "Luftartistik, Waterbowl" },
-  { name: "Sankofa Crew", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp", role: "Breakdance" },
-  { name: "Jana Rippel", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp", role: "Areal Silk" },
-  { name: "Sarah", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp", role: "Handstand, Tuch" },
-  { name: "Jannick", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-7.webp", role: "Jonglage, Floor, Teeterboard" },
-  { name: "Dani Thalmaier", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-8.webp", role: "Breakdance" },
+  { id: "danielaMeier", name: "Daniela Meier", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp" },
+  { id: "jakobVoeckler", name: "Jakob Vöckler", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp" },
+  { id: "jonasDuerrbeck", name: "Jonas Dürrbeck", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp" },
+  { id: "carmenLueck", name: "Carmen Lück", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-7.webp" },
+  { id: "lukasBrandl", name: "Lukas Brandl", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-8.webp" },
+  { id: "thomasDietz", name: "Thomas Dietz", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp" },
+  { id: "olesKoval", name: "Oles Koval", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp" },
+  { id: "julianBellini", name: "Julian Bellini", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp" },
+  { id: "jawadRajpoot", name: "Jawad Rajpoot", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp" },
+  { id: "serhardPerhat", name: "Serhard Perhat", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-7.webp" },
+  { id: "flo", name: "Flo", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-8.webp" },
+  { id: "henryHernandez", name: "Henry Hernandez", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp" },
+  { id: "gabrielDrouin", name: "Gabriel Drouin", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp" },
+  { id: "svetlanaWotschel", name: "Svetlana Wotschel", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp" },
+  { id: "sankofaCrew", name: "Sankofa Crew", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp" },
+  { id: "janaRippel", name: "Jana Rippel", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp" },
+  { id: "sarah", name: "Sarah", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-6.webp" },
+  { id: "jannick", name: "Jannick", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-7.webp" },
+  { id: "daniThalmaier", name: "Dani Thalmaier", image: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-8.webp" }
 ];
 
 const Team10 = () => {
+  const { t } = useTranslation();
+
   return (
     <section className=" py-32">
       <div className="container">
         <div className="flex flex-col lg:flex-row items-center lg:items-start justify-between">
           <div className="max-w-xl">
-            <h2 className="mb-5 text-4xl md:text-5xl">Unser Team & Netzwerk</h2>
-            <p className="mb-12 text-muted-foreground md:text-lg">
-              Bei PepeShows vereinen wir erfahrene Artisten, kreative Köpfe und starke Persönlichkeiten. Gemeinsam erschaffen wir unvergessliche Showmomente – von Solo-Acts bis hin zu großen Ensembleproduktionen.
-            </p>
+            <h2 className="mb-5 text-4xl md:text-5xl">{t("team10.heading")}</h2>
+            <p className="mb-12 text-muted-foreground md:text-lg">{t("team10.subheading")}</p>
             <Link to="/signup">
-              <Button size="lg">Als Artist registrieren</Button>
+              <Button size="lg">{t("team10.cta")}</Button>
             </Link>
           </div>
           <div className="mt-10 lg:mt-0 lg:ml-12 w-full max-w-sm">
@@ -61,7 +62,7 @@ const Team10 = () => {
               <div>
                 <h3 className="text-sm font-medium">{member.name}</h3>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  {member.role}
+                  {t(`team10.roles.${member.id}`)}
                 </p>
               </div>
             </div>

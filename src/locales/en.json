@@ -530,6 +530,254 @@
     "person": "PepeShows – Christoph Hermann"
   },
   "langnote": "Press kit available in German & English. Area of operation: flexible (artists based across Europe). Prices & availability: simply enquire via the booking assistant."
+},
+
+"technicalRider": {
+  "hero": {
+    "kicker": "Technical rider",
+    "title": "Requirements & stage notes",
+    "subtitle": "If a sound system is not booked additionally, we assume one is available on site. Music is delivered one week in advance as MP3 and brought as a safety copy on USB stick. All durations refer to solo acts and may vary with multiple artists."
+  },
+  "labels": {
+    "area": "Area",
+    "duration": "Duration",
+    "music": "Music",
+    "rigging": "Rigging",
+    "setup": "Setup",
+    "other": "Other",
+    "outdoorOption": "Outdoor option",
+    "light": "Light"
+  },
+  "disciplines": {
+    "akrobatik": { "name": "Acrobatics" },
+    "chinesischePole": { "name": "Chinese pole" },
+    "cyrWheel": { "name": "Cyr wheel" },
+    "feuershow": { "name": "Fire show" },
+    "jonglage": { "name": "Juggling" },
+    "luftakrobatik": { "name": "Aerial acrobatics" },
+    "walkingAct": { "name": "Walking act" },
+    "zauberei": { "name": "Magic" }
+  },
+  "values": {
+    "akrobatik": {
+      "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
+      "duration": "Rehearsal: ~30 min · Show: ~7 min",
+      "music": "Sound system required (MP3, audio, USB)",
+      "other": "As requested"
+    },
+    "chinesischePole": {
+      "area": "Stage 5 × 7 × 6 m (W/L/H) or round Ø 8 m; flat floor",
+      "rigging": "4 anchor points @ 400 kg OR 3 @ 500 kg (good angle)",
+      "setup": "3 stagehands · 10 min rehearsal for build up/down · 5 min build up · 5 min build down",
+      "other": "Anchor points & safety mat as required"
+    },
+    "cyrWheel": {
+      "area": "6 × 6 × 3 m (W/D/H); flat & dry; floor not too grippy (some carpets ok)",
+      "duration": "Rehearsal: ~15 min · Show: ~7 min",
+      "music": "Sound system required (MP3, audio, USB)"
+    },
+    "feuershow": {
+      "area": "Outdoor; at least 2 × 4.5 × 7 m (W/D/H)",
+      "duration": "Prep: ~30 min · Show: ~7–45 min (depending on program)",
+      "music": "Sound system required (MP3, audio, USB)"
+    },
+    "jonglage": {
+      "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
+      "duration": "Rehearsal: ~30 min · Show: ~7 min",
+      "music": "Sound system required (MP3, audio, USB)"
+    },
+    "luftakrobatik": {
+      "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
+      "duration": "Rehearsal: ~30 min · Show: ~7 min",
+      "music": "Sound system required (MP3, audio, USB)",
+      "rigging": "2 rigging points (1.80 m apart, each ≥ 250 kg), 1 point for aerial silk OR 1 helper on site, 1 safety mat",
+      "outdoorOption": "Own outdoor rig available (mobile, tailored to the artists’ needs)"
+    },
+    "walkingAct": {
+      "area": "No specific requirements",
+      "duration": "Individually by arrangement",
+      "music": "As needed; see general notes"
+    },
+    "zauberei": {
+      "area": "Stage: side & back masking; walking act: none",
+      "duration": "Rehearsal: ~30 min · Show: flexible (on stage or among the audience)",
+      "music": "Sound system required (MP3, audio, USB)",
+      "light": "Please coordinate with the tech team in advance"
+    }
+  }
+},
+
+"team10": {
+  "heading": "Our Team & Network",
+  "subheading": "At PepeShows we bring together experienced artists, creative minds and strong personalities. Together we create unforgettable show moments – from solo acts to large ensemble productions.",
+  "cta": "Register as an artist",
+  "roles": {
+    "michiHeiduk": "CEO",
+    "chrisHermann": "CEO",
+    "danielaMeier": "Handstand, contortion, aerial, hula",
+    "jakobVoeckler": "Chinese pole, freerunning",
+    "jonasDuerrbeck": "Chinese pole, handstand, acrobatics",
+    "carmenLueck": "Acrobatics, Cyr",
+    "lukasBrandl": "Magic, juggling",
+    "thomasDietz": "Juggling",
+    "olesKoval": "Magic",
+    "julianBellini": "Object theatre",
+    "jawadRajpoot": "Breakdance, Cyr wheel",
+    "serhardPerhat": "Breakdance",
+    "flo": "Chinese pole, partner acrobatics",
+    "henryHernandez": "Fire show",
+    "gabrielDrouin": "Cyr wheel",
+    "svetlanaWotschel": "Aerial, waterbowl",
+    "sankofaCrew": "Breakdance",
+    "janaRippel": "Aerial silk",
+    "sarah": "Handstand, silk",
+    "jannick": "Juggling, floor, teeterboard",
+    "daniThalmaier": "Breakdance"
+  }
+},
+
+"signup": {
+  "success": "Registration successful! Please check your email to confirm your account.",
+  "info": {
+    "title": "Artist registration",
+    "p1": "In this step you set your login details and confirm your email. On your first login you’ll be asked to complete your artist profile, upload a profile picture and add your availability.",
+    "p2": "Once saved, an admin will review your profile and approve it within 24 hours. After that, clients can contact you directly via the booking assistant.",
+    "benefitsTitle": "Your benefits:",
+    "benefits": {
+      "li1": "Clear overview of requests",
+      "li2": "Upload invoices directly",
+      "li3": "Easy calendar management",
+      "li4": "Faster responses to client inquiries",
+      "li5": "Simple & straightforward"
+    }
+  },
+  "form": {
+    "title": "Sign up",
+    "namePlaceholder": "Name",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "loading": "Loading…",
+    "submit": "Sign up",
+    "already": "Already registered?",
+    "login": "Log in"
+  }
+},
+
+
+"faq1": {
+  "heading": "Frequently asked questions",
+  "items": {
+    "1": {
+      "q": "Which artists and shows do you offer?",
+      "a": "PepeShows offers a wide range of disciplines: aerial acrobatics, Cyr wheel, juggling, dance, breakdance, fire arts, comedy, magic, hosting, walking acts, special acts and many more. Our network is active across Europe and constantly growing."
+    },
+    "2": {
+      "q": "How does the booking process work?",
+      "a": "You can use our booking assistant – it guides you step by step through the request and sends it directly to suitable artists. Or simply book a phone appointment with us for general questions and advice."
+    },
+    "3": {
+      "q": "How much lead time do I need for a booking?",
+      "a": "Depending on the show, we recommend a few weeks’ lead time. Many acts can also be booked at short notice. Best to inquire as early as possible so we can guarantee the best options."
+    },
+    "4": {
+      "q": "What technical requirements are needed?",
+      "a": "Requirements vary by show – for example stage height and rigging for aerials or safety distances for fire acts. Light and sound systems can be booked optionally. We advise individually and can handle the entire technical setup if needed."
+    },
+    "5": {
+      "q": "Can shows be customized?",
+      "a": "Yes! Theme, costume, duration and run-of-show can be tailored. We design every performance to fit your event."
+    },
+    "6": {
+      "q": "How are prices calculated?",
+      "a": "Together with our artists we’ve agreed on a fair pricing base. Fees depend on the type of show, effort, travel and technical needs. Just go through the booking assistant – it will immediately give you a price range."
+    },
+    "7": {
+      "q": "Do you offer flat rates or only custom quotes?",
+      "a": "As a rule we create individual quotes because every event is unique. However, the booking assistant immediately provides a transparent price overview."
+    },
+    "8": {
+      "q": "Are travel costs included in the price?",
+      "a": "Yes, the booking assistant shows a total price including travel costs. There are no hidden fees."
+    },
+    "9": {
+      "q": "What does your booking assistant do?",
+      "a": "In just a few minutes you’ll be asked for all the key details of your event – and it’s even fun! At the end you’ll receive a suitable offer with a price overview."
+    },
+    "10": {
+      "q": "Will I have a dedicated contact person?",
+      "a": "Yes, you’ll be looked after by a dedicated contact throughout the entire process. We coordinate artists, tech and run-of-show for you."
+    },
+    "11": {
+      "q": "Do you support larger events with multiple acts?",
+      "a": "Absolutely! We handle the entire show planning – from selection and coordination to execution of multiple acts. You get a coherent event from a single source."
+    }
+  }
+},
+
+"feature43": {
+  "heading": "Why PepeShows?",
+  "reasons": {
+    "1": {
+      "title": "Tailor-made shows",
+      "description": "Every performance is individually adapted to theme, stage and audience."
+    },
+    "2": {
+      "title": "Wide artist network",
+      "description": "From circus & aerial to juggling and magic, all the way to breakdance & fire arts."
+    },
+    "3": {
+      "title": "Experience & professionalism",
+      "description": "15+ years of event and stage experience, clear workflows and reliable management."
+    },
+    "4": {
+      "title": "Innovative show formats",
+      "description": "A blend of classic & modern, e.g. artistry combined with digital effects."
+    },
+    "5": {
+      "title": "Fair pricing",
+      "description": "Transparent baseline developed together with our artists – no hidden costs."
+    },
+    "6": {
+      "title": "Artistic excellence",
+      "description": "No average – with PepeShows you get only top acts at an international level."
+    }
+  }
+},
+
+
+"testimonial19": {
+  "kicker": "What our clients say",
+  "heading": "Testimonials from our clients",
+  "subheading": "Selected feedback after corporate events, galas and festivals.",
+  "moreLink": "Request more references",
+  "items": {
+    "1": {
+      "role": "Event manager, automotive industry",
+      "content": "Smooth coordination, on-time setup and a show perfectly aligned with our brand presence. Our team is still talking about it."
+    },
+    "2": {
+      "role": "Head of corporate communications",
+      "content": "From the first consultation to the final cue: highly professional. The combination of aerial artistry and hosting carried our gala program perfectly."
+    },
+    "3": {
+      "role": "Festival project lead",
+      "content": "Flexible, reliable and close to the audience. The walking acts brought the venue to life – fantastic vibe!"
+    },
+    "4": {
+      "role": "Agency owner",
+      "content": "Clear process, fair terms and outstanding artists. We’ll book again – our clients’ response was consistently positive."
+    },
+    "5": {
+      "role": "HR & internal events",
+      "content": "Summer party with a wow effect. The show length was perfectly adapted to our agenda – zero stress for us, maximum impact for the team."
+    },
+    "6": {
+      "role": "Hotel & event management",
+      "content": "Professional rigging, clean workflows and a very pleasant team. Exactly what you want a collaboration to be like."
+    }
+  }
 }
+
+
 }
 

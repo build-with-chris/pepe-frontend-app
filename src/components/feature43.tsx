@@ -6,6 +6,7 @@ import {
   SquareKanban,
   WandSparkles,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface Reason {
   title: string;
@@ -18,57 +19,56 @@ interface Feature43Props {
   reasons?: Reason[];
 }
 
-const Feature43 = ({
-  heading = "Warum PepeShows?",
-  reasons = [
+const Feature43 = ({ heading, reasons }: Feature43Props) => {
+  const { t } = useTranslation();
+
+  const headingText = heading ?? t("feature43.heading");
+
+  const defaultReasons: Reason[] = [
     {
-      title: "Maßgeschneiderte Shows",
-      description:
-        "Jede Performance wird individuell an Motto, Bühne und Zielgruppe angepasst.",
+      title: t("feature43.reasons.1.title"),
+      description: t("feature43.reasons.1.description"),
       icon: <WandSparkles className="size-6" />,
     },
     {
-      title: "Breites Künstlernetzwerk",
-      description:
-        "Von Zirkus- und Luftakrobatik über Jonglage, Zauberei bis hin zu Breakdance & Feuerkunst.",
+      title: t("feature43.reasons.2.title"),
+      description: t("feature43.reasons.2.description"),
       icon: <Layers className="size-6" />,
     },
     {
-      title: "Erfahrung & Professionalität",
-      description:
-        "Über 15 Jahre Event- und Bühnenerfahrung, klare Abläufe & zuverlässiges Management.",
+      title: t("feature43.reasons.3.title"),
+      description: t("feature43.reasons.3.description"),
       icon: <SquareKanban className="size-6" />,
     },
     {
-      title: "Innovative Showformate",
-      description:
-        "Kombination aus Klassik & Moderne, z. B. Artistik + digitale Effekte.",
+      title: t("feature43.reasons.4.title"),
+      description: t("feature43.reasons.4.description"),
       icon: <GitPullRequest className="size-6" />,
     },
     {
-      title: "Faire Preisgestaltung",
-      description:
-        "Transparente Basis, gemeinsam mit Künstlern entwickelt – ohne versteckte Kosten.",
+      title: t("feature43.reasons.5.title"),
+      description: t("feature43.reasons.5.description"),
       icon: <BatteryCharging className="size-6" />,
     },
     {
-      title: "Künstlerische Exzellenz",
-      description:
-        "Kein Mittelmaß – bei PepeShows gibt’s nur Top-Acts mit internationalem Niveau.",
+      title: t("feature43.reasons.6.title"),
+      description: t("feature43.reasons.6.description"),
       icon: <RadioTower className="size-6" />,
     },
-  ],
-}: Feature43Props) => {
+  ];
+
+  const reasonsData = reasons ?? defaultReasons;
+
   return (
     <section className="mt-20">
       <div className="container">
         <div className="mb-10 md:mb-20">
           <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl">
-            {heading}
+            {headingText}
           </h2>
         </div>
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
-          {reasons.map((reason, i) => (
+          {reasonsData.map((reason, i) => (
             <div key={i} className="flex flex-col">
               <div className="mb-5 flex size-16 items-center justify-center rounded-full bg-white text-black">
                 {reason.icon}

@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -24,7 +26,7 @@ export default function SignUp() {
     if (error) {
       setMessage(error.message);
     } else {
-      setMessage("Registrierung erfolgreich! Bitte prüfe deine E-Mails zur Bestätigung.");
+      setMessage(t("signup.success"));
       setTimeout(() => {
         console.log("Navigating to /login after successful sign-up");
         navigate("/login");
@@ -43,23 +45,21 @@ export default function SignUp() {
         {/* Info Section */}
         <div className="flex flex-col justify-center">
    
-          <h2 className="text-3xl font-bold mb-6 leading-tight">Artist Registrierung</h2>
+          <h2 className="text-3xl font-bold mb-6 leading-tight">{t("signup.info.title")}</h2>
           <p className="mb-4 text-white/80">
-            In diesem Schritt legst du deine Login-Daten fest und bestätigst deine E-Mail. 
-            Beim ersten Login wirst du gebeten, dein Künstlerprofil zu vervollständigen, ein Profilbild hochzuladen und deine Verfügbarkeiten anzugeben.
+            {t("signup.info.p1")}
           </p>
           <p className="mb-6 text-white/80">
-            Sobald du alles gespeichert hast, prüft ein Admin dein Profil und gibt es innerhalb von 24h frei. 
-            Danach können dich Kunden direkt über den Booking Assistenten anfragen.
+            {t("signup.info.p2")}
           </p>
           <div className="border-t border-white/10 my-6"></div>
-          <h2 className="text-xl font-semibold mb-3">Vorteile für dich:</h2>
+          <h2 className="text-xl font-semibold mb-3">{t("signup.info.benefitsTitle")}</h2>
           <ul className="list-disc list-inside space-y-2 text-white/80">
-            <li>Klare Übersicht über Anfragen</li>
-            <li>Rechnungen direkt hochladen</li>
-            <li>Kalenderpflege leicht gemacht</li>
-            <li>Schnelleres Antworten auf Kundenanfragen</li>
-            <li>Leicht & unkompliziert</li>
+            <li>{t("signup.info.benefits.li1")}</li>
+            <li>{t("signup.info.benefits.li2")}</li>
+            <li>{t("signup.info.benefits.li3")}</li>
+            <li>{t("signup.info.benefits.li4")}</li>
+            <li>{t("signup.info.benefits.li5")}</li>
           </ul>
         </div>
 
@@ -76,12 +76,12 @@ export default function SignUp() {
               style={{ width: "120px", height: "120px" }}
             />
           </div>
-          <h2 className="text-3xl font-bold mb-4 text-center">Registrieren</h2>
+          <h2 className="text-3xl font-bold mb-4 text-center">{t("signup.form.title")}</h2>
           {message && <p className="text-sm text-center text-white/70">{message}</p>}
           <Input
             id="name"
             type="text"
-            placeholder="Name"
+            placeholder={t("signup.form.namePlaceholder")}
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -90,7 +90,7 @@ export default function SignUp() {
           <Input
             id="email"
             type="email"
-            placeholder="Email"
+            placeholder={t("signup.form.emailPlaceholder")}
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -99,7 +99,7 @@ export default function SignUp() {
           <Input
             id="password"
             type="password"
-            placeholder="Passwort"
+            placeholder={t("signup.form.passwordPlaceholder")}
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -110,12 +110,12 @@ export default function SignUp() {
             disabled={loading}
             className="mt-2 bg-gradient-to-r from-blue-500 to-black hover:from-blue-600 hover:to-black text-white font-semibold py-2 rounded-lg transition-all"
           >
-            {loading ? "Lädt..." : "Registrieren"}
+            {loading ? t("signup.form.loading") : t("signup.form.submit")}
           </Button>
           <p className="text-center text-sm mt-4 text-white/70">
-            Schon registriert?{" "}
+            {t("signup.form.already")}{" "}
             <a href="/login" className="text-blue-400 hover:underline">
-              Anmelden
+              {t("signup.form.login")}
             </a>
           </p>
         </form>

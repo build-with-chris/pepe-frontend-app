@@ -93,18 +93,7 @@ const Footer04Page = () => {
               <Link to="/" className="text-white text-xl font-semibold">
                 PepeShows
               </Link>
-              <ul className="mt-6 flex items-center gap-4 flex-wrap">
-                <li>
-                  <Link
-                    to="https://www.instagram.com/pepe_arts/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-white/70 hover:text-white"
-                  >
-                    <InstagramIcon className="h-5 w-5" />
-                  </Link>
-                </li>
-              </ul>
+             
               <div className="mt-8 max-w-xs">
                 <h6 className="font-semibold text-white/90">{t("footer.newsletter.title")}</h6>
                 <form className="mt-4 flex items-center gap-2 max-w-full">

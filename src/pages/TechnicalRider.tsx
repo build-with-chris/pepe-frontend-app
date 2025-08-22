@@ -1,95 +1,101 @@
-
-
-import { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 /**
  * Technical Rider – Pepe Shows
  * Stil: dunkler Hintergrund (Pepe-Style), klare Cards, responsives Grid
  */
 
-type Detail = { label: string; value: string };
+type Detail = { labelKey: string; valueKey: string };
 
 type Disziplin = {
-  name: string;
+  key: string; // i18n key id, e.g., "akrobatik"
   details: Detail[];
 };
 
 const RAW_DISZIPLINEN: Disziplin[] = [
   {
-    name: "Akrobatik",
+    key: "akrobatik",
     details: [
-      { label: "Fläche", value: "2 × 4,5 × 7 m (L/T/H); Bühne eben & trocken" },
-      { label: "Dauer", value: "Probe: ca. 30 min · Show: ca. 7 min" },
-      { label: "Musik", value: "Musikanlage erforderlich (MP3, Audio, USB)" },
-      { label: "Sonstiges", value: "Je nach Wunsch" },
+      { labelKey: "area", valueKey: "area" },
+      { labelKey: "duration", valueKey: "duration" },
+      { labelKey: "music", valueKey: "music" },
+      { labelKey: "other", valueKey: "other" },
     ],
   },
   {
-    name: "Chinesische Pole",
+    key: "chinesischePole",
     details: [
-      { label: "Fläche", value: "Bühne 5 × 7 × 6 m (B/L/H) oder rund Ø 8 m; Boden eben" },
-      { label: "Rigging", value: "4 Ankerpunkte à 400 kg ODER 3 à 500 kg (guter Winkel)" },
-      { label: "Aufbau", value: "3 Stagehands · 10 min Probe für Aufbau/Abbau · 5 min Aufbau · 5 min Abbau" },
-      { label: "Sonstiges", value: "Aufhängepunkte & Sicherheitsmatte nach Bedarf" },
+      { labelKey: "area", valueKey: "area" },
+      { labelKey: "rigging", valueKey: "rigging" },
+      { labelKey: "setup", valueKey: "setup" },
+      { labelKey: "other", valueKey: "other" },
     ],
   },
   {
-    name: "Cyr-Wheel",
+    key: "cyrWheel",
     details: [
-      { label: "Fläche", value: "6 × 6 × 3 m (L/T/H); eben & trocken; Boden darf nicht stark reiben (manche Teppiche ok)" },
-      { label: "Dauer", value: "Probe: ca. 15 min · Show: ca. 7 min" },
-      { label: "Musik", value: "Musikanlage erforderlich (MP3, Audio, USB)" },
+      { labelKey: "area", valueKey: "area" },
+      { labelKey: "duration", valueKey: "duration" },
+      { labelKey: "music", valueKey: "music" },
     ],
   },
   {
-    name: "Feuershow",
+    key: "feuershow",
     details: [
-      { label: "Fläche", value: "Outdoor; mind. 2 × 4,5 × 7 m (L/T/H)" },
-      { label: "Dauer", value: "Vorbereitung: ca. 30 min · Show: ca. 7–45 min (programmabhängig)" },
-      { label: "Musik", value: "Musikanlage erforderlich (MP3, Audio, USB)" },
+      { labelKey: "area", valueKey: "area" },
+      { labelKey: "duration", valueKey: "duration" },
+      { labelKey: "music", valueKey: "music" },
     ],
   },
   {
-    name: "Jonglage",
+    key: "jonglage",
     details: [
-      { label: "Fläche", value: "2 × 4,5 × 7 m (L/T/H); Bühne eben & trocken" },
-      { label: "Dauer", value: "Probe: ca. 30 min · Show: ca. 7 min" },
-      { label: "Musik", value: "Musikanlage erforderlich (MP3, Audio, USB)" },
+      { labelKey: "area", valueKey: "area" },
+      { labelKey: "duration", valueKey: "duration" },
+      { labelKey: "music", valueKey: "music" },
     ],
   },
   {
-    name: "Luftakrobatik",
+    key: "luftakrobatik",
     details: [
-      { label: "Fläche", value: "2 × 4,5 × 7 m (L/T/H); Bühne eben & trocken" },
-      { label: "Dauer", value: "Probe: ca. 30 min · Show: ca. 7 min" },
-      { label: "Musik", value: "Musikanlage erforderlich (MP3, Audio, USB)" },
-      { label: "Rigging", value: "2 Aufhängepunkte (Abstand 1,80 m, je ≥ 250 kg), 1 Punkt für Klettertuch ODER 1 Helfer vor Ort, 1 Sicherheitsmatte" },
-      { label: "Outdoor-Option", value: "Eigene Vorrichtung für Außenbereich verfügbar (mobil, auf Bedürfnisse der Artisten abgestimmt)" },
+      { labelKey: "area", valueKey: "area" },
+      { labelKey: "duration", valueKey: "duration" },
+      { labelKey: "music", valueKey: "music" },
+      { labelKey: "rigging", valueKey: "rigging" },
+      { labelKey: "outdoorOption", valueKey: "outdoorOption" },
     ],
   },
   {
-    name: "Walking Act",
+    key: "walkingAct",
     details: [
-      { label: "Fläche", value: "Keine spezifischen Anforderungen" },
-      { label: "Dauer", value: "Individuell nach Absprache" },
-      { label: "Musik", value: "Nach Bedarf; siehe Allgemeine Hinweise" },
+      { labelKey: "area", valueKey: "area" },
+      { labelKey: "duration", valueKey: "duration" },
+      { labelKey: "music", valueKey: "music" },
     ],
   },
   {
-    name: "Zauberei",
+    key: "zauberei",
     details: [
-      { label: "Fläche", value: "Bühne: Sichtschutz an den Seiten & hinten; Walking Act: keine" },
-      { label: "Dauer", value: "Probe: ca. 30 min · Show: flexibel (Bühne oder direkt im Publikum)" },
-      { label: "Musik", value: "Musikanlage erforderlich (MP3, Audio, USB)" },
-      { label: "Licht", value: "Bitte vorab mit der Technik abstimmen" },
+      { labelKey: "area", valueKey: "area" },
+      { labelKey: "duration", valueKey: "duration" },
+      { labelKey: "music", valueKey: "music" },
+      { labelKey: "light", valueKey: "light" },
     ],
   },
 ];
 
-// Alphabetisch sortiert, falls später erweitert wird
-const DISZIPLINEN = [...RAW_DISZIPLINEN].sort((a, b) => a.name.localeCompare(b.name, "de"));
-
 export default function TechnicalRider() {
+  const { t } = useTranslation();
+
+  const DISZIPLINEN = useMemo(() => {
+    const withNames = RAW_DISZIPLINEN.map((d) => ({
+      ...d,
+      name: t(`technicalRider.disciplines.${d.key}.name`),
+    }));
+    return withNames.sort((a, b) => a.name.localeCompare(b.name, t("_locale", { defaultValue: "de" })));
+  }, [t]);
+
   return (
     <Fragment>
       {/* Hero */}
@@ -97,16 +103,13 @@ export default function TechnicalRider() {
         <div className="container mx-auto max-w-6xl">
           <div className="mx-auto max-w-3xl text-center">
             <div className="bg-gray-800 inline-flex items-center gap-2 rounded-md py-2 pl-4 pr-3">
-              <span className="text-white text-lg font-bold">Technical Rider</span>
+              <span className="text-white text-lg font-bold">{t("technicalRider.hero.kicker")}</span>
             </div>
             <h1 className="text-white mt-6 text-5xl font-semibold leading-tight md:text-6xl">
-              Anforderungen & Bühnenhinweise
+              {t("technicalRider.hero.title")}
             </h1>
             <p className="text-gray-300 mt-4 text-lg md:text-xl">
-              Sofern keine Musikanlage dazugebucht wird, setzen wir eine vor Ort voraus. Die Musik wird eine Woche
-              vorher als <strong>MP3</strong> versendet und zur Sicherheit zusätzlich auf einem <strong>USB‑Stick</strong>
-              mitgebracht. Die angegebenen Dauern beziehen sich auf <strong>Solo‑Acts</strong> und können bei mehreren
-              Artisten variieren.
+              {t("technicalRider.hero.subtitle")}
             </p>
           </div>
         </div>
@@ -117,13 +120,17 @@ export default function TechnicalRider() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {DISZIPLINEN.map((d) => (
-              <article key={d.name} className="rounded-2xl border border-gray-800 bg-[#0b0b0b] p-6">
+              <article key={d.key} className="rounded-2xl border border-gray-800 bg-[#0b0b0b] p-6">
                 <h3 className="text-white text-2xl font-semibold mb-4">{d.name}</h3>
                 <dl className="space-y-3">
                   {d.details.map((detail, idx) => (
                     <div key={idx}>
-                      <dt className="text-gray-400 text-sm font-medium uppercase tracking-wide">{detail.label}</dt>
-                      <dd className="text-gray-200 text-base">{detail.value}</dd>
+                      <dt className="text-gray-400 text-sm font-medium uppercase tracking-wide">
+                        {t(`technicalRider.labels.${detail.labelKey}`)}
+                      </dt>
+                      <dd className="text-gray-200 text-base">
+                        {t(`technicalRider.values.${d.key}.${detail.valueKey}`)}
+                      </dd>
                     </div>
                   ))}
                 </dl>

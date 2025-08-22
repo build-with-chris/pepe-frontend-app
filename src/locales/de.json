@@ -529,7 +529,254 @@
     "person": "PepeShows – Christoph Hermann"
   },
   "langnote": "Pressemappe verfügbar in Deutsch & Englisch. Einsatzgebiet: flexibel (Künstler europaweit verteilt). Preise & Verfügbarkeiten: einfach über den Booking-Assistenten anfragen."
+},
+
+
+"technicalRider": {
+  "hero": {
+    "kicker": "Technical Rider",
+    "title": "Anforderungen & Bühnenhinweise",
+    "subtitle": "Sofern keine Musikanlage dazugebucht wird, setzen wir eine vor Ort voraus. Die Musik wird eine Woche vorher als MP3 versendet und zur Sicherheit zusätzlich auf einem USB-Stick mitgebracht. Die angegebenen Dauern beziehen sich auf Solo-Acts und können bei mehreren Artisten variieren."
+  },
+  "labels": {
+    "area": "Fläche",
+    "duration": "Dauer",
+    "music": "Musik",
+    "rigging": "Rigging",
+    "setup": "Aufbau",
+    "other": "Sonstiges",
+    "outdoorOption": "Outdoor-Option",
+    "light": "Licht"
+  },
+  "disciplines": {
+    "akrobatik": { "name": "Akrobatik" },
+    "chinesischePole": { "name": "Chinesische Pole" },
+    "cyrWheel": { "name": "Cyr-Wheel" },
+    "feuershow": { "name": "Feuershow" },
+    "jonglage": { "name": "Jonglage" },
+    "luftakrobatik": { "name": "Luftakrobatik" },
+    "walkingAct": { "name": "Walking Act" },
+    "zauberei": { "name": "Zauberei" }
+  },
+  "values": {
+    "akrobatik": {
+      "area": "2 × 4,5 × 7 m (L/T/H); Bühne eben & trocken",
+      "duration": "Probe: ca. 30 min · Show: ca. 7 min",
+      "music": "Musikanlage erforderlich (MP3, Audio, USB)",
+      "other": "Je nach Wunsch"
+    },
+    "chinesischePole": {
+      "area": "Bühne 5 × 7 × 6 m (B/L/H) oder rund Ø 8 m; Boden eben",
+      "rigging": "4 Ankerpunkte à 400 kg ODER 3 à 500 kg (guter Winkel)",
+      "setup": "3 Stagehands · 10 min Probe für Aufbau/Abbau · 5 min Aufbau · 5 min Abbau",
+      "other": "Aufhängepunkte & Sicherheitsmatte nach Bedarf"
+    },
+    "cyrWheel": {
+      "area": "6 × 6 × 3 m (L/T/H); eben & trocken; Boden darf nicht stark reiben (manche Teppiche ok)",
+      "duration": "Probe: ca. 15 min · Show: ca. 7 min",
+      "music": "Musikanlage erforderlich (MP3, Audio, USB)"
+    },
+    "feuershow": {
+      "area": "Outdoor; mind. 2 × 4,5 × 7 m (L/T/H)",
+      "duration": "Vorbereitung: ca. 30 min · Show: ca. 7–45 min (programmabhängig)",
+      "music": "Musikanlage erforderlich (MP3, Audio, USB)"
+    },
+    "jonglage": {
+      "area": "2 × 4,5 × 7 m (L/T/H); Bühne eben & trocken",
+      "duration": "Probe: ca. 30 min · Show: ca. 7 min",
+      "music": "Musikanlage erforderlich (MP3, Audio, USB)"
+    },
+    "luftakrobatik": {
+      "area": "2 × 4,5 × 7 m (L/T/H); Bühne eben & trocken",
+      "duration": "Probe: ca. 30 min · Show: ca. 7 min",
+      "music": "Musikanlage erforderlich (MP3, Audio, USB)",
+      "rigging": "2 Aufhängepunkte (Abstand 1,80 m, je ≥ 250 kg), 1 Punkt für Klettertuch ODER 1 Helfer vor Ort, 1 Sicherheitsmatte",
+      "outdoorOption": "Eigene Vorrichtung für Außenbereich verfügbar (mobil, auf Bedürfnisse der Artisten abgestimmt)"
+    },
+    "walkingAct": {
+      "area": "Keine spezifischen Anforderungen",
+      "duration": "Individuell nach Absprache",
+      "music": "Nach Bedarf; siehe Allgemeine Hinweise"
+    },
+    "zauberei": {
+      "area": "Bühne: Sichtschutz an den Seiten & hinten; Walking Act: keine",
+      "duration": "Probe: ca. 30 min · Show: flexibel (Bühne oder direkt im Publikum)",
+      "music": "Musikanlage erforderlich (MP3, Audio, USB)",
+      "light": "Bitte vorab mit der Technik abstimmen"
+    }
+  }
+},
+
+"team10": {
+  "heading": "Unser Team & Netzwerk",
+  "subheading": "Bei PepeShows vereinen wir erfahrene Artisten, kreative Köpfe und starke Persönlichkeiten. Gemeinsam erschaffen wir unvergessliche Showmomente – von Solo-Acts bis hin zu großen Ensembleproduktionen.",
+  "cta": "Als Artist registrieren",
+  "roles": {
+    "michiHeiduk": "CEO",
+    "chrisHermann": "CEO",
+    "danielaMeier": "Handstand, Contortion, Luft, Hula",
+    "jakobVoeckler": "Chinese Pole, Freerunning",
+    "jonasDuerrbeck": "Chinese Pole, Handstand, Akrobatik",
+    "carmenLueck": "Akrobatik, Cyr",
+    "lukasBrandl": "Zauberei, Jonglage",
+    "thomasDietz": "Jonglage",
+    "olesKoval": "Zauberei",
+    "julianBellini": "Objekttheater",
+    "jawadRajpoot": "Breakdance, Cyr-Wheel",
+    "serhardPerhat": "Breakdance",
+    "flo": "Chinese Pole, Partnerakrobatik",
+    "henryHernandez": "Feuershow",
+    "gabrielDrouin": "Cyr-Wheel",
+    "svetlanaWotschel": "Luftartistik, Waterbowl",
+    "sankofaCrew": "Breakdance",
+    "janaRippel": "Aerial Silk",
+    "sarah": "Handstand, Tuch",
+    "jannick": "Jonglage, Floor, Teeterboard",
+    "daniThalmaier": "Breakdance"
+  }
+},
+
+"signup": {
+  "success": "Registrierung erfolgreich! Bitte prüfe deine E-Mails zur Bestätigung.",
+  "info": {
+    "title": "Artist Registrierung",
+    "p1": "In diesem Schritt legst du deine Login-Daten fest und bestätigst deine E-Mail. Beim ersten Login wirst du gebeten, dein Künstlerprofil zu vervollständigen, ein Profilbild hochzuladen und deine Verfügbarkeiten anzugeben.",
+    "p2": "Sobald du alles gespeichert hast, prüft ein Admin dein Profil und gibt es innerhalb von 24h frei. Danach können dich Kunden direkt über den Booking Assistenten anfragen.",
+    "benefitsTitle": "Vorteile für dich:",
+    "benefits": {
+      "li1": "Klare Übersicht über Anfragen",
+      "li2": "Rechnungen direkt hochladen",
+      "li3": "Kalenderpflege leicht gemacht",
+      "li4": "Schnelleres Antworten auf Kundenanfragen",
+      "li5": "Leicht & unkompliziert"
+    }
+  },
+  "form": {
+    "title": "Registrieren",
+    "namePlaceholder": "Name",
+    "emailPlaceholder": "E-Mail",
+    "passwordPlaceholder": "Passwort",
+    "loading": "Lädt...",
+    "submit": "Registrieren",
+    "already": "Schon registriert?",
+    "login": "Anmelden"
+  }
+},
+
+
+"faq1": {
+  "heading": "Häufige Fragen",
+  "items": {
+    "1": {
+      "q": "Welche Künstler und Shows bietet ihr an?",
+      "a": "PepeShows bietet eine große Bandbreite an Disziplinen: Luftakrobatik, Cyr Wheel, Jonglage, Tanz, Breakdance, Feuerkunst, Comedy, Zauberei, Moderation, Walking Acts, Spezial-Acts und viele mehr. Unser Netzwerk ist europaweit aktiv und wächst ständig."
+    },
+    "2": {
+      "q": "Wie läuft eine Buchung ab?",
+      "a": "Du kannst entweder direkt unseren Booking-Assistenten nutzen – er führt dich Schritt für Schritt durch die Anfrage und sendet sie direkt an die passenden Künstler. Oder du buchst für allgemeine Fragen und Beratung ganz einfach einen telefonischen Termin mit uns."
+    },
+    "3": {
+      "q": "Wie viel Vorlaufzeit brauche ich für eine Buchung?",
+      "a": "Je nach Show empfehlen wir einige Wochen Vorlauf. Viele Acts sind jedoch auch kurzfristig buchbar. Am besten so früh wie möglich anfragen, damit wir die besten Optionen garantieren können."
+    },
+    "4": {
+      "q": "Welche Technik / Voraussetzungen werden benötigt?",
+      "a": "Je nach Show gibt es unterschiedliche Anforderungen – etwa Bühnenhöhe und Rigging für Luftakrobatik oder Sicherheitsabstände für Feueracts. Licht- und Tonanlagen sind optional zubuchbar. Wir beraten dich individuell und kümmern uns bei Bedarf um die gesamte technische Umsetzung."
+    },
+    "5": {
+      "q": "Kann man Shows individuell anpassen?",
+      "a": "Ja! Motto, Kostüm, Länge und Ablauf lassen sich individuell anpassen. Wir gestalten jede Performance maßgeschneidert für dein Event."
+    },
+    "6": {
+      "q": "Wie setzen sich die Preise zusammen?",
+      "a": "Wir haben gemeinsam mit unseren Künstlern eine faire Preisbasis ausgehandelt. Die Gage richtet sich nach Art der Show, Aufwand, Anreise und Technik. Einfach den Booking-Assistenten durchgehen – dort wird dir direkt eine Preisrichtung angegeben."
+    },
+    "7": {
+      "q": "Gibt es Pauschalen oder nur individuelle Angebote?",
+      "a": "Grundsätzlich erstellen wir individuelle Angebote, da jedes Event einzigartig ist. Über den Booking-Assistenten erhältst du jedoch sofort eine transparente Preisübersicht."
+    },
+    "8": {
+      "q": "Sind Reisekosten im Preis enthalten?",
+      "a": "Ja, beim Booking-Assistenten siehst du den Komplettpreis inklusive Reisekosten. Es gibt keine versteckten Gebühren."
+    },
+    "9": {
+      "q": "Was macht euer Booking-Assistent?",
+      "a": "In wenigen Minuten wirst du alle wichtigen Details zu deinem Event abgefragt – und hast dabei sogar noch Spaß! Am Ende erhältst du ein passendes Angebot mit Preisübersicht."
+    },
+    "10": {
+      "q": "Habe ich einen festen Ansprechpartner?",
+      "a": "Ja, während des gesamten Prozesses betreut dich eine feste Bezugsperson. Wir koordinieren Künstler, Technik und Ablauf für dich."
+    },
+    "11": {
+      "q": "Unterstützt ihr auch bei größeren Events mit mehreren Acts?",
+      "a": "Absolut! Wir übernehmen die komplette Showplanung – von der Auswahl über die Abstimmung bis hin zur Durchführung mehrerer Acts. So hast du ein rundum stimmiges Event aus einer Hand."
+    }
+  }
+},
+
+"feature43": {
+  "heading": "Warum PepeShows?",
+  "reasons": {
+    "1": {
+      "title": "Maßgeschneiderte Shows",
+      "description": "Jede Performance wird individuell an Motto, Bühne und Zielgruppe angepasst."
+    },
+    "2": {
+      "title": "Breites Künstlernetzwerk",
+      "description": "Von Zirkus- und Luftakrobatik über Jonglage, Zauberei bis hin zu Breakdance & Feuerkunst."
+    },
+    "3": {
+      "title": "Erfahrung & Professionalität",
+      "description": "Über 15 Jahre Event- und Bühnenerfahrung, klare Abläufe & zuverlässiges Management."
+    },
+    "4": {
+      "title": "Innovative Showformate",
+      "description": "Kombination aus Klassik & Moderne, z. B. Artistik + digitale Effekte."
+    },
+    "5": {
+      "title": "Faire Preisgestaltung",
+      "description": "Transparente Basis, gemeinsam mit Künstlern entwickelt – ohne versteckte Kosten."
+    },
+    "6": {
+      "title": "Künstlerische Exzellenz",
+      "description": "Kein Mittelmaß – bei PepeShows gibt’s nur Top-Acts mit internationalem Niveau."
+    }
+  }
+},
+
+"testimonial19": {
+  "kicker": "Stimmen unserer Kund:innen",
+  "heading": "Das sagen unsere Auftraggeber",
+  "subheading": "Auszüge aus echtem Feedback nach Firmenfeiern, Galas und Festivals.",
+  "moreLink": "Mehr Referenzen anfragen",
+  "items": {
+    "1": {
+      "role": "Eventmanagerin, Automobilbranche",
+      "content": "Reibungslose Abstimmung, pünktlicher Aufbau und eine Show, die genau zu unserem Markenauftritt gepasst hat. Unser Team spricht heute noch darüber."
+    },
+    "2": {
+      "role": "Leitung Unternehmenskommunikation",
+      "content": "Von der ersten Beratung bis zum letzten Cue: sehr professionell. Die Kombination aus Luftartistik und Moderation hat unser Gala-Programm perfekt getragen."
+    },
+    "3": {
+      "role": "Projektleitung Festival",
+      "content": "Flexibel, zuverlässig und publikumsnah. Besonders die Walking Acts haben das Gelände lebendig gemacht – super Stimmung!"
+    },
+    "4": {
+      "role": "Agenturinhaber",
+      "content": "Klarer Prozess, faire Konditionen und starke Künstler:innen. Wir buchen wieder – die Resonanz unserer Kund:innen war durchweg positiv."
+    },
+    "5": {
+      "role": "HR & Internal Events",
+      "content": "Sommerfest mit Wow-Effekt. Die Showlänge wurde perfekt an unsere Agenda angepasst – null Stress für uns, maximaler Effekt fürs Team."
+    },
+    "6": {
+      "role": "Hotel- & Veranstaltungsleitung",
+      "content": "Professionelles Rigging, saubere Abläufe und ein sehr angenehmes Team. Genau so stellt man sich eine Zusammenarbeit vor."
+    }
+  }
 }
+
 
 
 }
