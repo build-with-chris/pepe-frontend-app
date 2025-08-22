@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { BadgeCheck, Calendar, Copy, Star, Building2, Mail, Phone, Globe, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -44,6 +45,7 @@ function Block({
   collapsible?: boolean;
   previewChars?: number;
 }) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const needsClamp = collapsible && text.length > previewChars;
   const displayText = expanded || !needsClamp ? text : (text.slice(0, previewChars).trimEnd() + "…");
@@ -57,7 +59,7 @@ function Block({
       {needsClamp && (
         <div className="mt-3">
           <Button size="sm" className="rounded-full" variant="secondary" onClick={() => setExpanded(!expanded)}>
-            {expanded ? "Weniger lesen" : "Mehr lesen"}
+            {expanded ? t("presskit.readLess") : t("presskit.readMore")}
           </Button>
         </div>
       )}
@@ -66,6 +68,7 @@ function Block({
 }
 
 export default function Pressemappe() {
+  const { t } = useTranslation();
   return (
     <Fragment>
       {/* Hero */}
@@ -74,12 +77,11 @@ export default function Pressemappe() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="bg-gray-800 inline-flex items-center gap-2 rounded-md py-2 pl-4 pr-3">
               <BadgeCheck className="h-6 w-6 stroke-white" />
-              <span className="text-white text-lg font-bold">Pressemappe</span>
+              <span className="text-white text-lg font-bold">{t("presskit.hero.kicker")}</span>
             </div>
-            <h1 className="text-white mt-6 text-5xl font-semibold leading-tight md:text-6xl">PepeShows – Pressetexte &amp; Infos</h1>
+            <h1 className="text-white mt-6 text-5xl font-semibold leading-tight md:text-6xl">{t("presskit.hero.title")}</h1>
             <p className="text-gray-300 mt-4 text-lg md:text-xl">
-              Artistik auf Weltklasse‑Niveau – modern, energetisch und perfekt organisiert. Wir verwandeln Events in magische Erlebnisse.
-              Alle Texte unten sind als Bausteine gedacht und können frei kombiniert werden.
+              {t("presskit.hero.subtitle")}
             </p>
           </div>
         </div>
@@ -87,23 +89,23 @@ export default function Pressemappe() {
 
       {/* Teaser / Elevator / About */}
       <Section
-        title="Texte – kurz, mittel, ausführlich"
-        subtitle="Flexibel einsetzbar für Website, Bookings, Programmhefte & Presse."
+        title={t("presskit.texts.title")}
+        subtitle={t("presskit.texts.subtitle")}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Block
-            headline="Teaser"
-            text={`PepeShows steht für Artistik auf Weltklasse‑Niveau – modern, energetisch und perfekt organisiert. Ob Gala, Corporate Event oder Festival: Unsere Shows verwandeln Räume in magische Erlebnisse. Von Weltmeistern bis hin zu preisgekrönten Talenten – das Pepe Collective vereint die Besten. Kunst wird zu Magie, und für einen Moment verschwindet der Alltag.`}
+            headline={t("presskit.blocks.teaser.headline")}
+            text={t("presskit.blocks.teaser.text")}
           />
           <Block
-            headline="Elevator Pitch"
-            text={`Seit 2006 steht das Pepe Collective für Artistik, die begeistert. Mit PepeShows haben sich zwei Freunde zusammengetan, um ihr Können auf die Bühne von Unternehmen zu bringen – professionell, unkompliziert und überragend.\n\nUnsere Künstler gehören zur Weltspitze: Cyr‑Wheel‑Weltmeisterin, siebenfacher Jonglage‑Weltmeister, BC One Champion im Breakdance und viele weitere Ausnahmetalente. Gemeinsam schaffen wir Shows, die Emotion und Präzision verbinden.\n\nOb Solo‑Highlight nach dem Dinner, 45‑minütige Duo‑Show oder ein abendfüllendes Varieté wie zuletzt in Gütersloh: Wir inszenieren Events, die bleiben. Für Marken wie Porsche, Google, McDonald’s, AstraZeneca und Festivals wie Tollwood haben wir bereits Magie auf die Bühne gebracht.\n\nPepeShows macht Artistik greifbar – und lässt das Publikum gleichzeitig träumen.`}
+            headline={t("presskit.blocks.elevator.headline")}
+            text={t("presskit.blocks.elevator.text")}
             collapsible
             previewChars={420}
           />
           <Block
-            headline="About"
-            text={`PepeShows – wo Artistik zu Magie wird.\n\nDas Pepe Collective ist seit 2006 ein Synonym für artistische Spitzenklasse. Mit PepeShows bündeln Christoph Hermann und sein Team ihre jahrzehntelange Erfahrung, um maßgeschneiderte Show‑Konzepte für Unternehmen und Events jeder Größenordnung zu entwickeln.\n\nUnsere Philosophie: professionell, unkompliziert, überragend. Wir glauben daran, dass Artistik mehr ist als Akrobatik. Sie berührt, inspiriert und eröffnet einen Blick in eine andere Welt. Für einen Moment verschwindet das Alltägliche, und Kunst wird zu Magie.\n\nHinter PepeShows stehen Weltmeister und preisgekrönte Performer: eine Cyr‑Wheel‑Weltmeisterin, ein siebenfacher Jonglage‑Weltmeister, ein BC One Champion im Breakdance – sowie zahlreiche weitere internationale Künstler. Gemeinsam gestalten wir einzigartige Shows, die Energie, Eleganz und Präzision vereinen.\n\nUnser Repertoire reicht von kurzen Solo‑Acts über dynamische 45‑minütige Duo‑Shows bis hin zu abendfüllenden Varietéprogrammen (u. a. 5‑stündiges Varieté für die Stadt Gütersloh). Dabei ist alles möglich – vom Dinner‑Highlight bis zum Festivalauftritt, mit klarer Spezialisierung auf Corporate‑Events.\n\nFür Veranstalter halten wir Technik‑Pakete bereit – Sound, Licht und Rider sind flexibel: Der vollständige Technical Rider sowie Logos, Headerbilder, Pressefotos und Trailer finden sich im Mediamaterial. PepeShows macht Artistik greifbar – und lässt das Publikum gleichzeitig träumen.`}
+            headline={t("presskit.blocks.about.headline")}
+            text={t("presskit.blocks.about.text")}
             collapsible
             previewChars={420}
           />
@@ -112,81 +114,79 @@ export default function Pressemappe() {
 
       {/* Angebote & Formate */}
       <Section
-        title="Formate & Kombinationen"
-        subtitle="Beispiele – flexibel kombinierbar und auf Corporate‑Events spezialisiert."
+        title={t("presskit.formats.title")}
+        subtitle={t("presskit.formats.subtitle")}
       >
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card>
-            <h3 className="text-white text-xl font-semibold mb-2">Solo‑Highlights</h3>
-            <p className="text-gray-300">7–10 Minuten, ideal als prägnanter Programmpunkt – z. B. nach dem Dinner.</p>
+            <h3 className="text-white text-xl font-semibold mb-2">{t("presskit.formats.cards.solo.title")}</h3>
+            <p className="text-gray-300">{t("presskit.formats.cards.solo.body")}</p>
           </Card>
           <Card>
-            <h3 className="text-white text-xl font-semibold mb-2">Duo‑Show (45 Minuten)</h3>
-            <p className="text-gray-300">Energiegeladenes Varieté mit rotem Faden – perfekt für Gala & Bühne.</p>
+            <h3 className="text-white text-xl font-semibold mb-2">{t("presskit.formats.cards.duo.title")}</h3>
+            <p className="text-gray-300">{t("presskit.formats.cards.duo.body")}</p>
           </Card>
           <Card>
-            <h3 className="text-white text-xl font-semibold mb-2">Abendfüllend</h3>
-            <p className="text-gray-300">Modular und abwechslungsreiche Unterhaltung für 2 Stunden.</p>
+            <h3 className="text-white text-xl font-semibold mb-2">{t("presskit.formats.cards.evening.title")}</h3>
+            <p className="text-gray-300">{t("presskit.formats.cards.evening.body")}</p>
           </Card>
         </div>
         <div className="mt-6 rounded-2xl border border-gray-800 bg-[#0b0b0b] p-6">
           <p className="text-gray-200">
-            Disziplinen (Auswahl): Cyr‑Wheel, Jonglage, Luftakrobatik, Akrobatik, Feuershow, Chinesische Pole, Zauberei, Walking Acts – jeweils mit
-            ausgewiesenen Profis (u. a. Weltmeister:innen und internationale Champions).
+            {t("presskit.formats.disciplinesNote")}
           </p>
         </div>
       </Section>
 
       {/* Zielgruppen & Referenzen */}
-      <Section title="Zielgruppen & Referenzen" subtitle="B2B‑Fokus – Corporate, Gala, Messe; zugleich publikumsstark für Festivals & Theater.">
+      <Section title={t("presskit.audref.title")} subtitle={t("presskit.audref.subtitle")}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
-            <h3 className="text-white text-xl font-semibold mb-3 flex items-center gap-2"><Building2 className="h-5 w-5" /> Zielgruppen</h3>
+            <h3 className="text-white text-xl font-semibold mb-3 flex items-center gap-2"><Building2 className="h-5 w-5" /> {t("presskit.audref.audiences.title")}</h3>
             <ul className="text-gray-200 list-disc pl-5 space-y-2">
-              <li>B2B/Coporate (Schwerpunkt), Gala, Messe, Eröffnungen</li>
-              <li>Stadtfeste/Streetshows, Festivals, Theater</li>
-              <li>Publikum: für alle Altersgruppen geeignet</li>
+              <li>{t("presskit.audref.audiences.i1")}</li>
+              <li>{t("presskit.audref.audiences.i2")}</li>
+              <li>{t("presskit.audref.audiences.i3")}</li>
             </ul>
           </Card>
           <Card>
-            <h3 className="text-white text-xl font-semibold mb-3 flex items-center gap-2"><Star className="h-5 w-5" /> Referenzen (Auswahl)</h3>
+            <h3 className="text-white text-xl font-semibold mb-3 flex items-center gap-2"><Star className="h-5 w-5" /> {t("presskit.audref.references.title")}</h3>
             <ul className="text-gray-200 list-disc pl-5 space-y-2">
-              <li>Porsche, Google, McDonald’s, AstraZeneca</li>
-              <li>Tollwood Festival</li>
-              <li>Stadt Gütersloh (abendfüllendes Varieté)</li>
+              <li>{t("presskit.audref.references.i1")}</li>
+              <li>{t("presskit.audref.references.i2")}</li>
+              <li>{t("presskit.audref.references.i3")}</li>
             </ul>
           </Card>
         </div>
       </Section>
 
       {/* Technik & Logistik */}
-      <Section title="Technik & Logistik" subtitle="Kurzfassung – vollständige Details im Mediamaterial/Technical Rider.">
+      <Section title={t("presskit.tech.title")} subtitle={t("presskit.tech.subtitle")}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
-            <h3 className="text-white text-xl font-semibold mb-2">Rider & Ausstattung</h3>
+            <h3 className="text-white text-xl font-semibold mb-2">{t("presskit.tech.rider.title")}</h3>
             <ul className="text-gray-200 list-disc pl-5 space-y-2">
-              <li>Technical Rider im Mediamaterial verfügbar</li>
-              <li>Sound &amp; Licht optional zubuchbar – nutzen auf Wunsch auch die Technik vor Ort</li>
-              <li>Musiklieferung 1 Woche vorab als MP3, zusätzlich auf USB‑Stick vor Ort</li>
+              <li>{t("presskit.tech.rider.i1")}</li>
+              <li>{t("presskit.tech.rider.i2")}</li>
+              <li>{t("presskit.tech.rider.i3")}</li>
             </ul>
           </Card>
           <Card>
-            <h3 className="text-white text-xl font-semibold mb-2">Flexibilität</h3>
+            <h3 className="text-white text-xl font-semibold mb-2">{t("presskit.tech.flex.title")}</h3>
             <ul className="text-gray-200 list-disc pl-5 space-y-2">
-              <li>Corporate‑Spezialisierung, individuelle Inszenierungen</li>
-              <li>Kombination mehrerer Disziplinen und Showmodule möglich</li>
-              {/* <li>Preisrange über Booking‑Assistent ermittelbar</li> */}
+              <li>{t("presskit.tech.flex.i1")}</li>
+              <li>{t("presskit.tech.flex.i2")}</li>
             </ul>
           </Card>
         </div>
       </Section>
 
       {/* Kontakt */}
-      <Section title="Kontakt & Buchung">
+      <Section title={t("presskit.contact.title")}>
         <div className="mx-auto max-w-xl">
           <Card>
             <div className="space-y-2 text-gray-200">
-              <p className="text-white text-2xl font-semibold mb-2">PepeShows – Christoph Hermann</p>
+              <p className="text-white text-2xl font-semibold mb-2">{t("presskit.contact.person")}</p>
               <p className="flex items-center gap-2"><Mail className="h-5 w-5" /> chris@pepearts.de</p>
               <p className="flex items-center gap-2"><Phone className="h-5 w-5" /> +49 159 04891419</p>
               <p className="flex items-center gap-2"><Globe className="h-5 w-5" /> pepeshows.de</p>
@@ -199,8 +199,7 @@ export default function Pressemappe() {
       <section className="bg-black pb-20" style={wrapperStyle}>
         <div className="container mx-auto max-w-6xl">
           <div className="rounded-2xl border border-gray-800 bg-[#0b0b0b] p-6 text-center text-gray-300">
-            Pressemappe verfügbar in <strong>Deutsch &amp; Englisch</strong>. Einsatzgebiet: flexibel (Künstler europaweit verteilt).
-            Preise &amp; Verfügbarkeiten: einfach über den Booking‑Assistenten anfragen.
+            {t("presskit.langnote")}
           </div>
         </div>
       </section>

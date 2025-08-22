@@ -1,6 +1,7 @@
 "use client";
 import { MessagesSquare, Play } from "lucide-react";
 import { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import {
 
 const Hero135 = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <Fragment>
@@ -23,14 +25,14 @@ const Hero135 = () => {
               <div className="bg-gray-800 flex w-fit items-center gap-2 rounded-md py-2 pl-4 pr-3">
                 <MessagesSquare className="stroke-white h-7 w-7" />
                 <div className="text-white text-lg font-bold">
-                  Artist Moments
+                  {t("hero135.kicker")}
                 </div>
               </div>
               <h1 className="text-white max-w-96 text-2xl font-medium lg:text-3xl">
-                Vorhang auf für unsere Artisten
+                {t("hero135.heading")}
               </h1>
               <p className="text-gray-300 max-w-96 text-lg leading-normal lg:text-xl">
-                Ein Vorgeschmack auf unsere Artisten – voller Energie, Kreativität und Leidenschaft. Klick auf Play für die volle Show auf YouTube.
+                {t("hero135.subtitle")}
               </p>
             </div>
             <div className="flex-1">
@@ -54,10 +56,10 @@ const Hero135 = () => {
                       </div>
                       <div>
                         <div className="text-black text-left text-base font-semibold">
-                          Showreel
+                          {t("hero135.play.title")}
                         </div>
                         <div className="text-gray-500 text-left text-base font-medium">
-                          Pepe
+                          {t("hero135.play.brand")}
                         </div>
                       </div>
                     </Button>
@@ -71,13 +73,13 @@ const Hero135 = () => {
       <Dialog open={isVideoOpen} onOpenChange={setIsVideoOpen}>
         <DialogContent className="sm:max-w-[800px]">
           <DialogHeader>
-            <DialogTitle>Presentation Video</DialogTitle>
+            <DialogTitle>{t("hero135.dialog.title")}</DialogTitle>
           </DialogHeader>
           <div className="aspect-video">
             <iframe
               className="h-full w-full"
               src="https://www.youtube.com/embed/dXHLaIkezTM"
-              title="Presentation Video"
+              title={t("hero135.dialog.title")}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>

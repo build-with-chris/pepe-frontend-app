@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ArtistCard from "@/components/ArtistCard/ArtistCard";
 import { Hero228 } from '@/components/hero228';
 import { Hero87 } from '@/components/hero87';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { useTranslation } from "react-i18next";
 
 
 interface Artist {
@@ -16,45 +17,64 @@ interface Artist {
   instagram?: string | null;
 }
 
-export default function Kuenstler(){
-  const DISCIPLINES = [
-    "Zauberer",
-    "Cyr-Wheel",
-    "Bodenakrobatik",
-    "Luftakrobatik",
-    "Partnerakrobatik",
-    "Chinese Pole",
-    "Hula Hoop",
-    "Handstand",
-    "Contemporary Dance",
-    "Breakdance",
-    "Teeterboard",
-    "Jonglage",
-    "Moderation",
-    "Pantomime/Entertainment",
-  ] as const;
+type DisciplineKey =
+  | "zauberer"
+  | "cyrWheel"
+  | "bodenakrobatik"
+  | "luftakrobatik"
+  | "partnerakrobatik"
+  | "chinesePole"
+  | "hulaHoop"
+  | "handstand"
+  | "contemporaryDance"
+  | "breakdance"
+  | "teeterboard"
+  | "jonglage"
+  | "moderation"
+  | "pantomimeEntertainment";
 
+const DISCIPLINE_ITEMS: { key: DisciplineKey; match: string }[] = [
+  { key: "zauberer", match: "zauberer" },
+  { key: "cyrWheel", match: "cyr-wheel" },
+  { key: "bodenakrobatik", match: "bodenakrobatik" },
+  { key: "luftakrobatik", match: "luftakrobatik" },
+  { key: "partnerakrobatik", match: "partnerakrobatik" },
+  { key: "chinesePole", match: "chinese pole" },
+  { key: "hulaHoop", match: "hula" },
+  { key: "handstand", match: "handstand" },
+  { key: "contemporaryDance", match: "contemporary" },
+  { key: "breakdance", match: "breakdance" },
+  { key: "teeterboard", match: "teeterboard" },
+  { key: "jonglage", match: "jonglage" },
+  { key: "moderation", match: "moderation" },
+  { key: "pantomimeEntertainment", match: "pantomime" },
+];
+
+export default function Kuenstler(){
   const [artists, setArtists] = useState<Artist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useState<DisciplineKey[]>([]);
 
-  const toggleFilter = (d: string) => {
+  const { t } = useTranslation();
+
+  const toggleFilter = (d: DisciplineKey) => {
     setActiveFilters(prev =>
       prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]
     );
   };
   const clearFilters = () => setActiveFilters([]);
 
-  const filteredArtists = React.useMemo(() => {
+  const matchMap = useMemo(() => Object.fromEntries(DISCIPLINE_ITEMS.map(i => [i.key, i.match])), [] as any) as Record<DisciplineKey, string>;
+
+  const filteredArtists = useMemo(() => {
     if (!activeFilters.length) return artists;
-    const set = new Set(activeFilters.map(s => s.toLowerCase()));
+    const wanted = new Set(activeFilters);
     return artists.filter(a => {
       const discs = (a.disciplines || []).map(x => (x || "").toLowerCase());
-      // match if any artist discipline contains any selected filter (substring allows variants)
-      return discs.some(d => Array.from(set).some(sel => d.includes(sel)));
+      return discs.some(d => Array.from(wanted).some(k => d.includes(matchMap[k])));
     });
-  }, [artists, activeFilters]);
+  }, [artists, activeFilters, matchMap]);
 
 
 
@@ -132,7 +152,7 @@ export default function Kuenstler(){
             />
           </div>
           <div className="text-xl md:text-3xl italic">
-            "Wo Kunst zu Magie wird"
+            {t("artists.quote")}
           </div>
         </div>
 
@@ -148,17 +168,19 @@ export default function Kuenstler(){
                     : "bg-transparent text-white border-white/30 hover:bg-white/10"
                 }`}
               >
-                Alle
+                {t("artists.filters.all")}
               </button>
               <div className="flex-1">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
-                  {DISCIPLINES.map((d) => {
-                    const active = activeFilters.includes(d);
+                  {DISCIPLINE_ITEMS.map((item) => {
+                    const active = activeFilters.includes(item.key);
+                    const full = t(`artists.disciplines.${item.key}`);
+                    const short = t(`artists.disciplinesShort.${item.key}`, full);
                     return (
                       <button
-                        key={d}
+                        key={item.key}
                         type="button"
-                        onClick={() => toggleFilter(d)}
+                        onClick={() => toggleFilter(item.key)}
                         className={`px-3 py-1.5 rounded-full border text-sm whitespace-nowrap transition-colors ${
                           active
                             ? "bg-white text-black border-white"
@@ -166,34 +188,28 @@ export default function Kuenstler(){
                         }`}
                         aria-pressed={active}
                       >
-                        <span className="block sm:hidden">
-                          {d === "Pantomime/Entertainment"
-                            ? "Pantomime"
-                            : d === "Contemporary Dance"
-                              ? "Contemporary"
-                              : d}
-                        </span>
-                        <span className="hidden sm:block">{d}</span>
+                        <span className="block sm:hidden">{short}</span>
+                        <span className="hidden sm:block">{full}</span>
                       </button>
                     );
                   })}
                 </div>
               </div>
               <span className="text-sm text-white/70 whitespace-nowrap">
-                {filteredArtists.length} Ergebnis{filteredArtists.length === 1 ? "" : "se"}
+                {t("artists.results", { count: filteredArtists.length })}
               </span>
             </div>
           </div>
 
           <section className="artist-cards grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading && (
-              <div className="col-span-full text-gray-300">Lade Künstler…</div>
+              <div className="col-span-full text-gray-300">{t("artists.loading")}</div>
             )}
             {error && (
               <div className="col-span-full text-red-400">{error}</div>
             )}
             {!loading && !error && filteredArtists.length === 0 && (
-              <div className="col-span-full text-gray-300">Noch keine Künstler verfügbar.</div>
+              <div className="col-span-full text-gray-300">{t("artists.empty")}</div>
             )}
             {!loading && !error && filteredArtists.map(artist => (
               <ArtistCard key={artist.id} artist={artist} />

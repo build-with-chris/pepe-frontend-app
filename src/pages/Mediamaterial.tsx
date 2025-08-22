@@ -2,12 +2,15 @@ import { Fragment } from "react";
 import { Download, FileText, Image as ImageIcon, Video, FolderDown, Link as LinkIcon, Info } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 // Pepe Mediamaterial – Seite für Veranstalter
 // Hinweis: Lege deine Dateien in /public/media/... ab (siehe Pfade unten).
 // Passe die Links/Dateinamen unten an deine echten Assets an.
 
 export default function Mediamaterial() {
+  const { t } = useTranslation();
+
   return (
     <Fragment>
       {/* Header / Hero */}
@@ -16,25 +19,25 @@ export default function Mediamaterial() {
           <div className="mx-auto max-w-3xl text-center flex flex-col items-center">
             <div className="bg-gray-800 inline-flex items-center gap-2 rounded-md py-2 pl-4 pr-3">
               <ImageIcon className="h-6 w-6 stroke-white" />
-              <span className="text-white text-lg font-bold">Mediamaterial</span>
+              <span className="text-white text-lg font-bold">{t("mediamaterial.hero.kicker")}</span>
             </div>
             <h1 className="text-white mt-6 text-5xl font-semibold leading-tight md:text-6xl whitespace-pre-line">
-              Alles für eure Promo –{"\n"} an einem Ort
+              {t("mediamaterial.hero.title")}
             </h1>
             <p className="text-gray-300 mt-4 text-xl md:text-2xl">
-              Logos, Titelbilder, Pressetexte und Trailer. Dazu optional Pakete je Disziplin, damit ihr genau das bewerben könnt, was ihr gebucht habt.
+              {t("mediamaterial.hero.subtitle")}
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Button asChild className="rounded-full">
                 <a href="/media/pepe_media_kit.zip" download>
                   <FolderDown className="mr-2 h-5 w-5" />
-                  Komplettes Media‑Kit (ZIP)
+                  {t("mediamaterial.hero.buttons.zip")}
                 </a>
               </Button>
               <Button asChild variant="secondary" className="rounded-full">
                 <a href="https://www.youtube.com/watch?v=dXHLaIkezTM" target="_blank" rel="noreferrer">
                   <Video className="mr-2 h-5 w-5" />
-                  YouTube‑Trailer
+                  {t("mediamaterial.hero.buttons.trailer")}
                 </a>
               </Button>
             </div>
@@ -45,62 +48,62 @@ export default function Mediamaterial() {
       {/* Allgemeines Material */}
       <section className="bg-black py-12 md:py-16">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-white mb-6 text-3xl font-semibold md:text-4xl text-center">Allgemeines Mediamaterial</h2>
+          <h2 className="text-white mb-6 text-3xl font-semibold md:text-4xl text-center">{t("mediamaterial.general.title")}</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto justify-items-center">
             {/* Logos */}
             <MediaCard
-              title="Logos (SVG/PNG)"
-              description="Farbig, Schwarz, Weiß – mit/ohne Hintergrund."
+              title={t("mediamaterial.cards.logos.title")}
+              description={t("mediamaterial.cards.logos.desc")}
               preview="/src/assets/LogoPepe.png"
               downloads={[
-                { label: "Logo‑Pack (ZIP)", href: "src/assets/Logos/PepeLogos.zip" },
-                { label: "Brand‑Guide (Seite)", href: "/brandguide", external: true },
+                { label: t("mediamaterial.cards.logos.zip"), href: "src/assets/Logos/PepeLogos.zip" },
+                { label: t("mediamaterial.cards.logos.brandguide"), href: "/brandguide", external: true },
               ]}
             />
 
             {/* Titelbild */}
             <MediaCard
-              title="Titel- / Headerbild"
-              description="High‑Res Header für Plakate, Websites & Social."
+              title={t("mediamaterial.cards.header.title")}
+              description={t("mediamaterial.cards.header.desc")}
               preview="src/assets/PEPE.png"
               downloads={[
-                { label: "Header 16:9 (JPG)", href: "/images/Brandguide/Header Pepe 16:9.jpg" },
-                { label: "Header 5:4 (JPG)", href: "/images/Brandguide/Header Pepe 5:4.jpg" },
+                { label: t("mediamaterial.cards.header.h169"), href: "/images/Brandguide/Header Pepe 16:9.jpg" },
+                { label: t("mediamaterial.cards.header.h54"), href: "/images/Brandguide/Header Pepe 5:4.jpg" },
               ]}
             />
 
             {/* Pressemappe */}
             <MediaCard
-              title="Pressemappe / Fact Sheet"
-              description="Kurzvorstellung, USP, Kontakt & Rider."
+              title={t("mediamaterial.cards.press.title")}
+              description={t("mediamaterial.cards.press.desc")}
               preview={<Info className="h-16 w-16 text-gray-500 mx-auto" />}
               downloads={[
-                { label: "Pressemappe (Seite)", href: "/pressemappe", external: true },
-                { label: "Technik‑Rider (Seite)", href: "/technical-rider", external: true },
+                { label: t("mediamaterial.cards.press.page"), href: "/pressemappe", external: true },
+                { label: t("mediamaterial.cards.press.rider"), href: "/technical-rider", external: true },
               ]}
             />
 
 
             {/* Trailer (Kurzclip) */}
             <MediaCard
-              title="Trailer (Kurzclip)"
-              description="Kurzvorschau für eure Kanäle."
+              title={t("mediamaterial.cards.trailer.title")}
+              description={t("mediamaterial.cards.trailer.desc")}
               video="/videos/Vorschauloop.webm"
               downloads={[
-                { label: "Download (WEBM)", href: "/videos/Vorschauloop.webm" },
-                { label: "YouTube‑Trailer", href: "https://www.youtube.com/watch?v=dXHLaIkezTM", external: true },
+                { label: t("mediamaterial.cards.trailer.webm"), href: "/videos/Vorschauloop.webm" },
+                { label: t("mediamaterial.cards.trailer.youtube"), href: "https://www.youtube.com/watch?v=dXHLaIkezTM", external: true },
               ]}
             />
 
             {/* QR-Code */}
             <MediaCard
-              title="QR‑Code zum Trailer"
-              description="Für Flyer, Plakate & Programme."
+              title={t("mediamaterial.cards.qr.title")}
+              description={t("mediamaterial.cards.qr.desc")}
               preview="/media/general/qr-trailer.png"
               downloads={[
-                { label: "QR‑Code (PNG)", href: "/media/general/qr-trailer.png" },
-                { label: "QR‑Code (SVG)", href: "/media/general/qr-trailer.svg" },
+                { label: t("mediamaterial.cards.qr.png"), href: "/media/general/qr-trailer.png" },
+                { label: t("mediamaterial.cards.qr.svg"), href: "/media/general/qr-trailer.svg" },
               ]}
             />
           </div>
@@ -110,44 +113,44 @@ export default function Mediamaterial() {
       {/* Disziplinen */}
       <section className="bg-black pb-20">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-white mb-6 text-3xl font-semibold md:text-4xl text-center">Disziplinen – Materialpakete</h2>
+          <h2 className="text-white mb-6 text-3xl font-semibold md:text-4xl text-center">{t("mediamaterial.disciplines.title")}</h2>
           <p className="text-gray-300 mb-8 max-w-3xl text-lg text-center mx-auto">
-            Für gezielte Promo: pro Disziplin 2–3 Fotos, kurzer Textbaustein und ggf. ein Poster‑Template.
+            {t("mediamaterial.disciplines.subtitle")}
           </p>
 
           <div className="space-y-4 max-w-5xl mx-auto">
             <Disziplin
-              name="Cyr‑Wheel"
+              name={t("mediamaterial.disciplines.items.cyr.name")}
               slug="cyr"
-              teaser="Atemberaubende Artistik im rotierenden Rad."
+              teaser={t("mediamaterial.disciplines.items.cyr.teaser")}
               images={["/media/disciplines/cyr/cyr-1.jpg", "/media/disciplines/cyr/cyr-2.jpg", "/media/disciplines/cyr/cyr-3.jpg"]}
               downloads={[
-                { label: "Foto‑Pack (ZIP)", href: "/media/disciplines/cyr/cyr-photos.zip" },
-                { label: "Textbausteine (TXT)", href: "/media/disciplines/cyr/cyr-copy.txt" },
-                { label: "Poster A3 (PDF)", href: "/media/disciplines/cyr/cyr-poster-a3.pdf" },
+                { label: t("mediamaterial.disciplines.items.cyr.zip"), href: "/media/disciplines/cyr/cyr-photos.zip" },
+                { label: t("mediamaterial.disciplines.items.cyr.copy"), href: "/media/disciplines/cyr/cyr-copy.txt" },
+                { label: t("mediamaterial.disciplines.items.cyr.poster"), href: "/media/disciplines/cyr/cyr-poster-a3.pdf" },
               ]}
             />
 
             <Disziplin
-              name="Jonglage"
+              name={t("mediamaterial.disciplines.items.jonglage.name")}
               slug="jonglage"
-              teaser="Präzision, Rhythmus und Humor – modern inszeniert."
+              teaser={t("mediamaterial.disciplines.items.jonglage.teaser")}
               images={["/media/disciplines/jonglage/j-1.jpg", "/media/disciplines/jonglage/j-2.jpg"]}
               downloads={[
-                { label: "Foto‑Pack (ZIP)", href: "/media/disciplines/jonglage/j-photos.zip" },
-                { label: "Textbausteine (TXT)", href: "/media/disciplines/jonglage/j-copy.txt" },
+                { label: t("mediamaterial.disciplines.items.jonglage.zip"), href: "/media/disciplines/jonglage/j-photos.zip" },
+                { label: t("mediamaterial.disciplines.items.jonglage.copy"), href: "/media/disciplines/jonglage/j-copy.txt" },
               ]}
             />
 
             <Disziplin
-              name="Akrobatik"
+              name={t("mediamaterial.disciplines.items.akrobatik.name")}
               slug="akrobatik"
-              teaser="Dynamische Hebefiguren und kraftvolle Soli."
+              teaser={t("mediamaterial.disciplines.items.akrobatik.teaser")}
               images={["/media/disciplines/akrobatik/a-1.jpg", "/media/disciplines/akrobatik/a-2.jpg", "/media/disciplines/akrobatik/a-3.jpg"]}
               downloads={[
-                { label: "Foto‑Pack (ZIP)", href: "/media/disciplines/akrobatik/a-photos.zip" },
-                { label: "Textbausteine (TXT)", href: "/media/disciplines/akrobatik/a-copy.txt" },
-                { label: "Poster A3 (PDF)", href: "/media/disciplines/akrobatik/a-poster-a3.pdf" },
+                { label: t("mediamaterial.disciplines.items.akrobatik.zip"), href: "/media/disciplines/akrobatik/a-photos.zip" },
+                { label: t("mediamaterial.disciplines.items.akrobatik.copy"), href: "/media/disciplines/akrobatik/a-copy.txt" },
+                { label: t("mediamaterial.disciplines.items.akrobatik.poster"), href: "/media/disciplines/akrobatik/a-poster-a3.pdf" },
               ]}
             />
           </div>
@@ -156,7 +159,7 @@ export default function Mediamaterial() {
             <Button asChild className="rounded-full">
               <a href="/media/disciplines/all_disciplines.zip" download>
                 <FolderDown className="mr-2 h-5 w-5" />
-                Alle Disziplin‑Pakete (ZIP)
+                {t("mediamaterial.disciplines.allZip")}
               </a>
             </Button>
           </div>
@@ -249,6 +252,7 @@ function Disziplin(props: {
   downloads: DownloadLink[];
 }) {
   const { name, teaser, images, downloads } = props;
+  const { t } = useTranslation();
 
   return (
     <details className="group rounded-2xl border border-gray-800 bg-[#0b0b0b] p-5 open:bg-[#0f0f0f]">
@@ -257,8 +261,8 @@ function Disziplin(props: {
           <h3 className="text-white text-2xl font-semibold text-center">{name}</h3>
           <p className="text-gray-400 mt-1 text-sm text-center">{teaser}</p>
         </div>
-        <span className="text-gray-400 text-sm group-open:hidden">aufklappen</span>
-        <span className="text-gray-400 text-sm hidden group-open:inline">zuklappen</span>
+        <span className="text-gray-400 text-sm group-open:hidden">{t("mediamaterial.disciplines.expand")}</span>
+        <span className="text-gray-400 text-sm hidden group-open:inline">{t("mediamaterial.disciplines.collapse")}</span>
       </summary>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-3 justify-center justify-items-center">
@@ -266,7 +270,7 @@ function Disziplin(props: {
           <AspectRatio key={i} ratio={4 / 5}>
             <img
               src={src}
-              alt={`${name} Beispielbild ${i + 1}`}
+              alt={t("mediamaterial.disciplines.imageAlt", { name, index: i + 1 })}
               className="h-full w-full rounded-lg object-cover"
               loading="lazy"
             />

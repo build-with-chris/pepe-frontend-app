@@ -15,6 +15,8 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 
+import { useTranslation } from "react-i18next";
+
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
@@ -37,6 +39,8 @@ const Hero228 = () => {
   }, [api]);
 
   const isMobile = useIsMobile();
+
+  const { t } = useTranslation();
 
   const baseTestimonials = [
     { id: 1, image: "/images/Hero228/Artist1.webp", name: "Artist 1" },
@@ -96,11 +100,11 @@ const Hero228 = () => {
     <section className="bg-black py-32 text-white">
       <div className="container flex flex-col items-center justify-center gap-4 text-center">
         <h1 className="max-w-3xl text-5xl font-medium tracking-tighter text-white md:px-9 md:text-6xl">
-          <span className="block text-3xl sm:hidden mt-24">Event-Magie</span>
-          <span className="hidden sm:block text-4xl md:text-5xl">Außergewöhnliche Künstler:innen,<br /> perfekt inszeniert für Ihr Publikum</span>
+          <span className="block text-3xl sm:hidden mt-24">{t("hero228.headingMobile")}</span>
+          <span className="hidden sm:block text-4xl md:text-5xl">{t("hero228.headingDesktopLine1")}<br />{t("hero228.headingDesktopLine2")}</span>
         </h1>
         <p className="mt-5 max-w-xl text-white/70">
-        Wir bringen Visionen auf die Bühne – professionell, individuell und mit viel Leidenschaft.
+        {t("hero228.subtitle")}
         </p>
 
         <Carousel

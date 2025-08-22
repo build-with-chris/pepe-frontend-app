@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useTranslation } from "react-i18next";
+
 import { cn } from "@/lib/utils";
 
 import type { CarouselApi } from "@/components/ui/carousel";
@@ -13,42 +15,40 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-const carouselItems = [
-  {
-    image: "/images/Galery14/Luft.webp",
-    title: "Luftakrobatik",
-    description:
-      "Schwerelos & elegant: Luftshows, die Galas und Firmenfeiern veredeln – mit eigenem, schnell aufbaubarem Rig.",
-  },
-  {
-    image: "/images/Galery14/Feuershow.webp",
-    title: "Feuershow",
-    description:
-      "Epische Bilder, präzise Choreo, maximale Gänsehaut – für Outdoor-Momente, die niemand vergisst.",
-  },
-  {
-    image: "/images/Galery14/Jonglage.webp",
-    title: "Jonglage & Variety",
-    description:
-      "Tempo, Timing, Interaktion: von Close-up bis Bühne – perfekt für Übergänge & Opening-Acts.",
-  },
-  {
-    image: "/images/Galery14/CustomActs.webp",
-    title: "Custom Acts",
-    description:
-      "Brandfarben, Produkt-Motive, Show-Dauer: Wir bauen den Act um deinen Anlass herum.",
-  },
-  {
-    image: "/images/Galery14/Firmenevent.webp",
-    title: "Firmen-Events",
-    description:
-      "Sommerfest, Weihnachtsfeier, Jubiläum – wir liefern Idee, Cast & Ablauf aus einer Hand.",
-  },
-];
 
 const Gallery14 = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
+
+  const { t } = useTranslation();
+
+  const carouselItems = [
+    {
+      image: "/images/Galery14/Luft.webp",
+      title: t("gallery14.items.1.title"),
+      description: t("gallery14.items.1.description"),
+    },
+    {
+      image: "/images/Galery14/Feuershow.webp",
+      title: t("gallery14.items.2.title"),
+      description: t("gallery14.items.2.description"),
+    },
+    {
+      image: "/images/Galery14/Jonglage.webp",
+      title: t("gallery14.items.3.title"),
+      description: t("gallery14.items.3.description"),
+    },
+    {
+      image: "/images/Galery14/CustomActs.webp",
+      title: t("gallery14.items.4.title"),
+      description: t("gallery14.items.4.description"),
+    },
+    {
+      image: "/images/Galery14/Firmenevent.webp",
+      title: t("gallery14.items.5.title"),
+      description: t("gallery14.items.5.description"),
+    },
+  ];
 
   useEffect(() => {
     if (!api) {
@@ -68,18 +68,24 @@ const Gallery14 = () => {
           <div className="grid gap-8 md:gap-4 lg:grid-cols-2 [&>div[data-slot=carousel-content]]:overflow-visible [&>div[data-slot=carousel-content]]:[clip-path:inset(-100vw_-100vw_-100vw_0)]">
             <div>
               <h2 className="text-4xl font-semibold md:text-6xl text-white">
-                Wow statt „nett“.
+                {t("gallery14.heading")}
               </h2>
               <div className="mt-6 space-y-6">
                 <p className="text-xl text-gray-300">
-                  Akrobatik, Jonglage, Feuer & mehr – individuell kombiniert für deinen Anlass.
+                  {t("gallery14.subheading")}
                 </p>
                 <ul className="grid gap-2 text-gray-200 list-disc pl-5">
-                  <li><span className="font-medium">Maßgeschneiderte Shows:</span> Motto, Kostüm, Länge & Ablauf individuell anpassbar.</li>
-                  <li><span className="font-medium">Breites Künstler‑Netzwerk:</span> Von Zirkus & Luftakrobatik über Jonglage bis Special Acts.</li>
-                  <li><span className="font-medium">Sicher & professionell:</span> Erfahrene Künstler, klare Abläufe, zuverlässiges Show‑Management.</li>
+                  <li>
+                    <span className="font-medium">{t("gallery14.bullets.b1.title")}</span> {t("gallery14.bullets.b1.text")}
+                  </li>
+                  <li>
+                    <span className="font-medium">{t("gallery14.bullets.b2.title")}</span> {t("gallery14.bullets.b2.text")}
+                  </li>
+                  <li>
+                    <span className="font-medium">{t("gallery14.bullets.b3.title")}</span> {t("gallery14.bullets.b3.text")}
+                  </li>
                 </ul>
-                <p className="text-sm text-white/70">Munich‑based Circus & Performance — europaweit buchbar</p>
+                <p className="text-sm text-white/70">{t("gallery14.tagline")}</p>
               </div>
               <div className="mt-8 hidden items-center gap-4 md:flex">
                 <CarouselPrevious className="static size-12 translate-x-0 translate-y-0 text-black border-white" />

@@ -2,16 +2,18 @@ import {Contact2} from "../components/contact2";
 import { Logos3 } from "@/components/logos3";
 import { Cta10 } from "@/components/cta10";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { useTranslation } from "react-i18next";
 
 export default function Kontakt() {
+  const { t } = useTranslation();
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-screen w-full md:w-11/12 lg:w-5/6 mx-auto ">
         <Cta10
-          heading="Schnell & einfach zur Show"
-          description={`Der schnellste Weg zu Ihrem Angebot: unser Booking Assistent. Alle Infos eingeben, Angebot erhalten \n– einfach, unverbindlich & effizient.\n\nFür persönliche Beratung erreichen Sie uns jederzeit telefonisch.`}
+          heading={t("contact.cta.heading")}
+          description={t("contact.cta.description")}
           buttons={{
-            primary: { text: "Booking Assistent starten", url: "/anfragen" },
+            primary: { text: t("contact.cta.button"), url: "/anfragen" },
           }}
           rightAddon={
             <DotLottieReact
@@ -31,7 +33,7 @@ export default function Kontakt() {
       <a
         href="tel:+4915904891419"
         className="fixed bottom-4 right-4 z-[9999] flex items-center justify-center w-14 h-14 rounded-full bg-green-500 text-white shadow-lg md:hidden"
-        aria-label="Jetzt anrufen"
+        aria-label={t("contact.callAria")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { Download, ExternalLink, Image as ImageIcon, FileText, Palette, Type as TypeIcon, Camera, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { useTranslation } from "react-i18next";
 
 /**
  * Brandguide – Pepe Shows
@@ -9,6 +10,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
  */
 
 export default function Brandguide() {
+  const { t } = useTranslation();
   return (
     <Fragment>
       {/* Hero */}
@@ -17,12 +19,11 @@ export default function Brandguide() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="bg-gray-800 inline-flex items-center gap-2 rounded-md py-2 pl-4 pr-3">
               <ImageIcon className="h-6 w-6 stroke-white" />
-              <span className="text-white text-lg font-bold">Brand Guide</span>
+              <span className="text-white text-lg font-bold">{t("brandguide.hero.kicker")}</span>
             </div>
-            <h1 className="text-white mt-6 text-5xl font-semibold leading-tight md:text-6xl">Pepe – Markenrichtlinien</h1>
+            <h1 className="text-white mt-6 text-5xl font-semibold leading-tight md:text-6xl">{t("brandguide.hero.title")}</h1>
             <p className="text-gray-300 mt-4 text-lg md:text-xl">
-              Dieser Guide hilft Veranstaltern, Partnern und der Presse, Pepe konsistent und professionell darzustellen.
-              Logos, Farben, Schriften – plus Beispiele und schnelle Downloads.
+              {t("brandguide.hero.subtitle")}
             </p>
           </div>
         </div>
@@ -31,18 +32,18 @@ export default function Brandguide() {
       {/* Logos */}
       <section className="bg-black py-12 md:py-16">
         <div className="container mx-auto max-w-6xl">
-          <Header title="Logos" subtitle="Hauptlogo in Farbe, Schwarz, Weiß & invertiert. Immer mit genügend Freiraum verwenden, nicht verzerren oder drehen." icon={<ImageIcon className="h-6 w-6" />} />
+          <Header title={t("brandguide.logos.title")} subtitle={t("brandguide.logos.subtitle")} icon={<ImageIcon className="h-6 w-6" />} />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
               <AspectRatio ratio={16 / 9}>
                 <img src="/src/assets/Logos/Logo PepeShows schwarz.png" alt="Pepe Logo Vorschau" className="h-full w-full object-contain bg-white" />
               </AspectRatio>
-              <CardTitle>Hauptlogo</CardTitle>
-              <CardText>SVG für digital & Druck, PNG (transparent) für Office/Präsentation.</CardText>
+              <CardTitle>{t("brandguide.logos.main.title")}</CardTitle>
+              <CardText>{t("brandguide.logos.main.text")}</CardText>
               <CardActions>
-                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/PepeShowsLogo schwarz.svg" download><Download className="mr-2 h-4 w-4" />SVG</a></Button>
-                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/Logo PepeShows schwarz.png" download><Download className="mr-2 h-4 w-4" />PNG</a></Button>
+                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/PepeShowsLogo schwarz.svg" download><Download className="mr-2 h-4 w-4" />{t("brandguide.common.svg")}</a></Button>
+                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/Logo PepeShows schwarz.png" download><Download className="mr-2 h-4 w-4" />{t("brandguide.common.png")}</a></Button>
               </CardActions>
             </Card>
 
@@ -52,11 +53,11 @@ export default function Brandguide() {
                   <img src="/src/assets/Logos/Logo PepeShows weiß.png" alt="Pepe Logo invertiert" className="h-16 w-auto" />
                 </div>
               </AspectRatio>
-              <CardTitle>Invertiert</CardTitle>
-              <CardText>Für dunkle Hintergründe. Bitte nicht auf unruhigen Fotos platzieren.</CardText>
+              <CardTitle>{t("brandguide.logos.inverted.title")}</CardTitle>
+              <CardText>{t("brandguide.logos.inverted.text")}</CardText>
               <CardActions>
-                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/PepeShows weiß.svg" download><Download className="mr-2 h-4 w-4" />SVG</a></Button>
-                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/Logo PepeShows weiß.png" download><Download className="mr-2 h-4 w-4" />PNG</a></Button>
+                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/PepeShows weiß.svg" download><Download className="mr-2 h-4 w-4" />{t("brandguide.common.svg")}</a></Button>
+                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/Logo PepeShows weiß.png" download><Download className="mr-2 h-4 w-4" />{t("brandguide.common.png")}</a></Button>
               </CardActions>
             </Card>
 
@@ -66,11 +67,11 @@ export default function Brandguide() {
                   <img src="/src/assets/Logos/Logo PepeShows schwarz.png" alt="Pepe Logo schwarz" className="h-16 w-auto" />
                 </div>
               </AspectRatio>
-              <CardTitle>Monochrom</CardTitle>
-              <CardText>Schwarz/Weiß‑Variante für reduzierte Anwendungen.</CardText>
+              <CardTitle>{t("brandguide.logos.mono.title")}</CardTitle>
+              <CardText>{t("brandguide.logos.mono.text")}</CardText>
               <CardActions>
-                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/PepeShowsLogo schwarz.svg" download><Download className="mr-2 h-4 w-4" />SVG</a></Button>
-                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/Logo PepeShows schwarz.png" download><Download className="mr-2 h-4 w-4" />PNG</a></Button>
+                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/PepeShowsLogo schwarz.svg" download><Download className="mr-2 h-4 w-4" />{t("brandguide.common.svg")}</a></Button>
+                <Button asChild size="sm" className="rounded-full"><a href="/src/assets/Logos/Logo PepeShows schwarz.png" download><Download className="mr-2 h-4 w-4" />{t("brandguide.common.png")}</a></Button>
               </CardActions>
             </Card>
           </div>
@@ -80,12 +81,12 @@ export default function Brandguide() {
       {/* Farben */}
       <section className="bg-black py-12 md:py-16">
         <div className="container mx-auto max-w-6xl">
-          <Header title="Farben" subtitle="Primärfarben, Sekundärfarben und Neutrals – mit Werten für HEX, RGB & CMYK." icon={<Palette className="h-6 w-6" />} />
+          <Header title={t("brandguide.colors.title")} subtitle={t("brandguide.colors.subtitle")} icon={<Palette className="h-6 w-6" />} />
 
           <div className="mx-auto grid max-w-3xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-            <ColorSwatch name="Pepe Dunkelblau" hex="#1D3557" rgb="29, 53, 87" cmyk="100, 75, 25, 40" />
-            <ColorSwatch name="Weiß" hex="#FFFFFF" rgb="255, 255, 255" cmyk="0, 0, 0, 0" border />
-            <ColorSwatch name="Schwarz" hex="#000000" rgb="0, 0, 0" cmyk="0, 0, 0, 100" />
+            <ColorSwatch name={t("brandguide.colors.primary")} hex="#1D3557" rgb="29, 53, 87" cmyk="100, 75, 25, 40" />
+            <ColorSwatch name={t("brandguide.colors.white")} hex="#FFFFFF" rgb="255, 255, 255" cmyk="0, 0, 0, 0" border />
+            <ColorSwatch name={t("brandguide.colors.black")} hex="#000000" rgb="0, 0, 0" cmyk="0, 0, 0, 100" />
           </div>
         </div>
       </section>
@@ -93,24 +94,24 @@ export default function Brandguide() {
       {/* Typografie */}
       <section className="bg-black py-12 md:py-16">
         <div className="container mx-auto max-w-6xl">
-          <Header title="Typografie" subtitle="Headlines und Fließtext – konsistent für Web & Print." icon={<TypeIcon className="h-6 w-6" />} />
+          <Header title={t("brandguide.type.title")} subtitle={t("brandguide.type.subtitle")} icon={<TypeIcon className="h-6 w-6" />} />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
-              <CardTitle>Headlines</CardTitle>
+              <CardTitle>{t("brandguide.type.headlines.title")}</CardTitle>
               <CardText>
-                Futura Bold. Alternativ: Nunito Sans Bold. Bitte großzügige Zeilenhöhe und negativen Tracking vermeiden.
+                {t("brandguide.type.headlines.text")}
               </CardText>
               <CardActions>
-                <Button asChild size="sm" variant="secondary" className="rounded-full"><a href="https://fonts.google.com/specimen/Nunito+Sans" target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />Google Fonts</a></Button>
+                <Button asChild size="sm" variant="secondary" className="rounded-full"><a href="https://fonts.google.com/specimen/Nunito+Sans" target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />{t("brandguide.common.googleFonts")}</a></Button>
               </CardActions>
             </Card>
 
             <Card>
-              <CardTitle>Fließtext</CardTitle>
-              <CardText>Futura Regular. Alternativ: Nunito Sans Regular. Für bessere Lesbarkeit ausreichend Kontrast.</CardText>
+              <CardTitle>{t("brandguide.type.body.title")}</CardTitle>
+              <CardText>{t("brandguide.type.body.text")}</CardText>
               <CardActions>
-                <Button asChild size="sm" variant="secondary" className="rounded-full"><a href="https://fonts.google.com/specimen/Nunito+Sans" target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />Google Fonts</a></Button>
+                <Button asChild size="sm" variant="secondary" className="rounded-full"><a href="https://fonts.google.com/specimen/Nunito+Sans" target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />{t("brandguide.common.googleFonts")}</a></Button>
               </CardActions>
             </Card>
           </div>
@@ -120,13 +121,13 @@ export default function Brandguide() {
       {/* Bildsprache */}
       <section className="bg-black py-12 md:py-16">
         <div className="container mx-auto max-w-6xl">
-          <Header title="Bildsprache" subtitle="Dynamisch, energiegeladen, modern – Action, Bewegung und Emotion." icon={<Camera className="h-6 w-6" />} />
+          <Header title={t("brandguide.imagery.title")} subtitle={t("brandguide.imagery.subtitle")} icon={<Camera className="h-6 w-6" />} />
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <AspectRatio ratio={4 / 5}>
             <img
                 src="/images/eventTypes/Streetshow.webp"
-                alt="Streetshow Beispiel"
+                alt={t("brandguide.imagery.alt.streetshow")}
                 className="h-full w-full rounded-xl object-cover"
             />
             </AspectRatio>
@@ -134,7 +135,7 @@ export default function Brandguide() {
             <AspectRatio ratio={4 / 5}>
             <img
                 src="/images/teamSizes/Solo.webp"
-                alt="Solo Beispiel"
+                alt={t("brandguide.imagery.alt.solo")}
                 className="h-full w-full rounded-xl object-cover"
             />
             </AspectRatio>
@@ -142,7 +143,7 @@ export default function Brandguide() {
             <AspectRatio ratio={4 / 5}>
             <img
                 src="/images/disciplines/Luftakrobatik.webp"
-                alt="Luftakrobatik Beispiel"
+                alt={t("brandguide.imagery.alt.aerial")}
                 className="h-full w-full rounded-xl object-cover"
             />
             </AspectRatio>
@@ -153,30 +154,30 @@ export default function Brandguide() {
       {/* Tonalität */}
       <section className="bg-black py-12 md:py-16">
         <div className="container mx-auto max-w-6xl">
-          <Header title="Sprache & Tonalität" subtitle="Locker, direkt, einladend – aktivierende Formulierungen, kein Fachjargon." icon={<MessageSquare className="h-6 w-6" />} />
+          <Header title={t("brandguide.tone.title")} subtitle={t("brandguide.tone.subtitle")} icon={<MessageSquare className="h-6 w-6" />} />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card>
-              <CardTitle>Do</CardTitle>
+              <CardTitle>{t("brandguide.tone.do.title")}</CardTitle>
               <ul className="text-gray-200 text-sm space-y-2 list-disc pl-5">
-                <li>„Erlebt Pepe live“ – aktivierend & kurz.</li>
-                <li>Konzise Infos, klare Handlungsaufforderungen.</li>
-                <li>Kontraststarke Hintergründe für das Logo.</li>
+                <li>{t("brandguide.tone.do.i1")}</li>
+                <li>{t("brandguide.tone.do.i2")}</li>
+                <li>{t("brandguide.tone.do.i3")}</li>
               </ul>
             </Card>
             <Card>
-              <CardTitle>Don't</CardTitle>
+              <CardTitle>{t("brandguide.tone.dont.title")}</CardTitle>
               <ul className="text-gray-200 text-sm space-y-2 list-disc pl-5">
-                <li>Logo verzerren, drehen oder mit Effekten versehen.</li>
-                <li>Logo auf unruhigen Fotos ohne Fläche platzieren.</li>
-                <li>Zu formelle Sprache oder Fachbegriffe.</li>
+                <li>{t("brandguide.tone.dont.i1")}</li>
+                <li>{t("brandguide.tone.dont.i2")}</li>
+                <li>{t("brandguide.tone.dont.i3")}</li>
               </ul>
             </Card>
             <Card>
-              <CardTitle>Kontakt</CardTitle>
-              <p className="text-gray-300 text-sm">Fragen zur Verwendung? Wir helfen gern weiter.</p>
-              <p className="text-gray-200 text-sm">E-Mail: info@pepeshows.de</p>
-              <p className="text-gray-200 text-sm">Web: www.pepeshows.de</p>
+              <CardTitle>{t("brandguide.tone.contact.title")}</CardTitle>
+              <p className="text-gray-300 text-sm">{t("brandguide.tone.contact.help")}</p>
+              <p className="text-gray-200 text-sm"><span className="font-semibold">{t("brandguide.common.email")}: </span>info@pepeshows.de</p>
+              <p className="text-gray-200 text-sm"><span className="font-semibold">{t("brandguide.common.web")}: </span>www.pepeshows.de</p>
             </Card>
           </div>
         </div>
@@ -216,13 +217,14 @@ function CardActions({ children }: { children: React.ReactNode }) {
 }
 
 function ColorSwatch({ name, hex, rgb, cmyk, border }: { name: string; hex: string; rgb: string; cmyk: string; border?: boolean }) {
+  const { t } = useTranslation();
   return (
     <div className="rounded-2xl border border-gray-800 bg-[#0b0b0b] p-6">
       <div className={`mb-4 h-24 w-full rounded-xl ${border ? "border border-gray-200" : ""}`} style={{ backgroundColor: hex }} />
       <h4 className="text-lg font-semibold text-white">{name}</h4>
-      <p className="text-sm text-gray-300">HEX {hex}</p>
-      <p className="text-sm text-gray-300">RGB {rgb}</p>
-      <p className="text-sm text-gray-300">CMYK {cmyk}</p>
+      <p className="text-sm text-gray-300">{t("brandguide.colors.hex")} {hex}</p>
+      <p className="text-sm text-gray-300">{t("brandguide.colors.rgb")} {rgb}</p>
+      <p className="text-sm text-gray-300">{t("brandguide.colors.cmyk")} {cmyk}</p>
     </div>
   );
 }
