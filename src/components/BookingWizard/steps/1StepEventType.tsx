@@ -9,6 +9,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { useTranslation } from "react-i18next";
 
 export interface StepEventTypeProps {
   data: BookingData;
@@ -18,17 +19,19 @@ export interface StepEventTypeProps {
 }
 
 const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext }) => {
+  const { t } = useTranslation();
+
   const options = [
-    { value: 'Private Feier', label: 'Private Feier', img: 'Private_Feier' },
-    { value: 'Firmenfeier', label: 'Firmenfeier', img: 'Firmenfeier' },
-    { value: 'Incentive', label: 'Teamevent', img: 'Incentive' },
-    { value: 'Streetshow', label: 'Streetshow', img: 'Streetshow' },
+    { value: 'Private Feier', label: t('booking.eventType.options.private'), img: 'Private_Feier' },
+    { value: 'Firmenfeier', label: t('booking.eventType.options.corporate'), img: 'Firmenfeier' },
+    { value: 'Incentive', label: t('booking.eventType.options.incentive'), img: 'Incentive' },
+    { value: 'Streetshow', label: t('booking.eventType.options.streetshow'), img: 'Streetshow' },
   ];
 
   return (
     <div className="p-0 w-full mx-auto md:max-w-4/5">
       <h2 className="text-3xl md:text-4xl text-center mb-7 font-extrabold">
-        Welchen Event‑Typ planst du?
+        {t('booking.eventType.heading')}
       </h2>
 
       <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 w-full">

@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
+import { useTranslation } from "react-i18next";
 
 export interface StepArtistCountProps {
   data: BookingData;
@@ -22,10 +23,12 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
   onNext,
   onPrev
 }) => {
-  const options: { label: string; value: number }[] = [
-    { label: 'Solo', value: 1 },
-    { label: 'Duo', value: 2 },
-    { label: 'Gruppe', value: 3 }
+  const { t } = useTranslation();
+
+  const options: { labelKey: string; value: number; img: string }[] = [
+    { labelKey: 'booking.artistCount.options.solo', value: 1, img: 'Solo' },
+    { labelKey: 'booking.artistCount.options.duo', value: 2, img: 'Duo' },
+    { labelKey: 'booking.artistCount.options.group', value: 3, img: 'Gruppe' },
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,20 +38,20 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
    return (
     <div className="step">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">
-        Wie viele Artists möchtest du buchen?
+        {t('booking.artistCount.heading')}
       </h2>
 
       {/* Auswahlkarten */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full lg:w-2/3 mx-auto">
-        {options.map(option => (
+        {options.map((option) => (
           <OptionCard
             key={option.value}
             name="team_size"
             value={option.value.toString()}
-            label={option.label}
-            imgSrc={`/images/teamSizes/${option.label.replace(/ /g, '_')}.webp`}
+            label={t(option.labelKey)}
+            imgSrc={`/images/teamSizes/${option.img}.webp`}
             checked={data.team_size === option.value}
-            onChange={val => { onChange({ team_size: Number(val) }); onNext(); }}
+            onChange={(val) => { onChange({ team_size: Number(val) }); onNext(); }}
           />
         ))}
       </div>

@@ -1,783 +1,663 @@
 {
-  "hero27": {
-    "title": "We bring <1>extraordinary artists</1> and <3>unforgettable show moments</3> to your stage.",
-    "subtitle": "Whether it's a corporate party, gala or trade fair – with us your event becomes the highlight everyone talks about.",
-    "usp": {
-      "custom": "Tailor-made",
-      "experience": "15+ years of experience",
-      "europe": "Europe-wide",
-      "fair": "Fair & transparent"
-    },
-    "cta": {
-      "media": "Media material",
-      "shows": "Shows & Formats"
-    }
-  },
-  "home": {
-    "findArtistTitle": "Find the perfect artist now",
-    "findArtistSubtitle": "Answer just a few short questions and receive non-binding initial suggestions and prices.",
-    "findArtistButton": "Start now",
-    "findArtistTime": "Takes less than 5 minutes",
-    "cta": {
-      "heading": "PepeShows – more than just an artist agency",
-      "description": "We create commercial shows, promote culture, and run our own base.\nThis way we combine experience, network, and passion – making PepeShows true experts for unforgettable experiences.",
-      "button": "To the agency"
-    }
-  },
-
-  "gallery23": {
-    "headingMobile": "Excellence over average",
-    "headingDesktop": "We don’t believe in average – with us it’s excellence.",
-    "subtitle": "We create moments that stay in your head and your heart.",
-    "cta": "Let’s talk",
-    "images": {
-        "1": "Gala evenings",
-        "2": "Anniversaries",
-        "3": "Corporate events",
-        "4": "Festivals",
-        "5": "Christmas parties"
-    }
-    }, 
-
-    "logos3": {
-        "heading": "These clients trust Pepe"
-        }, 
-
-    "gallery23": {
-        "headingMobile": "Excellence over average",
-        "headingDesktop": "We don’t believe in average – with us it’s excellence.",
-        "subtitle": "We create moments that stay in your head and your heart.",
-        "cta": "Let’s talk",
-        "images": {
-            "1": "Gala evenings",
-            "2": "Anniversaries",
-            "3": "Corporate events",
-            "4": "Festivals",
-            "5": "Christmas parties"
-        }
-        },
-
-    "footer": {
-        "navigation": "Navigation",
-        "legal": "Legal",
-        "mainLinks": {
-            "mediamaterial": "Media Material",
-            "showsAndFormate": "Shows & Formats",
-            "referenzen": "References",
-            "faq": "FAQ",
-            "agenturUndTeam": "Agency & Team",
-            "kontakt": "Contact",
-            "artistLogin": "Artist Log-in"
-        },
-        "legalLinks": {
-            "impressum": "Imprint",
-            "datenschutz": "Privacy Policy",
-            "agb": "Terms & Conditions"
-        },
-        "newsletter": {
-            "title": "Newsletter",
-            "placeholder": "Enter your email here",
-            "button": "Subscribe"
-        },
-        "copyright": "PepeShows. All rights reserved."
-        },
-
-
-    "nav": {
-        "admin": {
-            "dashboard": "Dashboard",
-            "invoices": "Invoices",
-            "upcomingGigs": "Upcoming Gigs",
-            "artists": "Artists"
-        },
-        "user": {
-            "profile": "Profile",
-            "calendar": "Calendar",
-            "requests": "Requests",
-            "myGigs": "My Gigs",
-            "accounting": "Accounting"
-        },
-        "public": {
-            "artists": "Artists",
-            "shows": "Shows",
-            "gallery": "Gallery",
-            "contact": "Contact"
-        }
-        },
-
-        "artists": {
-  "quote": "Where art becomes magic",
-  "filters": {
-    "all": "All"
-  },
-  "results_one": "{{count}} result",
-  "results_other": "{{count}} results",
-  "loading": "Loading artists…",
-  "empty": "No artists available yet.",
-  "disciplines": {
-    "zauberer": "Magician",
-    "cyrWheel": "Cyr wheel",
-    "bodenakrobatik": "Floor acrobatics",
-    "luftakrobatik": "Aerial acrobatics",
-    "partnerakrobatik": "Partner acrobatics",
-    "chinesePole": "Chinese pole",
-    "hulaHoop": "Hula hoop",
-    "handstand": "Handstand",
-    "contemporaryDance": "Contemporary dance",
-    "breakdance": "Breakdance",
-    "teeterboard": "Teeterboard",
-    "jonglage": "Juggling",
-    "moderation": "Hosting",
-    "pantomimeEntertainment": "Pantomime/Entertainment"
-  },
-  "disciplinesShort": {
-    "contemporaryDance": "Contemporary",
-    "pantomimeEntertainment": "Pantomime"
-  }
-}, 
-
-"hero228": {
-  "headingMobile": "Event magic",
-  "headingDesktopLine1": "Extraordinary artists,",
-  "headingDesktopLine2": "perfectly staged for your audience",
-  "subtitle": "We bring visions to the stage – professional, bespoke, and full of passion."
-},
-
-"hero87": {
-  "heading": "Our Artists",
-  "body": "Our artists come from renowned circus schools across Europe, and each one presents a unique way of expressing themselves on stage. Our network, however, spans the entire world. As the Pepe Collective, we train together regularly in Munich to ensure seamless transitions in our performances. If you’re not sure whether our artists fit your event, just visit us and get to know your favorite in person.",
-  "cta": "Meet the artists",
-  "imgAlt": "Circus"
-},
-
-"hero37": {
-  "kicker": "Shows & Formats",
-  "title": "Full variety shows, solo acts, or tailor-made ensemble concepts.",
-  "subtitle": "We curate and produce stage programs – from a 15-minute highlight to a full evening. We book solo artists directly; for groups we develop custom concepts including run-of-show, music, and costumes.",
-  "cta": {
-    "requestShow": "Request a show",
-    "bookConsult": "Book a consultation"
-  }
-},
-
-"about1": {
-  "hero": {
-    "title": "Shows & formats – clearly planned, powerfully performed",
-    "subtitle": "From short show highlights to full-evening variety: we deliver the right size – including direction, music & costumes. Book solo acts directly or curated ensembles tailored to your event."
-  },
-  "mission": {
-    "kicker": "OUR MISSION",
-    "body": "Every event is unique – and that’s exactly how we design our concepts. Our goal: the perfect show for your occasion and a magical moment that lasts."
-  },
-  "sectionTitle": "Our focus – shows that make an impact",
-  "cards": {
-    "solo": {
-      "title": "Solo act",
-      "meta": "5–8 min | 1 artist",
-      "b1": "Powerful highlight for galas & award shows",
-      "b2": "Fast setup, minimal stage required",
-      "b3": "Bookable directly from our network"
-    },
-    "block": {
-      "title": "Show block",
-      "meta": "15–25 min | 3–5 artists",
-      "b1": "Curated program with a red thread",
-      "b2": "Ideal for corporate events & trade fairs",
-      "b3": "Hosting & transitions on request"
-    },
-    "variete": {
-      "title": "Variety evening",
-      "meta": "60–90 min | 6–12 artists",
-      "b1": "Full-evening program with direction",
-      "b2": "Custom theme, music & costumes",
-      "b3": "Technical & stage management optional"
-    }
-  },
-  "info": {
-    "lead": { "kicker": "Lead time", "value": "from 2–6 weeks" },
-    "stage": { "kicker": "Stage", "value": "depends on the act – we advise" },
-    "tech": { "kicker": "Tech", "value": "Light/sound optionally bookable" }
-  },
-  "next": {
-    "kicker": "NEXT STEP",
-    "title": "Which format fits your event?",
-    "body": "Use the booking assistant for a quick, non-binding inquiry – or book a short consultation call. We’ll recommend the perfect format.",
-    "cta": {
-      "assistant": "Start booking assistant",
-      "consult": "Consultation appointment"
-    }
-  }
-},
-
-
-"gallery14": {
-  "heading": "Wow, not \"nice\".",
-  "subheading": "Acrobatics, juggling, fire & more – combined individually for your occasion.",
-  "bullets": {
-    "b1": { "title": "Tailor-made shows:", "text": "Theme, costume, duration & run-of-show adapted to your needs." },
-    "b2": { "title": "Broad artist network:", "text": "From circus & aerial to juggling and special acts." },
-    "b3": { "title": "Safe & professional:", "text": "Experienced artists, clear processes, reliable show management." }
-  },
-  "tagline": "Munich-based circus & performance — bookable across Europe",
-  "items": {
-    "1": {
-      "title": "Aerial acrobatics",
-      "description": "Weightless & elegant: aerial shows that refine galas and corporate events – with our quick-setup rig."
-    },
-    "2": {
-      "title": "Fire show",
-      "description": "Epic visuals, precise choreography, maximum goosebumps – for outdoor moments no one forgets."
-    },
-    "3": {
-      "title": "Juggling & variety",
-      "description": "Pace, timing, interaction: from close-up to stage – perfect for transitions & opening acts."
-    },
-    "4": {
-      "title": "Custom acts",
-      "description": "Brand colors, product motifs, show length: we build the act around your occasion."
-    },
-    "5": {
-      "title": "Corporate events",
-      "description": "Summer parties, Christmas events, anniversaries – we deliver concept, cast & run-of-show from a single source."
-    }
-  }
-},
-
-"hero135": {
-  "kicker": "Artist Moments",
-  "heading": "Curtain up for our artists",
-  "subtitle": "A taste of our artists – full of energy, creativity and passion. Click play to watch the full show on YouTube.",
-  "play": {
-    "title": "Showreel",
-    "brand": "Pepe"
-  },
-  "dialog": {
-    "title": "Presentation video"
-  }
-},
-
-
-"contact": {
-  "cta": {
-    "heading": "Fast & easy to your show",
-    "description": "The quickest way to receive your quote: our booking assistant. Enter a few details and get a non-binding offer – simple and efficient.\n\nFor personal advice you can call us anytime.",
-    "button": "Start booking assistant"
-  },
-  "callAria": "Call now"
-},
-
-"contact2": {
-  "title": "Contact",
-  "description": "We’re available for questions, feedback or collaboration. Let us know how we can help!",
-  "details": "Contact details",
-  "phone": "Phone",
-  "email": "Email",
-  "website": "Website",
-  "form": {
-    "firstname": "First name",
-    "firstnamePlaceholder": "First name",
-    "lastname": "Last name",
-    "lastnamePlaceholder": "Last name",
-    "email": "Email",
-    "emailPlaceholder": "Email",
-    "subject": "Subject",
-    "subjectPlaceholder": "Subject",
-    "message": "Message",
-    "messagePlaceholder": "Type your message here.",
-    "submit": "Send message"
-  }
-},
-
-
-"mediamaterial": {
-  "hero": {
-    "kicker": "Media material",
-    "title": "Everything for your promo –\n in one place",
-    "subtitle": "Logos, header images, press texts and trailers. Optional discipline packs so you can promote exactly what you booked.",
-    "buttons": {
-      "zip": "Complete media kit (ZIP)",
-      "trailer": "YouTube trailer"
-    }
-  },
-  "general": {
-    "title": "General media material"
-  },
-  "cards": {
-    "logos": {
-      "title": "Logos (SVG/PNG)",
-      "desc": "Color, black, white – with/without background.",
-      "zip": "Logo pack (ZIP)",
-      "brandguide": "Brand guide (page)"
-    },
-    "header": {
-      "title": "Title / header image",
-      "desc": "High-res header for posters, websites & social.",
-      "h169": "Header 16:9 (JPG)",
-      "h54": "Header 5:4 (JPG)"
-    },
-    "press": {
-      "title": "Press kit / fact sheet",
-      "desc": "Short intro, USP, contact & rider.",
-      "page": "Press kit (page)",
-      "rider": "Technical rider (page)"
-    },
-    "trailer": {
-      "title": "Trailer (short clip)",
-      "desc": "Short preview for your channels.",
-      "webm": "Download (WEBM)",
-      "youtube": "YouTube trailer"
-    },
-    "qr": {
-      "title": "QR code to trailer",
-      "desc": "For flyers, posters & programs.",
-      "png": "QR code (PNG)",
-      "svg": "QR code (SVG)"
-    }
-  },
-  "disciplines": {
-    "title": "Disciplines – material packs",
-    "subtitle": "For targeted promo: 2–3 photos per discipline, a short text block and, if needed, a poster template.",
-    "expand": "expand",
-    "collapse": "collapse",
-    "imageAlt": "{{name}} sample image {{index}}",
-    "allZip": "All discipline packs (ZIP)",
-    "items": {
-      "cyr": {
-        "name": "Cyr wheel",
-        "teaser": "Breathtaking artistry in a rotating wheel.",
-        "zip": "Photo pack (ZIP)",
-        "copy": "Text blocks (TXT)",
-        "poster": "Poster A3 (PDF)"
+    "about1": {
+      "hero": {
+        "title": "Shows & formats – clearly planned, powerfully performed",
+        "subtitle": "From short show highlights to full-evening variety: we deliver the right size – including direction, music & costumes. Book solo acts directly or curated ensembles tailored to your event."
       },
-      "jonglage": {
-        "name": "Juggling",
-        "teaser": "Precision, rhythm and humor – staged in a modern way.",
-        "zip": "Photo pack (ZIP)",
-        "copy": "Text blocks (TXT)"
+      "mission": {
+        "kicker": "OUR MISSION",
+        "body": "Every event is unique – and that’s exactly how we design our concepts. Our goal: the perfect show for your occasion and a magical moment that lasts."
       },
-      "akrobatik": {
-        "name": "Acrobatics",
-        "teaser": "Dynamic lifts and powerful solos.",
-        "zip": "Photo pack (ZIP)",
-        "copy": "Text blocks (TXT)",
-        "poster": "Poster A3 (PDF)"
+      "sectionTitle": "Our focus – shows that make an impact",
+      "cards": {
+        "solo": {
+          "title": "Solo act",
+          "meta": "5–8 min | 1 artist",
+          "b1": "Powerful highlight for galas & award shows",
+          "b2": "Fast setup, minimal stage required",
+          "b3": "Bookable directly from our network"
+        },
+        "block": {
+          "title": "Show block",
+          "meta": "15–25 min | 3–5 artists",
+          "b1": "Curated program with a red thread",
+          "b2": "Ideal for corporate events & trade fairs",
+          "b3": "Hosting & transitions on request"
+        },
+        "variete": {
+          "title": "Variety evening",
+          "meta": "60–90 min | 6–12 artists",
+          "b1": "Full-evening program with direction",
+          "b2": "Custom theme, music & costumes",
+          "b3": "Technical & stage management optional"
+        }
+      },
+      "info": {
+        "lead": { "kicker": "Lead time", "value": "from 2–6 weeks" },
+        "stage": { "kicker": "Stage", "value": "depends on the act – we advise" },
+        "tech": { "kicker": "Tech", "value": "Light/sound optionally bookable" }
+      },
+      "next": {
+        "kicker": "NEXT STEP",
+        "title": "Which format fits your event?",
+        "body": "Use the booking assistant for a quick, non-binding inquiry – or book a short consultation call. We’ll recommend the perfect format.",
+        "cta": { "assistant": "Start booking assistant", "consult": "Consultation appointment" }
       }
-    }
-  }
-},
-
-
-"brandguide": {
-  "hero": {
-    "kicker": "Brand guide",
-    "title": "Pepe – brand guidelines",
-    "subtitle": "This guide helps organizers, partners and the press represent Pepe consistently and professionally. Logos, colors, typography – plus examples and quick downloads."
-  },
-  "common": {
-    "svg": "SVG",
-    "png": "PNG",
-    "googleFonts": "Google Fonts",
-    "email": "Email",
-    "web": "Web"
-  },
-  "logos": {
-    "title": "Logos",
-    "subtitle": "Primary logo in color, black, white & inverted. Always keep clear space, do not distort or rotate.",
-    "main": {
-      "title": "Primary logo",
-      "text": "SVG for digital & print, PNG (transparent) for office/presentations."
     },
-    "inverted": {
-      "title": "Inverted",
-      "text": "For dark backgrounds. Please avoid placing it on busy photos."
+  
+    "artists": {
+      "quote": "Where art becomes magic",
+      "filters": { "all": "All" },
+      "results_one": "{{count}} result",
+      "results_other": "{{count}} results",
+      "loading": "Loading artists…",
+      "empty": "No artists available yet.",
+      "disciplines": {
+        "zauberer": "Magician",
+        "cyrWheel": "Cyr wheel",
+        "bodenakrobatik": "Floor acrobatics",
+        "luftakrobatik": "Aerial acrobatics",
+        "partnerakrobatik": "Partner acrobatics",
+        "chinesePole": "Chinese pole",
+        "hulaHoop": "Hula hoop",
+        "handstand": "Handstand",
+        "contemporaryDance": "Contemporary dance",
+        "breakdance": "Breakdance",
+        "teeterboard": "Teeterboard",
+        "jonglage": "Juggling",
+        "moderation": "Hosting",
+        "pantomimeEntertainment": "Pantomime/Entertainment"
+      },
+      "disciplinesShort": {
+        "contemporaryDance": "Contemporary",
+        "pantomimeEntertainment": "Pantomime"
+      }
     },
-    "mono": {
-      "title": "Monochrome",
-      "text": "Black/white version for reduced applications."
-    }
-  },
-  "colors": {
-    "title": "Colors",
-    "subtitle": "Primary, secondary and neutrals – with HEX, RGB & CMYK values.",
-    "primary": "Pepe dark blue",
-    "white": "White",
-    "black": "Black",
-    "hex": "HEX",
-    "rgb": "RGB",
-    "cmyk": "CMYK"
-  },
-  "type": {
-    "title": "Typography",
-    "subtitle": "Headlines and body copy – consistent for web & print.",
-    "headlines": {
-      "title": "Headlines",
-      "text": "Futura Bold. Alternative: Nunito Sans Bold. Avoid excessive line height and negative tracking."
+  
+    "booking": {
+      "artistCount": {
+        "heading": "How many artists would you like to book?",
+        "options": { "solo": "Solo", "duo": "Duo", "group": "Group" }
+      },
+      "eventType": {
+        "heading": "What type of event are you planning?",
+        "options": {
+          "private": "Private party",
+          "corporate": "Corporate event",
+          "incentive": "Team event",
+          "streetshow": "Street show"
+        }
+      },
+      "showType": {
+        "heading": "What type of show do you have in mind?",
+        "options": {
+          "liveInteraction": "Live interaction",
+          "stageShow": "Stage show"
+        }
+      }
     },
-    "body": {
-      "title": "Body copy",
-      "text": "Futura Regular. Alternative: Nunito Sans Regular. Ensure sufficient contrast for readability."
-    }
-  },
-  "imagery": {
-    "title": "Imagery",
-    "subtitle": "Dynamic, energetic, modern – action, motion and emotion.",
-    "alt": {
-      "streetshow": "Street show sample",
-      "solo": "Solo sample",
-      "aerial": "Aerial acrobatics sample"
-    }
-  },
-  "tone": {
-    "title": "Voice & tone",
-    "subtitle": "Casual, direct, inviting – activating phrasing, no jargon.",
-    "do": {
-      "title": "Do",
-      "i1": "“Experience Pepe live” – active & concise.",
-      "i2": "Concise info with clear calls to action.",
-      "i3": "High-contrast backgrounds for the logo."
+  
+    "bookingIntro": {
+      "logoAlt": "Pepe logo",
+      "kicker": "Artist finder",
+      "heading": "The right artists for your event",
+      "body": "In just a few steps we’ll match you with the best acts and prepare a non-binding quote. Answer a few quick questions to plan your show and get an initial price idea.",
+      "start": "Start now"
     },
-    "dont": {
-      "title": "Don't",
-      "i1": "Do not distort, rotate or add effects to the logo.",
-      "i2": "Do not place the logo on busy photos without a solid area.",
-      "i3": "Avoid overly formal language or jargon."
+  
+    "brandguide": {
+      "hero": {
+        "kicker": "Brand guide",
+        "title": "Pepe – brand guidelines",
+        "subtitle": "This guide helps organizers, partners and the press represent Pepe consistently and professionally. Logos, colors, typography – plus examples and quick downloads."
+      },
+      "common": { "svg": "SVG", "png": "PNG", "googleFonts": "Google Fonts", "email": "Email", "web": "Web" },
+      "logos": {
+        "title": "Logos",
+        "subtitle": "Primary logo in color, black, white & inverted. Always keep clear space, do not distort or rotate.",
+        "main": { "title": "Primary logo", "text": "SVG for digital & print, PNG (transparent) for office/presentations." },
+        "inverted": { "title": "Inverted", "text": "For dark backgrounds. Please avoid placing it on busy photos." },
+        "mono": { "title": "Monochrome", "text": "Black/white version for reduced applications." }
+      },
+      "colors": {
+        "title": "Colors",
+        "subtitle": "Primary, secondary and neutrals – with HEX, RGB & CMYK values.",
+        "primary": "Pepe dark blue",
+        "white": "White",
+        "black": "Black",
+        "hex": "HEX",
+        "rgb": "RGB",
+        "cmyk": "CMYK"
+      },
+      "type": {
+        "title": "Typography",
+        "subtitle": "Headlines and body copy – consistent for web & print.",
+        "headlines": {
+          "title": "Headlines",
+          "text": "Futura Bold. Alternative: Nunito Sans Bold. Avoid excessive line height and negative tracking."
+        },
+        "body": {
+          "title": "Body copy",
+          "text": "Futura Regular. Alternative: Nunito Sans Regular. Ensure sufficient contrast for readability."
+        }
+      },
+      "imagery": {
+        "title": "Imagery",
+        "subtitle": "Dynamic, energetic, modern – action, motion and emotion.",
+        "alt": { "streetshow": "Street show sample", "solo": "Solo sample", "aerial": "Aerial acrobatics sample" }
+      },
+      "tone": {
+        "title": "Voice & tone",
+        "subtitle": "Casual, direct, inviting – activating phrasing, no jargon.",
+        "do": {
+          "title": "Do",
+          "i1": "“Experience Pepe live” – active & concise.",
+          "i2": "Concise info with clear calls to action.",
+          "i3": "High-contrast backgrounds for the logo."
+        },
+        "dont": {
+          "title": "Don't",
+          "i1": "Do not distort, rotate or add effects to the logo.",
+          "i2": "Do not place the logo on busy photos without a solid area.",
+          "i3": "Avoid overly formal language or jargon."
+        },
+        "contact": { "title": "Contact", "help": "Questions about usage? We’re happy to help." }
+      }
     },
+  
     "contact": {
+      "cta": {
+        "heading": "Fast & easy to your show",
+        "description": "The quickest way to receive your quote: our booking assistant. Enter a few details and get a non-binding offer – simple and efficient.\n\nFor personal advice you can call us anytime.",
+        "button": "Start booking assistant"
+      },
+      "callAria": "Call now"
+    },
+  
+    "contact2": {
       "title": "Contact",
-      "help": "Questions about usage? We’re happy to help."
-    }
-  }
-},
-
-"presskit": {
-  "hero": {
-    "kicker": "Press kit",
-    "title": "PepeShows – press texts & info",
-    "subtitle": "World-class artistry – modern, energetic and perfectly organized. We turn events into magical experiences. All texts below are modular building blocks you can combine freely."
-  },
-  "readMore": "Read more",
-  "readLess": "Read less",
-  "texts": {
-    "title": "Texts – short, medium, long",
-    "subtitle": "Flexible for websites, bookings, programs & press."
-  },
-  "blocks": {
-    "teaser": {
-      "headline": "Teaser",
-      "text": "PepeShows stands for world-class artistry – modern, energetic and perfectly organized. From galas to corporate events and festivals: our shows transform spaces into magical experiences. From world champions to award-winning talents – the Pepe Collective brings together the best. Art becomes magic, and for a moment the everyday fades."
-    },
-    "elevator": {
-      "headline": "Elevator pitch",
-      "text": "Since 2006, the Pepe Collective has stood for artistry that excites. With PepeShows, two friends joined forces to bring their craft to corporate stages – professional, uncomplicated and outstanding.\n\nOur artists are among the world’s elite: a Cyr-wheel world champion, a seven-time juggling world champion, a BC One champion in breakdance and many more exceptional talents. Together we create shows that blend emotion and precision.\n\nWhether a solo highlight after dinner, a 45-minute duo show or a full-evening variety performance like recently in Gütersloh: we stage events that last. We’ve already brought magic to the stage for brands like Porsche, Google, McDonald’s, AstraZeneca and festivals like Tollwood.\n\nPepeShows makes artistry tangible – and lets audiences dream at the same time."
-    },
-    "about": {
-      "headline": "About",
-      "text": "PepeShows – where artistry becomes magic.\n\nSince 2006, the Pepe Collective has been synonymous with top-tier artistry. With PepeShows, Christoph Hermann and his team combine decades of experience to develop tailor-made show concepts for companies and events of all sizes.\n\nOur philosophy: professional, uncomplicated, outstanding. We believe artistry is more than acrobatics. It moves, inspires and opens a window into another world. For a moment, the everyday disappears and art becomes magic.\n\nBehind PepeShows are world champions and award-winning performers: a Cyr-wheel world champion, a seven-time juggling world champion, a BC One champion in breakdance – and many other international artists. Together we craft unique shows that unite energy, elegance and precision.\n\nOur repertoire ranges from short solo acts and dynamic 45-minute duo shows to full-evening variety programs (e.g. a 5-hour variety for the city of Gütersloh). Everything is possible – from dinner highlights to festival performances, with a clear focus on corporate events.\n\nFor organizers we provide technical packages – sound, light and rider are flexible: the full technical rider as well as logos, header images, press photos and trailers can be found in the media material. PepeShows makes artistry tangible – and lets audiences dream."
-    }
-  },
-  "formats": {
-    "title": "Formats & combinations",
-    "subtitle": "Examples – flexible to combine, specialized in corporate events.",
-    "cards": {
-      "solo": {
-        "title": "Solo highlights",
-        "body": "7–10 minutes, ideal as a crisp program point – e.g. after dinner."
-      },
-      "duo": {
-        "title": "Duo show (45 minutes)",
-        "body": "High-energy variety with a red thread – perfect for galas & stages."
-      },
-      "evening": {
-        "title": "Full-evening",
-        "body": "Modular, varied entertainment for 2 hours."
+      "description": "We’re available for questions, feedback or collaboration. Let us know how we can help!",
+      "details": "Contact details",
+      "phone": "Phone",
+      "email": "Email",
+      "website": "Website",
+      "form": {
+        "firstname": "First name",
+        "firstnamePlaceholder": "First name",
+        "lastname": "Last name",
+        "lastnamePlaceholder": "Last name",
+        "email": "Email",
+        "emailPlaceholder": "Email",
+        "subject": "Subject",
+        "subjectPlaceholder": "Subject",
+        "message": "Message",
+        "messagePlaceholder": "Type your message here.",
+        "submit": "Send message"
       }
     },
-    "disciplinesNote": "Disciplines (selection): Cyr wheel, juggling, aerial acrobatics, acrobatics, fire show, Chinese pole, magic, walking acts – each performed by proven professionals (incl. world champions and international champions)."
-  },
-  "audref": {
-    "title": "Audiences & references",
-    "subtitle": "B2B focus – corporate, gala, trade fair; equally strong with the public for festivals & theatres.",
-    "audiences": {
-      "title": "Audiences",
-      "i1": "B2B/corporate (focus), gala, trade fair, openings",
-      "i2": "City festivals/street shows, festivals, theatres",
-      "i3": "Audience: suitable for all age groups"
+  
+    "faq1": {
+      "heading": "Frequently asked questions",
+      "items": {
+        "1": {
+          "q": "Which artists and shows do you offer?",
+          "a": "PepeShows offers a wide range of disciplines: aerial acrobatics, Cyr wheel, juggling, dance, breakdance, fire arts, comedy, magic, hosting, walking acts, special acts and many more. Our network is active across Europe and constantly growing."
+        },
+        "2": {
+          "q": "How does the booking process work?",
+          "a": "You can use our booking assistant – it guides you step by step through the request and sends it directly to suitable artists. Or simply book a phone appointment with us for general questions and advice."
+        },
+        "3": {
+          "q": "How much lead time do I need for a booking?",
+          "a": "Depending on the show, we recommend a few weeks’ lead time. Many acts can also be booked at short notice. Best to inquire as early as possible so we can guarantee the best options."
+        },
+        "4": {
+          "q": "What technical requirements are needed?",
+          "a": "Requirements vary by show – for example stage height and rigging for aerials or safety distances for fire acts. Light and sound systems can be booked optionally. We advise individually and can handle the entire technical setup if needed."
+        },
+        "5": {
+          "q": "Can shows be customized?",
+          "a": "Yes! Theme, costume, duration and run-of-show can be tailored. We design every performance to fit your event."
+        },
+        "6": {
+          "q": "How are prices calculated?",
+          "a": "Together with our artists we’ve agreed on a fair pricing base. Fees depend on the type of show, effort, travel and technical needs. Just go through the booking assistant – it will immediately give you a price range."
+        },
+        "7": {
+          "q": "Do you offer flat rates or only custom quotes?",
+          "a": "As a rule we create individual quotes because every event is unique. However, the booking assistant immediately provides a transparent price overview."
+        },
+        "8": {
+          "q": "Are travel costs included in the price?",
+          "a": "Yes, the booking assistant shows a total price including travel costs. There are no hidden fees."
+        },
+        "9": {
+          "q": "What does your booking assistant do?",
+          "a": "In just a few minutes you’ll be asked for all the key details of your event – and it’s even fun! At the end you’ll receive a suitable offer with a price overview."
+        },
+        "10": {
+          "q": "Will I have a dedicated contact person?",
+          "a": "Yes, you’ll be looked after by a dedicated contact throughout the entire process. We coordinate artists, tech and run-of-show for you."
+        },
+        "11": {
+          "q": "Do you support larger events with multiple acts?",
+          "a": "Absolutely! We handle the entire show planning – from selection and coordination to execution of multiple acts. You get a coherent event from a single source."
+        }
+      }
     },
-    "references": {
-      "title": "References (selection)",
-      "i1": "Porsche, Google, McDonald’s, AstraZeneca",
-      "i2": "Tollwood Festival",
-      "i3": "City of Gütersloh (full-evening variety)"
-    }
-  },
-  "tech": {
-    "title": "Tech & logistics",
-    "subtitle": "Short version – full details in the media material/technical rider.",
-    "rider": {
-      "title": "Rider & equipment",
-      "i1": "Technical rider available in the media material",
-      "i2": "Sound & light optionally bookable – happy to use on-site tech as well",
-      "i3": "Music delivered 1 week in advance as MP3, additionally on USB stick on site"
+  
+    "feature43": {
+      "heading": "Why PepeShows?",
+      "reasons": {
+        "1": { "title": "Tailor-made shows", "description": "Every performance is individually adapted to theme, stage and audience." },
+        "2": { "title": "Wide artist network", "description": "From circus & aerial to juggling and magic, all the way to breakdance & fire arts." },
+        "3": { "title": "Experience & professionalism", "description": "15+ years of event and stage experience, clear workflows and reliable management." },
+        "4": { "title": "Innovative show formats", "description": "A blend of classic & modern, e.g. artistry combined with digital effects." },
+        "5": { "title": "Fair pricing", "description": "Transparent baseline developed together with our artists – no hidden costs." },
+        "6": { "title": "Artistic excellence", "description": "No average – with PepeShows you get only top acts at an international level." }
+      }
     },
-    "flex": {
-      "title": "Flexibility",
-      "i1": "Corporate specialization, individual staging",
-      "i2": "Possible to combine several disciplines and show modules"
-    }
-  },
-  "contact": {
-    "title": "Contact & booking",
-    "person": "PepeShows – Christoph Hermann"
-  },
-  "langnote": "Press kit available in German & English. Area of operation: flexible (artists based across Europe). Prices & availability: simply enquire via the booking assistant."
-},
-
-"technicalRider": {
-  "hero": {
-    "kicker": "Technical rider",
-    "title": "Requirements & stage notes",
-    "subtitle": "If a sound system is not booked additionally, we assume one is available on site. Music is delivered one week in advance as MP3 and brought as a safety copy on USB stick. All durations refer to solo acts and may vary with multiple artists."
-  },
-  "labels": {
-    "area": "Area",
-    "duration": "Duration",
-    "music": "Music",
-    "rigging": "Rigging",
-    "setup": "Setup",
-    "other": "Other",
-    "outdoorOption": "Outdoor option",
-    "light": "Light"
-  },
-  "disciplines": {
-    "akrobatik": { "name": "Acrobatics" },
-    "chinesischePole": { "name": "Chinese pole" },
-    "cyrWheel": { "name": "Cyr wheel" },
-    "feuershow": { "name": "Fire show" },
-    "jonglage": { "name": "Juggling" },
-    "luftakrobatik": { "name": "Aerial acrobatics" },
-    "walkingAct": { "name": "Walking act" },
-    "zauberei": { "name": "Magic" }
-  },
-  "values": {
-    "akrobatik": {
-      "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
-      "duration": "Rehearsal: ~30 min · Show: ~7 min",
-      "music": "Sound system required (MP3, audio, USB)",
-      "other": "As requested"
+  
+    "footer": {
+      "navigation": "Navigation",
+      "legal": "Legal",
+      "mainLinks": {
+        "mediamaterial": "Media Material",
+        "showsAndFormate": "Shows & Formats",
+        "referenzen": "References",
+        "faq": "FAQ",
+        "agenturUndTeam": "Agency & Team",
+        "kontakt": "Contact",
+        "artistLogin": "Artist Log-in"
+      },
+      "legalLinks": { "impressum": "Imprint", "datenschutz": "Privacy Policy", "agb": "Terms & Conditions" },
+      "newsletter": { "title": "Newsletter", "placeholder": "Enter your email here", "button": "Subscribe" },
+      "copyright": "PepeShows. All rights reserved."
     },
-    "chinesischePole": {
-      "area": "Stage 5 × 7 × 6 m (W/L/H) or round Ø 8 m; flat floor",
-      "rigging": "4 anchor points @ 400 kg OR 3 @ 500 kg (good angle)",
-      "setup": "3 stagehands · 10 min rehearsal for build up/down · 5 min build up · 5 min build down",
-      "other": "Anchor points & safety mat as required"
+  
+    "gallery14": {
+      "heading": "Wow, not \"nice\".",
+      "subheading": "Acrobatics, juggling, fire & more – combined individually for your occasion.",
+      "bullets": {
+        "b1": { "title": "Tailor-made shows:", "text": "Theme, costume, duration & run-of-show adapted to your needs." },
+        "b2": { "title": "Broad artist network:", "text": "From circus & aerial to juggling and special acts." },
+        "b3": { "title": "Safe & professional:", "text": "Experienced artists, clear processes, reliable show management." }
+      },
+      "tagline": "Munich-based circus & performance — bookable across Europe",
+      "items": {
+        "1": { "title": "Aerial acrobatics", "description": "Weightless & elegant: aerial shows that refine galas and corporate events – with our quick-setup rig." },
+        "2": { "title": "Fire show", "description": "Epic visuals, precise choreography, maximum goosebumps – for outdoor moments no one forgets." },
+        "3": { "title": "Juggling & variety", "description": "Pace, timing, interaction: from close-up to stage – perfect for transitions & opening acts." },
+        "4": { "title": "Custom acts", "description": "Brand colors, product motifs, show length: we build the act around your occasion." },
+        "5": { "title": "Corporate events", "description": "Summer parties, Christmas events, anniversaries – we deliver concept, cast & run-of-show from a single source." }
+      }
     },
-    "cyrWheel": {
-      "area": "6 × 6 × 3 m (W/D/H); flat & dry; floor not too grippy (some carpets ok)",
-      "duration": "Rehearsal: ~15 min · Show: ~7 min",
-      "music": "Sound system required (MP3, audio, USB)"
+  
+    "gallery23": {
+      "headingMobile": "Excellence over average",
+      "headingDesktop": "We don’t believe in average – with us it’s excellence.",
+      "subtitle": "We create moments that stay in your head and your heart.",
+      "cta": "Let’s talk",
+      "images": { "1": "Gala evenings", "2": "Anniversaries", "3": "Corporate events", "4": "Festivals", "5": "Christmas parties" }
     },
-    "feuershow": {
-      "area": "Outdoor; at least 2 × 4.5 × 7 m (W/D/H)",
-      "duration": "Prep: ~30 min · Show: ~7–45 min (depending on program)",
-      "music": "Sound system required (MP3, audio, USB)"
+  
+    "hero27": {
+      "title": "We bring <1>extraordinary artists</1> and <3>unforgettable show moments</3> to your stage.",
+      "subtitle": "Whether it's a corporate party, gala or trade fair – with us your event becomes the highlight everyone talks about.",
+      "usp": { "custom": "Tailor-made", "experience": "15+ years of experience", "europe": "Europe-wide", "fair": "Fair & transparent" },
+      "cta": { "media": "Media material", "shows": "Shows & Formats" }
     },
-    "jonglage": {
-      "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
-      "duration": "Rehearsal: ~30 min · Show: ~7 min",
-      "music": "Sound system required (MP3, audio, USB)"
+  
+    "hero37": {
+      "kicker": "Shows & Formats",
+      "title": "Full variety shows, solo acts, or tailor-made ensemble concepts.",
+      "subtitle": "We curate and produce stage programs – from a 15-minute highlight to a full evening. We book solo artists directly; for groups we develop custom concepts including run-of-show, music, and costumes.",
+      "cta": { "requestShow": "Request a show", "bookConsult": "Book a consultation" }
     },
-    "luftakrobatik": {
-      "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
-      "duration": "Rehearsal: ~30 min · Show: ~7 min",
-      "music": "Sound system required (MP3, audio, USB)",
-      "rigging": "2 rigging points (1.80 m apart, each ≥ 250 kg), 1 point for aerial silk OR 1 helper on site, 1 safety mat",
-      "outdoorOption": "Own outdoor rig available (mobile, tailored to the artists’ needs)"
+  
+    "hero87": {
+      "heading": "Our Artists",
+      "body": "Our artists come from renowned circus schools across Europe, and each one presents a unique way of expressing themselves on stage. Our network, however, spans the entire world. As the Pepe Collective, we train together regularly in Munich to ensure seamless transitions in our performances. If you’re not sure whether our artists fit your event, just visit us and get to know your favorite in person.",
+      "cta": "Meet the artists",
+      "imgAlt": "Circus"
     },
-    "walkingAct": {
-      "area": "No specific requirements",
-      "duration": "Individually by arrangement",
-      "music": "As needed; see general notes"
+  
+    "hero135": {
+      "kicker": "Artist Moments",
+      "heading": "Curtain up for our artists",
+      "subtitle": "A taste of our artists – full of energy, creativity and passion. Click play to watch the full show on YouTube.",
+      "play": { "title": "Showreel", "brand": "Pepe" },
+      "dialog": { "title": "Presentation video" }
     },
-    "zauberei": {
-      "area": "Stage: side & back masking; walking act: none",
-      "duration": "Rehearsal: ~30 min · Show: flexible (on stage or among the audience)",
-      "music": "Sound system required (MP3, audio, USB)",
-      "light": "Please coordinate with the tech team in advance"
+  
+    "hero228": {
+      "headingMobile": "Event magic",
+      "headingDesktopLine1": "Extraordinary artists,",
+      "headingDesktopLine2": "perfectly staged for your audience",
+      "subtitle": "We bring visions to the stage – professional, bespoke, and full of passion."
+    },
+  
+    "home": {
+      "findArtistTitle": "Find the perfect artist now",
+      "findArtistSubtitle": "Answer just a few short questions and receive non-binding initial suggestions and prices.",
+      "findArtistButton": "Start now",
+      "findArtistTime": "Takes less than 5 minutes",
+      "cta": {
+        "heading": "PepeShows – more than just an artist agency",
+        "description": "We create commercial shows, promote culture, and run our own base.\nThis way we combine experience, network, and passion – making PepeShows true experts for unforgettable experiences.",
+        "button": "To the agency"
+      }
+    },
+  
+    "logos3": { "heading": "These clients trust Pepe" },
+  
+    "mediamaterial": {
+      "hero": {
+        "kicker": "Media material",
+        "title": "Everything for your promo –\n in one place",
+        "subtitle": "Logos, header images, press texts and trailers. Optional discipline packs so you can promote exactly what you booked.",
+        "buttons": { "zip": "Complete media kit (ZIP)", "trailer": "YouTube trailer" }
+      },
+      "general": { "title": "General media material" },
+      "cards": {
+        "logos": {
+          "title": "Logos (SVG/PNG)",
+          "desc": "Color, black, white – with/without background.",
+          "zip": "Logo pack (ZIP)",
+          "brandguide": "Brand guide (page)"
+        },
+        "header": {
+          "title": "Title / header image",
+          "desc": "High-res header for posters, websites & social.",
+          "h169": "Header 16:9 (JPG)",
+          "h54": "Header 5:4 (JPG)"
+        },
+        "press": {
+          "title": "Press kit / fact sheet",
+          "desc": "Short intro, USP, contact & rider.",
+          "page": "Press kit (page)",
+          "rider": "Technical rider (page)"
+        },
+        "trailer": {
+          "title": "Trailer (short clip)",
+          "desc": "Short preview for your channels.",
+          "webm": "Download (WEBM)",
+          "youtube": "YouTube trailer"
+        },
+        "qr": {
+          "title": "QR code to trailer",
+          "desc": "For flyers, posters & programs.",
+          "png": "QR code (PNG)",
+          "svg": "QR code (SVG)"
+        }
+      },
+      "disciplines": {
+        "title": "Disciplines – material packs",
+        "subtitle": "For targeted promo: 2–3 photos per discipline, a short text block and, if needed, a poster template.",
+        "expand": "expand",
+        "collapse": "collapse",
+        "imageAlt": "{{name}} sample image {{index}}",
+        "allZip": "All discipline packs (ZIP)",
+        "items": {
+          "cyr": {
+            "name": "Cyr wheel",
+            "teaser": "Breathtaking artistry in a rotating wheel.",
+            "zip": "Photo pack (ZIP)",
+            "copy": "Text blocks (TXT)",
+            "poster": "Poster A3 (PDF)"
+          },
+          "jonglage": {
+            "name": "Juggling",
+            "teaser": "Precision, rhythm and humor – staged in a modern way.",
+            "zip": "Photo pack (ZIP)",
+            "copy": "Text blocks (TXT)"
+          },
+          "akrobatik": {
+            "name": "Acrobatics",
+            "teaser": "Dynamic lifts and powerful solos.",
+            "zip": "Photo pack (ZIP)",
+            "copy": "Text blocks (TXT)",
+            "poster": "Poster A3 (PDF)"
+          }
+        }
+      }
+    },
+  
+    "nav": {
+      "admin": { "dashboard": "Dashboard", "invoices": "Invoices", "upcomingGigs": "Upcoming Gigs", "artists": "Artists" },
+      "user": { "profile": "Profile", "calendar": "Calendar", "requests": "Requests", "myGigs": "My Gigs", "accounting": "Accounting" },
+      "public": { "artists": "Artists", "shows": "Shows", "gallery": "Gallery", "contact": "Contact" }
+    },
+  
+    "presskit": {
+      "hero": {
+        "kicker": "Press kit",
+        "title": "PepeShows – press texts & info",
+        "subtitle": "World-class artistry – modern, energetic and perfectly organized. We turn events into magical experiences. All texts below are modular building blocks you can combine freely."
+      },
+      "readMore": "Read more",
+      "readLess": "Read less",
+      "texts": { "title": "Texts – short, medium, long", "subtitle": "Flexible for websites, bookings, programs & press." },
+      "blocks": {
+        "teaser": {
+          "headline": "Teaser",
+          "text": "PepeShows stands for world-class artistry – modern, energetic and perfectly organized. From galas to corporate events and festivals: our shows transform spaces into magical experiences. From world champions to award-winning talents – the Pepe Collective brings together the best. Art becomes magic, and for a moment the everyday fades."
+        },
+        "elevator": {
+          "headline": "Elevator pitch",
+          "text": "Since 2006, the Pepe Collective has stood for artistry that excites. With PepeShows, two friends joined forces to bring their craft to corporate stages – professional, uncomplicated and outstanding.\n\nOur artists are among the world’s elite: a Cyr-wheel world champion, a seven-time juggling world champion, a BC One champion in breakdance and many more exceptional talents. Together we create shows that blend emotion and precision.\n\nWhether a solo highlight after dinner, a 45-minute duo show or a full-evening variety performance like recently in Gütersloh: we stage events that last. We’ve already brought magic to the stage for brands like Porsche, Google, McDonald’s, AstraZeneca and festivals like Tollwood.\n\nPepeShows makes artistry tangible – and lets audiences dream at the same time."
+        },
+        "about": {
+          "headline": "About",
+          "text": "PepeShows – where artistry becomes magic.\n\nSince 2006, the Pepe Collective has been synonymous with top-tier artistry. With PepeShows, Christoph Hermann and his team combine decades of experience to develop tailor-made show concepts for companies and events of all sizes.\n\nOur philosophy: professional, uncomplicated, outstanding. We believe artistry is more than acrobatics. It moves, inspires and opens a window into another world. For a moment, the everyday disappears and art becomes magic.\n\nBehind PepeShows are world champions and award-winning performers: a Cyr-wheel world champion, a seven-time juggling world champion, a BC One champion in breakdance – and many other international artists. Together we craft unique shows that unite energy, elegance and precision.\n\nOur repertoire ranges from short solo acts and dynamic 45-minute duo shows to full-evening variety programs (e.g. a 5-hour variety for the city of Gütersloh). Everything is possible – from dinner highlights to festival performances, with a clear focus on corporate events.\n\nFor organizers we provide technical packages – sound, light and rider are flexible: the full technical rider as well as logos, header images, press photos and trailers can be found in the media material. PepeShows makes artistry tangible – and lets audiences dream."
+        }
+      },
+      "formats": {
+        "title": "Formats & combinations",
+        "subtitle": "Examples – flexible to combine, specialized in corporate events.",
+        "cards": {
+          "solo": { "title": "Solo highlights", "body": "7–10 minutes, ideal as a crisp program point – e.g. after dinner." },
+          "duo": { "title": "Duo show (45 minutes)", "body": "High-energy variety with a red thread – perfect for galas & stages." },
+          "evening": { "title": "Full-evening", "body": "Modular, varied entertainment for 2 hours." }
+        },
+        "disciplinesNote": "Disciplines (selection): Cyr wheel, juggling, aerial acrobatics, acrobatics, fire show, Chinese pole, magic, walking acts – each performed by proven professionals (incl. world champions and international champions)."
+      },
+      "audref": {
+        "title": "Audiences & references",
+        "subtitle": "B2B focus – corporate, gala, trade fair; equally strong with the public for festivals & theatres.",
+        "audiences": {
+          "title": "Audiences",
+          "i1": "B2B/corporate (focus), gala, trade fair, openings",
+          "i2": "City festivals/street shows, festivals, theatres",
+          "i3": "Audience: suitable for all age groups"
+        },
+        "references": {
+          "title": "References (selection)",
+          "i1": "Porsche, Google, McDonald’s, AstraZeneca",
+          "i2": "Tollwood Festival",
+          "i3": "City of Gütersloh (full-evening variety)"
+        }
+      },
+      "tech": {
+        "title": "Tech & logistics",
+        "subtitle": "Short version – full details in the media material/technical rider.",
+        "rider": {
+          "title": "Rider & equipment",
+          "i1": "Technical rider available in the media material",
+          "i2": "Sound & light optionally bookable – happy to use on-site tech as well",
+          "i3": "Music delivered 1 week in advance as MP3, additionally on USB stick on site"
+        },
+        "flex": {
+          "title": "Flexibility",
+          "i1": "Corporate specialization, individual staging",
+          "i2": "Possible to combine several disciplines and show modules"
+        }
+      },
+      "contact": { "title": "Contact & booking", "person": "PepeShows – Christoph Hermann" },
+      "langnote": "Press kit available in German & English. Area of operation: flexible (artists based across Europe). Prices & availability: simply enquire via the booking assistant."
+    },
+  
+    "signup": {
+      "success": "Registration successful! Please check your email to confirm your account.",
+      "info": {
+        "title": "Artist registration",
+        "p1": "In this step you set your login details and confirm your email. On your first login you’ll be asked to complete your artist profile, upload a profile picture and add your availability.",
+        "p2": "Once saved, an admin will review your profile and approve it within 24 hours. After that, clients can contact you directly via the booking assistant.",
+        "benefitsTitle": "Your benefits:",
+        "benefits": {
+          "li1": "Clear overview of requests",
+          "li2": "Upload invoices directly",
+          "li3": "Easy calendar management",
+          "li4": "Faster responses to client inquiries",
+          "li5": "Simple & straightforward"
+        }
+      },
+      "form": {
+        "title": "Sign up",
+        "namePlaceholder": "Name",
+        "emailPlaceholder": "Email",
+        "passwordPlaceholder": "Password",
+        "loading": "Loading…",
+        "submit": "Sign up",
+        "already": "Already registered?",
+        "login": "Log in"
+      }
+    },
+  
+    "team10": {
+      "heading": "Our Team & Network",
+      "subheading": "At PepeShows we bring together experienced artists, creative minds and strong personalities. Together we create unforgettable show moments – from solo acts to large ensemble productions.",
+      "cta": "Register as an artist",
+      "roles": {
+        "michiHeiduk": "CEO",
+        "chrisHermann": "CEO",
+        "danielaMeier": "Handstand, contortion, aerial, hula",
+        "jakobVoeckler": "Chinese pole, freerunning",
+        "jonasDuerrbeck": "Chinese pole, handstand, acrobatics",
+        "carmenLueck": "Acrobatics, Cyr",
+        "lukasBrandl": "Magic, juggling",
+        "thomasDietz": "Juggling",
+        "olesKoval": "Magic",
+        "julianBellini": "Object theatre",
+        "jawadRajpoot": "Breakdance, Cyr wheel",
+        "serhardPerhat": "Breakdance",
+        "flo": "Chinese pole, partner acrobatics",
+        "henryHernandez": "Fire show",
+        "gabrielDrouin": "Cyr wheel",
+        "svetlanaWotschel": "Aerial, waterbowl",
+        "sankofaCrew": "Breakdance",
+        "janaRippel": "Aerial silk",
+        "sarah": "Handstand, silk",
+        "jannick": "Juggling, floor, teeterboard",
+        "daniThalmaier": "Breakdance"
+      }
+    },
+  
+    "technicalRider": {
+      "hero": {
+        "kicker": "Technical rider",
+        "title": "Requirements & stage notes",
+        "subtitle": "If a sound system is not booked additionally, we assume one is available on site. Music is delivered one week in advance as MP3 and brought as a safety copy on USB stick. All durations refer to solo acts and may vary with multiple artists."
+      },
+      "labels": {
+        "area": "Area",
+        "duration": "Duration",
+        "music": "Music",
+        "rigging": "Rigging",
+        "setup": "Setup",
+        "other": "Other",
+        "outdoorOption": "Outdoor option",
+        "light": "Light"
+      },
+      "disciplines": {
+        "akrobatik": { "name": "Acrobatics" },
+        "chinesischePole": { "name": "Chinese pole" },
+        "cyrWheel": { "name": "Cyr wheel" },
+        "feuershow": { "name": "Fire show" },
+        "jonglage": { "name": "Juggling" },
+        "luftakrobatik": { "name": "Aerial acrobatics" },
+        "walkingAct": { "name": "Walking act" },
+        "zauberei": { "name": "Magic" }
+      },
+      "values": {
+        "akrobatik": {
+          "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
+          "duration": "Rehearsal: ~30 min · Show: ~7 min",
+          "music": "Sound system required (MP3, audio, USB)",
+          "other": "As requested"
+        },
+        "chinesischePole": {
+          "area": "Stage 5 × 7 × 6 m (W/L/H) or round Ø 8 m; flat floor",
+          "rigging": "4 anchor points @ 400 kg OR 3 @ 500 kg (good angle)",
+          "setup": "3 stagehands · 10 min rehearsal for build up/down · 5 min build up · 5 min build down",
+          "other": "Anchor points & safety mat as required"
+        },
+        "cyrWheel": {
+          "area": "6 × 6 × 3 m (W/D/H); flat & dry; floor not too grippy (some carpets ok)",
+          "duration": "Rehearsal: ~15 min · Show: ~7 min",
+          "music": "Sound system required (MP3, audio, USB)"
+        },
+        "feuershow": {
+          "area": "Outdoor; at least 2 × 4.5 × 7 m (W/D/H)",
+          "duration": "Prep: ~30 min · Show: ~7–45 min (depending on program)",
+          "music": "Sound system required (MP3, audio, USB)"
+        },
+        "jonglage": {
+          "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
+          "duration": "Rehearsal: ~30 min · Show: ~7 min",
+          "music": "Sound system required (MP3, audio, USB)"
+        },
+        "luftakrobatik": {
+          "area": "2 × 4.5 × 7 m (W/D/H); flat & dry stage",
+          "duration": "Rehearsal: ~30 min · Show: ~7 min",
+          "music": "Sound system required (MP3, audio, USB)",
+          "rigging": "2 rigging points (1.80 m apart, each ≥ 250 kg), 1 point for aerial silk OR 1 helper on site, 1 safety mat",
+          "outdoorOption": "Own outdoor rig available (mobile, tailored to the artists’ needs)"
+        },
+        "walkingAct": {
+          "area": "No specific requirements",
+          "duration": "Individually by arrangement",
+          "music": "As needed; see general notes"
+        },
+        "zauberei": {
+          "area": "Stage: side & back masking; walking act: none",
+          "duration": "Rehearsal: ~30 min · Show: flexible (on stage or among the audience)",
+          "music": "Sound system required (MP3, audio, USB)",
+          "light": "Please coordinate with the tech team in advance"
+        }
+      }
+    },
+  
+    "testimonial19": {
+      "kicker": "What our clients say",
+      "heading": "Testimonials from our clients",
+      "subheading": "Selected feedback after corporate events, galas and festivals.",
+      "moreLink": "Request more references",
+      "items": {
+        "1": {
+          "role": "Event manager, automotive industry",
+          "content": "Smooth coordination, on-time setup and a show perfectly aligned with our brand presence. Our team is still talking about it."
+        },
+        "2": {
+          "role": "Head of corporate communications",
+          "content": "From the first consultation to the final cue: highly professional. The combination of aerial artistry and hosting carried our gala program perfectly."
+        },
+        "3": {
+          "role": "Festival project lead",
+          "content": "Flexible, reliable and close to the audience. The walking acts brought the venue to life – fantastic vibe!"
+        },
+        "4": {
+          "role": "Agency owner",
+          "content": "Clear process, fair terms and outstanding artists. We’ll book again – our clients’ response was consistently positive."
+        },
+        "5": {
+          "role": "HR & internal events",
+          "content": "Summer party with a wow effect. The show length was perfectly adapted to our agenda – zero stress for us, maximum impact for the team."
+        },
+        "6": {
+          "role": "Hotel & event management",
+          "content": "Professional rigging, clean workflows and a very pleasant team. Exactly what you want a collaboration to be like."
+        }
+      }
     }
   }
-},
-
-"team10": {
-  "heading": "Our Team & Network",
-  "subheading": "At PepeShows we bring together experienced artists, creative minds and strong personalities. Together we create unforgettable show moments – from solo acts to large ensemble productions.",
-  "cta": "Register as an artist",
-  "roles": {
-    "michiHeiduk": "CEO",
-    "chrisHermann": "CEO",
-    "danielaMeier": "Handstand, contortion, aerial, hula",
-    "jakobVoeckler": "Chinese pole, freerunning",
-    "jonasDuerrbeck": "Chinese pole, handstand, acrobatics",
-    "carmenLueck": "Acrobatics, Cyr",
-    "lukasBrandl": "Magic, juggling",
-    "thomasDietz": "Juggling",
-    "olesKoval": "Magic",
-    "julianBellini": "Object theatre",
-    "jawadRajpoot": "Breakdance, Cyr wheel",
-    "serhardPerhat": "Breakdance",
-    "flo": "Chinese pole, partner acrobatics",
-    "henryHernandez": "Fire show",
-    "gabrielDrouin": "Cyr wheel",
-    "svetlanaWotschel": "Aerial, waterbowl",
-    "sankofaCrew": "Breakdance",
-    "janaRippel": "Aerial silk",
-    "sarah": "Handstand, silk",
-    "jannick": "Juggling, floor, teeterboard",
-    "daniThalmaier": "Breakdance"
-  }
-},
-
-"signup": {
-  "success": "Registration successful! Please check your email to confirm your account.",
-  "info": {
-    "title": "Artist registration",
-    "p1": "In this step you set your login details and confirm your email. On your first login you’ll be asked to complete your artist profile, upload a profile picture and add your availability.",
-    "p2": "Once saved, an admin will review your profile and approve it within 24 hours. After that, clients can contact you directly via the booking assistant.",
-    "benefitsTitle": "Your benefits:",
-    "benefits": {
-      "li1": "Clear overview of requests",
-      "li2": "Upload invoices directly",
-      "li3": "Easy calendar management",
-      "li4": "Faster responses to client inquiries",
-      "li5": "Simple & straightforward"
-    }
-  },
-  "form": {
-    "title": "Sign up",
-    "namePlaceholder": "Name",
-    "emailPlaceholder": "Email",
-    "passwordPlaceholder": "Password",
-    "loading": "Loading…",
-    "submit": "Sign up",
-    "already": "Already registered?",
-    "login": "Log in"
-  }
-},
-
-
-"faq1": {
-  "heading": "Frequently asked questions",
-  "items": {
-    "1": {
-      "q": "Which artists and shows do you offer?",
-      "a": "PepeShows offers a wide range of disciplines: aerial acrobatics, Cyr wheel, juggling, dance, breakdance, fire arts, comedy, magic, hosting, walking acts, special acts and many more. Our network is active across Europe and constantly growing."
-    },
-    "2": {
-      "q": "How does the booking process work?",
-      "a": "You can use our booking assistant – it guides you step by step through the request and sends it directly to suitable artists. Or simply book a phone appointment with us for general questions and advice."
-    },
-    "3": {
-      "q": "How much lead time do I need for a booking?",
-      "a": "Depending on the show, we recommend a few weeks’ lead time. Many acts can also be booked at short notice. Best to inquire as early as possible so we can guarantee the best options."
-    },
-    "4": {
-      "q": "What technical requirements are needed?",
-      "a": "Requirements vary by show – for example stage height and rigging for aerials or safety distances for fire acts. Light and sound systems can be booked optionally. We advise individually and can handle the entire technical setup if needed."
-    },
-    "5": {
-      "q": "Can shows be customized?",
-      "a": "Yes! Theme, costume, duration and run-of-show can be tailored. We design every performance to fit your event."
-    },
-    "6": {
-      "q": "How are prices calculated?",
-      "a": "Together with our artists we’ve agreed on a fair pricing base. Fees depend on the type of show, effort, travel and technical needs. Just go through the booking assistant – it will immediately give you a price range."
-    },
-    "7": {
-      "q": "Do you offer flat rates or only custom quotes?",
-      "a": "As a rule we create individual quotes because every event is unique. However, the booking assistant immediately provides a transparent price overview."
-    },
-    "8": {
-      "q": "Are travel costs included in the price?",
-      "a": "Yes, the booking assistant shows a total price including travel costs. There are no hidden fees."
-    },
-    "9": {
-      "q": "What does your booking assistant do?",
-      "a": "In just a few minutes you’ll be asked for all the key details of your event – and it’s even fun! At the end you’ll receive a suitable offer with a price overview."
-    },
-    "10": {
-      "q": "Will I have a dedicated contact person?",
-      "a": "Yes, you’ll be looked after by a dedicated contact throughout the entire process. We coordinate artists, tech and run-of-show for you."
-    },
-    "11": {
-      "q": "Do you support larger events with multiple acts?",
-      "a": "Absolutely! We handle the entire show planning – from selection and coordination to execution of multiple acts. You get a coherent event from a single source."
-    }
-  }
-},
-
-"feature43": {
-  "heading": "Why PepeShows?",
-  "reasons": {
-    "1": {
-      "title": "Tailor-made shows",
-      "description": "Every performance is individually adapted to theme, stage and audience."
-    },
-    "2": {
-      "title": "Wide artist network",
-      "description": "From circus & aerial to juggling and magic, all the way to breakdance & fire arts."
-    },
-    "3": {
-      "title": "Experience & professionalism",
-      "description": "15+ years of event and stage experience, clear workflows and reliable management."
-    },
-    "4": {
-      "title": "Innovative show formats",
-      "description": "A blend of classic & modern, e.g. artistry combined with digital effects."
-    },
-    "5": {
-      "title": "Fair pricing",
-      "description": "Transparent baseline developed together with our artists – no hidden costs."
-    },
-    "6": {
-      "title": "Artistic excellence",
-      "description": "No average – with PepeShows you get only top acts at an international level."
-    }
-  }
-},
-
-
-"testimonial19": {
-  "kicker": "What our clients say",
-  "heading": "Testimonials from our clients",
-  "subheading": "Selected feedback after corporate events, galas and festivals.",
-  "moreLink": "Request more references",
-  "items": {
-    "1": {
-      "role": "Event manager, automotive industry",
-      "content": "Smooth coordination, on-time setup and a show perfectly aligned with our brand presence. Our team is still talking about it."
-    },
-    "2": {
-      "role": "Head of corporate communications",
-      "content": "From the first consultation to the final cue: highly professional. The combination of aerial artistry and hosting carried our gala program perfectly."
-    },
-    "3": {
-      "role": "Festival project lead",
-      "content": "Flexible, reliable and close to the audience. The walking acts brought the venue to life – fantastic vibe!"
-    },
-    "4": {
-      "role": "Agency owner",
-      "content": "Clear process, fair terms and outstanding artists. We’ll book again – our clients’ response was consistently positive."
-    },
-    "5": {
-      "role": "HR & internal events",
-      "content": "Summer party with a wow effect. The show length was perfectly adapted to our agenda – zero stress for us, maximum impact for the team."
-    },
-    "6": {
-      "role": "Hotel & event management",
-      "content": "Professional rigging, clean workflows and a very pleasant team. Exactly what you want a collaboration to be like."
-    }
-  }
-}
-
-
-}
-
