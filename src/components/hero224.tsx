@@ -5,56 +5,41 @@ import React, { useEffect, useRef, useState } from "react";
 import { renderToString } from "react-dom/server";
 
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const Hero224 = () => {
+  const { t } = useTranslation();
+
   const images = [
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random11.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random12.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random13.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw4.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw5.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw6.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw7.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw8.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/person1.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/person2.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/person3.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random1.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random11.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/bw1.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random3.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random4.jpeg",
-    "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/lummi/random5.jpeg",
+    "/images/disciplines/Pantomime.webp",
+    "/images/disciplines/Bodenakrobatik.webp",
+    "/images/disciplines/Breakdance.webp",
+    "/images/disciplines/Chinese_Pole.webp",
+    "/images/disciplines/Contemporary_Dance.webp",
+    "/images/disciplines/Cyr-Wheel.webp",
+    "/images/disciplines/Handstand.webp",
+    "/images/disciplines/Hula_Hoop.webp",
+    "/images/disciplines/Jonglage.webp",
+    "/images/disciplines/Luftakrobatik.webp",
+    "/images/disciplines/Moderation.webp",
+    "/images/disciplines/Partnerakrobatik.webp",
   ];
 
   return (
-    <section className="py-32">
-      <div className="md:h-150 container flex w-full flex-col items-center justify-between md:flex-row md:overflow-hidden">
+    <section className="relative py-32 overflow-hidden px-6 md:px-12 lg:px-20">
+      {/* Background glow effects */}
+      <div className="absolute -top-40 -right-40 w-[28rem] h-[28rem] bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.4),_transparent_70%)] blur-3xl rounded-full pointer-events-none" />
+      <div className="absolute -bottom-40 -left-40 w-[28rem] h-[28rem] bg-[radial-gradient(circle_at_bottom_left,_rgba(34,211,238,0.4),_transparent_70%)] blur-3xl rounded-full pointer-events-none" />
+
+      <div className="md:h-150 relative z-10 flex w-full flex-col items-center justify-between md:flex-row md:overflow-hidden">
         <div>
           <h1 className="z-99 relative max-w-md text-6xl font-medium tracking-tight md:text-7xl">
-            Search, <br /> Copy, Paste
-            <br /> Build
+            {t("hero224.headline")}
           </h1>
           <p className="z-99 text-muted-foreground relative mt-4 max-w-lg text-lg">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab sapiente
-            quisquam debitis error vero possimus amet
+            {t("hero224.subline")}
           </p>
-          <div className="realtive z-99 mt-10 flex gap-4">
-            <Button
-              variant="default"
-              className="text-md group flex w-fit items-center justify-center gap-2 rounded-full px-4 py-1 tracking-tight"
-            >
-              <span>See Pricing</span>
-              <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:ml-3 group-hover:rotate-0" />
-            </Button>
-            <Button
-              variant="secondary"
-              className="text-md group flex w-fit items-center justify-center gap-2 rounded-full px-4 py-1 tracking-tight"
-            >
-              <span>Try it for free</span>
-              <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:ml-3 group-hover:rotate-0" />
-            </Button>
-          </div>
+         
         </div>
         <div className="flex h-full w-full items-center justify-center overflow-hidden md:w-1/2">
           <IconCloud images={images} />
@@ -110,6 +95,8 @@ export function IconCloud({ icons, images }: IconCloudProps) {
   const iconCanvasesRef = useRef<HTMLCanvasElement[]>([]);
   const imagesLoadedRef = useRef<boolean[]>([]);
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   // Create icon canvases once when icons/images change
   useEffect(() => {
     if (!icons && !images) return;
@@ -140,6 +127,14 @@ export function IconCloud({ icons, images }: IconCloudProps) {
 
             // Draw the image
             offCtx.drawImage(img, 0, 0, 40, 40);
+
+            // Add border for contrast on dark backgrounds
+            offCtx.beginPath();
+            offCtx.arc(20, 20, 19, 0, Math.PI * 2);
+            offCtx.closePath();
+            offCtx.lineWidth = 2;
+            offCtx.strokeStyle = "white";
+            offCtx.stroke();
 
             imagesLoadedRef.current[index] = true;
           };
@@ -203,7 +198,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
     const ctx = canvasRef.current.getContext("2d");
     if (!ctx) return;
 
-    iconPositions.forEach((icon) => {
+    iconPositions.forEach((icon, index) => {
       const cosX = Math.cos(rotationRef.current.x);
       const sinX = Math.sin(rotationRef.current.x);
       const cosY = Math.cos(rotationRef.current.y);
@@ -245,6 +240,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
           startTime: performance.now(),
           duration,
         });
+        setSelectedImage(images ? (images[index] as string) : null);
         return;
       }
     });
@@ -376,17 +372,32 @@ export function IconCloud({ icons, images }: IconCloudProps) {
   }, [icons, images, iconPositions, isDragging, mousePos, targetRotation]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={700}
-      height={600}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      className="rounded-lg"
-      aria-label="Interactive 3D Icon Cloud"
-      role="img"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        width={700}
+        height={600}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        className="rounded-lg cursor-pointer"
+        aria-label="Interactive 3D Icon Cloud"
+        role="img"
+      />
+      {selectedImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+          <div className="relative max-w-3xl w-full px-4">
+            <img src={selectedImage} alt="Selected" className="mx-auto rounded-lg shadow-xl max-h-[80vh] object-contain" />
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-2 right-2 rounded-full bg-white/20 p-2 text-white hover:bg-white/40"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
