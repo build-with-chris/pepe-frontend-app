@@ -19,16 +19,16 @@ const Hero27 = () => {
               Wir bringen <span className="font-bold text-white/90">außergewöhnliche Künstler</span> und <span className="font-bold text-white/90">unvergessliche Showmomente</span> auf Ihre Bühne.
             </Trans>
           </h1>
-          <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
+          <p className="mb-8 text-muted-foreground md:text-base lg:max-w-xl lg:text-lg leading-relaxed">
             {t("hero27.subtitle")}
           </p>
-          {/* USP Pills */}
-          <div className="mb-2 flex flex-wrap items-center justify-center gap-2">
-            <span className="rounded-full border border-white/20 px-3 py-1 text-sm text-white/80">{t("hero27.usp.custom")}</span>
-            <span className="rounded-full border border-white/20 px-3 py-1 text-sm text-white/80">{t("hero27.usp.experience")}</span>
-            <span className="rounded-full border border-white/20 px-3 py-1 text-sm text-white/80">{t("hero27.usp.europe")}</span>
-            <span className="rounded-full border border-white/20 px-3 py-1 text-sm text-white/80">{t("hero27.usp.fair")}</span>
-          </div>
+          {/* USP Inline Meta (lightweight, not buttons) */}
+          <ul className="-mt-2 mb-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs md:text-sm leading-relaxed text-white/60">
+            <li className="before:content-[''] first:before:hidden">{t("hero27.usp.custom")}</li>
+            <li className="before:content-['·'] before:mx-2 before:text-white/40">{t("hero27.usp.experience")}</li>
+            <li className="before:content-['·'] before:mx-2 before:text-white/40">{t("hero27.usp.europe")}</li>
+            <li className="before:content-['·'] before:mx-2 before:text-white/40">{t("hero27.usp.fair")}</li>
+          </ul>
           {/* CTAs */}
           <div className="flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
             <a href="/mediamaterial" className="w-full sm:w-auto">

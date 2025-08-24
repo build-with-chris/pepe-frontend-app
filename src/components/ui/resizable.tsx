@@ -1,6 +1,7 @@
 import * as React from "react"
 import { GripVerticalIcon } from "lucide-react"
 import * as ResizablePrimitive from "react-resizable-panels"
+import type { MouseEvent, KeyboardEvent } from "react"
 
 import { cn } from "@/lib/utils"
 import { DotLottieReact } from "@lottiefiles/dotlottie-react"
@@ -41,23 +42,54 @@ function ResizableHandle({
   className,
   withLottie,
   lottieSrc,
+  jumpTo,
+  onJump,
   ...props
 }: React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> & {
   withHandle?: boolean
   withLottie?: boolean
   lottieSrc?: string
+  /** Zielwert in Prozent (0–100), auf den beim Klick gesprungen wird. Default: 45 */
+  jumpTo?: number
+  /** Callback, um das tatsächliche Re-Layout im Parent auszulösen (z. B. über imperativelySetPanelGroupLayout). */
+  onJump?: (targetPercent: number) => void
 }) {
+  const activate = () => {
+    const target = typeof jumpTo === "number" ? Math.max(0, Math.min(100, jumpTo)) : 45
+    onJump?.(target)
+  }
+
+  const onKeyActivate = (e: KeyboardEvent<HTMLDivElement>) => {
+    const key = e.key.toLowerCase()
+    if (key === "enter" || key === " ") {
+      e.preventDefault()
+      activate()
+    }
+  }
+
   return (
     <ResizablePrimitive.PanelResizeHandle
       data-slot="resizable-handle"
+      role="button"
+      tabIndex={0}
+      onClick={activate}
+      title="Klicken oder Enter/Leertaste: springt auf voreingestellte Größe"
       className={cn(
-        "bg-border focus-visible:ring-ring relative flex w-px items-center justify-center after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-hidden data-[panel-group-direction=vertical]:h-px data-[panel-group-direction=vertical]:w-full data-[panel-group-direction=vertical]:after:left-0 data-[panel-group-direction=vertical]:after:h-1 data-[panel-group-direction=vertical]:after:w-full data-[panel-group-direction=vertical]:after:translate-x-0 data-[panel-group-direction=vertical]:after:-translate-y-1/2 [&[data-panel-group-direction=vertical]>div]:rotate-90 bg-white/40 hover:bg-white/70 transition-colors",
+        "bg-border focus-visible:ring-ring relative flex w-px items-center justify-center after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-hidden data-[panel-group-direction=vertical]:h-px data-[panel-group-direction=vertical]:w-full data-[panel-group-direction=vertical]:after:left-0 data-[panel-group-direction=vertical]:after:h-1 data-[panel-group-direction=vertical]:after:w-full data-[panel-group-direction=vertical]:after:translate-x-0 data-[panel-group-direction=vertical]:after:-translate-y-1/2 [&[data-panel-group-direction=vertical]>div]:rotate-90 bg-white/40 hover:bg-white/70 transition-colors cursor-pointer select-none",
         className
       )}
       {...props}
     >
       {withHandle && (
-        <div className="bg-white z-10 flex h-6 w-4 items-center justify-center rounded-sm shadow-md">
+        <div
+          className="bg-white z-10 flex h-6 w-4 items-center justify-center rounded-sm shadow-md cursor-pointer select-none"
+          role="button"
+          tabIndex={0}
+          onKeyDown={onKeyActivate}
+          onClick={activate}
+          aria-label="Resize-Handle: klicken oder Enter/Leertaste springt auf voreingestellte Größe"
+          title="Klicken oder Enter/Leertaste: springt auf voreingestellte Größe"
+        >
           <GripVerticalIcon className="size-3 text-black" />
         </div>
       )}
