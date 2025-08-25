@@ -22,6 +22,10 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const [loading, setLoading] = useState(false);
   const [showAnim, setShowAnim] = useState(false);
 
+  const [animArtists, setAnimArtists] = useState<number>(0);
+  const [animPriceMin, setAnimPriceMin] = useState<number>(0);
+  const [animPriceMax, setAnimPriceMax] = useState<number>(0);
+
   const isGroup = Number(data.team_size) === 3;
 
   // Map Gästezahl (intern evtl. 199 / 350 / 501) auf verständliche Buckets für die Anzeige
@@ -33,6 +37,31 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
       : guestsValue >= 200
         ? "200–500"
         : "<200";
+
+  // Derive city from address (best-effort)
+  const city = (data.event_address || '').split(',')[1]?.trim() || (data.event_address || '').trim();
+  const showTypeLabel = String(data.show_type || '').trim();
+
+  // Staggered reveal for waiting lines
+  const [showL1, setShowL1] = useState(true);
+  const [showL2, setShowL2] = useState(false);
+  const [showL3, setShowL3] = useState(false);
+
+  useEffect(() => {
+    if (showAnim) {
+      setShowL1(true);
+      const t2 = setTimeout(() => setShowL2(true), 900);
+      const t3 = setTimeout(() => setShowL3(true), 1800);
+      return () => {
+        clearTimeout(t2);
+        clearTimeout(t3);
+      };
+    } else {
+      setShowL1(true);
+      setShowL2(false);
+      setShowL3(false);
+    }
+  }, [showAnim]);
 
   useEffect(() => {
     if (responseRef.current && response) {
@@ -59,7 +88,26 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
       const waitTime = elapsed < 5000 ? 5000 - elapsed : 0;
       setTimeout(() => {
         setResponse(res);
+        try {
+          const duration = 800; // ms
+          const start = performance.now();
+          const fromArtists = 0;
+          const toArtists = Number(res?.num_available_artists || 0);
+          const fromMin = 0;
+          const toMin = Number(res?.price_min || 0);
+          const fromMax = 0;
+          const toMax = Number(res?.price_max || 0);
 
+          const step = (now: number) => {
+            const t = Math.min(1, (now - start) / duration);
+            const ease = t * (2 - t); // easeOutQuad
+            setAnimArtists(Math.round(fromArtists + (toArtists - fromArtists) * ease));
+            setAnimPriceMin(Math.round(fromMin + (toMin - fromMin) * ease));
+            setAnimPriceMax(Math.round(fromMax + (toMax - fromMax) * ease));
+            if (t < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        } catch {}
         // 👉 Notify the wizard to clear its cached data and also clear here as a fallback
         try {
           window.dispatchEvent(new Event('booking:submitted'));
@@ -185,47 +233,85 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         ) : null}
       </div>
       {showAnim && (
-        <div className="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 z-[1000]">
+        <div className="fixed inset-0 flex flex-col items-center justify-center z-[1000] bg-black/60 backdrop-blur-sm text-center px-4">
           <DotLottieReact
             src="https://lottie.host/f1618824-5547-4c31-80af-8c201d095f8c/klnukhE8Er.lottie"
             loop
             autoplay
-            style={{ width: 96, height: 96 }}
+            style={{ width: 120, height: 120 }}
           />
+          <div className="mt-6 text-white font-medium text-lg max-w-md">
+            <p className={`transition-all duration-500 ${showL1 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
+              {t('booking.showtime.waiting.line1', { defaultValue: 'Ich spüre schon, wie es aussehen wird…' })}
+            </p>
+            <p className={`transition-all duration-500 ${showL2 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
+              {t('booking.showtime.waiting.line2', {
+                defaultValue: '{{guests}} Gäste in {{city}} – {{showType}}. Man spürt das Kribbeln.',
+                guests: guestsLabel,
+                city,
+                showType: showTypeLabel
+              })}
+            </p>
+            <p className={`transition-all duration-500 ${showL3 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
+              {t('booking.showtime.waiting.line3', {
+                defaultValue: 'Gleich zeigen wir dir, was sich für euch richtig anfühlt.',
+              })}
+            </p>
+          </div>
         </div>
       )}
       {response && !showAnim && (
         <div ref={responseRef} className="relative w-full max-w-2xl mx-auto bg-stone-50 border border-gray-200 rounded-2xl shadow-xl mt-8 p-8">
-          {/* Header */}
+          {/* Badge */}
           <div className="flex flex-col items-center text-center">
             <span className="inline-flex items-center gap-2 text-green-600 mb-2">
-              <CheckCircle2 className="h-5 w-5" /> 
+              <CheckCircle2 className="h-5 w-5" />
               <span className="text-sm font-semibold uppercase tracking-wide">{t('booking.showtime.success.badge')}</span>
             </span>
-            <h3 className="text-2xl md:text-3xl font-extrabold mb-2 flex items-center gap-2 text-black">
-              {t('booking.showtime.success.title')}
+
+            {/* Emotion + Personalization */}
+            <h3 className="text-2xl md:text-3xl font-extrabold mb-2 text-black">
+              {t('booking.showtime.emotion.headline', {
+                defaultValue: 'Wow {{name}}, euer Event wird unvergesslich!',
+                name: data.client_name || ''
+              })}
             </h3>
+            <p className="text-sm md:text-base text-gray-600 max-w-md">
+              {t('booking.showtime.emotion.subline', {
+                defaultValue: '{{guests}} Gäste • {{showType}} • {{date}} um {{time}}',
+                guests: guestsLabel,
+                showType: String(data.show_type || ''),
+                date: String(data.event_date || ''),
+                time: String(data.event_time || '')
+              })}
+            </p>
+
+            {/* Supportive note (existing copy) */}
             {isGroup ? (
-              <p className="text-sm md:text-base text-gray-600 max-w-md">
+              <p className="text-xs md:text-sm text-gray-500 max-w-md mt-3">
                 {t('booking.showtime.success.groupNote')}
               </p>
             ) : (
-              <p className="text-sm md:text-base text-gray-600 max-w-md">
+              <p className="text-xs md:text-sm text-gray-500 max-w-md mt-3">
                 {t('booking.showtime.success.note')}
               </p>
             )}
           </div>
 
-          {/* Highlights */}
+          {/* Highlights with count-up */}
           {!isGroup && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
               <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
                 <div className="text-xs text-gray-500">{t('booking.showtime.success.highlights.available')}</div>
-                <div className="text-xl font-bold text-blue-700">{response.num_available_artists}</div>
+                <div className="text-xl font-bold text-blue-700">
+                  {animArtists}
+                </div>
               </div>
               <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
                 <div className="text-xs text-gray-500">{t('booking.showtime.success.highlights.price')}</div>
-                <div className="text-xl font-bold text-blue-700">{response.price_min}€ – {response.price_max}€</div>
+                <div className="text-xl font-bold text-blue-700">
+                  {animPriceMin}€ – {animPriceMax}€
+                </div>
               </div>
               <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
                 <div className="text-xs text-gray-500">{t('booking.showtime.success.highlights.bundle')}</div>
@@ -234,7 +320,27 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
             </div>
           )}
 
-          {/* Link */}
+          {/* Human touch: curator */}
+          <div className="mt-6 flex items-center gap-3 bg-white border border-gray-200 rounded-lg p-4">
+            <img src="/images/team/chris.jpg" alt="Chris" className="w-12 h-12 rounded-full object-cover" />
+            <p className="text-sm text-gray-700">
+              {t('booking.showtime.emotion.curator', {
+                defaultValue: '{{name}} prüft deine Anfrage und meldet sich innerhalb von 48 Stunden.',
+                name: 'Chris'
+              })}
+            </p>
+          </div>
+
+          {/* Optional: mini timeline */}
+          <div className="mt-6 text-xs md:text-sm text-gray-500">
+            <ul className="space-y-1">
+              <li>📩 {t('booking.showtime.timeline.received', { defaultValue: 'Heute: Anfrage eingegangen' })}</li>
+              <li>⏱️ {t('booking.showtime.timeline.inbox', { defaultValue: '<48h: Vorschläge im Postfach' })}</li>
+              <li>🔥 {t('booking.showtime.timeline.showtime', { defaultValue: 'Event: Showtime' })}</li>
+            </ul>
+          </div>
+
+          {/* CTA */}
           <div className="text-center mt-6">
             <a
               href="/kuenstler"
