@@ -85,7 +85,7 @@
           "private": "Private party",
           "corporate": "Corporate event",
           "incentive": "Team event",
-          "streetshow": "Street show"
+          "streetshow": "Cultural Event"
         }
       },
       "showType": {
@@ -241,7 +241,7 @@
     }
   },
   "contact": {
-    "heading": "How can we contact you for questions?",
+    "heading": "How can we contact you?",
     "nameLabel": "Name",
     "namePlaceholder": "Your name",
     "emailLabel": "Email",
@@ -863,7 +863,7 @@
     "headline": "A Network of World-Class Artists",
     "subline": "We are a strong collective of the finest performers in their disciplines – from the 7-time juggling world champion and the Cyr Wheel world champion to Olympic-level breakdancers and the German champion of magic. Led by PepeShows’ Michael Heiduk and Christoph Hermann – both passionate artists themselves."
   },
-    "contact": {
+    "contactPage": {
       "title": "Contact",
       "description": "We're here for you.",
       "email": {

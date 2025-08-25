@@ -88,7 +88,7 @@
         "private": "Private Feier",
         "corporate": "Firmenfeier",
         "incentive": "Teamevent",
-        "streetshow": "Streetshow"
+        "streetshow": "Kulturevent"
       }
     },
     "showType": {
@@ -242,97 +242,96 @@
     "custom": "Andere …",
     "placeholderMinutes": "Minuten",
     "next": "Weiter"
-    }
     },
-  "common": {
-  "yes": "Ja",
-  "no": "Nein"
+    "contact": {
+      "heading": "Wie dürfen wir dich kontaktieren?",
+      "nameLabel": "Name",
+      "namePlaceholder": "Dein Name",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "name@beispiel.de",
+      "emailNote": "Mit Angabe deiner E-Mail-Adresse erlaubst du uns, dir unverbindliche Angebotsvorschläge zu dieser Anfrage zuzusenden. Du kannst dem jederzeit widersprechen.",
+      "optional": "(optional)",
+      "planning": {
+        "label": "Planungsstatus",
+        "aria": "Info zum Planungsstatus",
+        "popover": "Der Planungsstatus hilft uns, das Angebot <b>individueller</b> zu gestalten. Je nach Stand gehen wir mehr in die <b>Detailtiefe</b> und erstellen entweder ein Angebot, das man <b>direkt buchen</b> kann (\"schneller Bedarf\"), oder eines, das <b>abgestimmt</b> werden kann (\"Angebotsvergleich\").",
+        "placeholder": "Bitte auswählen …",
+        "options": {
+          "initial": "Erstplanung",
+          "compare": "Angebotsvergleich",
+          "ready": "Bereit zum Buchen",
+          "urgent": "schneller Bedarf"
+        }
+      },
+      "newsletter": {
+        "label": "Newsletter abonnieren (5% Rabatt auf diese Anfrage)",
+        "desc": "Wir informieren dich über neueste Acts, Showorte und Veranstaltungen. Kein Spam, versprochen!"
+      },
+      "next": "Weiter"
     },
-  "contact": {
-  
-    "heading": "Wie dürfen wir dich für Rückfragen kontaktieren?",
-    "nameLabel": "Name",
-    "namePlaceholder": "Dein Name",
-    "emailLabel": "E-Mail",
-    "emailPlaceholder": "name@beispiel.de",
-    "emailNote": "Mit Angabe deiner E-Mail-Adresse erlaubst du uns, dir unverbindliche Angebotsvorschläge zu dieser Anfrage zuzusenden. Du kannst dem jederzeit widersprechen.",
-    "optional": "(optional)",
-    "planning": {
-      "label": "Planungsstatus",
-      "aria": "Info zum Planungsstatus",
-      "popover": "Der Planungsstatus hilft uns, das Angebot <b>individueller</b> zu gestalten. Je nach Stand gehen wir mehr in die <b>Detailtiefe</b> und erstellen entweder ein Angebot, das man <b>direkt buchen</b> kann (\"schneller Bedarf\"), oder eines, das <b>abgestimmt</b> werden kann (\"Angebotsvergleich\").",
-      "placeholder": "Bitte auswählen …",
-      "options": {
-        "initial": "Erstplanung",
-        "compare": "Angebotsvergleich",
-        "ready": "Bereit zum Buchen",
-        "urgent": "schneller Bedarf"
+    "showtime": {
+      "heading": {
+        "line1": "Fast geschafft – sollen wir deine Anfrage jetzt",
+        "line2": "an unsere Künstler senden?"
+      },
+      "infobox": {
+        "title": "Was passiert als nächstes",
+        "body": {
+          "part1": "Beim Klick auf",
+          "submit": "Absenden",
+          "part2": "geht deine Anfrage unverbindlich an unsere Künstler. Du erhältst innerhalb von 48 Stunden passende Angebote."
+        }
+      },
+      "summary": {
+        "title": "Ihre Daten im Überblick",
+        "labels": {
+          "eventType": "Event Typ",
+          "showType": "Show Typ",
+          "disciplines": "Disziplinen",
+          "teamSize": "Anreisende Künstler",
+          "duration": "Dauer",
+          "address": "Adresse",
+          "venueType": "Ort",
+          "datetime": "Datum & Uhrzeit",
+          "guests": "Gäste",
+          "planning": "Planungsstatus",
+          "light": "Licht benötigt",
+          "sound": "Ton benötigt",
+          "special": "Sonderwünsche",
+          "name": "Name",
+          "email": "E-Mail",
+          "newsletter": "Newsletter-Rabatt"
+        },
+        "minutes": "Minuten",
+        "indoor": "Indoor",
+        "outdoor": "Outdoor",
+        "at": "um",
+        "none": "–",
+        "newsletterYes": "Ja (5% Rabatt)",
+        "newsletterNo": "Nein"
+      },
+      "actions": {
+        "sending": "Senden…",
+        "submit": "Absenden"
+      },
+      "success": {
+        "badge": "Anfrage versendet 🎉",
+        "title": "Vielen Dank für deine Anfrage",
+        "groupNote": "Wir haben deine Anfrage erhalten und sind bereits in der Abstimmung. Da eine Gruppe etwas komplexer zu buchen ist, können wir an dieser Stelle noch keine Preisauskunft geben. Dein Angebot erhältst du wie gewohnt innerhalb von 48 Stunden per E-Mail.",
+        "note": "Deine Anfrage wurde erfolgreich versendet. Schau dich in der Zwischenzeit gern bei unseren Künstlern um und entdecke weitere spannende Acts.",
+        "highlights": {
+          "available": "Verfügbare Artisten",
+          "price": "Voraussichtlicher Preis",
+          "bundle": "Gebündeltes Angebot",
+          "bundleValue": "in 48h per Mail"
+        },
+        "ctaArtists": "Zu unseren Künstlern"
       }
-    },
-    "newsletter": {
-      "label": "Newsletter abonnieren (5% Rabatt auf diese Anfrage)",
-      "desc": "Wir informieren dich über neueste Acts, Showorte und Veranstaltungen. Kein Spam, versprochen!"
-    },
-    "next": "Weiter"
+    }
   },
-  "showtime": {
-    "heading": {
-      "line1": "Fast geschafft – sollen wir deine Anfrage jetzt",
-      "line2": "an unsere Künstler senden?"
-    },
-    "infobox": {
-      "title": "Was passiert als nächstes",
-      "body": {
-        "part1": "Beim Klick auf",
-        "submit": "Absenden",
-        "part2": "geht deine Anfrage unverbindlich an unsere Künstler. Du erhältst innerhalb von 48 Stunden passende Angebote."
-      }
-    },
-    "summary": {
-      "title": "Ihre Daten im Überblick",
-      "labels": {
-        "eventType": "Event Typ",
-        "showType": "Show Typ",
-        "disciplines": "Disziplinen",
-        "teamSize": "Anreisende Künstler",
-        "duration": "Dauer",
-        "address": "Adresse",
-        "venueType": "Ort",
-        "datetime": "Datum & Uhrzeit",
-        "guests": "Gäste",
-        "planning": "Planungsstatus",
-        "light": "Licht benötigt",
-        "sound": "Ton benötigt",
-        "special": "Sonderwünsche",
-        "name": "Name",
-        "email": "E-Mail",
-        "newsletter": "Newsletter-Rabatt"
-      },
-      "minutes": "Minuten",
-      "indoor": "Indoor",
-      "outdoor": "Outdoor",
-      "at": "um",
-      "none": "–",
-      "newsletterYes": "Ja (5% Rabatt)",
-      "newsletterNo": "Nein"
-    },
-    "actions": {
-      "sending": "Senden…",
-      "submit": "Absenden"
-    },
-    "success": {
-      "badge": "Anfrage versendet 🎉",
-      "title": "Vielen Dank für deine Anfrage",
-      "groupNote": "Wir haben deine Anfrage erhalten und sind bereits in der Abstimmung. Da eine Gruppe etwas komplexer zu buchen ist, können wir an dieser Stelle noch keine Preisauskunft geben. Dein Angebot erhältst du wie gewohnt innerhalb von 48 Stunden per E-Mail.",
-      "note": "Deine Anfrage wurde erfolgreich versendet. Schau dich in der Zwischenzeit gern bei unseren Künstlern um und entdecke weitere spannende Acts.",
-      "highlights": {
-        "available": "Verfügbare Artisten",
-        "price": "Voraussichtlicher Preis",
-        "bundle": "Gebündeltes Angebot",
-        "bundleValue": "in 48h per Mail"
-      },
-      "ctaArtists": "Zu unseren Künstlern"
-    }
+  "common": {
+    "yes": "Ja",
+    "no": "Nein"
   },
   "bookingIntro": {
     "logoAlt": "Pepe Logo",
@@ -690,7 +689,7 @@
       "subline": "Wir sind ein breites Netz aus den besten Artisten ihres Fachs – vom 7-fachen Jonglage-Weltmeister über die Cyr-Wheel-Weltmeisterin bis hin zum Olympia-Kader-Breakdancer und dem deutschen Meister der Zauberkunst. Geleitet von PepeShows Michael Heiduk und Christoph Hermann – beide selbst Artisten aus Leidenschaft."
     },
 
-  "contact": {
+  "contactPage": {
     "title": "Kontakt",
     "description": "Wir sind für dich da.",
     "email": {

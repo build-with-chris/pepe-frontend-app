@@ -4,7 +4,7 @@ import { Mail } from 'lucide-react';
 import InfoBox from '../Infobox';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Info } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 export interface StepContactDetailsProps {
   data: BookingData;
@@ -83,7 +83,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
               </button>
             </PopoverTrigger>
             <PopoverContent side="top" align="end" className="max-w-sm bg-black text-white text-sm p-4 rounded-lg border border-white/20 shadow-lg">
-              {t('booking.contact.planning.popover')}
+              <Trans i18nKey="booking.contact.planning.popover" />
             </PopoverContent>
           </Popover>
         </div>
@@ -100,26 +100,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           <option value="schneller Bedarf">{t('booking.contact.planning.options.urgent')}</option>
         </select>
       </div>
-      <div className="w-full lg:w-1/3 mx-auto mb-6">
-        <div className="flex items-center space-x-4 p-4 border border-white/20 rounded-lg bg-black/30 hover:bg-black/40 transition text-white">
-          <input
-            id="newsletter"
-            type="checkbox"
-            checked={data.newsletter_opt_in}
-            onChange={handleNewsletterChange}
-            className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mr-10"
-          />
-          <Mail className="h-6 w-6 text-blue-600 animate-bounce" />
-          <div className="flex-1">
-            <label htmlFor="newsletter" className="text-sm font-medium text-white">
-              {t('booking.contact.newsletter.label')}
-            </label>
-            <p className="text-xs text-white/80 mt-1">
-              {t('booking.contact.newsletter.desc')}
-            </p>
-          </div>
-        </div>
-      </div>
+  
       {/* Erklärung – Desktop & Tablet */}
      
       {/* Fixed footer CTA */}
