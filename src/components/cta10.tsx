@@ -20,7 +20,6 @@ interface Cta10Props {
 const Cta10 = ({
   heading,
   description,
-  buttons,
   rightAddon,
 }: Cta10Props) => {
   const { t } = useTranslation();
