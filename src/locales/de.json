@@ -249,6 +249,7 @@
   "no": "Nein"
     },
   "contact": {
+  
     "heading": "Wie dürfen wir dich für Rückfragen kontaktieren?",
     "nameLabel": "Name",
     "namePlaceholder": "Dein Name",
@@ -389,12 +390,10 @@
       "contact": { "title": "Kontakt", "help": "Fragen zur Verwendung? Wir helfen gern weiter." }
     }
   },
-  "contact": {
-    "cta": {
-      "heading": "Schnell & einfach zur Show",
-      "description": "Der schnellste Weg zu Ihrem Angebot: unser Booking-Assistent. Alle Infos eingeben, Angebot erhalten – einfach, unverbindlich & effizient.\n\nFür persönliche Beratung erreichen Sie uns jederzeit telefonisch.",
-      "button": "Booking-Assistent starten"
-    },
+  "contactCta": {
+    "heading": "Schnell & einfach zur Show",
+    "description": "Der schnellste Weg zu Ihrem Angebot: unser Booking-Assistent. Alle Infos eingeben, Angebot erhalten – einfach, unverbindlich & effizient.",
+    "button": "Booking-Assistent starten",
     "callAria": "Jetzt anrufen"
   },
   "contact2": {
@@ -690,6 +689,29 @@
       "headline": "Netzwerk von Weltklasse-Künstlern",
       "subline": "Wir sind ein breites Netz aus den besten Artisten ihres Fachs – vom 7-fachen Jonglage-Weltmeister über die Cyr-Wheel-Weltmeisterin bis hin zum Olympia-Kader-Breakdancer und dem deutschen Meister der Zauberkunst. Geleitet von PepeShows Michael Heiduk und Christoph Hermann – beide selbst Artisten aus Leidenschaft."
     },
+
+  "contact": {
+    "title": "Kontakt",
+    "description": "Wir sind für dich da.",
+    "email": {
+      "label": "E-Mail",
+      "description": "Auf E-Mails antworten wir in der Regel innerhalb von 24 Stunden."
+    },
+    "office": {
+      "label": "Space",
+      "description": "Unser PepeDome im Ostpark München.",
+      "address": "PepeDome, Ostpark München, 81735"
+    },
+    "phone": {
+      "label": "Telefon",
+      "description": "Mo–Fr, 9–17 Uhr"
+    },
+    "chat": {
+      "label": "Live Chat",
+      "description": "Coming soon...",
+      "link": "Coming soon"
+    }
+  },
  
   "testimonial19": {
     "kicker": "Stimmen unserer Kund:innen",

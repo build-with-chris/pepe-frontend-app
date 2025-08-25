@@ -399,12 +399,10 @@
     "no": "No"
     },
   
-    "contact": {
-      "cta": {
-        "heading": "Fast & easy to your show",
-        "description": "The quickest way to receive your quote: our booking assistant. Enter a few details and get a non-binding offer – simple and efficient.\n\nFor personal advice you can call us anytime.",
-        "button": "Start booking assistant"
-      },
+    "contactCta": {
+      "heading": "Fast & easy to your show",
+      "description": "The quickest way to receive your quote: our booking assistant. Enter a few details and get a non-binding offer – simple and efficient.",
+      "button": "Start booking assistant",
       "callAria": "Call now"
     },
   
@@ -865,7 +863,28 @@
     "headline": "A Network of World-Class Artists",
     "subline": "We are a strong collective of the finest performers in their disciplines – from the 7-time juggling world champion and the Cyr Wheel world champion to Olympic-level breakdancers and the German champion of magic. Led by PepeShows’ Michael Heiduk and Christoph Hermann – both passionate artists themselves."
   },
-  
+    "contact": {
+      "title": "Contact",
+      "description": "We're here for you.",
+      "email": {
+        "label": "Email",
+        "description": "We usually reply within 24 hours."
+      },
+      "office": {
+        "label": "Space",
+        "description": "Our PepeDome in Munich’s Ostpark.",
+        "address": "PepeDome, Ostpark Munich, 81735"
+      },
+      "phone": {
+        "label": "Phone",
+        "description": "Mon–Fri, 9am–5pm"
+      },
+      "chat": {
+        "label": "Live Chat",
+        "description": "Coming soon...",
+        "link": "Coming soon"
+      }
+    },
     "testimonial19": {
       "kicker": "What our clients say",
       "heading": "Testimonials from our clients",

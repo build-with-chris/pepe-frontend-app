@@ -26,7 +26,7 @@ const Hero224 = () => {
   ];
 
   return (
-    <section className="relative py-32 overflow-hidden px-6 md:px-12 lg:px-20">
+    <section className="relative py-16 overflow-hidden px-6 md:px-12 lg:px-20">
       {/* Background glow effects */}
       <div className="absolute -top-40 -right-40 w-[28rem] h-[28rem] bg-[radial-gradient(circle_at_top_right,_rgba(99,102,241,0.4),_transparent_70%)] blur-3xl rounded-full pointer-events-none" />
       <div className="absolute -bottom-40 -left-40 w-[28rem] h-[28rem] bg-[radial-gradient(circle_at_bottom_left,_rgba(34,211,238,0.4),_transparent_70%)] blur-3xl rounded-full pointer-events-none" />

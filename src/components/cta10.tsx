@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface Cta10Props {
   heading?: string;
@@ -22,37 +23,26 @@ const Cta10 = ({
   buttons,
   rightAddon,
 }: Cta10Props) => {
+  const { t } = useTranslation();
   return (
-    <section className="md:py-16 bg-black text-white ">
+    <section className="bg-black text-white pt-12 md:py-16 px-6 md:px-12 lg:pt-20">
       <div className="w-full ">
-        <div className="bg-white/5 lg:flex-row backdrop-blur-sm rounded-lg p-8 flex w-full flex-col gap-16 overflow-hidden rounded-lg p-8 md:rounded-xl lg:items-center lg:p-12 ">
+        <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-16 overflow-hidden rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm p-8 lg:p-12 hover:bg-white/10 transition">
           <div className="flex-1">
-            <h3 className="mb-3 text-2xl font-semibold text-white md:mb-4 md:text-4xl lg:mb-6">
-              {heading}
+            <h3 className="mb-3 text-2xl font-semibold text-white md:mb-4 md:text-4xl ">
+              {heading ?? t("contactCta.heading")}
             </h3>
-            <p className="w-full text-white/70 lg:text-xl whitespace-pre-line">
-              {description}
+            <p className="w-full text-white/70 lg:text-xl leading-relaxed whitespace-pre-line">
+              {description ?? t("contactCta.description")}
             </p>
           </div>
-          <div className="flex items-center gap-2 flex-col sm:flex-row">
-            {buttons?.primary && (
-              <Button asChild size="lg" className="bg-white text-black hover:bg-gray-200">
-                <a href={buttons.primary.url}>{buttons.primary.text}</a>
-              </Button>
-            )}
-
-            {rightAddon && (
-              <span className="ml-5 inline-flex items-center select-none pointer-events-none">
+          {rightAddon && (
+            <div className="flex items-center justify-center lg:justify-start">
+              <div className="w-16 h-16 lg:w-20 lg:h-20">
                 {rightAddon}
-              </span>
-            )}
-
-            {buttons?.secondary && (
-              <Button variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
-                <a href={buttons.secondary.url}>{buttons.secondary.text}</a>
-              </Button>
-            )}
-          </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

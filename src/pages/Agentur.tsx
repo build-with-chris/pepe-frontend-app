@@ -46,8 +46,7 @@ export default function Agentur() {
                   </p>
 
                   {/* Subtile Effekte */}
-                  <div className="absolute -top-20 -right-20 w-72 h-72 bg-gradient-to-tr from-indigo-500/40 to-sky-400/25 blur-2xl rounded-full pointer-events-none" />
-                  <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-gradient-to-bl from-cyan-400/40 to-emerald-400/25 blur-2xl rounded-full pointer-events-none" />
+                  
                 </div>
               </section>
             </div>
