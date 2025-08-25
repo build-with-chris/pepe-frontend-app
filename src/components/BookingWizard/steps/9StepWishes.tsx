@@ -33,6 +33,39 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
 
       {/* Unified content wrapper for consistent left edge */}
       <div className="w-full max-w-3xl mx-auto px-4">
+        {/* Duration selection (required) */}
+        <div className="mb-8">
+          <label className="block text-lg font-semibold text-white mb-3 text-left">
+            {t('booking.length.selectLabel', { defaultValue: 'Dauer der Show' })}
+          </label>
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3">
+            {[
+              { v: 5, label: '5 min' },
+              { v: 10, label: '10 min' },
+              { v: 15, label: '15 min' },
+              { v: 20, label: '20 min' },
+              { v: 21, label: '>20 min' }, // 21 steht hier als Marker für ">20"
+            ].map(({ v, label }) => {
+              const selected = Number(data.duration_minutes) === v || (v === 21 && Number(data.duration_minutes) > 20);
+              return (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => onChange({ duration_minutes: v })}
+                  className={`px-4 py-2 rounded-full border transition-colors text-sm font-medium ${
+                    selected
+                      ? 'bg-white text-black border-white'
+                      : 'bg-transparent text-white border-white/30 hover:border-white/60'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          <p className="mt-2 text-xs text-white/70">{t('booking.length.requiredHint', { defaultValue: 'Bitte eine Dauer auswählen (Pflichtfeld).' })}</p>
+        </div>
+
         {/* Wishes textarea */}
         <div className="mb-6">
           <label htmlFor="wishes" className="block text-lg font-semibold text-white mb-2 text-left">
@@ -113,7 +146,12 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
         <button
           type="button"
           onClick={onNext}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full shadow-lg"
+          disabled={!data.duration_minutes || Number(data.duration_minutes) < 1}
+          className={`font-semibold py-3 px-8 rounded-full shadow-lg transition-colors ${
+            !data.duration_minutes || Number(data.duration_minutes) < 1
+              ? 'bg-blue-600/60 cursor-not-allowed text-white'
+              : 'bg-blue-600 hover:bg-blue-700 text-white'
+          }`}
         >
           {t('booking.wishes.next')}
         </button>

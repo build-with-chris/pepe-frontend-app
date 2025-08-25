@@ -278,7 +278,7 @@
         "title": "Was passiert als nächstes",
         "body": {
           "part1": "Beim Klick auf",
-          "submit": "Absenden",
+          "submit": "",
           "part2": "geht deine Anfrage unverbindlich an unsere Künstler. Du erhältst innerhalb von 48 Stunden passende Angebote."
         }
       },
@@ -312,7 +312,7 @@
       },
       "actions": {
         "sending": "Senden…",
-        "submit": "Absenden"
+        "submit": "unverbindlich Anfragen"
       },
       "success": {
         "badge": "Anfrage versendet 🎉",
@@ -689,7 +689,7 @@
       "subline": "Wir sind ein breites Netz aus den besten Artisten ihres Fachs – vom 7-fachen Jonglage-Weltmeister über die Cyr-Wheel-Weltmeisterin bis hin zum Olympia-Kader-Breakdancer und dem deutschen Meister der Zauberkunst. Geleitet von PepeShows Michael Heiduk und Christoph Hermann – beide selbst Artisten aus Leidenschaft."
     },
 
-  "contactPage": {
+  "contact": {
     "title": "Kontakt",
     "description": "Wir sind für dich da.",
     "email": {

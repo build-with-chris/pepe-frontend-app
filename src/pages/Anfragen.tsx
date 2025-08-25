@@ -6,7 +6,6 @@ import StepEventType from '../components/BookingWizard/steps/1StepEventType';
 import StepShowType from '../components/BookingWizard/steps/2StepShowType';
 import StepShowDisciplines from '../components/BookingWizard/steps/5ShowDisciplines.tsx';
 import StepArtistCount from '../components/BookingWizard/steps/3StepArtistCount';
-import StepLengthOfShow from '../components/BookingWizard/steps/4StepLengthOfShow';
 import StepLocation from '../components/BookingWizard/steps/6StepLocation';
 import StepDateAndTime from '../components/BookingWizard/steps/7StepDateAndTime';
 import StepWishes from '../components/BookingWizard/steps/9StepWishes';
@@ -19,7 +18,6 @@ const steps = [
   StepShowType,
   StepShowDisciplines,
   StepArtistCount,
-  StepLengthOfShow,
   StepLocation,
   StepDateAndTime,
   StepWishes,

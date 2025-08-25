@@ -3,7 +3,6 @@ import confetti from 'canvas-confetti';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
 import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star, PartyPopper, CheckCircle2 } from 'lucide-react';
-import InfoBox from '../Infobox';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useTranslation } from "react-i18next";
 
@@ -37,7 +36,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
     if (key.includes('led') && key.includes('cyr')) return 'LED CYR Blackbox.webm';
     if (key.includes('cyr')) return 'Cyr 5.webm';
     if (key.includes('pantom')) return 'Pantomime.webm';
-    if (key.includes('contor') || key.includes('contortion')) return 'Contortion.webm';
+    if (key.includes('akro') || key.includes('contortion')) return 'Contortion.webm';
     if (key.includes('hula')) return 'Hula.webm';
     if (key.includes('handstand')) return 'Handstand.webm';
     if (key.includes('chinese') || key.includes('pole')) return 'Chienise Pole.webm';
@@ -158,80 +157,64 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         <br />
         {t('booking.showtime.heading.line2')}
       </h2>
-      <InfoBox
-        title={t('booking.showtime.infobox.title')}
-        text={
-          <>
-            {t('booking.showtime.infobox.body.part1')} <strong>{t('booking.showtime.infobox.body.submit')}</strong> {t('booking.showtime.infobox.body.part2')}
-          </>
-        }
-      />
-      <div className="w-full max-w-2xl mx-auto mb-6 bg-stone-50 border border-gray-200 rounded-lg shadow p-5 sm:p-6 break-words">
+      <div className="w-full max-w-2xl mx-auto mb-6 bg-white border border-gray-200/70 rounded-2xl shadow-sm p-5 sm:p-6 break-words">
         <h3 className="text-xl font-semibold mb-4 text-black ">{t('booking.showtime.summary.title')}</h3>
         <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-stone-700 break-words">
           <div>
-            <dt className="font-semibold flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.eventType')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.eventType')}</dt>
             <dd>{data.event_type}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.showType')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.showType')}</dt>
             <dd>{data.show_type}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><ListChecks className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.disciplines')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><ListChecks className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.disciplines')}</dt>
             <dd>{data.disciplines.join(', ')}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><Users className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.teamSize')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><Users className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.teamSize')}</dt>
             <dd>{Number(data.team_size) === 3 ? 'Gruppe' : data.team_size}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><Clock className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.duration')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><Clock className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.duration')}</dt>
             <dd>{data.duration_minutes}{' ' + t('booking.showtime.summary.minutes')}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><MapPin className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.address')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><MapPin className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.address')}</dt>
             <dd>{data.event_address}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><MapPin className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.venueType')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><MapPin className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.venueType')}</dt>
             <dd>{data.is_indoor ? t('booking.showtime.summary.indoor') : t('booking.showtime.summary.outdoor')}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><Clock className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.datetime')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><Clock className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.datetime')}</dt>
             <dd>{data.event_date}{' ' + t('booking.showtime.summary.at') + ' '}{data.event_time}</dd>
           </div>
-          <div>
-            <dt className="font-semibold flex items-center gap-2"><Users className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.guests')}</dt>
-            <dd>{guestsLabel}</dd>
-          </div>
-          <div>
-            <dt className="font-semibold flex items-center gap-2"><Info className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.planning')}</dt>
-            <dd>{data.planning_status}</dd>
-          </div>
-          <div>
-            <dt className="font-semibold flex items-center gap-2"><Lightbulb className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.light')}</dt>
-            <dd>{data.needs_light ? t('common.yes') : t('common.no')}</dd>
-          </div>
-          <div>
-            <dt className="font-semibold flex items-center gap-2"><Mic className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.sound')}</dt>
-            <dd>{data.needs_sound ? t('common.yes') : t('common.no')}</dd>
-          </div>
+          {data.needs_light && (
+            <div>
+              <dt className="font-semibold text-gray-800 flex items-center gap-2"><Lightbulb className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.light')}</dt>
+              <dd>{t('common.yes')}</dd>
+            </div>
+          )}
+          {data.needs_sound && (
+            <div>
+              <dt className="font-semibold text-gray-800 flex items-center gap-2"><Mic className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.sound')}</dt>
+              <dd>{t('common.yes')}</dd>
+            </div>
+          )}
           <div className="md:col-span-2">
-            <dt className="font-semibold flex items-center gap-2"><Star className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.special')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><Star className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.special')}</dt>
             <dd>{data.special_requests || t('booking.showtime.summary.none')}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><User className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.name')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><User className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.name')}</dt>
             <dd>{data.client_name}</dd>
           </div>
           <div>
-            <dt className="font-semibold flex items-center gap-2"><Mail className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.email')}</dt>
+            <dt className="font-semibold text-gray-800 flex items-center gap-2"><Mail className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.email')}</dt>
             <dd className="break-all">{data.client_email}</dd>
-          </div>
-          <div className="md:col-span-2">
-            <dt className="font-semibold flex items-center gap-2"><Gift className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.newsletter')}</dt>
-            <dd>{data.newsletter_opt_in ? t('booking.showtime.summary.newsletterYes') : t('booking.showtime.summary.newsletterNo')}</dd>
           </div>
         </dl>
       </div>
@@ -378,7 +361,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
 
           {/* Human touch: curator */}
           <div className="mt-6 flex items-center gap-3 bg-white border border-gray-200 rounded-lg p-4">
-            <img src="/images/team/chris.jpg" alt="Chris" className="w-12 h-12 rounded-full object-cover" />
+            <img src="public/images/Team/Chris.webp" alt="Chris" className="w-12 h-12 rounded-full object-cover" />
             <p className="text-sm text-gray-700">
               {t('booking.showtime.emotion.curator', {
                 defaultValue: '{{name}} prüft deine Anfrage und meldet sich innerhalb von 48 Stunden.',
