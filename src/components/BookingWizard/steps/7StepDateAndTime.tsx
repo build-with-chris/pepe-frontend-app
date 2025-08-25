@@ -4,15 +4,20 @@ import { Clock as ClockIcon, Users as UsersIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import type { BookingData } from '../types';
-import InfoBox from '../Infobox';
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
-
 import { useTranslation } from "react-i18next";
+
+const TIME_SLOTS: string[] = Array.from({ length: 24 }, (_, i) => {
+  const totalMinutes = i * 30;
+  const hour = Math.floor(totalMinutes / 60) + 12;
+  const minute = totalMinutes % 60;
+  return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+});
+
+const GUEST_OPTIONS: { labelKey: string; value: number }[] = [
+  { labelKey: 'booking.dateTime.guests.options.under200', value: 199 },
+  { labelKey: 'booking.dateTime.guests.options.between200and500', value: 350 },
+  { labelKey: 'booking.dateTime.guests.options.over500', value: 501 },
+];
 
 export interface StepDateAndTimeProps {
   data: BookingData;
@@ -58,18 +63,15 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
     setSelectedDay(selected);
   };
 
-  // Time slot builder (12:00 -> 24:00 in 30-min steps, last slot 23:30)
-  const timeSlots = React.useMemo(() => {
-    // 12 hours * 2 slots/hour = 24 slots (12:00, 12:30, ..., 23:30)
-    return Array.from({ length: 24 }, (_, i) => {
-      const totalMinutes = i * 30; // 0 .. 690
-      const hour = Math.floor(totalMinutes / 60) + 12; // start 12:00
-      const minute = totalMinutes % 60;
-      return `${hour.toString().padStart(2, '0')}:${minute
-        .toString()
-        .padStart(2, '0')}`;
-    });
-  }, []);
+  const canProceed = Boolean(data.event_date && data.event_time && data.number_of_guests);
+
+  const handleTimeSelect = React.useCallback((time: string) => {
+    onChange({ event_time: time });
+  }, [onChange]);
+
+  const handleGuestSelect = React.useCallback((val: number) => {
+    onChange({ number_of_guests: val });
+  }, [onChange]);
 
   // Selected time comes from data.event_time
   const selectedTime = data.event_time || null;
@@ -120,11 +122,11 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
           </div>
           <div className="h-px bg-white/10 -mt-2 mb-3" />
           <div className="grid gap-2">
-            {timeSlots.map((time) => (
+            {TIME_SLOTS.map((time) => (
               <Button
                 key={time}
                 variant={selectedTime === time ? 'secondary' : 'default'}
-                onClick={() => onChange({ event_time: time })}
+                onClick={() => handleTimeSelect(time)}
                 className="w-full shadow-none"
               >
                 {time}
@@ -139,19 +141,15 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
           </div>
           <div className="h-px bg-white/10 -mt-2 mb-3" />
           <div className="grid gap-2">
-            {[
-              { label: t('booking.dateTime.guests.options.under200'), value: 199 },
-              { label: t('booking.dateTime.guests.options.between200and500'), value: 350 },
-              { label: t('booking.dateTime.guests.options.over500'), value: 501 },
-            ].map((option) => (
+            {GUEST_OPTIONS.map((option) => (
               <Button
-                key={option.label}
-                onClick={() => onChange({ number_of_guests: option.value })}
+                key={option.labelKey}
+                onClick={() => handleGuestSelect(option.value)}
                 variant={data.number_of_guests === option.value ? 'secondary' : 'default'}
                 className="w-full"
                 type="button"
               >
-                {option.label}
+                {t(option.labelKey)}
               </Button>
             ))}
           </div>
@@ -179,10 +177,10 @@ const StepDateAndTime: React.FC<StepDateAndTimeProps> = ({
         <button
           type="button"
           onClick={onNext}
-          disabled={!data.event_date || !data.event_time || !data.number_of_guests}
+          disabled={!canProceed}
           aria-label={t('booking.dateTime.next')}
           className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${
-            !data.event_date || !data.event_time || !data.number_of_guests
+            !canProceed
               ? 'opacity-50 cursor-not-allowed'
               : 'hover:bg-blue-700'
           }`}

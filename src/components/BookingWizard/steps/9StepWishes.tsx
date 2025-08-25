@@ -1,6 +1,5 @@
 import React from 'react';
 import type { BookingData } from '../types';
-import InfoBox from '../Infobox';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Info } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -44,9 +43,9 @@ const StepWishes: React.FC<StepWishesProps> = ({ data, onChange, onNext, onPrev 
               { v: 10, label: '10 min' },
               { v: 15, label: '15 min' },
               { v: 20, label: '20 min' },
-              { v: 21, label: '>20 min' }, // 21 steht hier als Marker für ">20"
+              { v: 30, label: '>20 min' }, // 30 steht hier als Marker für ">20"
             ].map(({ v, label }) => {
-              const selected = Number(data.duration_minutes) === v || (v === 21 && Number(data.duration_minutes) > 20);
+              const selected = Number(data.duration_minutes) === v || (v === 30 && Number(data.duration_minutes) > 20);
               return (
                 <button
                   key={v}

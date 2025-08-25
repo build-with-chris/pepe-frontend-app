@@ -1,5 +1,4 @@
-import React from 'react';
-import InfoBox from '../Infobox';
+import React, { useCallback } from 'react';
 import type { BookingData } from '../types';
 import {
   Accordion,
@@ -8,6 +7,23 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { useTranslation } from "react-i18next";
+
+const DISCIPLINE_OPTIONS: { value: string; img: string; labelKey: string; descKey: string }[] = [
+  { value: 'Zauberer', img: 'Zauberer', labelKey: 'booking.disciplines.options.zauberer.label', descKey: 'booking.disciplines.options.zauberer.description' },
+  { value: 'Cyr-Wheel', img: 'Cyr-Wheel', labelKey: 'booking.disciplines.options.cyrWheel.label', descKey: 'booking.disciplines.options.cyrWheel.description' },
+  { value: 'Bodenakrobatik', img: 'Bodenakrobatik', labelKey: 'booking.disciplines.options.bodenakrobatik.label', descKey: 'booking.disciplines.options.bodenakrobatik.description' },
+  { value: 'Luftakrobatik', img: 'Luftakrobatik', labelKey: 'booking.disciplines.options.luftakrobatik.label', descKey: 'booking.disciplines.options.luftakrobatik.description' },
+  { value: 'Partnerakrobatik', img: 'Partnerakrobatik', labelKey: 'booking.disciplines.options.partnerakrobatik.label', descKey: 'booking.disciplines.options.partnerakrobatik.description' },
+  { value: 'Chinese Pole', img: 'Chinese_Pole', labelKey: 'booking.disciplines.options.chinesePole.label', descKey: 'booking.disciplines.options.chinesePole.description' },
+  { value: 'Hula Hoop', img: 'Hula_Hoop', labelKey: 'booking.disciplines.options.hulaHoop.label', descKey: 'booking.disciplines.options.hulaHoop.description' },
+  { value: 'Handstand', img: 'Handstand', labelKey: 'booking.disciplines.options.handstand.label', descKey: 'booking.disciplines.options.handstand.description' },
+  { value: 'Contemporary Dance', img: 'Contemporary_Dance', labelKey: 'booking.disciplines.options.contemporaryDance.label', descKey: 'booking.disciplines.options.contemporaryDance.description' },
+  { value: 'Breakdance', img: 'Breakdance', labelKey: 'booking.disciplines.options.breakdance.label', descKey: 'booking.disciplines.options.breakdance.description' },
+  { value: 'Teeterboard', img: 'Teeterboard', labelKey: 'booking.disciplines.options.teeterboard.label', descKey: 'booking.disciplines.options.teeterboard.description' },
+  { value: 'Jonglage', img: 'Jonglage', labelKey: 'booking.disciplines.options.jonglage.label', descKey: 'booking.disciplines.options.jonglage.description' },
+  { value: 'Moderation', img: 'Moderation', labelKey: 'booking.disciplines.options.moderation.label', descKey: 'booking.disciplines.options.moderation.description' },
+  { value: 'Pantomime/Entertainment', img: 'Pantomime_Entertainment', labelKey: 'booking.disciplines.options.pantomimeEntertainment.label', descKey: 'booking.disciplines.options.pantomimeEntertainment.description' }
+];
 
 export interface StepDisciplinesProps {
   data: BookingData;
@@ -24,30 +40,13 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const options: { value: string; img: string; labelKey: string; descKey: string }[] = [
-    { value: 'Zauberer', img: 'Zauberer', labelKey: 'booking.disciplines.options.zauberer.label', descKey: 'booking.disciplines.options.zauberer.description' },
-    { value: 'Cyr-Wheel', img: 'Cyr-Wheel', labelKey: 'booking.disciplines.options.cyrWheel.label', descKey: 'booking.disciplines.options.cyrWheel.description' },
-    { value: 'Bodenakrobatik', img: 'Bodenakrobatik', labelKey: 'booking.disciplines.options.bodenakrobatik.label', descKey: 'booking.disciplines.options.bodenakrobatik.description' },
-    { value: 'Luftakrobatik', img: 'Luftakrobatik', labelKey: 'booking.disciplines.options.luftakrobatik.label', descKey: 'booking.disciplines.options.luftakrobatik.description' },
-    { value: 'Partnerakrobatik', img: 'Partnerakrobatik', labelKey: 'booking.disciplines.options.partnerakrobatik.label', descKey: 'booking.disciplines.options.partnerakrobatik.description' },
-    { value: 'Chinese Pole', img: 'Chinese_Pole', labelKey: 'booking.disciplines.options.chinesePole.label', descKey: 'booking.disciplines.options.chinesePole.description' },
-    { value: 'Hula Hoop', img: 'Hula_Hoop', labelKey: 'booking.disciplines.options.hulaHoop.label', descKey: 'booking.disciplines.options.hulaHoop.description' },
-    { value: 'Handstand', img: 'Handstand', labelKey: 'booking.disciplines.options.handstand.label', descKey: 'booking.disciplines.options.handstand.description' },
-    { value: 'Contemporary Dance', img: 'Contemporary_Dance', labelKey: 'booking.disciplines.options.contemporaryDance.label', descKey: 'booking.disciplines.options.contemporaryDance.description' },
-    { value: 'Breakdance', img: 'Breakdance', labelKey: 'booking.disciplines.options.breakdance.label', descKey: 'booking.disciplines.options.breakdance.description' },
-    { value: 'Teeterboard', img: 'Teeterboard', labelKey: 'booking.disciplines.options.teeterboard.label', descKey: 'booking.disciplines.options.teeterboard.description' },
-    { value: 'Jonglage', img: 'Jonglage', labelKey: 'booking.disciplines.options.jonglage.label', descKey: 'booking.disciplines.options.jonglage.description' },
-    { value: 'Moderation', img: 'Moderation', labelKey: 'booking.disciplines.options.moderation.label', descKey: 'booking.disciplines.options.moderation.description' },
-    { value: 'Pantomime/Entertainment', img: 'Pantomime_Entertainment', labelKey: 'booking.disciplines.options.pantomimeEntertainment.label', descKey: 'booking.disciplines.options.pantomimeEntertainment.description' }
-  ];
-
-  const toggleDiscipline = (value: string) => {
+  const toggleDiscipline = useCallback((value: string) => {
     const selected = data.disciplines.includes(value);
     const newList = selected
       ? data.disciplines.filter(d => d !== value)
       : [...data.disciplines, value];
     onChange({ disciplines: newList });
-  };
+  }, [data.disciplines, onChange]);
 
   return (
     <div className="step flex flex-col items-center pb-28">
@@ -56,22 +55,26 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
       
       <div className="w-full px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto justify-items-center">
-          {options.map((opt) => {
+          {DISCIPLINE_OPTIONS.map((opt) => {
             const label = t(opt.labelKey);
             const desc = t(opt.descKey);
             const isSelected = data.disciplines.includes(opt.value);
             return (
-              <div
+              <button
                 key={opt.value}
+                type="button"
                 onClick={() => toggleDiscipline(opt.value)}
-                className={`aspect-square w-full relative cursor-pointer rounded-lg overflow-hidden group ${
+                aria-pressed={isSelected}
+                title={String(label)}
+                className={`aspect-square w-full relative cursor-pointer rounded-lg overflow-hidden group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                   isSelected ? 'border-4 border-blue-500' : 'border-2 border-transparent'
                 }`}
               >
                 <img
-                  src={`/images/disciplines/${opt.img}.webp`
-                  }
-                  alt={label}
+                  src={`/images/disciplines/${opt.img}.webp`}
+                  alt={String(label)}
+                  loading="lazy"
+                  decoding="async"
                   className="absolute inset-0 w-full h-full object-cover transition duration-200 group-hover:brightness-75"
                 />
                 <div className="absolute bottom-0 w-full bg-black/50 py-1 transition-opacity group-hover:opacity-0">
@@ -80,7 +83,7 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
                 <div className="absolute inset-x-3 bottom-3 bg-black/60 text-white rounded-md px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                   <p className="text-md text-center leading-snug">{desc}</p>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>

@@ -1,13 +1,6 @@
 import React from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
-import InfoBox from '../Infobox';
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from '@/components/ui/accordion';
 import { useTranslation } from "react-i18next";
 
 export interface StepShowTypeProps {

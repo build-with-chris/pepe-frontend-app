@@ -1,15 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { BookingData } from '../types';
 import OptionCard from '../OptionCard';
-import InfoBox from '../Infobox';
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
 import { useTranslation } from "react-i18next";
-
 export interface StepLocationProps {
   data: BookingData;
   onChange: (update: Partial<BookingData>) => void;
@@ -68,25 +60,32 @@ const StepLocation: React.FC<StepLocationProps> = ({
 
   useEffect(() => {
     if (city && artistCoord) {
-      fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`)
-        .then(res => res.json())
-        .then(results => {
-          if (results[0]) {
-            const ev = { lat: parseFloat(results[0].lat), lon: parseFloat(results[0].lon) };
-            setEventCoord(ev);
-            const dist = haversineDistance(artistCoord, ev);
-            onChange({ distance_km: Math.round(dist) });
-          }
-        })
-        .catch(() => {});
+      const handler = setTimeout(() => {
+        fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city)}&format=json&limit=1`)
+          .then(res => res.json())
+          .then(results => {
+            if (results[0]) {
+              const ev = { lat: parseFloat(results[0].lat), lon: parseFloat(results[0].lon) };
+              setEventCoord(ev);
+              const dist = haversineDistance(artistCoord, ev);
+              onChange({ distance_km: Math.round(dist) });
+            }
+          })
+          .catch(() => {});
+      }, 500); // debounce 500ms
+      return () => clearTimeout(handler);
     }
   }, [city, artistCoord, haversineDistance, onChange]);
 
-  // Combine into single event_address on change
   const updateAddress = (newStreet: string, newPostalCode: string, newCity: string) => {
-    const addr = `${newStreet}${newPostalCode ? ', ' + newPostalCode : ''}${newCity ? ' ' + newCity : ''}`.trim();
+    const addr = [newStreet, newPostalCode, newCity].filter(Boolean).join(', ');
     onChange({ event_address: addr });
   };
+
+  const locationOptions = [
+    { value: 'true', label: t('booking.location.indoor'), imgSrc: '/images/indoor.webp' },
+    { value: 'false', label: t('booking.location.outdoor'), imgSrc: '/images/outdoor.webp' }
+  ];
 
   const handleIndoorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ is_indoor: e.target.value === 'true' });
@@ -139,38 +138,24 @@ const StepLocation: React.FC<StepLocationProps> = ({
       </div>
       <div className="w-full max-w-[800px] mx-auto px-4 mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="w-full">
-            <OptionCard
-              name="is_indoor"
-              value="true"
-              label={t('booking.location.indoor')}
-              imgSrc="/images/indoor.webp"
-              checked={hasSelection && data.is_indoor === true}
-              onChange={val => {
-                setHasSelection(true);
-                onChange({ is_indoor: val === 'true' });
-                if (street && postalCode && city) {
-                  onNext();
-                }
-              }}
-            />
-          </div>
-          <div className="w-full">
-            <OptionCard
-              name="is_indoor"
-              value="false"
-              label={t('booking.location.outdoor')}
-              imgSrc="/images/outdoor.webp"
-              checked={hasSelection && data.is_indoor === false}
-              onChange={val => {
-                setHasSelection(true);
-                onChange({ is_indoor: val === 'true' });
-                if (street && postalCode && city) {
-                  onNext();
-                }
-              }}
-            />
-          </div>
+          {locationOptions.map(opt => (
+            <div className="w-full" key={opt.value}>
+              <OptionCard
+                name="is_indoor"
+                value={opt.value}
+                label={opt.label}
+                imgSrc={opt.imgSrc}
+                checked={hasSelection && data.is_indoor === (opt.value === 'true')}
+                onChange={val => {
+                  setHasSelection(true);
+                  onChange({ is_indoor: val === 'true' });
+                  if (street && postalCode && city) {
+                    onNext();
+                  }
+                }}
+              />
+            </div>
+          ))}
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ProgressBar from '../components/BookingWizard/ProgressBar';
 import type { BookingData } from '../components/BookingWizard/types';
 import Intro from '../components/BookingWizard/steps/0Intro.tsx';

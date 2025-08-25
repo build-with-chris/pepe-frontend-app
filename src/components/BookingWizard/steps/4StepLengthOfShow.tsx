@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { BookingData } from '../types';
 import { Button } from '../../ui/button';
-import InfoBox from '../Infobox';
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
 import { useTranslation } from "react-i18next";
 
 export interface StepLengthOfShowProps {
