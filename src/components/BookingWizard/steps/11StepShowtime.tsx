@@ -25,8 +25,26 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const [animArtists, setAnimArtists] = useState<number>(0);
   const [animPriceMin, setAnimPriceMin] = useState<number>(0);
   const [animPriceMax, setAnimPriceMax] = useState<number>(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [showReplay, setShowReplay] = useState(false);
 
   const isGroup = Number(data.team_size) === 3;
+
+  // Pick a short cinematic loop based on discipline/show type
+  const pickVideoFile = () => {
+    const primary = (Array.isArray(data.disciplines) && data.disciplines[0]) || data.show_type || '';
+    const key = String(primary).toLowerCase();
+    if (key.includes('led') && key.includes('cyr')) return 'LED CYR Blackbox.webm';
+    if (key.includes('cyr')) return 'Cyr 5.webm';
+    if (key.includes('pantom')) return 'Pantomime.webm';
+    if (key.includes('contor') || key.includes('contortion')) return 'Contortion.webm';
+    if (key.includes('hula')) return 'Hula.webm';
+    if (key.includes('handstand')) return 'Handstand.webm';
+    if (key.includes('chinese') || key.includes('pole')) return 'Chienise Pole.webm';
+    // fallback
+    return 'Vorschau loop.webm';
+  };
+  const visualSrc = encodeURI(`/videos/Short Clips/${pickVideoFile()}`);
 
   // Map Gästezahl (intern evtl. 199 / 350 / 501) auf verständliche Buckets für die Anzeige
   const guestsValue = Number(data.number_of_guests);
@@ -80,6 +98,12 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
     setShowAnim(true);
     const startTime = Date.now();
     try {
+      try {
+        localStorage.setItem('bookingData', JSON.stringify(data));
+        console.log('💾 bookingData cached at submit (Step 11)');
+      } catch (e) {
+        console.warn('Could not cache bookingData at submit:', e);
+      }
       const res = await postRequest(data);
       setPendingResponse(res);
 
@@ -111,11 +135,9 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         // 👉 Notify the wizard to clear its cached data and also clear here as a fallback
         try {
           window.dispatchEvent(new Event('booking:submitted'));
-          localStorage.removeItem('bookingData');
-          localStorage.removeItem('bookingStep');
-          console.log('🧹 Booking wizard cache cleared after submit (Step 11)');
+          console.log('ℹ️ bookingData preserved for reuse (Step 11)');
         } catch (e) {
-          console.warn('Could not clear wizard cache:', e);
+          console.warn('Could not notify booking submitted:', e);
         }
 
         setShowAnim(false);
@@ -258,18 +280,27 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
               })}
             </p>
           </div>
+          <button
+            type="button"
+            onClick={onPrev}
+            className="mt-6 text-sm text-white/80 hover:text-white underline underline-offset-4"
+          >
+            {t('booking.showtime.actions.backOne', { defaultValue: 'Einen Schritt zurück' })}
+          </button>
         </div>
       )}
       {response && !showAnim && (
         <div ref={responseRef} className="relative w-full max-w-2xl mx-auto bg-stone-50 border border-gray-200 rounded-2xl shadow-xl mt-8 p-8">
           {/* Badge */}
-          <div className="flex flex-col items-center text-center">
-            <span className="inline-flex items-center gap-2 text-green-600 mb-2">
+          <div className="text-center mb-2">
+            <span className="inline-flex items-center gap-2 text-green-600">
               <CheckCircle2 className="h-5 w-5" />
               <span className="text-sm font-semibold uppercase tracking-wide">{t('booking.showtime.success.badge')}</span>
             </span>
+          </div>
 
-            {/* Emotion + Personalization */}
+          {/* Emotion (text only) */}
+          <div className="mt-3 flex flex-col items-center md:items-start text-center md:text-left">
             <h3 className="text-2xl md:text-3xl font-extrabold mb-2 text-black">
               {t('booking.showtime.emotion.headline', {
                 defaultValue: 'Wow {{name}}, euer Event wird unvergesslich!',
@@ -285,8 +316,6 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
                 time: String(data.event_time || '')
               })}
             </p>
-
-            {/* Supportive note (existing copy) */}
             {isGroup ? (
               <p className="text-xs md:text-sm text-gray-500 max-w-md mt-3">
                 {t('booking.showtime.success.groupNote')}
@@ -296,6 +325,33 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
                 {t('booking.showtime.success.note')}
               </p>
             )}
+          </div>
+
+          {/* Large cinematic video (plays once, then shows replay) */}
+          <div className="mt-5 -mx-2 sm:mx-0">
+            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-black aspect-video">
+              <video
+                key={visualSrc}
+                ref={videoRef}
+                src={visualSrc}
+                muted
+                playsInline
+                autoPlay
+                className="w-full h-full object-cover"
+                aria-label={t('booking.showtime.visual.alt', { defaultValue: 'Stimmungsclip passend zum Event' })}
+                onEnded={() => setShowReplay(true)}
+              />
+              <div className="pointer-events-none absolute inset-0 ring-1 ring-white/10"></div>
+              {showReplay && (
+                <button
+                  type="button"
+                  onClick={() => { setShowReplay(false); videoRef.current?.play?.(); }}
+                  className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-sm md:text-base"
+                >
+                  ↺ {t('booking.showtime.visual.replay', { defaultValue: 'Noch mal ansehen' })}
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Highlights with count-up */}
@@ -349,6 +405,15 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
               <PartyPopper className="h-5 w-5" />
               {t('booking.showtime.success.ctaArtists')}
             </a>
+          </div>
+          <div className="mt-3 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={onPrev}
+              className="text-sm text-gray-600 hover:text-gray-900 underline underline-offset-4"
+            >
+              {t('booking.showtime.actions.backOne', { defaultValue: 'Einen Schritt zurück' })}
+            </button>
           </div>
         </div>
       )}
