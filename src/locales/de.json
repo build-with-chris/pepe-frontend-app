@@ -1,5 +1,4 @@
 
-
 {
   "about1": {
     "hero": {
@@ -221,12 +220,12 @@
     },
     "popover": {
       "sound": {
-        "body": "Für eine professionelle Darbietung ist <strong>qualitativer Sound</strong> essentiell. Je nach Raum oder Gelände braucht es unterschiedlich große Anlagen, damit die Musik überall <strong>klar</strong> ankommt. Bei <strong>Moderation, Zauberei</strong> oder anderen sprachlastigen Acts empfiehlt sich ab <strong>~50 Personen</strong> zusätzlich ein <strong>Headset-Mikrofon</strong> – so versteht euch das Publikum in jeder Ecke.",
+        "body": "Für eine professionelle Darbietung ist qualitativer Sound essentiell. Je nach Raum oder Gelände braucht es unterschiedlich große Anlagen, damit die Musik überall klar ankommt. Bei Moderation, Zauberei oder anderen sprachlastigen Acts empfiehlt sich ab Headset-Mikrofon – so versteht euch das Publikum in jeder Ecke. Pepe bietet Headset und Musikanlage dazu für einen Preis: 450€",
         "toggleAdd": "Sound hinzufügen",
         "toggleRemove": "Sound abwählen"
       },
       "light": {
-        "body": "<strong>Licht</strong> schafft <strong>Dramaturgie</strong>: Es setzt Highlights, baut Spannung auf und verwandelt ein gutes Event in ein <strong>großartiges</strong>. Stimmungen lassen sich präzise lenken – vom eleganten Warm-up bis zum finalen Gänsehautmoment.",
+        "body": "Licht schafft Dramaturgie: Es setzt Highlights, baut Spannung auf und verwandelt ein gutes Event in ein großartiges. Stimmungen lassen sich präzise lenken – vom eleganten Warm-up bis zum finalen Gänsehautmoment. Pepe bietet Lichteffekte und Scheinwerfer mit dazu für Preis: 450€",
         "toggleAdd": "Licht hinzufügen",
         "toggleRemove": "Licht abwählen"
       }

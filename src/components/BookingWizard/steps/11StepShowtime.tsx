@@ -1,3 +1,24 @@
+const ANIM_DURATION = 800; // ms
+const CONFETTI_COUNT = 100;
+const MIN_DELAY = 5000;
+
+const DISCIPLINE_VIDEO_MAP: Record<string, string> = {
+  "led cyr": "LED CYR Blackbox.webm",
+  "cyr": "Cyr 5.webm",
+  "pantom": "Pantomime.webm",
+  "akro": "Contortion.webm",
+  "contortion": "Contortion.webm",
+  "hula": "Hula.webm",
+  "handstand": "Handstand.webm",
+  "chinese": "Chienise Pole.webm",
+  "pole": "Chienise Pole.webm"
+};
+
+const extractCity = (address: string): string => {
+  if (!address) return "";
+  const parts = address.split(",").map(s => s.trim());
+  return parts[1] || parts[0] || "";
+};
 import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import type { BookingData } from '../types';
@@ -33,14 +54,9 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const pickVideoFile = () => {
     const primary = (Array.isArray(data.disciplines) && data.disciplines[0]) || data.show_type || '';
     const key = String(primary).toLowerCase();
-    if (key.includes('led') && key.includes('cyr')) return 'LED CYR Blackbox.webm';
-    if (key.includes('cyr')) return 'Cyr 5.webm';
-    if (key.includes('pantom')) return 'Pantomime.webm';
-    if (key.includes('akro') || key.includes('contortion')) return 'Contortion.webm';
-    if (key.includes('hula')) return 'Hula.webm';
-    if (key.includes('handstand')) return 'Handstand.webm';
-    if (key.includes('chinese') || key.includes('pole')) return 'Chienise Pole.webm';
-    // fallback
+    for (const k of Object.keys(DISCIPLINE_VIDEO_MAP)) {
+      if (key.includes(k)) return DISCIPLINE_VIDEO_MAP[k];
+    }
     return 'Vorschau loop.webm';
   };
   const visualSrc = encodeURI(`/videos/Short Clips/${pickVideoFile()}`);
@@ -56,7 +72,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         : "<200";
 
   // Derive city from address (best-effort)
-  const city = (data.event_address || '').split(',')[1]?.trim() || (data.event_address || '').trim();
+  const city = extractCity(data.event_address || "");
   const showTypeLabel = String(data.show_type || '').trim();
 
   // Staggered reveal for waiting lines
@@ -84,7 +100,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
     if (responseRef.current && response) {
       responseRef.current.scrollIntoView({ behavior: 'smooth' });
       confetti({
-        particleCount: 100,
+        particleCount: CONFETTI_COUNT,
         spread: 70,
         origin: { y: 0.6 },
       });
@@ -106,13 +122,13 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
       const res = await postRequest(data);
       setPendingResponse(res);
 
-      // ensure at least 5 seconds delay
+      // ensure at least MIN_DELAY delay
       const elapsed = Date.now() - startTime;
-      const waitTime = elapsed < 5000 ? 5000 - elapsed : 0;
+      const waitTime = elapsed < MIN_DELAY ? MIN_DELAY - elapsed : 0;
       setTimeout(() => {
         setResponse(res);
         try {
-          const duration = 800; // ms
+          const duration = ANIM_DURATION; // ms
           const start = performance.now();
           const fromArtists = 0;
           const toArtists = Number(res?.num_available_artists || 0);

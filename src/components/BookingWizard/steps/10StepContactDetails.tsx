@@ -1,7 +1,5 @@
 import React from 'react';
 import type { BookingData } from '../types';
-import { Mail } from 'lucide-react';
-import InfoBox from '../Infobox';
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Info } from "lucide-react";
 import { useTranslation, Trans } from "react-i18next";
@@ -20,6 +18,12 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  const isValid = Boolean(
+    data.client_name &&
+    data.client_email &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.client_email)
+  );
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ client_name: e.target.value });
   };
@@ -28,9 +32,6 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
     onChange({ client_email: e.target.value });
   };
 
-  const handleNewsletterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({ newsletter_opt_in: e.target.checked });
-  };
 
   const handlePlanningChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -48,6 +49,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           id="clientName"
           type="text"
           required
+          aria-required="true"
           value={data.client_name}
           onChange={handleNameChange}
           placeholder={t('booking.contact.namePlaceholder')}
@@ -62,6 +64,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
           id="clientEmail"
           type="email"
           required
+          aria-required="true"
           value={data.client_email}
           onChange={handleEmailChange}
           placeholder={t('booking.contact.emailPlaceholder')}
@@ -89,7 +92,7 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
         </div>
         <select
           id="planningStatus"
-          value={(data as any).planning_status || ""}
+          value={data.planning_status || ""}
           onChange={handlePlanningChange}
           className="mt-1 block w-full border border-white rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-white/70 bg-black text-white/70"
         >
@@ -108,9 +111,9 @@ const StepContactDetails: React.FC<StepContactDetailsProps> = ({
         <button
           type="button"
           onClick={onNext}
-          disabled={!data.client_name || !data.client_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.client_email)}
+          disabled={!isValid}
           aria-label={t('booking.contact.next')}
-          className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${(!data.client_name || !data.client_email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.client_email)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
+          className={`bg-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transition-opacity ${!isValid ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700'}`}
         >
           {t('booking.contact.next')}
         </button>

@@ -229,12 +229,12 @@
     },
     "popover": {
       "sound": {
-        "body": "For a professional performance, <strong>quality sound</strong> is essential. Depending on the room or venue, different system sizes are needed so the music is <strong>clear</strong> everywhere. For <strong>hosting, magic</strong> or other speech-heavy acts, we recommend adding a <strong>headset microphone</strong> from <strong>~50 people</strong> so the audience can hear you in every corner.",
+        "body": "For a professional performance,quality sound is essential. Depending on the room or venue, different system sizes are needed so the music is clear everywhere. For hosting, magic or other speech-heavy acts, we recommend adding a headset microphone from ~50 people so the audience can hear you in every corner. We do offer a set of Music soundsystem and headset for 450€",
         "toggleAdd": "Add sound",
         "toggleRemove": "Remove sound"
       },
       "light": {
-        "body": "<strong>Lighting</strong> creates <strong>dramaturgy</strong>: it sets highlights, builds tension and turns a good event into a <strong>great</strong> one. Moods can be steered precisely – from elegant warm-up to a goosebump finale.",
+        "body": "Lighting creates dramaturgy: it sets highlights, builds tension and turns a good event into a great one. Moods can be steered precisely – from elegant warm-up to a goosebump finale. We offer spotlights and lightsystem for 450€.",
         "toggleAdd": "Add lighting",
         "toggleRemove": "Remove lighting"
       }
