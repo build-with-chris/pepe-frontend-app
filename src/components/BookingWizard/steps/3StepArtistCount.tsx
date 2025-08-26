@@ -1,6 +1,6 @@
 import React from 'react';
 import type { BookingData } from '../types';
-import OptionCard from '../OptionCard';
+import OptionCard from '../parts/OptionCard';
 import { useTranslation } from "react-i18next";
 
 export interface StepArtistCountProps {

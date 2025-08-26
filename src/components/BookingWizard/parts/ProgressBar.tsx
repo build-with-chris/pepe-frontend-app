@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 

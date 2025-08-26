@@ -1,3 +1,11 @@
+import React, { useState, useEffect, useRef } from 'react';
+import confetti from 'canvas-confetti';
+import type { BookingData } from '../types';
+import { postRequest } from '../../../services/bookingApi';
+import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star, PartyPopper, CheckCircle2 } from 'lucide-react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { useTranslation } from "react-i18next";
+
 const ANIM_DURATION = 800; // ms
 const CONFETTI_COUNT = 100;
 const MIN_DELAY = 5000;
@@ -19,14 +27,6 @@ const extractCity = (address: string): string => {
   const parts = address.split(",").map(s => s.trim());
   return parts[1] || parts[0] || "";
 };
-import React, { useState, useEffect, useRef } from 'react';
-import confetti from 'canvas-confetti';
-import type { BookingData } from '../types';
-import { postRequest } from '../../../services/bookingApi';
-import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star, PartyPopper, CheckCircle2 } from 'lucide-react';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { useTranslation } from "react-i18next";
-
 export interface StepShowtimeProps {
   data: BookingData;
   onPrev: () => void;

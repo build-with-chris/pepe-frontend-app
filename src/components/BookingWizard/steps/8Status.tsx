@@ -1,6 +1,6 @@
 import React from 'react';
 import type { BookingData } from '../types';
-import InfoBox from '../Infobox';
+import InfoBox from '../parts/Infobox';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
