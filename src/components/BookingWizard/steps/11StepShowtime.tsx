@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
-import { Loader2, PartyPopper, CheckCircle2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 import SummaryCard from '../parts/SummaryCard';
 import WaitingOverlay from '../parts/WaitingOverlay';
+import SuccessView from '../parts/SuccessView';
 
 const ANIM_DURATION = 800; // ms
 const CONFETTI_COUNT = 100;
@@ -23,11 +24,6 @@ const DISCIPLINE_VIDEO_MAP: Record<string, string> = {
   "pole": "Chienise Pole.webm"
 };
 
-const extractCity = (address: string): string => {
-  if (!address) return "";
-  const parts = address.split(",").map(s => s.trim());
-  return parts[1] || parts[0] || "";
-};
 export interface StepShowtimeProps {
   data: BookingData;
   onPrev: () => void;
@@ -46,7 +42,6 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const [animArtists, setAnimArtists] = useState<number>(0);
   const [animPriceMin, setAnimPriceMin] = useState<number>(0);
   const [animPriceMax, setAnimPriceMax] = useState<number>(0);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [showReplay, setShowReplay] = useState(false);
 
   const isGroup = Number(data.team_size) === 3;
@@ -61,21 +56,6 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
     return 'Vorschau loop.webm';
   };
   const visualSrc = encodeURI(`/videos/Short Clips/${pickVideoFile()}`);
-
-  // Map Gästezahl (intern evtl. 199 / 350 / 501) auf verständliche Buckets für die Anzeige
-  const guestsValue = Number(data.number_of_guests);
-  const guestsLabel = isNaN(guestsValue)
-    ? String(data.number_of_guests ?? "")
-    : guestsValue >= 501
-      ? ">500"
-      : guestsValue >= 200
-        ? "200–500"
-        : "<200";
-
-  // Derive city from address (best-effort)
-  const city = extractCity(data.event_address || "");
-  const showTypeLabel = String(data.show_type || '').trim();
-
 
   useEffect(() => {
     if (responseRef.current && response) {
@@ -186,132 +166,18 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
       )}
       
       {response && !showAnim && (
-        <div ref={responseRef} className="relative w-full max-w-2xl mx-auto bg-stone-50 border border-gray-200 rounded-2xl shadow-xl mt-8 p-8">
-          {/* Badge */}
-          <div className="text-center mb-2">
-            <span className="inline-flex items-center gap-2 text-green-600">
-              <CheckCircle2 className="h-5 w-5" />
-              <span className="text-sm font-semibold uppercase tracking-wide">{t('booking.showtime.success.badge')}</span>
-            </span>
-          </div>
-
-          {/* Emotion (text only) */}
-          <div className="mt-3 flex flex-col items-center md:items-start text-center md:text-left">
-            <h3 className="text-2xl md:text-3xl font-extrabold mb-2 text-black">
-              {t('booking.showtime.emotion.headline', {
-                defaultValue: 'Wow {{name}}, euer Event wird unvergesslich!',
-                name: data.client_name || ''
-              })}
-            </h3>
-            <p className="text-sm md:text-base text-gray-600 max-w-md">
-              {t('booking.showtime.emotion.subline', {
-                defaultValue: '{{guests}} Gäste • {{showType}} • {{date}} um {{time}}',
-                guests: guestsLabel,
-                showType: String(data.show_type || ''),
-                date: String(data.event_date || ''),
-                time: String(data.event_time || '')
-              })}
-            </p>
-            {isGroup ? (
-              <p className="text-xs md:text-sm text-gray-500 max-w-md mt-3">
-                {t('booking.showtime.success.groupNote')}
-              </p>
-            ) : (
-              <p className="text-xs md:text-sm text-gray-500 max-w-md mt-3">
-                {t('booking.showtime.success.note')}
-              </p>
-            )}
-          </div>
-
-          {/* Large cinematic video (plays once, then shows replay) */}
-          <div className="mt-5 -mx-2 sm:mx-0">
-            <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-black aspect-video">
-              <video
-                key={visualSrc}
-                ref={videoRef}
-                src={visualSrc}
-                muted
-                playsInline
-                autoPlay
-                className="w-full h-full object-cover"
-                aria-label={t('booking.showtime.visual.alt', { defaultValue: 'Stimmungsclip passend zum Event' })}
-                onEnded={() => setShowReplay(true)}
-              />
-              <div className="pointer-events-none absolute inset-0 ring-1 ring-white/10"></div>
-              {showReplay && (
-                <button
-                  type="button"
-                  onClick={() => { setShowReplay(false); videoRef.current?.play?.(); }}
-                  className="absolute inset-0 flex items-center justify-center bg-black/40 text-white text-sm md:text-base"
-                >
-                  ↺ {t('booking.showtime.visual.replay', { defaultValue: 'Noch mal ansehen' })}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Highlights with count-up */}
-          {!isGroup && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6">
-              <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
-                <div className="text-xs text-gray-500">{t('booking.showtime.success.highlights.available')}</div>
-                <div className="text-xl font-bold text-blue-700">
-                  {animArtists}
-                </div>
-              </div>
-              <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
-                <div className="text-xs text-gray-500">{t('booking.showtime.success.highlights.price')}</div>
-                <div className="text-xl font-bold text-blue-700">
-                  {animPriceMin}€ – {animPriceMax}€
-                </div>
-              </div>
-              <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-center">
-                <div className="text-xs text-gray-500">{t('booking.showtime.success.highlights.bundle')}</div>
-                <div className="text-xl font-bold text-blue-700">{t('booking.showtime.success.highlights.bundleValue')}</div>
-              </div>
-            </div>
-          )}
-
-          {/* Human touch: curator */}
-          <div className="mt-6 flex items-center gap-3 bg-white border border-gray-200 rounded-lg p-4">
-            <img src="/images/Team/Chris.webp" alt="Chris" className="w-12 h-12 rounded-full object-cover" />
-            <p className="text-sm text-gray-700">
-              {t('booking.showtime.emotion.curator', {
-                defaultValue: '{{name}} prüft deine Anfrage und meldet sich innerhalb von 48 Stunden.',
-                name: 'Chris'
-              })}
-            </p>
-          </div>
-
-          {/* Optional: mini timeline */}
-          <div className="mt-6 text-xs md:text-sm text-gray-500">
-            <ul className="space-y-1">
-              <li>📩 {t('booking.showtime.timeline.received', { defaultValue: 'Heute: Anfrage eingegangen' })}</li>
-              <li>⏱️ {t('booking.showtime.timeline.inbox', { defaultValue: '<48h: Vorschläge im Postfach' })}</li>
-              <li>🔥 {t('booking.showtime.timeline.showtime', { defaultValue: 'Event: Showtime' })}</li>
-            </ul>
-          </div>
-
-          {/* CTA */}
-          <div className="text-center mt-6">
-            <a
-              href="/kuenstler"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition-colors"
-            >
-              <PartyPopper className="h-5 w-5" />
-              {t('booking.showtime.success.ctaArtists')}
-            </a>
-          </div>
-          <div className="mt-3 flex items-center justify-center">
-            <button
-              type="button"
-              onClick={onPrev}
-              className="text-sm text-gray-600 hover:text-gray-900 underline underline-offset-4"
-            >
-              {t('booking.showtime.actions.backOne', { defaultValue: 'Einen Schritt zurück' })}
-            </button>
-          </div>
-        </div>
+        <SuccessView
+          responseRef={responseRef}
+          data={data}
+          visualSrc={visualSrc}
+          isGroup={isGroup}
+          animArtists={animArtists}
+          animPriceMin={animPriceMin}
+          animPriceMax={animPriceMax}
+          showReplay={showReplay}
+          setShowReplay={setShowReplay}
+          onPrev={onPrev}
+        />
       )}
       {error && (
         <div className="error" style={{ color: 'red', marginTop: '16px' }}>
