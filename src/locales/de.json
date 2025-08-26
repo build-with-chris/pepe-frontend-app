@@ -309,6 +309,11 @@
         "newsletterYes": "Ja (5% Rabatt)",
         "newsletterNo": "Nein"
       },
+      "waiting": {
+        "line1": "Ich spüre schon, wie es aussehen wird…",
+        "line2": "Die passenden Künstler bereiten ihre Angebote für {{city}} vor – passend für {{guests}} Gäste und eine {{showType}}.",
+        "line3": "In wenigen Augenblicken erhältst du alle Details."
+      },
       "actions": {
         "sending": "Senden…",
         "submit": "unverbindlich Anfragen"

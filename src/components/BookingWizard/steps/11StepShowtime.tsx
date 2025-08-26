@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import type { BookingData } from '../types';
 import { postRequest } from '../../../services/bookingApi';
-import { Loader2, CalendarDays, Users, Clock, MapPin, Info, Music, Mic, Lightbulb, ListChecks, User, Mail, Gift, Star, PartyPopper, CheckCircle2 } from 'lucide-react';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { Loader2, PartyPopper, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 import SummaryCard from '../parts/SummaryCard';
+import WaitingOverlay from '../parts/WaitingOverlay';
 
 const ANIM_DURATION = 800; // ms
 const CONFETTI_COUNT = 100;
@@ -76,26 +76,6 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const city = extractCity(data.event_address || "");
   const showTypeLabel = String(data.show_type || '').trim();
 
-  // Staggered reveal for waiting lines
-  const [showL1, setShowL1] = useState(true);
-  const [showL2, setShowL2] = useState(false);
-  const [showL3, setShowL3] = useState(false);
-
-  useEffect(() => {
-    if (showAnim) {
-      setShowL1(true);
-      const t2 = setTimeout(() => setShowL2(true), 900);
-      const t3 = setTimeout(() => setShowL3(true), 1800);
-      return () => {
-        clearTimeout(t2);
-        clearTimeout(t3);
-      };
-    } else {
-      setShowL1(true);
-      setShowL2(false);
-      setShowL3(false);
-    }
-  }, [showAnim]);
 
   useEffect(() => {
     if (responseRef.current && response) {
@@ -167,6 +147,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
     }
   };
 
+
   return (
     <div className="step pb-28">
       <h2 className="text-3xl md:text-4xl text-center mb-3 font-extrabold">
@@ -196,41 +177,14 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           </button>
         ) : null}
       </div>
+
       {showAnim && (
-        <div className="fixed inset-0 flex flex-col items-center justify-center z-[1000] bg-black/60 backdrop-blur-sm text-center px-4">
-          <DotLottieReact
-            src="https://lottie.host/f1618824-5547-4c31-80af-8c201d095f8c/klnukhE8Er.lottie"
-            loop
-            autoplay
-            style={{ width: 120, height: 120 }}
-          />
-          <div className="mt-6 text-white font-medium text-lg max-w-md">
-            <p className={`transition-all duration-500 ${showL1 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
-              {t('booking.showtime.waiting.line1', { defaultValue: 'Ich spüre schon, wie es aussehen wird…' })}
-            </p>
-            <p className={`transition-all duration-500 ${showL2 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
-              {t('booking.showtime.waiting.line2', {
-                defaultValue: '{{guests}} Gäste in {{city}} – {{showType}}. Man spürt das Kribbeln.',
-                guests: guestsLabel,
-                city,
-                showType: showTypeLabel
-              })}
-            </p>
-            <p className={`transition-all duration-500 ${showL3 ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
-              {t('booking.showtime.waiting.line3', {
-                defaultValue: 'Gleich zeigen wir dir, was sich für euch richtig anfühlt.',
-              })}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onPrev}
-            className="mt-6 text-sm text-white/80 hover:text-white underline underline-offset-4"
-          >
-            {t('booking.showtime.actions.backOne', { defaultValue: 'Einen Schritt zurück' })}
-          </button>
-        </div>
+        <WaitingOverlay
+          message={t('booking.showtime.waiting.line1', { defaultValue: 'Ich spüre schon, wie es aussehen wird…' })}
+          onBack={onPrev}
+        />
       )}
+      
       {response && !showAnim && (
         <div ref={responseRef} className="relative w-full max-w-2xl mx-auto bg-stone-50 border border-gray-200 rounded-2xl shadow-xl mt-8 p-8">
           {/* Badge */}
@@ -320,7 +274,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
 
           {/* Human touch: curator */}
           <div className="mt-6 flex items-center gap-3 bg-white border border-gray-200 rounded-lg p-4">
-            <img src="public/images/Team/Chris.webp" alt="Chris" className="w-12 h-12 rounded-full object-cover" />
+            <img src="/images/Team/Chris.webp" alt="Chris" className="w-12 h-12 rounded-full object-cover" />
             <p className="text-sm text-gray-700">
               {t('booking.showtime.emotion.curator', {
                 defaultValue: '{{name}} prüft deine Anfrage und meldet sich innerhalb von 48 Stunden.',

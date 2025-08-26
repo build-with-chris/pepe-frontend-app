@@ -311,6 +311,11 @@
       "sending": "Sending…",
       "submit": "unbinding offer"
     },
+    "waiting": {
+      "line1": "I can already picture how it will look…",
+      "line2": "The right artists are preparing their offers for {{city}} — tailored to {{guests}} guests and a {{showType}}.",
+      "line3": "You'll receive all the details in just a moment."
+    },
     "success": {
       "badge": "Request sent 🎉",
       "title": "Thank you for your request",
