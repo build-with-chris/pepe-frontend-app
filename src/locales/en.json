@@ -317,18 +317,28 @@
       "line3": "You'll receive all the details in just a moment."
     },
     "success": {
-      "badge": "Request sent 🎉",
-      "title": "Thank you for your request",
-      "groupNote": "We’ve received your request and are already coordinating. Group bookings are a bit more complex, so we can’t give a price here yet. You’ll receive your offer within 48 hours by email.",
-      "note": "Your request has been sent successfully. In the meantime, feel free to browse our artists and discover more exciting acts.",
-      "highlights": {
-        "available": "Available artists",
-        "price": "Estimated price",
-        "bundle": "Bundled offer",
-        "bundleValue": "via email in 48h"
-      },
-      "ctaArtists": "Explore our artists"
-    }
+    "badge": "Request sent 🎉",
+    "headline": "Wow, {{name}} — this will be amazing!",
+    "subline": "{{date}} at {{time}} · {{showType}}",
+    "groupNote": "We’ve received your request and started coordination. Since a group booking is more complex, we can’t display a price yet. You’ll receive your tailored offer within 48 hours via email.",
+    "note": "Your request was sent successfully. In the meantime, feel free to explore our artists and discover more exciting acts.",
+    "replay": "Play again",
+    "available": "Available artists",
+    "priceRange": "Estimated price",
+    "bundle": "Bundled offer",
+    "cta": "Meet the artists",
+    "bundleValue": "within 48h via email",
+    "curatorNote": "Chris is taking care of your request, coordinating with the artists, and will send you suitable proposals via email."
+  },
+  "timeline": {
+    "received": "Request received",
+    "receivedDesc": "We review your details and start coordinating with suitable artists.",
+    "suggestions": "Suggestions via email",
+    "suggestionsDesc": "Within 48 hours you’ll receive curated proposals including a price range.",
+    "showtime": "Showtime",
+    "showtimeDesc": "Final coordination, tech check — and curtains up!"
+  },
+  "ctaArtists": "Meet our artists"
   }
     },
   

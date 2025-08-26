@@ -320,19 +320,32 @@
       },
       "success": {
         "badge": "Anfrage versendet 🎉",
-        "title": "Vielen Dank für deine Anfrage",
-        "groupNote": "Wir haben deine Anfrage erhalten und sind bereits in der Abstimmung. Da eine Gruppe etwas komplexer zu buchen ist, können wir an dieser Stelle noch keine Preisauskunft geben. Dein Angebot erhältst du wie gewohnt innerhalb von 48 Stunden per E-Mail.",
+        "headline": "Wow, {{name}} – das wird stark!",
+        "subline": "{{date}} um {{time}} · {{showType}}",
+        "groupNote": "Wir haben deine Anfrage erhalten und sind bereits in der Abstimmung. Da eine Gruppe komplexer zu buchen ist, können wir an dieser Stelle noch keine Preisauskunft geben. Dein Angebot erhältst du innerhalb von 48 Stunden per E-Mail.",
         "note": "Deine Anfrage wurde erfolgreich versendet. Schau dich in der Zwischenzeit gern bei unseren Künstlern um und entdecke weitere spannende Acts.",
-        "highlights": {
-          "available": "Verfügbare Artisten",
-          "price": "Voraussichtlicher Preis",
-          "bundle": "Gebündeltes Angebot",
-          "bundleValue": "in 48h per Mail"
+        "replay": "Nochmal abspielen",
+        "available": "Verfügbare Artisten",
+        "priceRange": "Voraussichtlicher Preis",
+        "bundle": "Gebündeltes Angebot",
+        "cta": "Künstler kennenlernen",
+        "bundleValue": "in 48h per Mail",
+        "curatorNote": "Chris kümmert sich um deine Anfrage und geht nun in die Abstimmung mit den Artisten und schickt dir passende Vorschläge via Mail"
+      }, "timeline": {
+        "received": "Anfrage eingegangen",
+        "receivedDesc": "Wir prüfen die Details und starten die Abstimmung mit passenden Künstlern.",
+        "suggestions": "Vorschläge per E-Mail",
+        "suggestionsDesc": "Innerhalb von 48 Stunden erhältst du kuratierte Vorschläge inkl. Preisrahmen.",
+        "showtime": "Showtime",
+        "showtimeDesc": "Finale Abstimmung, Technikcheck – und Bühne frei!"
+      }
+
+
+
         },
         "ctaArtists": "Zu unseren Künstlern"
-      }
-    }
-  },
+      },
+      
   "common": {
     "yes": "Ja",
     "no": "Nein"

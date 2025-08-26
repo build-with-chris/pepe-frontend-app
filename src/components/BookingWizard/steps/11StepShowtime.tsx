@@ -161,7 +161,6 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
       {showAnim && (
         <WaitingOverlay
           message={t('booking.showtime.waiting.line1', { defaultValue: 'Ich spüre schon, wie es aussehen wird…' })}
-          onBack={onPrev}
         />
       )}
       
@@ -176,7 +175,6 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           animPriceMax={animPriceMax}
           showReplay={showReplay}
           setShowReplay={setShowReplay}
-          onPrev={onPrev}
         />
       )}
       {error && (

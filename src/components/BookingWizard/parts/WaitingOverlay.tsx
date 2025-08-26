@@ -5,11 +5,9 @@ import { useTranslation } from 'react-i18next';
 interface WaitingOverlayProps {
   /** Optional single message (line1) */
   message?: string;
-  /** Optional back handler to go to previous step */
-  onBack?: () => void;
 }
 
-const WaitingOverlay: React.FC<WaitingOverlayProps> = ({ message, onBack }) => {
+const WaitingOverlay: React.FC<WaitingOverlayProps> = ({ message }) => {
   const { t } = useTranslation();
 
   return (
@@ -27,15 +25,6 @@ const WaitingOverlay: React.FC<WaitingOverlayProps> = ({ message, onBack }) => {
       <div className="mt-6 text-white font-medium text-lg max-w-md">
         <p>{message || t('booking.showtime.waiting.line1')}</p>
       </div>
-      {onBack && (
-        <button
-          type="button"
-          onClick={onBack}
-          className="mt-6 text-sm text-white/80 hover:text-white underline underline-offset-4"
-        >
-          {t('booking.showtime.actions.backOne', { defaultValue: 'Einen Schritt zurück' })}
-        </button>
-      )}
     </div>
   );
 };

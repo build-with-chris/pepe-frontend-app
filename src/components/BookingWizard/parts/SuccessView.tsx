@@ -16,7 +16,6 @@ interface SuccessViewProps {
   animPriceMax: number;
   showReplay: boolean;
   setShowReplay: React.Dispatch<React.SetStateAction<boolean>>;
-  onPrev: () => void;
 }
 
 const SuccessView: React.FC<SuccessViewProps> = ({
@@ -29,7 +28,6 @@ const SuccessView: React.FC<SuccessViewProps> = ({
   animPriceMax,
   showReplay,
   setShowReplay,
-  onPrev,
 }) => {
   const { t } = useTranslation();
 
@@ -96,26 +94,26 @@ const SuccessView: React.FC<SuccessViewProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
             <Users className="w-6 h-6 text-blue-600 mb-2" />
-            <p className="text-lg font-bold">
+            <p className="text-lg text-black font-bold">
               <CountUp end={animArtists} duration={2.5} />
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-black">
               {t('booking.showtime.success.available')}
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
             <PiggyBank className="w-6 h-6 text-blue-600 mb-2" />
-            <p className="text-lg font-bold">
+            <p className="text-lg font-bold text-black">
               <CountUp end={animPriceMin} duration={2} /> -{' '}
               <CountUp end={animPriceMax} duration={2} />
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-black">
               {t('booking.showtime.success.priceRange')}
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
             <Gift className="w-6 h-6 text-blue-600 mb-2" />
-            <p className="text-lg font-bold">+</p>
+            <p className="text-lg font-bold text-black">in 48h</p>
             <p className="text-xs text-gray-500">
               {t('booking.showtime.success.bundle')}
             </p>
@@ -180,13 +178,6 @@ const SuccessView: React.FC<SuccessViewProps> = ({
         >
           {t('booking.showtime.success.cta')}
         </a>
-        <button
-          type="button"
-          onClick={onPrev}
-          className="text-sm text-gray-600 hover:text-gray-900 underline underline-offset-2"
-        >
-          {t('booking.showtime.actions.backOne')}
-        </button>
       </div>
     </div>
   );
