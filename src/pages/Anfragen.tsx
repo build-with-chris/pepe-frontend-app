@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import ProgressBar from '../components/BookingWizard/ProgressBar';
+import ProgressBar from '../components/BookingWizard/parts/ProgressBar';
 import type { BookingData } from '../components/BookingWizard/types';
 import Intro from '../components/BookingWizard/steps/0Intro.tsx';
 import StepEventType from '../components/BookingWizard/steps/1StepEventType';
