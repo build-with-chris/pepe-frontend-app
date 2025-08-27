@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { useAuth } from '@/context/AuthContext';
+import { toLocalDate, formatISODate, getDateRange } from "@/utils/calendar";
 
 function useBackendArtistId(supabase: any, user: any, token: string | null) {
   const [backendArtistId, setBackendArtistId] = useState<string | null>(null);
@@ -101,16 +102,6 @@ const CalendarPage: React.FC = () => {
       return d >= startOfToday;
     });
   }, [available, startOfToday]);
-  
-// Baut ein lokales Datum aus 'YYYY-MM-DD' (vermeidet UTC-Shift), robust gegen null/undefiniert
-const toLocalDate = (iso: string | null | undefined) => {
-  if (!iso || typeof iso !== "string") return null;
-  const parts = iso.split("-");
-  if (parts.length < 3) return null;
-  const [y, m, d] = parts.map(Number);
-  if (!y || !m || !d) return null;
-  return new Date(y, m - 1, d);
-};
 
   const availableDates = (futureAvailable ?? []).map((s) => toLocalDate(s.date)).filter(Boolean) as Date[];
   // Matcher for blocked days: only future/today days NOT in available
@@ -133,24 +124,7 @@ const toLocalDate = (iso: string | null | undefined) => {
   // prevent flooding the API with concurrent add requests for the same day
   const inFlightAdd = useRef<Set<string>>(new Set());
 
-  const getDateRange = (start: Date, end: Date) => {
-    const dates: Date[] = [];
-    const current = new Date(start);
-    while (current <= end) {
-      dates.push(new Date(current));
-      current.setDate(current.getDate() + 1);
-    }
-    return dates;
-  };
 
-// lokale YYYY-MM-DD Formatierung, vermeidet UTC Off-by-One, robust gegen null
-const formatISODate = (d: Date | null | undefined) => {
-  if (!d || !(d instanceof Date) || isNaN(d.getTime())) return "";
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-};
 
   
 
