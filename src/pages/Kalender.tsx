@@ -3,79 +3,55 @@ import { Calendar } from "@/components/ui/calendar";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { useAuth } from '@/context/AuthContext';
 import { toLocalDate, formatISODate, getDateRange } from "@/utils/calendar";
+import { listAvailability, createAvailability, deleteAvailability } from "@/services/availabilityAPI";
+import type { AvailabilitySlot, ISODate } from "@/services/availabilityAPI";
 
-function useBackendArtistId(supabase: any, user: any, token: string | null) {
+function useBackendArtistId(user: any, token: string | null) {
   const [backendArtistId, setBackendArtistId] = useState<string | null>(null);
   const [loadingArtistId, setLoadingArtistId] = useState(true);
-  const [profileFetchTried, setProfileFetchTried] = useState(false);
-  const [profileMissingBackendArtistId, setProfileMissingBackendArtistId] = useState(false);
 
   const load = async () => {
-    if (!supabase || !user || !token) {
-      setLoadingArtistId(false);
-      return;
-    }
+    if (!token) { setLoadingArtistId(false); return; }
     setLoadingArtistId(true);
     try {
-      const supabaseUserId = user?.id || user?.sub;
-      const email = user?.email;
-      console.log("[useBackendArtistId] supabaseUserId:", supabaseUserId, "user.email:", email);
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('backend_artist_id')
-        .eq('user_id', supabaseUserId)
-        .maybeSingle();
-      console.log("[useBackendArtistId] Supabase profile fetch result:", { data, error });
-      setProfileFetchTried(true);
-      if (!error && data?.backend_artist_id) {
-        setBackendArtistId(data.backend_artist_id);
-        setProfileMissingBackendArtistId(false);
-        return;
+      // 1) Prefer the backend ensure endpoint
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/artists/me/ensure`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (data?.id) { setBackendArtistId(String(data.id)); return; }
       }
-      setProfileMissingBackendArtistId(true);
+      // 2) Fallback: try listing and matching by email
+      const email = user?.email;
       if (email) {
-        console.log("[useBackendArtistId] No backend_artist_id found, fetching artists from backend for email:", email);
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/artists`, {
+        const listRes = await fetch(`${import.meta.env.VITE_API_URL}/api/artists`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (res.ok) {
-          const artists = await res.json();
-          console.log("[useBackendArtistId] Artists fetched from backend:", artists);
-          const match = artists.find((a: any) => a.email && a.email.toLowerCase() === email.toLowerCase());
-          if (match) {
-            setBackendArtistId(match.id);
-            setProfileMissingBackendArtistId(false);
-            // upsert for next time
-            const upsertResult = await supabase.from('profiles').upsert({ user_id: supabaseUserId, backend_artist_id: match.id });
-            console.log("[useBackendArtistId] Upserted backend_artist_id to Supabase profile:", upsertResult);
-          } else {
-            console.log("[useBackendArtistId] No matching artist found for email:", email);
-          }
-        } else {
-          const text = await res.text();
-          console.warn("[useBackendArtistId] Failed to fetch artists from backend. Status:", res.status, "Response:", text);
+        if (listRes.ok) {
+          const artists = await listRes.json().catch(() => []);
+          const match = Array.isArray(artists) ? artists.find((a: any) => a.email && a.email.toLowerCase() === String(email).toLowerCase()) : null;
+          if (match?.id) { setBackendArtistId(String(match.id)); return; }
         }
       }
+      setBackendArtistId(null);
     } catch (e) {
-      console.warn('Error resolving backendArtistId', e);
+      console.warn('[useBackendArtistId] error resolving id from backend', e);
+      setBackendArtistId(null);
     } finally {
       setLoadingArtistId(false);
     }
   };
 
-  // initial load and when dependencies change
-  useEffect(() => {
-    load();
-  }, [supabase, user, token]);
+  useEffect(() => { load(); }, [token, user?.email]);
 
-  return { backendArtistId, loadingArtistId, profileFetchTried, profileMissingBackendArtistId, refreshArtistId: load };
+  return { backendArtistId, loadingArtistId, refreshArtistId: load };
 }
 
-type AvailabilitySlot = { id: number; date: string }; // expecting YYYY-MM-DD
 
 const CalendarPage: React.FC = () => {
-  const { token, user, supabase } = useAuth();
-  const supabaseUserId = (user as any)?.id || (user as any)?.sub || null;
+  const { token, user } = useAuth();
   const [available, setAvailable] = useState<AvailabilitySlot[]>([]);
   // Tick once per day at local midnight so the UI drops past days automatically
   const [todayTick, setTodayTick] = useState(0);
@@ -128,122 +104,18 @@ const CalendarPage: React.FC = () => {
 
   
 
-  const { backendArtistId, loadingArtistId, profileFetchTried, profileMissingBackendArtistId, refreshArtistId } =
-    useBackendArtistId(supabase, user, token);
-
-  // Stellt sicher, dass ein Artist im Backend existiert und synchronisiert die ID in Supabase.profile
-    const ensureAndSyncArtistId = async () => {
-      if (!token) return null;
-      try {
-        console.log("[ensureAndSyncArtistId] About to call /api/artists/me/ensure with token (prefix):", token.slice(0, 8) + "...");
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/artists/me/ensure`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        });
-        const text = await res.text();
-        console.log("[ensureAndSyncArtistId] Response status:", res.status, "Text:", text);
-        if (!res.ok) {
-          console.warn('ensure failed', res.status, text);
-          return null;
-        }
-        const data = JSON.parse(text);
-        if (data?.id && supabase && supabaseUserId) {
-          // schreibe die ID ins Supabase-Profil, damit wir sie stabil haben
-          const upsertResult = await supabase.from('profiles').upsert({ user_id: supabaseUserId, backend_artist_id: data.id });
-          console.log("[ensureAndSyncArtistId] Upserted backend_artist_id into Supabase profile:", upsertResult);
-          await refreshArtistId();
-        }
-        return data;
-      } catch (e) {
-        console.warn('ensure error', e);
-        return null;
-      }
-    };
-
-  useEffect(() => {
-    console.log("DEBUG: user object:", user);
-    console.log("DEBUG: resolved supabaseUserId:", supabaseUserId);
-    console.log("DEBUG: backendArtistId state:", backendArtistId);
-    // expose for manual console inspection
-    (window as any).__CAL_DEBUG = { user, backendArtistId, supabaseUserId };
-  }, [user, backendArtistId, supabaseUserId]);
-
-  useEffect(() => {
-    console.log("AVAILABLE STATE UPDATED:", available);
-    }, [available]);
-
-  useEffect(() => {
-    if (token) {
-      console.log('🔐 Supabase JWT (prefix):', token.slice(0, 8) + '...');
-      // expose full token for manual copy in console (temporary debug)
-      (window as any).__DEBUG_SUPABASE_TOKEN = token;
-    } else {
-      console.log('Kein Supabase-Token vorhanden (noch nicht eingeloggt oder Session fehlt)');
-    }
-  }, [token]);
-
-  // Wenn das Profil geladen wurde, aber keine backendArtistId vorhanden ist, Artist erzwingen & danach Verfügbarkeit neu laden
-  useEffect(() => {
-    console.log("[useEffect] token:", token ? token.slice(0, 8) + "..." : null, "backendArtistId:", backendArtistId, "profileFetchTried:", profileFetchTried, "profileMissingBackendArtistId:", profileMissingBackendArtistId);
-    if (!token) return;
-    if (!profileFetchTried) return;
-    if (!backendArtistId && profileMissingBackendArtistId) {
-      ensureAndSyncArtistId().then(() => {
-        // nach dem Sync neu laden (falls vorher leer)
-        fetchAvailability();
-      });
-    }
-    // Ergänzung: fetchAvailability immer nach Laden der backendArtistId aufrufen
-    if (backendArtistId) {
-      fetchAvailability();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, backendArtistId, profileFetchTried, profileMissingBackendArtistId]);
+  const { backendArtistId, loadingArtistId, refreshArtistId } =
+    useBackendArtistId(user, token);
 
   const fetchAvailability = async () => {
     if (!token) return;
-    console.log('fetchAvailability for artist', backendArtistId);
     setLoading(true);
     setError(null);
     try {
-      const url = backendArtistId
-        ? `${import.meta.env.VITE_API_URL}/api/availability?artist_id=${backendArtistId}`
-        : `${import.meta.env.VITE_API_URL}/api/availability`;
-      console.log('[fetchAvailability] Fetching from URL:', url, 'token (prefix):', token.slice(0, 8) + '...', 'backendArtistId:', backendArtistId);
-      const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const text = await res.text();
-      if (!res.ok) {
-        console.error('fetchAvailability error response', res.status, text);
-        let msg = `Fehler beim Laden: ${res.status}`;
-        try {
-          const parsed = JSON.parse(text);
-          if (parsed.detail) msg += ` - ${parsed.detail}`;
-          else if (parsed.message) msg += ` - ${parsed.message}`;
-        } catch {}
-        setError(msg);
-        return;
-      }
-      // parse success response
-      let data: AvailabilitySlot[] = [];
-      try {
-        data = JSON.parse(text);
-      } catch (parseErr) {
-        console.warn('Could not parse availability JSON:', parseErr, text);
-        setError('Antwort des Backends konnte nicht verstanden werden.');
-        return;
-      }
-      console.log('Raw availability data count', data.length);
-      console.log('Sample dates from backend', data.slice(0, 10).map(d => d.date));
-      console.log(
-        'Normalized selected dates for DayPicker',
-        data.map(d => formatISODate(toLocalDate(d.date)))
-      );
+      const data = await listAvailability({ token, artistId: backendArtistId ?? undefined });
       setAvailable(data);
     } catch (err: any) {
-      console.error('fetchAvailability network error', err);
-      setError('Verfügbarkeit konnte nicht geladen werden. Netzwerk- oder Serverproblem.');
+      setError('Verfügbarkeit konnte nicht geladen werden.' + (err?.message ? ` ${err.message}` : ''));
     } finally {
       setLoading(false);
     }
@@ -251,77 +123,40 @@ const CalendarPage: React.FC = () => {
 
   const addAvailability = async (date: Date) => {
     if (!token) return;
-    const iso = formatISODate(date);
-    // avoid duplicate/concurrent requests for the same date
-    if (inFlightAdd.current.has(iso)) return;
-    // Robust: prüfe, ob available existiert
-    if (!Array.isArray(available) ? false : (available ?? []).some((s) => s.date === iso)) return; // schon vorhanden
+    const iso = formatISODate(date) as ISODate;
+    if ((available ?? []).some((s) => s.date === iso)) return;
 
-    // Optimistischer Eintrag (temporär)
     const tempSlot: AvailabilitySlot = { id: -Date.now(), date: iso };
     setAvailable((prev) => [...(prev ?? []), tempSlot]);
-    inFlightAdd.current.add(iso);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/availability`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(backendArtistId ? { date: iso, artist_id: backendArtistId } : { date: iso }),
-      });
-      const text = await res.text();
-      if (!res.ok) {
-        console.error("addAvailability failed", res.status, text);
-        // Rückgängig machen
-        setAvailable((prev) => (prev ?? []).filter((s) => s.id !== tempSlot.id));
-        throw new Error(`Add failed: ${res.status} ${text}`);
-      }
-
-      let newSlot: AvailabilitySlot;
-      try {
-        newSlot = JSON.parse(text);
-      } catch (parseErr) {
-        console.warn("Could not parse created availability, using fallback", parseErr, text);
-        newSlot = { id: tempSlot.id, date: iso }; // behalte temporären Eintrag
-      }
-
+      const newSlot = await createAvailability({ token, date: iso, artistId: backendArtistId ?? undefined });
       setAvailable((prev) => {
         const withoutTemp = (prev ?? []).filter((s) => s.id !== tempSlot.id && s.date !== iso);
         return [...withoutTemp, newSlot];
       });
     } catch (err: any) {
-      console.error("addAvailability error", err);
-      setError("Verfügbarkeit konnte nicht hinzugefügt werden.");
-      // rollback optimistic insert if necessary
-      setAvailable((prev) => (prev ?? []).filter((s) => s.date !== iso && s.id !== tempSlot.id));
-    } finally {
-      inFlightAdd.current.delete(iso);
+      setError('Verfügbarkeit konnte nicht hinzugefügt werden.' + (err?.message ? ` ${err.message}` : ''));
+      setAvailable((prev) => (prev ?? []).filter((s) => s.id !== tempSlot.id && s.date !== iso));
     }
   };
 
   const removeAvailability = async (slot: AvailabilitySlot) => {
     if (!token) return;
-    // Robust: prüfe, ob available existiert
     setAvailable((prev) => (prev ?? []).filter((s) => s.id !== slot.id));
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/availability/${slot.id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Remove failed: ${res.status} ${text}`);
-      }
+      await deleteAvailability({ token, slotId: slot.id, artistId: backendArtistId ?? undefined });
     } catch (err: any) {
-      // Fange Netzwerkfehler besser ab, inkl. evtl. response text
-      let message = "Verfügbarkeit konnte nicht entfernt werden.";
-      if (err && err.message) message += " " + err.message;
+      let message = 'Verfügbarkeit konnte nicht entfernt werden.';
+      if (err && err.message) message += ' ' + err.message;
       setError(message);
-      // im Fehlerfall zurückrollen
       setAvailable((prev) => [...(prev ?? []), slot]);
     }
   };
+
+  useEffect(() => {
+    if (!token || !backendArtistId) return;
+    fetchAvailability();
+  }, [token, backendArtistId]);
 
   // Stelle sicher, dass der Tag heute+365 existiert (ein stabiler „Grenzmarker“)
   useEffect(() => {
@@ -444,22 +279,6 @@ const CalendarPage: React.FC = () => {
         </div>
       )}
       {loading && <div className="mb-2">Lade Verfügbarkeit…</div>}
-      {!backendArtistId && profileFetchTried && (
-        <div className="mb-2 text-sm text-gray-400">
-          Profil noch nicht vollständig verknüpft, deshalb werden keine Verfügbarkeiten geladen.
-        </div>
-      )}
-      {profileFetchTried && profileMissingBackendArtistId && (
-        <div className="mb-2 text-sm text-yellow-500 flex items-center gap-2">
-          <div>Profil hat keinen verknüpften Backend-Artist. Du kannst es versuchen erneut zu synchronisieren.</div>
-          <button
-            className="underline text-sm"
-            onClick={() => refreshArtistId()}
-          >
-            Erneut synchronisieren
-          </button>
-        </div>
-      )}
       <div className="mx-auto w-full max-w-[28rem] md:max-w-[36rem] text-sm mb-4 flex items-center justify-center gap-6 text-white">
         <div className="flex items-center gap-2">
           <span className="inline-block w-3 h-3 rounded-full bg-green-500/90" />
