@@ -1,4 +1,6 @@
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import posthog from './lib/posthog';
+import { useEffect } from 'react';
 import Home from './pages/Home';
 import Anfragen from './pages/Anfragen';
 import Kuenstler from './pages/Kuenstler';
@@ -36,6 +38,16 @@ import "./i18n"
 
 function App() {
   const location = useLocation();
+
+  useEffect(() => {
+    // Nur tracken, wenn PostHog aktiv ist
+    if ((posthog as any)?.capture) {
+      posthog.capture('$pageview', {
+        $current_url: window.location.href,
+        path: location.pathname,
+      });
+    }
+  }, [location.pathname]);
 
   return (
 

@@ -104,10 +104,6 @@ export default function Anfragen() {
       )}
       {stepIndex === 0 ? (
         <Intro
-          data={data}
-          onChange={onChange}
-          onNext={onNext}
-          onPrev={onPrev}
           onStart={() => setStepIndex(1)}
         />
       ) : (

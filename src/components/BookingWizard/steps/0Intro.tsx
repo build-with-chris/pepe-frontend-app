@@ -1,6 +1,7 @@
 import React from 'react';
 import PepeLogo from '../../../assets/PepeSchrift.png';
 import { useTranslation } from "react-i18next";
+import posthog from "@/lib/posthog";
 
 /**
  * Landing page component for the booking wizard.
@@ -11,18 +12,21 @@ import { useTranslation } from "react-i18next";
  * black and white with a blue accent, conveying a high‑end, elegant
  * appearance.
  */
-export interface BookingStartPageProps {
-  /**
-   * Callback invoked when the user clicks the start button. This should
-   * advance the wizard to the first question.
-   */
-  onStart?: () => void;
+interface BookingStartPageProps {
+  onStart: () => void;
 }
 
 const BookingStartPage: React.FC<BookingStartPageProps> = ({ onStart }) => {
   const { t } = useTranslation();
   const handleStart = React.useCallback(() => {
     if (typeof onStart === 'function') {
+      try {
+        posthog.capture("booking_assistant_started", {
+          source: "web",
+        });
+      } catch (e) {
+        console.warn("PostHog capture failed", e);
+      }
       onStart();
     } else {
       // Prevent hard crash if parent forgot to pass onStart

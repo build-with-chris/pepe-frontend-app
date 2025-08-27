@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import SummaryCard from '../parts/SummaryCard';
 import WaitingOverlay from '../parts/WaitingOverlay';
 import SuccessView from '../parts/SuccessView';
+import posthog from "@/lib/posthog";
 
 const ANIM_DURATION = 800; // ms
 const CONFETTI_COUNT = 100;
@@ -75,12 +76,32 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
     const startTime = Date.now();
     try {
       try {
+        posthog.capture('booking_request_submitted', {
+          path: window.location.pathname,
+          show_type: (data as any)?.show_type ?? null,
+          disciplines: Array.isArray((data as any)?.disciplines) ? (data as any).disciplines : undefined,
+          team_size: Number((data as any)?.team_size) || null,
+          is_group: Number((data as any)?.team_size) === 3,
+        });
+      } catch {}
+
+      try {
         localStorage.setItem('bookingData', JSON.stringify(data));
         console.log('💾 bookingData cached at submit (Step 11)');
       } catch (e) {
         console.warn('Could not cache bookingData at submit:', e);
       }
       const res = await postRequest(data);
+
+      try {
+        posthog.capture('booking_request_succeeded', {
+          num_available_artists: Number((res as any)?.num_available_artists || 0),
+          price_min: Number((res as any)?.price_min || 0),
+          price_max: Number((res as any)?.price_max || 0),
+          latency_ms: Date.now() - startTime,
+        });
+      } catch {}
+
       setPendingResponse(res);
 
       // ensure at least MIN_DELAY delay
@@ -120,6 +141,12 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         setLoading(false);
       }, waitTime);
     } catch (err: any) {
+      try {
+        posthog.capture('booking_request_failed', {
+          message: err?.message || String(err),
+          latency_ms: Date.now() - startTime,
+        });
+      } catch {}
       console.error('❌ postRequest failed:', err);
       setError(err.message || 'Ein Fehler ist aufgetreten');
       setShowAnim(false);

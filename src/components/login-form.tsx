@@ -13,6 +13,7 @@ import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
+import posthog from "@/lib/posthog";
 
 export function Login({
   className,
@@ -42,6 +43,7 @@ export function Login({
       });
       if (signInError) {
         console.error("Supabase signIn error:", signInError);
+        try { posthog.capture('login_failed', { stage: 'supabase', reason: signInError.message }); } catch {}
         alert("Login failed: " + signInError.message);
         return;
       }
@@ -63,6 +65,7 @@ export function Login({
       const verifyJson = await verifyRes.json().catch(() => ({}));
       if (!verifyRes.ok) {
         console.error("Verify failed:", verifyJson);
+        try { posthog.capture('login_failed', { stage: 'backend_verify', status: verifyRes.status, reason: (verifyJson && (verifyJson.message || verifyJson.error)) || 'verify_failed' }); } catch {}
         alert("Token verification failed");
         return;
       }
@@ -74,6 +77,16 @@ export function Login({
         email: supUser.email || undefined,
         role: (supUser.app_metadata as any)?.role || undefined,
       });
+      try {
+        posthog.identify(supUser.id, {
+          email: supUser.email ?? undefined,
+          role: (supUser.app_metadata as any)?.role ?? undefined,
+          sign_in_provider: (supUser.app_metadata as any)?.provider ?? undefined,
+        });
+        posthog.capture('login_success', { method: 'password' });
+      } catch (e) {
+        console.warn('PostHog identify/capture failed', e);
+      }
       // Ensure an Artist row exists / is linked for this Supabase user
       try {
         const ensureRes = await fetch(`${API}/api/artists/me/ensure`, {
@@ -102,6 +115,9 @@ export function Login({
       } catch (e) {
         console.warn("/api/artists/me request error", e);
       }
+      try {
+        posthog.capture(meOk ? 'artist_profile_loaded' : 'artist_profile_missing');
+      } catch {}
       const role = (supUser.app_metadata as any)?.role;
       if (role === 'admin') {
         navigate('/admin');
@@ -113,6 +129,7 @@ export function Login({
       }
     } catch (err) {
       console.error("handleSignIn exception:", err);
+      try { posthog.capture('login_exception', { message: err instanceof Error ? err.message : String(err) }); } catch {}
       alert("Unexpected error during login: " + (err instanceof Error ? err.message : String(err)));
     } finally {
       setLoading(false);
@@ -154,6 +171,7 @@ export function Login({
                 <div className="grid gap-3">
                   <Label htmlFor="email">Email</Label>
                   <Input
+                    data-ph-no-capture
                     id="email"
                     type="email"
                     placeholder="m@example.com"
@@ -173,6 +191,7 @@ export function Login({
                     </a>
                   </div>
                   <Input
+                    data-ph-no-capture
                     id="password"
                     type="password"
                     required
