@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
 
-import { Sparkles, Circle, Lightbulb } from "lucide-react";
+import { Sparkles, Circle, Flashlight } from "lucide-react";
 
 // NOTE: Requires `framer-motion`. If not installed: npm i framer-motion
 
@@ -16,6 +16,31 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const Bento1 = () => {
   const [showBeams, setShowBeams] = useState(false);
+
+  const [spotPos, setSpotPos] = useState<{ x: string; y: string }>({ x: "50%", y: "50%" });
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleSpotMove = (e: any) => {
+    if (!isHovering) setIsHovering(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setSpotPos({ x: `${x}%`, y: `${y}%` });
+  };
+  const resetSpot = () => {
+    setSpotPos({ x: "50%", y: "50%" });
+    setIsHovering(false);
+  };
+
+  const handleSpotTouch = (e: React.TouchEvent<HTMLDivElement>) => {
+    setIsHovering(true);
+    const touch = e.touches[0];
+    if (!touch) return;
+    const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+    const x = ((touch.clientX - rect.left) / rect.width) * 100;
+    const y = ((touch.clientY - rect.top) / rect.height) * 100;
+    setSpotPos({ x: `${x}%`, y: `${y}%` });
+  };
 
   const cardRef = useRef<HTMLDivElement | null>(null);
   const inView = useInView(cardRef, { amount: 0.4, margin: "-10% 0px -10% 0px" });
@@ -129,18 +154,62 @@ const Bento1 = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-black relative h-60 overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full">
-            <CardContent className="flex h-full flex-col justify-end p-6">
+          <Card
+            className="bg-black relative h-60 overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseMove={handleSpotMove}
+            onMouseLeave={resetSpot}
+            onTouchStart={() => setIsHovering(true)}
+            onTouchMove={handleSpotTouch}
+            onTouchEnd={resetSpot}
+          >
+            <div className="absolute inset-0">
+              <video
+                src="/videos/BentoVideo.webm"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              {/* Global dark layer with a circular hole (mask) at the spotlight */}
+              <div
+                className={`absolute inset-0 ${isHovering ? "bg-black/90" : "bg-black/95"}`}
+                style={{
+                  WebkitMaskImage: `radial-gradient(${isHovering ? "360px" : "120px"} at ${spotPos.x} ${spotPos.y}, rgba(0,0,0,0) ${isHovering ? "58%" : "40%"}, rgba(0,0,0,1) ${isHovering ? "62%" : "44%"})`,
+                  maskImage: `radial-gradient(${isHovering ? "360px" : "120px"} at ${spotPos.x} ${spotPos.y}, rgba(0,0,0,0) ${isHovering ? "58%" : "40%"}, rgba(0,0,0,1) ${isHovering ? "62%" : "44%"})`,
+                  transition: "mask-image 80ms linear, -webkit-mask-image 80ms linear, background-color 120ms linear",
+                }}
+                aria-hidden
+              />
+              {/* Subtle glow ring to make the light feel brighter */}
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background: isHovering
+                    ? `radial-gradient(460px at ${spotPos.x} ${spotPos.y}, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.18) 35%, rgba(255,255,255,0) 72%)`
+                    : `radial-gradient(180px at ${spotPos.x} ${spotPos.y}, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 28%, rgba(255,255,255,0) 60%)`,
+                  mixBlendMode: "screen",
+                  transition: "background 80ms linear",
+                }}
+                aria-hidden
+              />
+            </div>
+            <CardContent className="relative z-10 flex h-full flex-col justify-end p-6">
               <h2 className="text-primary-foreground dark:text-foreground text-left text-lg font-medium">
                 Innovative Showkonzepte.
               </h2>
               <div className="absolute left-6 top-6 z-10">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 dark:bg-black/20">
-                  <Lightbulb className="h-5 w-5 text-white dark:text-white" />
-                </div>
+                <motion.div
+                  animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 dark:bg-black/20 relative overflow-visible"
+                >
+                  <Flashlight className="h-5 w-5 text-yellow-300" />
+                  <span className="absolute h-10 w-10 rounded-full bg-yellow-300 opacity-20 blur-md animate-ping" />
+                </motion.div>
               </div>
             </CardContent>
-            <BackgroundBeams />
           </Card>
 
           <Card className="relative col-span-1 h-60 rounded-3xl md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-3">
