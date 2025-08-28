@@ -69,7 +69,7 @@
       "teeterboard": "Teeterboard",
       "jonglage": "Jonglage",
       "moderation": "Moderation",
-      "pantomimeEntertainment": "Pantomime/Entertainment"
+      "pantomime": "Pantomime"
     },
     "disciplinesShort": {
       "contemporaryDance": "Contemporary",
@@ -188,7 +188,7 @@
         "description": "Professionelle und unterhaltsame Leitung durch das Programm."
       },
       "pantomimeEntertainment": {
-        "label": "Pantomime/Entertainment",
+        "label": "Pantomime",
         "description": "Wortlose Unterhaltung, Comedy und Interaktion."
       }
     }
@@ -527,7 +527,7 @@
     "headingDesktop": "Wir glauben nicht an Mittelmaß – bei uns gibt es Exzellenz.",
     "subtitle": "Wir erschaffen Momente, die im Kopf und im Herzen bleiben.",
     "cta": "Lass uns reden",
-    "images": { "1": "Gala-Abende", "2": "Jubiläen", "3": "Firmenfeiern", "4": "Festivals", "5": "LED Shows" }
+    "images": { "1": "Gala-Abende", "2": "Jubiläen", "3": "Corporate events", "4": "Festivals", "5": "LED Shows" }
   },
   "hero27": {
     "title": "Wir bringen <1>außergewöhnliche Künstler</1> und <3>unvergessliche Showmomente</3> auf Ihre Bühne.",

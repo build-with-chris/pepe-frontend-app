@@ -22,7 +22,7 @@ const DISCIPLINE_OPTIONS: { value: string; img: string; labelKey: string; descKe
   { value: 'Teeterboard', img: 'Teeterboard', labelKey: 'booking.disciplines.options.teeterboard.label', descKey: 'booking.disciplines.options.teeterboard.description' },
   { value: 'Jonglage', img: 'Jonglage', labelKey: 'booking.disciplines.options.jonglage.label', descKey: 'booking.disciplines.options.jonglage.description' },
   { value: 'Moderation', img: 'Moderation', labelKey: 'booking.disciplines.options.moderation.label', descKey: 'booking.disciplines.options.moderation.description' },
-  { value: 'Pantomime/Entertainment', img: 'Pantomime_Entertainment', labelKey: 'booking.disciplines.options.pantomimeEntertainment.label', descKey: 'booking.disciplines.options.pantomimeEntertainment.description' }
+  { value: 'Pantomime', img: 'Pantomime', labelKey: 'booking.disciplines.options.pantomimeEntertainment.label', descKey: 'booking.disciplines.options.pantomimeEntertainment.description' }
 ];
 
 export interface StepDisciplinesProps {
@@ -70,13 +70,26 @@ const StepShowDisciplines: React.FC<StepDisciplinesProps> = ({
                   isSelected ? 'border-4 border-blue-500' : 'border-2 border-transparent'
                 }`}
               >
-                <img
-                  src={`/images/disciplines/${opt.img}.webp`}
-                  alt={String(label)}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 w-full h-full object-cover transition duration-200 group-hover:brightness-75"
-                />
+                <div className="absolute inset-0 w-full h-full">
+                  {/* Schwarz-Weiß default */}
+                  <img
+                    src={`/images/bookingagent/BW/${opt.img}.webp`}
+                    alt={String(label)}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover transition duration-200"
+                  />
+                  {/* Farbig on hover or selected */}
+                  <img
+                    src={`/images/bookingagent/Farbig/${opt.img}.webp`}
+                    alt={String(label)}
+                    loading="lazy"
+                    decoding="async"
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                      isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                    }`}
+                  />
+                </div>
                 <div className="absolute bottom-0 w-full bg-black/50 py-1 transition-opacity group-hover:opacity-0">
                   <span className="text-white text-center block text-sm">{label}</span>
                 </div>

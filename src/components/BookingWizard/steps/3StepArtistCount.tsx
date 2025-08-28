@@ -42,7 +42,8 @@ const StepArtistCount: React.FC<StepArtistCountProps> = ({
             name="team_size"
             value={option.value.toString()}
             label={t(option.labelKey)}
-            imgSrc={`/images/teamSizes/${option.img}.webp`}
+            imgSrc={`/images/bookingagent/BW/${option.img}.webp`}
+            imgHoverSrc={`/images/bookingagent/Farbig/${option.img}.webp`}
             checked={data.team_size === option.value}
             onChange={(val) => { onChange({ team_size: Number(val) }); onNext(); }}
           />

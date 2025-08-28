@@ -33,7 +33,7 @@ const StepEventType: React.FC<StepEventTypeProps> = ({ data, onChange, onNext })
             name="event_type"
             value={option.value}
             label={option.label}
-            imgSrc={`/images/eventTypes/${option.img}.webp`}
+            imgSrc={`/images/bookingagent/BW/${option.img}.webp`}
             checked={data.event_type === option.value}
             onChange={val => onChange({ event_type: val })}
             onSelectNext={onNext}

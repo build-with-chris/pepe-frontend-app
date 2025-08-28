@@ -83,8 +83,18 @@ const StepLocation: React.FC<StepLocationProps> = ({
   };
 
   const locationOptions = [
-    { value: 'true', label: t('booking.location.indoor'), imgSrc: '/images/indoor.webp' },
-    { value: 'false', label: t('booking.location.outdoor'), imgSrc: '/images/outdoor.webp' }
+    {
+      value: 'true',
+      label: t('booking.location.indoor'),
+      imgSrc: '/images/bookingagent/BW/Indoor.webp',
+      imgHoverSrc: '/images/bookingagent/Farbig/Indoor.webp'
+    },
+    {
+      value: 'false',
+      label: t('booking.location.outdoor'),
+      imgSrc: '/images/bookingagent/BW/Outdoor.webp',
+      imgHoverSrc: '/images/bookingagent/Farbig/Outdoor.webp'
+    }
   ];
 
   const handleIndoorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,6 +155,7 @@ const StepLocation: React.FC<StepLocationProps> = ({
                 value={opt.value}
                 label={opt.label}
                 imgSrc={opt.imgSrc}
+                imgHoverSrc={opt.imgHoverSrc}
                 checked={hasSelection && data.is_indoor === (opt.value === 'true')}
                 onChange={val => {
                   setHasSelection(true);
