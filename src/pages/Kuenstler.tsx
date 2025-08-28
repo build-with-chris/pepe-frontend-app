@@ -143,7 +143,19 @@ export default function Kuenstler(){
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-white relative z-10">
         <Hero87 />
         <div id="kuenstler-quote" className="relative flex flex-col items-center text-center text-white my-8">
-          <div className="pointer-events-none absolute -top-10">
+          <div className="flex flex-row pointer-events-none absolute -top-10">
+            <DotLottieReact
+              src="https://lottie.host/e86a7557-375e-4cf6-abc0-c8f0d034b637/mQay5cJDVU.lottie"
+              loop
+              autoplay
+              style={{ width: 96, height: 96, filter: "brightness(2)" }}
+            />
+            <DotLottieReact
+              src="https://lottie.host/e86a7557-375e-4cf6-abc0-c8f0d034b637/mQay5cJDVU.lottie"
+              loop
+              autoplay
+              style={{ width: 96, height: 96, filter: "brightness(2)" }}
+            />
             <DotLottieReact
               src="https://lottie.host/e86a7557-375e-4cf6-abc0-c8f0d034b637/mQay5cJDVU.lottie"
               loop

@@ -2,14 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation, useInView } from "framer-motion";
-
-import { Sparkles, Circle, Flashlight } from "lucide-react";
-
-// NOTE: Requires `framer-motion`. If not installed: npm i framer-motion
-
-import { BackgroundBeams } from "@/components/aceternity/background-beams";
+import { Sparkles, Drama, Flashlight, ArrowRight } from "lucide-react";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-import { Logo, LogoImage } from "@/components/shadcnblocks/logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -56,15 +50,32 @@ const Bento1 = () => {
     }
   }, [inView, controls]);
 
+  // Crossfade slider for middle card
+  const sliderImages = [
+    "/images/Bento1/Slider1.webp",
+    "/images/Bento1/Slider2.webp",
+    "/images/Bento1/Slider3.webp",
+  ]
+  const [slide, setSlide] = useState(0);
+  const [showSparkleAnim, setShowSparkleAnim] = useState(false);
+  const [showGlobalSparkles, setShowGlobalSparkles] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSlide((s) => (s + 1) % sliderImages.length);
+    }, 3500);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section className="py-32">
       <div className="container">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
-          <Card className="bg-neutral-900 relative h-60 overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full">
+          <Card className="relative h-60 overflow-hidden rounded-xl border border-white/10 bg-black transition md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full">
             <div ref={cardRef} />
             {/* subtle flicker grid stays */}
             <FlickeringGrid
-              className="absolute inset-0 h-full w-full"
+              className="absolute inset-0 h-full w-full z-0"
               squareSize={4}
               gridGap={6}
               flickerChance={0.3}
@@ -78,7 +89,7 @@ const Bento1 = () => {
               animate={controls}
               transition={{ type: "spring", stiffness: 80, damping: 18, mass: 1.2, duration: 1.6 }}
               onAnimationComplete={() => setShowBeams(true)}
-              className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center"
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center"
               aria-hidden
             >
               <img
@@ -126,38 +137,72 @@ const Bento1 = () => {
               </>
             )}
 
-            <CardContent className="relative z-10 flex h-full flex-col justify-end p-6">
+            <CardContent className="relative z-20 flex h-full flex-col justify-end p-6">
               <h2 className="text-left text-lg font-medium text-gray-100">
                 Pepe Shows, die begeistern.
               </h2>
-              <div className="absolute left-6 top-6 z-10">
+              <div
+                className="absolute left-6 top-6 z-10 cursor-pointer"
+                onClick={() => {
+                  setShowSparkleAnim(true);
+                  setTimeout(() => {
+                    setShowSparkleAnim(false);
+                    setShowGlobalSparkles(true);
+                    setTimeout(() => setShowGlobalSparkles(false), 10000);
+                  }, 2000);
+                }}
+              >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
                   <Sparkles className="h-5 w-5 text-yellow-400" />
                 </div>
               </div>
+              {showSparkleAnim && (
+                <div className="absolute top-1/6 right-4 -translate-y-1/2 z-30 pointer-events-none">
+                  <DotLottieReact
+                    src="https://lottie.host/8f8332c8-41ef-4d9d-ad07-d9dd352b1cb4/UVLLlb0OP5.lottie"
+                    loop
+                    autoplay
+                    style={{ width: 160, height: 160, filter: "brightness(1.8)" }}
+                  />
+                </div>
+              )}
+              {showGlobalSparkles && (
+                <div className="absolute inset-0 z-40 pointer-events-none">
+                  <DotLottieReact
+                    src="https://lottie.host/e86a7557-375e-4cf6-abc0-c8f0d034b637/mQay5cJDVU.lottie"
+                    loop
+                    autoplay
+                    style={{ width: "100%", height: "100%", filter: "brightness(2)" }}
+                  />
+                </div>
+              )}
             </CardContent>
           </Card>
 
-          <Card className="border-border relative h-60 overflow-hidden rounded-3xl border md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-[600px]">
-            <img
-              src="/images/Bento1/AirFestival.webp"
-              alt="Performance"
-              className="absolute inset-0 h-full w-full object-cover opacity-90"
-            />
+          <Card className="relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-[600px]">
+            <div className="absolute inset-0">
+              {sliderImages.map((src, i) => (
+                <motion.img
+                  key={src}
+                  src={src}
+                  alt="Show Impression"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: i === slide ? 0.9 : 0 }}
+                  transition={{ duration: 0.8 }}
+                />
+              ))}
+              <div className="absolute inset-0 bg-black/30" />
+            </div>
             <CardContent className="z-10 flex h-full flex-col justify-end p-6">
               <h2 className="text-left text-lg font-medium text-gray-100">
                 Artistik, die fesselt.
               </h2>
-              <div className="absolute left-6 top-6 z-10">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
-                  <Circle className="h-5 w-5 text-yellow-400" />
-                </div>
-              </div>
             </CardContent>
           </Card>
 
           <Card
-            className="bg-neutral-900 relative h-60 overflow-hidden rounded-3xl md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full"
+            className="relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full"
             onMouseEnter={() => setIsHovering(true)}
             onMouseMove={handleSpotMove}
             onMouseLeave={resetSpot}
@@ -214,9 +259,9 @@ const Bento1 = () => {
             </CardContent>
           </Card>
 
-          <Card className="relative bg-neutral-900 col-span-1 h-60 rounded-3xl md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-3">
+          <Card className="relative col-span-1 h-60 rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-3">
             <CardContent className="flex h-full flex-col items-center justify-center p-6">
-              <span className="text-2xl font-bold md:text-xl lg:text-3xl">100% Fairness</span>
+              <span className="text-2xl font-bold text-white md:text-xl lg:text-3xl">100% Fairness</span>
               <p className="text-gray-300 mb-4 text-left text-sm md:text-sm">
                 Faire & transparente Bezahlung unserer Künstler:innen – nach den{" "}
                 <a href="https://www.kreativkultur.berlin/en/resource-center/honoraruntergrenzen/" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">
@@ -237,7 +282,7 @@ const Bento1 = () => {
             </CardContent>
           </Card>
 
-          <Card className="relative bg-neutral-900 col-span-1 h-60 overflow-hidden rounded-3xl md:col-span-3 md:row-span-1 md:h-[300px] lg:col-span-5">
+          <Card className="relative col-span-1 h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-3 md:row-span-1 md:h-[300px] lg:col-span-5">
             <div className="flex h-full flex-col items-center justify-center p-6">
               <div className="flex flex-col items-center text-center">
                 <div className="mb-4 h-24 w-24">
@@ -256,12 +301,29 @@ const Bento1 = () => {
             </div>
           </Card>
 
-          <Card className="bg-neutral-900 relative col-span-1 h-60 rounded-3xl md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4">
+          <Card className="relative col-span-1 h-60 rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4">
             <CardContent className="flex h-full flex-col items-center justify-center p-6">
               <p className="text-gray-300 mb-4 text-left text-sm md:text-sm">
                 Raum für künstlerische Freiheit – so entstehen unvergessliche Erlebnisse.
               </p>
-              <Button className="bg-yellow-400 text-black font-semibold hover:bg-yellow-300">Jetzt Show anfragen</Button>
+              <div className="mt-6 flex flex-col gap-4">
+                <a href="/anfragen">
+                  <Button
+                    className="group flex w-fit items-center justify-center gap-2 rounded-full tracking-tight bg-white text-black hover:bg-gray-200 font-[futura]"
+                  >
+                    Unverbindlich anfragen
+                    <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:rotate-0" />
+                  </Button>
+                </a>
+                <a href="/kontakt">
+                  <Button
+                    className="group flex w-fit items-center justify-center gap-2 rounded-full tracking-tight bg-white text-black hover:bg-gray-200 font-[futura]"
+                  >
+                    Persönlich beraten lassen
+                    <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:rotate-0" />
+                  </Button>
+                </a>
+              </div>
             </CardContent>
           </Card>
         </div>
