@@ -12,6 +12,7 @@ import { Gallery23 } from "@/components/gallery23";
 import { Hero27 } from "@/components/hero27";
 import { Cta10 } from "@/components/cta10";
 import { useTranslation } from "react-i18next";
+import { Bento1 } from "@/components/bento1";
 
 const THRESHOLD = 45; // %
 
@@ -193,7 +194,11 @@ export default function Home() {
 
       
           {/* Textblock 1 nach Hero */}
-      <Hero27 />
+          <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
+
+        <Bento1 />
+        </div>
+  
 
       <div className="h-px w-full max-w-none mx-auto my-16 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
