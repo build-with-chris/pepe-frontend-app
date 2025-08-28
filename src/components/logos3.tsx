@@ -73,7 +73,7 @@ const Logos3 = ({
   const { t } = useTranslation();
   const marqueeLogos = [...logos, ...logos, ...logos];
   return (
-    <section className="bg-black text-white pt-10 pb-20 mb-10 overflow-hidden">
+    <section className="bg-black text-white lg:pt-10 pb-20 mb-10 overflow-hidden">
       <div className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-5xl px-4">
         <div className="w-full flex justify-center">
           <h1 className="my-6 text-xl sm:text-2xl lg:text-4xl font-bold text-center text-white">

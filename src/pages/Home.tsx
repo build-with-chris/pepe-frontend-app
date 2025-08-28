@@ -159,6 +159,27 @@ export default function Home() {
     };
   }, [carouselApi]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handle = groupRef.current;
+    const mq = window.matchMedia("(min-width: 768px) and (max-width: 1023px)");
+
+    const applyTabletSize = () => {
+      if (!handle) return;
+      if (mq.matches) {
+        // left = 60, right = 40 when tablet
+        handle.setLayout([60, 40]);
+        setRightSize(40);
+      }
+    };
+
+    applyTabletSize();
+    mq.addEventListener ? mq.addEventListener("change", applyTabletSize) : mq.addListener(applyTabletSize);
+    return () => {
+      mq.removeEventListener ? mq.removeEventListener("change", applyTabletSize) : mq.removeListener(applyTabletSize);
+    };
+  }, []);
+
   const activeArtists = useMemo(() => {
     return shuffledSmall;
   }, [rightSize, shuffledSmall]);
@@ -242,7 +263,12 @@ export default function Home() {
             jumpTo={THRESHOLD}
             onJump={handleJump}
           />
-          <ResizablePanel defaultSize={30} minSize={30} maxSize={45} className="bg-black w-full min-h-[420px] p-2">
+          <ResizablePanel
+            defaultSize={typeof window !== "undefined" && window.innerWidth >= 768 && window.innerWidth < 1024 ? 40 : 30}
+            minSize={30}
+            maxSize={45}
+            className="bg-black w-full min-h-[420px] p-2"
+          >
             <Carousel
               className="h-full min-h-[420px]"
               opts={{ loop: true }}
@@ -321,7 +347,7 @@ export default function Home() {
               {t("home.findArtistButton")}
             </button>
           </a>
-          <AnimatedArrow />
+  
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg text-left">
             {t("home.findArtistTime")}
           </p>

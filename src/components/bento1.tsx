@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { useTranslation } from "react-i18next";
 
 const Bento1 = () => {
+  const { t } = useTranslation();
   const [showBeams, setShowBeams] = useState(false);
 
   const [spotPos, setSpotPos] = useState<{ x: string; y: string }>({ x: "50%", y: "50%" });
@@ -87,7 +89,7 @@ const Bento1 = () => {
   }, [images.length, isPaused, isMobile]);
 
   return (
-    <section className="py-32">
+    <section className="sm:pt-16 sm:pb-8 md:py-16">
       <div className="container">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
           <Card className="relative h-60 overflow-hidden rounded-xl border border-white/10 bg-black transition md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full">
@@ -163,7 +165,7 @@ const Bento1 = () => {
 
             <CardContent className="relative z-20 flex h-full flex-col justify-end p-6">
               <h2 className="text-left text-lg font-medium text-gray-100">
-                Pepe Shows, die begeistern.
+                {t("bento1.hero.title")}
               </h2>
               <div
                 className="absolute left-4 top-4 z-30 cursor-pointer"
@@ -221,7 +223,7 @@ const Bento1 = () => {
                 <motion.img
                   key={src}
                   src={src}
-                  alt="Show Impression"
+                  alt={t("bento1.slider.alt")}
                   className="absolute inset-0 h-full w-full object-cover"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: i === slide ? 0.9 : 0 }}
@@ -232,7 +234,7 @@ const Bento1 = () => {
             </div>
             <CardContent className="z-10 flex h-full flex-col justify-end p-6">
               <h2 className="text-left text-lg font-medium text-gray-100">
-                Artistik, die fesselt.
+                {t("bento1.middle.title")}
               </h2>
             </CardContent>
           </Card>
@@ -285,7 +287,7 @@ const Bento1 = () => {
             </div>
             <CardContent className="relative z-10 flex h-full flex-col justify-end p-6">
               <h2 className="text-left text-lg font-medium text-gray-100">
-                Innovative Showkonzepte.
+                {t("bento1.third.title")}
               </h2>
               <div className="absolute left-4 top-4 z-30 cursor-pointer" onClick={() => setRevealAll((v) => !v)}>
                 <motion.div
@@ -301,12 +303,18 @@ const Bento1 = () => {
 
           <Card className="relative col-span-1 h-60 rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-3">
             <CardContent className="flex h-full flex-col items-center justify-center p-6">
-              <span className="text-2xl font-bold text-white md:text-xl lg:text-3xl">100% Fairness</span>
+              <span className="text-2xl font-bold text-white md:text-xl lg:text-3xl">{t("bento1.values.fairnessTitle")}</span>
               <p className="text-gray-300 my-6 text-center text-sm md:text-sm">
-                Faire & transparente Bezahlung unserer Künstler:innen – nach den{" "}
-                <a href="https://www.kreativkultur.berlin/en/resource-center/honoraruntergrenzen/" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">
-                  Honorarmindestsätzen von Kreativ Kultur Berlin
-                </a>.
+                {t("bento1.values.fairnessBodyPrefix")}{" "}
+                <a
+                  href="https://www.kreativkultur.berlin/en/resource-center/honoraruntergrenzen/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-white"
+                >
+                  {t("bento1.values.linkText")}
+                </a>
+                .
               </p>
               <div className="flex -space-x-2">
                 {["Artist1.webp","Artist2.webp","Artist3.webp","Artist4.webp","Artist5.webp"].map((file, i) => (
@@ -333,10 +341,10 @@ const Bento1 = () => {
                     autoplay
                   />
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-white">Verantwortung übernehmen</h3>
+                <h3 className="text-lg font-bold mb-2 text-white">{t("bento1.responsibility.title")}</h3>
                 <p className="text-sm text-gray-300 ">
-                  Wir achten auf einen nachhaltigen Umgang mit Ressourcen.<br/>
-                  Inklusivität & Vielfalt sind Grundwerte unserer Arbeit.
+                  {t("bento1.responsibility.body1")}<br/>
+                  {t("bento1.responsibility.body2")}
                 </p>
               </div>
             </div>
@@ -346,14 +354,14 @@ const Bento1 = () => {
           hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4">
             <CardContent className="flex h-full flex-col items-center justify-center text-center p-6">
               <p className="text-gray-300 mb-6 text-center text-sm md:text-sm">
-                Raum für künstlerische Freiheit – so entstehen unvergessliche Erlebnisse.
+                {t("bento1.cta.body")}
               </p>
               <div className="mt-6 flex flex-col gap-4">
                 <a href="/anfragen">
                   <Button
                     className="group flex w-full min-w-[220px] items-center justify-center gap-2 rounded-full tracking-tight bg-white text-black hover:bg-gray-200 font-[futura] px-6 py-2"
                   >
-                    Unverbindlich anfragen
+                    {t("bento1.cta.btnEnquire")}
                     <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:rotate-0" />
                   </Button>
                 </a>
@@ -361,7 +369,7 @@ const Bento1 = () => {
                   <Button
                     className="group flex w-full min-w-[220px] items-center justify-center gap-2 rounded-full tracking-tight bg-white text-black hover:bg-gray-200 font-[futura] px-6 py-2"
                   >
-                    Persönlich beraten lassen
+                    {t("bento1.cta.btnConsult")}
                     <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:rotate-0" />
                   </Button>
                 </a>

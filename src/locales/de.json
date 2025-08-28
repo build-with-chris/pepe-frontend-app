@@ -76,6 +76,35 @@
       "pantomimeEntertainment": "Pantomime"
     }
   },
+  "bento1": {
+    "hero": {
+      "title": "Pepe Shows, die begeistern."
+    },
+    "middle": {
+      "title": "Artistik, die fesselt."
+    },
+    "third": {
+      "title": "Innovative Showkonzepte."
+    },
+    "slider": {
+      "alt": "Show-Impression"
+    },
+    "values": {
+      "fairnessTitle": "100% Fairness",
+      "fairnessBodyPrefix": "Faire & transparente Bezahlung unserer Künstler:innen – nach den",
+      "linkText": "Honorarmindestsätzen von Kreativ Kultur Berlin"
+    },
+    "responsibility": {
+      "title": "Verantwortung übernehmen",
+      "body1": "Wir achten auf einen nachhaltigen Umgang mit Ressourcen.",
+      "body2": "Inklusivität & Vielfalt sind Grundwerte unserer Arbeit."
+    },
+    "cta": {
+      "body": "Raum für künstlerische Freiheit – so entstehen unvergessliche Erlebnisse.",
+      "btnConsult": "Persönlich beraten lassen",
+      "btnEnquire": "Unverbindlich anfragen"
+    }
+  },
   "booking": {
     "artistCount": {
       "heading": "Wie viele Artists möchtest du buchen?",
@@ -498,7 +527,7 @@
     "headingDesktop": "Wir glauben nicht an Mittelmaß – bei uns gibt es Exzellenz.",
     "subtitle": "Wir erschaffen Momente, die im Kopf und im Herzen bleiben.",
     "cta": "Lass uns reden",
-    "images": { "1": "Gala-Abende", "2": "Jubiläen", "3": "Firmenfeiern", "4": "Festivals", "5": "Weihnachtsfeiern" }
+    "images": { "1": "Gala-Abende", "2": "Jubiläen", "3": "Firmenfeiern", "4": "Festivals", "5": "LED Shows" }
   },
   "hero27": {
     "title": "Wir bringen <1>außergewöhnliche Künstler</1> und <3>unvergessliche Showmomente</3> auf Ihre Bühne.",

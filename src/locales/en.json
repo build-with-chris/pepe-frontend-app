@@ -73,7 +73,35 @@
         "pantomimeEntertainment": "Pantomime"
       }
     },
-  
+    "bento1": {
+    "hero": {
+      "title": "Pepe shows that thrill."
+    },
+    "middle": {
+      "title": "Captivating artistry."
+    },
+    "third": {
+      "title": "Innovative show concepts."
+    },
+    "slider": {
+      "alt": "Show impression"
+    },
+    "values": {
+      "fairnessTitle": "100% Fairness",
+      "fairnessBodyPrefix": "Fair and transparent pay for our artists — according to the",
+      "linkText": "minimum fee guidelines by Kreativ Kultur Berlin"
+    },
+    "responsibility": {
+      "title": "Taking responsibility",
+      "body1": "We use resources sustainably.",
+      "body2": "Inclusivity & diversity are core values of our work."
+    },
+    "cta": {
+      "body": "Space for artistic freedom — that’s how unforgettable experiences are created.",
+      "btnConsult": "Get personal advice",
+      "btnEnquire": "Request a quote"
+    }
+  },
     "booking": {
       "artistCount": {
         "heading": "How many artists would you like to book?",
@@ -545,7 +573,7 @@
       "headingDesktop": "We don’t believe in average – with us it’s excellence.",
       "subtitle": "We create moments that stay in your head and your heart.",
       "cta": "Let’s talk",
-      "images": { "1": "Gala evenings", "2": "Anniversaries", "3": "Corporate events", "4": "Festivals", "5": "Christmas parties" }
+      "images": { "1": "Gala evenings", "2": "Anniversaries", "3": "Corporate events", "4": "Festivals", "5": "LED Shows" }
     },
   
     "hero27": {

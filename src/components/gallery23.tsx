@@ -32,13 +32,13 @@ const Gallery23 = () => {
   }, []);
 
   return (
-    <section className="bg-black text-white mb-10">
-      <div className="container overflow-hidden p-10">
-        <div className="relative flex flex-col items-center justify-between gap-12  bg-black p-10 py-20 md:flex-row">
-          <div className="flex h-142 flex-col justify-center items-center text-center w-full md:w-1/2">
+    <section className="bg-black text-white mb-10 mx-5">
+      <div className="container p-6 md:p-8 lg:p-10">
+        <div className="relative flex flex-col items-center gap-10 md:gap-12 bg-black p-10 py-20 md:flex-row md:items-start">
+          <div className="flex h-142 flex-col justify-center items-center text-center w-full md:flex-1 md:min-w-0 md:pr-10">
             <h1 className="max-w-lg font-calSans text-white">
-              <span className="block text-3xl md:hidden">{t("gallery23.headingMobile")}</span>
-              <span className="hidden md:block text-4xl">{t("gallery23.headingDesktop")}</span>
+              <span className="block text-3xl lg:hidden">{t("gallery23.headingMobile")}</span>
+              <span className="hidden lg:block text-4xl">{t("gallery23.headingDesktop")}</span>
             </h1>
             <p className="text-md mt-10 max-w-2xl text-gray-300">
               {t("gallery23.subtitle")}
@@ -52,22 +52,22 @@ const Gallery23 = () => {
                 <ArrowRight className="size-4 -rotate-45 transition-all ease-out group-hover:rotate-0" />
               </Button>
             </Link>
-            <div className="mt-8 w-full md:max-w-[36rem] md:self-center overflow-hidden">
+            <div className="lg:mt-8 w-full md:max-w-[36rem] md:self-center overflow-hidden">
               <Logos3 />
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center gap-1 w-full md:w-1/2">
+          <div className="flex flex-col items-center justify-center gap-1 w-full md:flex-1 md:min-w-0">
             {images.map((image, index) => (
               <motion.div
                 key={image.id}
-                className="group relative cursor-pointer overflow-hidden rounded-4xl border"
-                initial={{ height: "2.5rem", width: "24rem" }}
+                initial={{ height: "2.5rem" }}
                 animate={{
-                  height: activeImage === index ? "24rem" : "2.5rem",
+                  height: activeImage === index ? "auto" : "2.5rem",
                 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 onClick={() => setActiveImage(index)}
                 onHoverStart={() => setActiveImage(index)}
+                className="group relative cursor-pointer overflow-hidden rounded-4xl border w-full max-w-full self-stretch aspect-square"
               >
                 <AnimatePresence>
                   {activeImage === index && (
