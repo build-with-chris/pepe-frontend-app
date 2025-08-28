@@ -3,8 +3,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { useAuth } from '@/context/AuthContext';
 import { toLocalDate, formatISODate, getDateRange } from "@/utils/calendar";
-import { listAvailability, createAvailability, deleteAvailability } from "@/services/availabilityAPI";
-import type { AvailabilitySlot, ISODate } from "@/services/availabilityAPI";
+import { listAvailability, createAvailability, deleteAvailability } from "@/services/availabilityApi";
+import type { AvailabilitySlot, ISODate } from "@/services/availabilityApi";
 
 function useBackendArtistId(user: any, token: string | null) {
   const [backendArtistId, setBackendArtistId] = useState<string | null>(null);
