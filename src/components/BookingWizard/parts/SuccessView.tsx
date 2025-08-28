@@ -1,6 +1,4 @@
-
-
-import React from 'react';
+import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CheckCircle2, Users, PiggyBank, Gift } from 'lucide-react';
 import type { BookingData } from '../types';
@@ -30,6 +28,7 @@ const SuccessView: React.FC<SuccessViewProps> = ({
   setShowReplay,
 }) => {
   const { t } = useTranslation();
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   return (
     <div
@@ -72,16 +71,31 @@ const SuccessView: React.FC<SuccessViewProps> = ({
       <div className="relative w-full aspect-video mb-6 rounded-lg overflow-hidden">
         <video
           key={visualSrc}
+          ref={videoRef}
           src={visualSrc}
           muted
           playsInline
           autoPlay
+          preload="auto"
           className="w-full h-full object-cover rounded-lg"
+          onEnded={() => setShowReplay(true)}
+          onPlay={() => setShowReplay(false)}
         />
         {showReplay && (
           <button
             type="button"
-            onClick={() => setShowReplay(false)}
+            onClick={() => {
+              if (videoRef.current) {
+                try {
+                  videoRef.current.currentTime = 0;
+                  const playPromise = videoRef.current.play();
+                  if (playPromise && typeof playPromise.then === 'function') {
+                    playPromise.catch(() => {/* ignore */});
+                  }
+                } catch {}
+              }
+              setShowReplay(false);
+            }}
             className="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-3 py-1 rounded-full"
           >
             {t('booking.showtime.success.replay')}
@@ -173,7 +187,7 @@ const SuccessView: React.FC<SuccessViewProps> = ({
       {/* CTA + Back */}
       <div className="flex justify-between items-center">
         <a
-          href="#artists"
+          href="/kuenstler"
           className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-700 transition-colors text-sm"
         >
           {t('booking.showtime.success.cta')}
