@@ -250,14 +250,16 @@ const Bento1 = () => {
           >
             <div className="absolute inset-0">
               <video
-                src="/videos/BentoVideo.webm"
                 autoPlay
                 loop
                 muted
                 playsInline
                 className="absolute inset-0 h-full w-full object-cover"
                 style={{ filter: revealAll ? "brightness(1)" : undefined }}
-              />
+              >
+                <source src="/videos/bentoVideoMobile.webm" type="video/webm" media="(max-width: 639px)" />
+                <source src="/videos/BentoVideo.webm" type="video/webm" />
+              </video>
               {!revealAll && (
                 <>
                   {/* Global dark layer with a circular hole (mask) at the spotlight */}

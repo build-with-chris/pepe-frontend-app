@@ -8,6 +8,8 @@ import { supabase } from "@/lib/supabase";
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
 
 const Navbar01Page = () => {
   const { user, setUser, setToken } = useAuth();
@@ -15,6 +17,7 @@ const Navbar01Page = () => {
   const location = useLocation();
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const { i18n } = useTranslation();
   const changeLanguage = (lng: string) => {
@@ -65,11 +68,11 @@ const Navbar01Page = () => {
           <Logo />
 
           {/* Desktop Menu */}
-          <NavMenu className="hidden md:block" />
+          <NavMenu className="hidden lg:block" />
 
           <div className="flex items-center gap-3">
             {user ? (
-              <div className="w-auto max-w-xs md:max-w-none">
+              <div className="hidden lg:block w-auto max-w-xs">
                 <Button
                   variant="secondary"
                   className="text-sm px-3 py-1.5 md:text-base md:px-5 md:py-2.5"
@@ -79,7 +82,7 @@ const Navbar01Page = () => {
                 </Button>
               </div>
             ) : (
-              <div className="w-auto max-w-xs md:max-w-none">
+              <div className="hidden lg:block w-auto max-w-xs">
                 <Link to="/anfragen">
                   <Button
                     variant="secondary"
@@ -91,7 +94,7 @@ const Navbar01Page = () => {
               </div>
             )}
             {/* Language Switcher (desktop) */}
-            <div className="hidden md:flex items-center gap-2 text-white">
+            <div className="hidden lg:flex items-center gap-2 text-white">
               <button
                 onClick={() => changeLanguage("de")}
                 className={`text-xs md:text-sm px-2 py-1 rounded ${i18n.language?.startsWith("de") ? "underline" : "opacity-80 hover:opacity-100"}`}
@@ -108,29 +111,110 @@ const Navbar01Page = () => {
                 EN
               </button>
             </div>
-            {/* Language Switcher (mobile) */}
-            <div className="md:hidden flex items-center gap-2 text-white">
-              <button
-                onClick={() => changeLanguage("de")}
-                className={`text-xs px-2 py-1 rounded ${i18n.language?.startsWith("de") ? "underline" : "opacity-80 hover:opacity-100"}`}
-                aria-label="Deutsch"
+            {/* Hamburger (mobile & tablet) */}
+            <button
+              className="lg:hidden inline-flex items-center justify-center rounded-md p-2 sm:p-3 md:p-4 text-white/90 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
+              aria-label="Open menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(true)}
+            >
+              <svg
+                className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                DE
-              </button>
-              <span className="text-white/40">|</span>
-              <button
-                onClick={() => changeLanguage("en")}
-                className={`text-xs px-2 py-1 rounded ${i18n.language?.startsWith("en") ? "underline" : "opacity-80 hover:opacity-100"}`}
-                aria-label="English"
-              >
-                EN
-              </button>
-              <NavigationSheet />
-            </div>
+                <path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
           </div>
         </div>
       </nav>
       {!isHomeOrArtists && <div className="h-26" />}
+
+      {/* Mobile/Tablet Fullscreen Menu */}
+      <div
+        className={`lg:hidden fixed inset-0 z-[60] transition-transform duration-300 ${menuOpen ? "translate-x-0" : "translate-x-full"}`}
+        aria-hidden={!menuOpen}
+      >
+        {/* Backdrop */}
+        <div
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          onClick={() => setMenuOpen(false)}
+        />
+
+        {/* Panel */}
+        <div className="absolute right-0 top-0 h-full w-[88%] sm:w-[70%] max-w-[420px] bg-neutral-900 border-l border-white/10 shadow-xl">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+            <div className="h-10 w-28 sm:h-12 sm:w-32 shrink-0 pointer-events-none">
+              <DotLottieReact
+                src="https://lottie.host/624aabe7-916a-416f-b6c2-be3a17f113f9/DyPtBBmqU4.lottie"
+                loop
+                autoplay
+                style={{ width: "100%", height: "100%", filter: "invert(1) brightness(2)" }}
+              />
+            </div>
+            <button
+              className="inline-flex items-center justify-center rounded-md p-2 text-white/90 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
+              aria-label="Close menu"
+              onClick={() => setMenuOpen(false)}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div className="px-6 py-6 space-y-2">
+            {/* Nav items - large touch targets */}
+            <Link to="/home" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Home</Link>
+            <Link to="/kuenstler" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Künstler</Link>
+            <Link to="/anfragen" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Booking Assistent</Link>
+            <Link to="/kontakt" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Kontakt</Link>
+
+            {/* Divider */}
+            <div className="my-4 border-t border-white/10" />
+
+            {/* Language Switcher (inside menu) */}
+            <div className="flex items-center gap-3 px-4">
+              <span className="text-white/60 text-sm">Sprache:</span>
+              <button
+                onClick={() => changeLanguage("de")}
+                className={`text-sm px-3 py-1.5 rounded-full border ${i18n.language?.startsWith("de") ? "border-white/40 bg-white/10" : "border-white/10 hover:border-white/30"}`}
+                aria-label="Deutsch"
+              >
+                DE
+              </button>
+              <button
+                onClick={() => changeLanguage("en")}
+                className={`text-sm px-3 py-1.5 rounded-full border ${i18n.language?.startsWith("en") ? "border-white/40 bg-white/10" : "border-white/10 hover:border-white/30"}`}
+                aria-label="English"
+              >
+                EN
+              </button>
+            </div>
+
+            {/* Auth / CTA */}
+            <div className="px-4 pt-4">
+              {user ? (
+                <Button
+                  variant="secondary"
+                  className="w-full text-base py-3"
+                  onClick={() => { setMenuOpen(false); handleLogout(); }}
+                >
+                  Logout
+                </Button>
+              ) : (
+                <Link to="/anfragen" onClick={() => setMenuOpen(false)}>
+                  <Button variant="secondary" className="w-full text-base py-3">
+                    Booking Assistent
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

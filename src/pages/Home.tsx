@@ -336,6 +336,63 @@ export default function Home() {
       {/* Mobile: simple text block (no resizable) */}
       <div className="block md:hidden w-full mx-auto my-6 px-4">
         <div className="bg-black/50 rounded-lg p-6">
+          <div className="w-full mb-6">
+            <div className="relative w-full overflow-hidden rounded-lg aspect-[16/9] bg-black/40 ring-1 ring-white/10">
+              <Carousel className="absolute inset-0" opts={{ loop: true }} plugins={[Autoplay({ delay: 3200, stopOnInteraction: false })]}>
+                <CarouselContent className="h-full">
+                  {shuffledSpotlights.map((s, i) => (
+                    <CarouselItem key={i} className="h-full">
+                      <div className="relative w-full h-full">
+                        {s.mediaType === "video" ? (
+                          <video
+                            key={s.mediaSrc}
+                            src={s.mediaSrc}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="auto"
+                            aria-label="PepeShows Showcase Video"
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        ) : (
+                          <img
+                            src={s.mediaSrc}
+                            alt={s.title}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                        {/* Tags */}
+                        {s.tags && (
+                          <div className="absolute top-2 left-2 right-2 flex flex-wrap gap-1">
+                            {s.tags.map((tag, idx) => (
+                              <span
+                                key={idx}
+                                className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur-sm"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {/* Text overlay */}
+                        <div className="absolute bottom-2 left-2 right-2 text-white">
+                          {s.kicker && (
+                            <div className="text-[10px] uppercase tracking-widest opacity-80">{s.kicker}</div>
+                          )}
+                          <div className="text-sm font-semibold leading-snug">{s.title}</div>
+                          {s.subtitle && (
+                            <div className="text-[11px] opacity-80 mt-0.5">{s.subtitle}</div>
+                          )}
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
+          </div>
           <h2 className="text-xl font-bold mb-3 text-white text-left">
             {t("home.findArtistTitle")}
           </h2>
