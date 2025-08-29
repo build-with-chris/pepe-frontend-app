@@ -92,7 +92,7 @@ const Bento1 = () => {
     <section className="sm:pt-16 sm:pb-8 md:py-16">
       <div className="container">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
-          <Card className="relative h-60 overflow-hidden rounded-xl border border-white/10 bg-black transition md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full">
+          <Card className="group relative h-60 overflow-hidden rounded-xl border border-white/10 bg-black transition md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full">
             <div ref={cardRef} />
             {/* subtle flicker grid stays */}
             <FlickeringGrid
@@ -163,29 +163,42 @@ const Bento1 = () => {
               </>
             )}
 
-            <CardContent className="relative z-20 flex h-full flex-col justify-end p-6">
-              <h2 className="text-left text-lg font-medium text-gray-100">
-                {t("bento1.hero.title")}
-              </h2>
-              <div
-                className="absolute left-4 top-4 z-30 cursor-pointer"
-                onClick={() => {
-                  setShowSparkleAnim(true);
-                  setTimeout(() => {
-                    setShowSparkleAnim(false);
-                    setShowGlobalSparkles(true);
-                    setTimeout(() => setShowGlobalSparkles(false), 10000);
-                  }, 2000);
-                }}
-              >
-                <motion.div
-                  animate={{ opacity: [0.75, 1, 0.75], scale: [1, 1.02, 1] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-[1px] sm:h-10 sm:w-10"
+            {/* Subtle top gradient for readability */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-10 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
+            {/* Discreet top-centered header with centered icon below */}
+            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none">
+              <div className="flex flex-col items-center gap-2">
+                <h2
+                  className="text-center text-white font-semibold text-xl md:text-3xl lg:text-4xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
+                  style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
                 >
-                  <Sparkles className="h-4 w-4 text-yellow-400 opacity-90 sm:h-5 sm:w-5" />
-                </motion.div>
+                  {t("bento1.hero.title")}
+                </h2>
+                <div
+                  className="pointer-events-auto"
+                  onClick={() => {
+                    setShowSparkleAnim(true);
+                    setTimeout(() => {
+                      setShowSparkleAnim(false);
+                      setShowGlobalSparkles(true);
+                      setTimeout(() => setShowGlobalSparkles(false), 10000);
+                    }, 2500);
+                  }}
+                >
+                  <motion.div
+                    animate={{ opacity: [0.75, 1, 0.75], scale: [1, 1.02, 1] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-[1px] sm:h-10 sm:w-10"
+                  >
+                    <Sparkles className="h-4 w-4 text-yellow-400 opacity-90 sm:h-5 sm:w-5" />
+                  </motion.div>
+                </div>
               </div>
+            </div>
+
+            <CardContent className="relative z-20 flex h-full flex-col justify-end p-6">
+              {/* Visually hidden title for a11y (overlay above shows the visual title) */}
+              <h2 className="sr-only">{t("bento1.hero.title")}</h2>
               {showSparkleAnim && (
                 <div className="absolute top-4 right-2 sm:right-3 md:right-4 z-30 pointer-events-none">
                   <DotLottieReact
@@ -214,7 +227,7 @@ const Bento1 = () => {
           </Card>
 
           <Card
-            className="relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-[600px]"
+            className="group relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-[600px]"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
@@ -232,15 +245,24 @@ const Bento1 = () => {
               ))}
               <div className="absolute inset-0 bg-black/30" />
             </div>
-            <CardContent className="z-10 flex h-full flex-col justify-end p-6">
-              <h2 className="text-left text-lg font-medium text-gray-100">
+            {/* Subtle top gradient for readability */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-10 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
+            {/* Discreet top-centered title */}
+            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none">
+              <h2
+                className="text-center text-white font-semibold text-xl md:text-3xl lg:text-4xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
+                style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
+              >
                 {t("bento1.middle.title")}
               </h2>
+            </div>
+            <CardContent className="z-10 flex h-full flex-col justify-end p-6">
+              <h2 className="sr-only">{t("bento1.middle.title")}</h2>
             </CardContent>
           </Card>
 
           <Card
-            className="relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full"
+            className="group relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full"
             onMouseEnter={() => setIsHovering(true)}
             onMouseMove={handleSpotMove}
             onMouseLeave={resetSpot}
@@ -287,23 +309,58 @@ const Bento1 = () => {
                 </>
               )}
             </div>
-            <CardContent className="relative z-10 flex h-full flex-col justify-end p-6">
-              <h2 className="text-left text-lg font-medium text-gray-100">
-                {t("bento1.third.title")}
-              </h2>
-              <div className="absolute left-4 top-4 z-30 cursor-pointer" onClick={() => setRevealAll((v) => !v)}>
-                <motion.div
-                  animate={typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches ? { opacity: [0.75, 1, 0.75], scale: [1, 1.02, 1] } : undefined}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-[1px] sm:h-10 sm:w-10"
+            {/* Subtle top gradient for readability */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-10 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
+            {/* Discreet top-centered header with centered icon below */}
+            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none">
+              <div className="flex flex-col items-center gap-2">
+                <h2
+                  className="text-center text-white font-semibold text-xl md:text-3xl lg:text-4xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
+                  style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
                 >
-                  <Flashlight className="h-4 w-4 text-yellow-400 opacity-90 sm:h-5 sm:w-5" />
-                </motion.div>
+                  {t("bento1.third.title")}
+                </h2>
+                <div className="pointer-events-auto" onClick={() => setRevealAll((v) => !v)}>
+                  <motion.div
+                    animate={typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches ? { opacity: [0.75, 1, 0.75], scale: [1, 1.02, 1] } : undefined}
+                    transition={{ duration: 3, repeat: Infinity }}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-[1px] sm:h-10 sm:w-10"
+                  >
+                    <Flashlight className="h-4 w-4 text-yellow-400 opacity-90 sm:h-5 sm:w-5" />
+                  </motion.div>
+                </div>
               </div>
+            </div>
+            <CardContent className="relative z-10 flex h-full flex-col justify-end p-6">
+              <h2 className="sr-only">{t("bento1.third.title")}</h2>
             </CardContent>
           </Card>
 
-          <Card className="relative col-span-1 h-60 rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-3">
+         
+
+          <Card className="relative col-span-1 h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 
+          backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4 lg:h-[300px]">
+            <div className="flex h-full flex-col items-center justify-center p-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4 h-24 w-24">
+                  <DotLottieReact
+                    src="https://lottie.host/b2962fce-3098-47a6-872c-94da6b12033f/vP0MmCNB7f.lottie"
+                    loop
+                    autoplay
+                  />
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-white">{t("bento1.responsibility.title")}</h3>
+                <p className="text-sm text-gray-300 ">
+                  {t("bento1.responsibility.body1")}<br/>
+                  {t("bento1.responsibility.body2")}
+                </p>
+              </div>
+            </div>
+          </Card>
+
+
+          <Card className="relative col-span-1 h-60 rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 
+          md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4 lg:h-[300px]">
             <CardContent className="flex h-full flex-col items-center justify-center p-6">
               <span className="text-2xl font-bold text-white md:text-xl lg:text-3xl">{t("bento1.values.fairnessTitle")}</span>
               <p className="text-gray-300 my-6 text-center text-sm md:text-sm">
@@ -332,28 +389,8 @@ const Bento1 = () => {
             </CardContent>
           </Card>
 
-          <Card className="relative col-span-1 h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 
-          backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4 lg:h-[300px]">
-            <div className="flex h-full flex-col items-center justify-center p-6">
-              <div className="flex flex-col items-center text-center">
-                <div className="mb-4 h-24 w-24">
-                  <DotLottieReact
-                    src="https://lottie.host/b2962fce-3098-47a6-872c-94da6b12033f/vP0MmCNB7f.lottie"
-                    loop
-                    autoplay
-                  />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-white">{t("bento1.responsibility.title")}</h3>
-                <p className="text-sm text-gray-300 ">
-                  {t("bento1.responsibility.body1")}<br/>
-                  {t("bento1.responsibility.body2")}
-                </p>
-              </div>
-            </div>
-          </Card>
-
           <Card className="relative col-span-1 h-60 rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition 
-          hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4">
+          hover:bg-neutral-900/60 md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4 lg:h-[300px]">
             <CardContent className="flex h-full flex-col items-center justify-center text-center p-6">
               <p className="text-gray-300 mb-6 text-center text-sm md:text-sm">
                 {t("bento1.cta.body")}
