@@ -32,55 +32,12 @@ const About1 = () => {
         </div>
         <div className="flex flex-col gap-6 md:gap-20">
           </div>
-          <h2 className="text-3xl font-semibold text-white">
-            {t("about1.sectionTitle")}
-          </h2>
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl bg-white/5 p-6">
-            <h3 className="text-xl font-semibold mb-2">{t("about1.cards.solo.title")}</h3>
-            <p className="text-white/70 mb-3">{t("about1.cards.solo.meta")}</p>
-            <ul className="text-white/70 space-y-1 list-disc list-inside">
-              <li>{t("about1.cards.solo.b1")}</li>
-              <li>{t("about1.cards.solo.b2")}</li>
-              <li>{t("about1.cards.solo.b3")}</li>
-            </ul>
-          </div>
-          <div className="rounded-2xl bg-white/5 p-6">
-            <h3 className="text-xl font-semibold mb-2">{t("about1.cards.block.title")}</h3>
-            <p className="text-white/70 mb-3">{t("about1.cards.block.meta")}</p>
-            <ul className="text-white/70 space-y-1 list-disc list-inside">
-              <li>{t("about1.cards.block.b1")}</li>
-              <li>{t("about1.cards.block.b2")}</li>
-              <li>{t("about1.cards.block.b3")}</li>
-            </ul>
-          </div>
-          <div className="rounded-2xl bg-white/5 p-6">
-            <h3 className="text-xl font-semibold mb-2">{t("about1.cards.variete.title")}</h3>
-            <p className="text-white/70 mb-3">{t("about1.cards.variete.meta")}</p>
-            <ul className="text-white/70 space-y-1 list-disc list-inside">
-              <li>{t("about1.cards.variete.b1")}</li>
-              <li>{t("about1.cards.variete.b2")}</li>
-              <li>{t("about1.cards.variete.b3")}</li>
-            </ul>
-          </div>
-        </div>
+   
+     
 
         
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl bg-white/5 p-4 text-white/80">
-            <span className="block text-sm">{t("about1.info.lead.kicker")}</span>
-            <span className="text-lg font-semibold">{t("about1.info.lead.value")}</span>
-          </div>
-          <div className="rounded-xl bg-white/5 p-4 text-white/80">
-            <span className="block text-sm">{t("about1.info.stage.kicker")}</span>
-            <span className="text-lg font-semibold">{t("about1.info.stage.value")}</span>
-          </div>
-          <div className="rounded-xl bg-white/5 p-4 text-white/80">
-            <span className="block text-sm">{t("about1.info.tech.kicker")}</span>
-            <span className="text-lg font-semibold">{t("about1.info.tech.value")}</span>
-          </div>
-        </div>
+
         <div className="grid gap-10 md:grid-cols-2">
           <div>
             <p className="mb-10 text-sm font-medium text-white/60 tracking-wide">
