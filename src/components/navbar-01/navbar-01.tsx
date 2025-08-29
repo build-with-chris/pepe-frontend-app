@@ -12,6 +12,7 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 
 const Navbar01Page = () => {
+  const { t, i18n } = useTranslation();
   const { user, setUser, setToken } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,7 +20,6 @@ const Navbar01Page = () => {
   const [lastY, setLastY] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { i18n } = useTranslation();
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
@@ -78,7 +78,7 @@ const Navbar01Page = () => {
                   className="text-sm px-3 py-1.5 md:text-base md:px-5 md:py-2.5"
                   onClick={handleLogout}
                 >
-                  Logout
+                  {t("nav.logout")}
                 </Button>
               </div>
             ) : (
@@ -88,7 +88,7 @@ const Navbar01Page = () => {
                     variant="secondary"
                     className="text-sm px-3 py-1.5 md:text-base md:px-5 md:py-2.5"
                   >
-                    Booking Assistent
+                    {t("nav.booking")}
                   </Button>
                 </Link>
               </div>
@@ -98,7 +98,7 @@ const Navbar01Page = () => {
               <button
                 onClick={() => changeLanguage("de")}
                 className={`text-xs md:text-sm px-2 py-1 rounded ${i18n.language?.startsWith("de") ? "underline" : "opacity-80 hover:opacity-100"}`}
-                aria-label="Deutsch"
+                aria-label={t("nav.lang.de")}
               >
                 DE
               </button>
@@ -106,7 +106,7 @@ const Navbar01Page = () => {
               <button
                 onClick={() => changeLanguage("en")}
                 className={`text-xs md:text-sm px-2 py-1 rounded ${i18n.language?.startsWith("en") ? "underline" : "opacity-80 hover:opacity-100"}`}
-                aria-label="English"
+                aria-label={t("nav.lang.en")}
               >
                 EN
               </button>
@@ -114,7 +114,7 @@ const Navbar01Page = () => {
             {/* Hamburger (mobile & tablet) */}
             <button
               className="lg:hidden inline-flex items-center justify-center rounded-md p-2 sm:p-3 md:p-4 text-white/90 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
-              aria-label="Open menu"
+              aria-label={t("nav.openMenu")}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen(true)}
             >
@@ -156,7 +156,7 @@ const Navbar01Page = () => {
             </div>
             <button
               className="inline-flex items-center justify-center rounded-md p-2 text-white/90 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
-              aria-label="Close menu"
+              aria-label={t("nav.closeMenu")}
               onClick={() => setMenuOpen(false)}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -167,29 +167,29 @@ const Navbar01Page = () => {
 
           <div className="px-6 py-6 space-y-2">
             {/* Nav items - large touch targets */}
-            <Link to="/home" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Home</Link>
-            <Link to="/kuenstler" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Künstler</Link>
-            <Link to="/shows" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Shows</Link>
-            <Link to="/galerie" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Galerie</Link>
-            <Link to="/kontakt" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Kontakt</Link>
+            <Link to="/home" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.home")}</Link>
+            <Link to="/kuenstler" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.artists")}</Link>
+            <Link to="/shows" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.shows")}</Link>
+            <Link to="/galerie" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.gallery")}</Link>
+            <Link to="/kontakt" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.contact")}</Link>
 
             {/* Divider */}
             <div className="my-4 border-t border-white/10" />
 
             {/* Language Switcher (inside menu) */}
             <div className="flex items-center gap-3 px-4">
-              <span className="text-white/60 text-sm">Sprache:</span>
+              <span className="text-white/60 text-sm">{t("nav.language")}</span>
               <button
                 onClick={() => changeLanguage("de")}
                 className={`text-sm px-3 py-1.5 rounded-full border ${i18n.language?.startsWith("de") ? "border-white/40 bg-white/10" : "border-white/10 hover:border-white/30"}`}
-                aria-label="Deutsch"
+                aria-label={t("nav.lang.de")}
               >
                 DE
               </button>
               <button
                 onClick={() => changeLanguage("en")}
                 className={`text-sm px-3 py-1.5 rounded-full border ${i18n.language?.startsWith("en") ? "border-white/40 bg-white/10" : "border-white/10 hover:border-white/30"}`}
-                aria-label="English"
+                aria-label={t("nav.lang.en")}
               >
                 EN
               </button>
@@ -203,12 +203,12 @@ const Navbar01Page = () => {
                   className="w-full text-base py-3"
                   onClick={() => { setMenuOpen(false); handleLogout(); }}
                 >
-                  Logout
+                  {t("nav.logout")}
                 </Button>
               ) : (
                 <Link to="/anfragen" onClick={() => setMenuOpen(false)}>
                   <Button variant="secondary" className="w-full text-base py-3">
-                    Booking Assistent
+                    {t("nav.booking")}
                   </Button>
                 </Link>
               )}

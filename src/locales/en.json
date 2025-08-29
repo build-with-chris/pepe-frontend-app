@@ -575,7 +575,70 @@
       "cta": "Let’s talk",
       "images": { "1": "Gala evenings", "2": "Anniversaries", "3": "Corporate events", "4": "Festivals", "5": "LED Shows" }
     },
-  
+    "gallery34": {
+    "hint": "Click for details",
+    "items": {
+      "1": {
+        "title": "Solo Act",
+        "desc": "5–8 min | 1 artist",
+        "details": [
+          "Strong highlight for galas & award ceremonies",
+          "Fast setup, small stage required",
+          "Bookable directly via Booking Assistant"
+        ]
+      },
+      "2": {
+        "title": "Duo Act",
+        "desc": "15–20 min | 2 artists",
+        "details": [
+          "Synergy of different disciplines (male & female duo)",
+          "Perfect for longer acts at galas & events",
+          "Flexible indoors",
+          "Bookable directly via Booking Assistant"
+        ]
+      },
+      "3": {
+        "title": "Concept Show",
+        "desc": "20–50 min | ensemble",
+        "details": [
+          "Sit-back-and-marvel entertainment",
+          "Idea refined and perfected over months",
+          "Flexible indoors",
+          "On request only"
+        ]
+      },
+      "4": {
+        "title": "Variety Show",
+        "desc": "1–2 hrs | ensemble",
+        "details": [
+          "Adaptable to your event",
+          "Full-evening & diverse",
+          "Flexible indoors",
+          "On request only"
+        ]
+      },
+      "5": {
+        "title": "Magician",
+        "desc": "30 min | 1 artist",
+        "details": [
+          "Walking act or stage show",
+          "All-rounder",
+          "Flexible indoors",
+          "Bookable directly via Booking Assistant"
+        ]
+      },
+      "6": {
+        "title": "Fire Show",
+        "desc": "30 min | outdoor",
+        "details": [
+          "Epic – multiple fire elements",
+          "Combined with acrobatics",
+          "Outdoor recommended",
+          "Bookable directly via Booking Assistant"
+        ]
+      }
+    }
+  },
     "hero27": {
       "title": "We bring <1>extraordinary artists</1> and <3>unforgettable show moments</3> to your stage.",
       "subtitle": "Whether it's a corporate party, gala or trade fair – with us your event becomes the highlight everyone talks about.",
@@ -701,7 +764,21 @@
     "nav": {
       "admin": { "dashboard": "Dashboard", "invoices": "Invoices", "upcomingGigs": "Upcoming Gigs", "artists": "Artists" },
       "user": { "profile": "Profile", "calendar": "Calendar", "requests": "Requests", "myGigs": "My Gigs", "accounting": "Accounting" },
-      "public": { "artists": "Artists", "shows": "Shows", "gallery": "Gallery", "contact": "Contact" }
+      "public": { "artists": "Artists", "shows": "Shows", "gallery": "Gallery", "contact": "Contact" },
+      "home": "Home",
+      "artists": "Artists",
+      "shows": "Shows",
+      "gallery": "Gallery",
+      "contact": "Contact",
+      "language": "Language:",
+      "booking": "Booking Assistant",
+      "logout": "Logout",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "lang": {
+        "de": "German",
+        "en": "English"
+    }
     },
   
     "presskit": {

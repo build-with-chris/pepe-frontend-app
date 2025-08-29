@@ -529,6 +529,70 @@
     "cta": "Lass uns reden",
     "images": { "1": "Gala-Abende", "2": "Jubiläen", "3": "Corporate events", "4": "Festivals", "5": "LED Shows" }
   },
+  "gallery34": {
+    "hint": "Klick für Details",
+    "items": {
+      "1": {
+        "title": "Solo-Act",
+        "desc": "5–8 Min | 1 Artist",
+        "details": [
+          "Starkes Highlight für Galas & Preisverleihungen",
+          "Schneller Aufbau, geringe Bühne nötig",
+          "Direkt buchbar über Booking Assistent"
+        ]
+      },
+      "2": {
+        "title": "Duo-Act",
+        "desc": "15–20 Min | 2 Artists",
+        "details": [
+          "Zusammenspiel verschiedener Disziplinen (Mann & Frau)",
+          "Perfekt für längere Acts bei Galas & Veranstaltungen",
+          "Indoor flexibel",
+          "Direkt buchbar über Booking Assistent"
+        ]
+      },
+      "3": {
+        "title": "Konzeptshow",
+        "desc": "20–50 Min | Ensemble",
+        "details": [
+          "Entertainment zum Sitzen und Staunen",
+          "Über Monate gereifte und verfeinerte Idee",
+          "Indoor flexibel",
+          "Nur auf Anfrage"
+        ]
+      },
+      "4": {
+        "title": "Varieté Show",
+        "desc": "1–2 Std | Ensemble",
+        "details": [
+          "Flexibel anpassbar an die Veranstaltung",
+          "Abendfüllend & vielfältig",
+          "Indoor flexibel",
+          "Nur auf Anfrage"
+        ]
+      },
+      "5": {
+        "title": "Zauberer",
+        "desc": "30 Min | 1 Artist",
+        "details": [
+          "Walking Act oder Bühnenshow",
+          "Allrounder",
+          "Indoor flexibel",
+          "Direkt buchbar über Booking Assistent"
+        ]
+      },
+      "6": {
+        "title": "Feuershow",
+        "desc": "30 Min | Outdoor",
+        "details": [
+          "Episch – verschiedene Feuerelemente",
+          "Verknüpfung mit Akrobatik",
+          "Outdoor empfohlen",
+          "Direkt buchbar über Booking Assistent"
+        ]
+      }
+    }
+  },
   "hero27": {
     "title": "Wir bringen <1>außergewöhnliche Künstler</1> und <3>unvergessliche Showmomente</3> auf Ihre Bühne.",
     "subtitle": "Ob Firmenfeier, Gala oder Messe – mit uns wird Ihr Event zum Highlight, über das man noch lange spricht.",
@@ -604,7 +668,21 @@
   "nav": {
     "admin": { "dashboard": "Dashboard", "invoices": "Rechnungen", "upcomingGigs": "Anstehende Gigs", "artists": "Künstler" },
     "user": { "profile": "Profil", "calendar": "Kalender", "requests": "Anfragen", "myGigs": "Meine Gigs", "accounting": "Buchhaltung" },
-    "public": { "artists": "Künstler", "shows": "Shows", "gallery": "Galerie", "contact": "Kontakt" }
+    "public": { "artists": "Künstler", "shows": "Shows", "gallery": "Galerie", "contact": "Kontakt" },
+    "home": "Home",
+    "artists": "Künstler",
+    "shows": "Shows",
+    "gallery": "Galerie",
+    "contact": "Kontakt",
+    "language": "Sprache:",
+    "booking": "Booking Assistent",
+    "logout": "Logout",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "lang": {
+      "de": "Deutsch",
+      "en": "Englisch"
+    }
   },
   "presskit": {
     "hero": {
