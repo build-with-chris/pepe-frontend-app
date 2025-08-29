@@ -6,26 +6,11 @@ import GalleryUploader from "@/components/GalleryUploader";
 import { uploadProfileImage, uploadGalleryImages } from "@/lib/storage/upload";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
+import { ProfileForm } from "./components/ProfileForm";
 
 const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || "profiles";
 const baseUrl = import.meta.env.VITE_API_URL;
 
-const disciplinesOptions = [
-  "Zauberer",
-  "Cyr-Wheel",
-  "Bodenakrobatik",
-  "Luftakrobatik",
-  "Partnerakrobatik",
-  "Chinese Pole",
-  "Hula Hoop",
-  "Handstand",
-  "Contemporary Dance",
-  "Breakdance",
-  "Teeterboard",
-  "Jonglage",
-  "Moderation",
-  "Pantomime/Entertainment",
-];
 
 export default function Profile() {
   const { user, token } = useAuth();
@@ -190,6 +175,7 @@ export default function Profile() {
         setBio(saved.bio || "");
         setProfileImageUrl(saved.profile_image_url || imageUrl || null);
         setGalleryUrls(Array.isArray(saved.gallery_urls) ? saved.gallery_urls : mergedGalleryUrls);
+        setGalleryFiles([]);
         setApprovalStatus((saved.approval_status as any) ?? nextStatus);
         setRejectionReason(saved.rejection_reason ?? null);
       }
@@ -209,6 +195,46 @@ export default function Profile() {
   const toggleDiscipline = (d: string) => {
     if (locked) return;
     setDisciplines(prev => (prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]));
+  };
+
+  const profile = {
+    name,
+    address,
+    phoneNumber,
+    disciplines,
+    priceMin,
+    priceMax,
+    bio,
+    profileImageUrl,
+    galleryUrls,
+    galleryFiles,
+  };
+
+  const setProfileAdapter = (next: any) => {
+    if (typeof next.name !== "undefined") setName(next.name);
+    if (typeof next.address !== "undefined") setAddress(next.address);
+    if (typeof next.phoneNumber !== "undefined") setPhoneNumber(next.phoneNumber);
+    if (typeof next.disciplines !== "undefined") setDisciplines(next.disciplines as string[]);
+    if (typeof next.priceMin !== "undefined") setPriceMin(next.priceMin as number);
+    if (typeof next.priceMax !== "undefined") setPriceMax(next.priceMax as number);
+    if (typeof next.bio !== "undefined") setBio(next.bio as string);
+    if (typeof next.profileImageUrl !== "undefined") setProfileImageUrl(next.profileImageUrl as string | null);
+    if (typeof next.galleryUrls !== "undefined") setGalleryUrls(next.galleryUrls as string[]);
+
+    // Accept file selections from ProfileForm and create local previews
+    if (typeof next.profileImageFile !== "undefined" && next.profileImageFile) {
+      const file = next.profileImageFile as File;
+      setProfileImageFile(file);
+      try {
+        const preview = URL.createObjectURL(file);
+        setProfileImageUrl(preview);
+      } catch {}
+    }
+
+    if (typeof next.galleryFiles !== "undefined" && next.galleryFiles) {
+      const files = next.galleryFiles as File[];
+      setGalleryFiles(files);
+    }
   };
 
   return (
@@ -265,194 +291,12 @@ export default function Profile() {
           )}
         </div>
       )}
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Basisdaten */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm md:col-span-2">
-          <h2 className="text-lg font-semibold mb-4 text-gray-300">Basisdaten</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Name */}
-            <div>
-              <label className="block mb-1 font-medium text-gray-300">Name*</label>
-              <input
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
-                required
-                disabled={locked}
-              />
-            </div>
-            {/* Adresse */}
-            <div>
-              <label className="block mb-1 font-medium text-gray-300">Adresse*</label>
-              <input
-                type="text"
-                value={address}
-                onChange={e => setAddress(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
-                required
-                disabled={locked}
-              />
-            </div>
-            {/* Telefonnummer */}
-            <div>
-              <label className="block mb-1 font-medium text-gray-300">Telefonnummer*</label>
-              <input
-                type="tel"
-                value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
-                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
-                required
-                disabled={locked}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Disziplinen */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm md:col-span-2">
-          <h2 className="text-lg font-semibold mb-4 text-gray-300">Disziplinen</h2>
-          <div className="flex flex-wrap gap-2">
-            {disciplinesOptions.map(d => (
-              <button
-                type="button"
-                key={d}
-                onClick={() => toggleDiscipline(d)}
-                disabled={locked}
-                className={`px-3 py-1 border rounded ${disciplines.includes(d) ? "bg-blue-600 text-white border-blue-500" : "bg-gray-800 text-white border-gray-700 hover:bg-gray-700"}`}
-              >
-                {d}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Preise */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm md:col-span-2">
-          <h2 className="text-lg font-semibold mb-4 text-gray-300">Preisrahmen</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block mb-1 font-medium text-gray-300">Preis (min)*</label>
-              <input
-                type="number"
-                value={priceMin}
-                onChange={e => setPriceMin(Number(e.target.value))}
-                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
-                min={0}
-                required
-                disabled={locked}
-              />
-              <p className="mt-1 text-sm text-gray-400">
-                Realistischer Richtwert für ein Teamevent (ca. 150 Personen, 5‑Minuten‑Act, ohne Anfahrtskosten). Nur Gage + ggf. Material.
-              </p>
-            </div>
-            <div>
-              <label className="block mb-1 font-medium text-gray-300">Preis (max)*</label>
-              <input
-                type="number"
-                value={priceMax}
-                onChange={e => setPriceMax(Number(e.target.value))}
-                className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2"
-                min={priceMin}
-                required
-                disabled={locked}
-              />
-              <p className="mt-1 text-sm text-gray-400">
-                Oberer Rahmen für denselben Event‑Case (150 Gäste, 5‑Minuten‑Act, ohne Anfahrt).
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Profilbild */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4 text-gray-300">Profilbild</h2>
-          <div className="mb-3 rounded-md border-2 border-dashed border-gray-700 bg-gray-800 p-3">
-            <p className="text-sm font-medium text-gray-300">Bitte so hochladen:</p>
-            <ul className="list-disc list-inside text-sm text-gray-400">
-              <li>Gesicht sichtbar</li>
-              <li>Quadratisches Format</li>
-              <li>Am liebsten WebP (
-                <a href="https://ezgif.com/png-to-webp" target="_blank" rel="noreferrer" className="text-blue-300 hover:underline">PNG → WebP</a>
-                )
-              </li>
-              <li>
-                <a href="https://ezgif.com/jpg-to-webp" target="_blank" rel="noreferrer" className="text-blue-300 hover:underline">JPG → WebP</a>
-              </li>
-            </ul>
-          </div>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={e => setProfileImageFile(e.target.files?.[0] ?? null)}
-            disabled={locked}
-            className="w-full"
-          />
-          <button
-            type="button"
-            onClick={() => document.querySelector<HTMLInputElement>('input[type="file"][accept="image/*"]')?.click()}
-            disabled={locked}
-            className="mt-2 inline-flex items-center px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded disabled:opacity-50"
-          >
-            Profilbild hochladen
-          </button>
-          {profileImageUrl && (
-            <img src={profileImageUrl} alt="Profilbild" className="mt-2 h-24 rounded object-cover" />
-          )}
-        </div>
-
-        {/* Galerie */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4 text-gray-300">Galerie</h2>
-          <p className="text-sm mb-2 text-gray-400">Divers, Format 4:3 (breiter als höher). Idealerweise WebP.</p>
-          <button
-            type="button"
-            onClick={() => document.querySelector<HTMLInputElement>('input[type="file"][multiple]')?.click()}
-            disabled={locked}
-            className="mb-2 inline-flex items-center px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded disabled:opacity-50"
-          >
-            Galerie-Bilder hochladen
-          </button>
-          <GalleryUploader
-            locked={locked}
-            galleryUrls={galleryUrls}
-            setGalleryUrls={setGalleryUrls}
-            galleryFiles={galleryFiles}
-            setGalleryFiles={setGalleryFiles}
-          />
-        </div>
-
-        {/* Über mich */}
-        <div className="bg-gray-900 border border-gray-800 rounded-lg p-5 shadow-sm md:col-span-2">
-          <h2 className="text-lg font-semibold mb-2 text-gray-300">Über mich</h2>
-          <p className="mb-2 text-sm text-gray-400">Dieser Text erscheint auf der Homepage unter deiner Karte. Sei kreativ, aber halte dich kurz.</p>
-          <textarea
-            value={bio}
-            onChange={e => setBio(e.target.value)}
-            disabled={locked}
-            className="w-full bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400 rounded px-3 py-2 h-28"
-          />
-        </div>
-
-        {/* Submit */}
-        <div className="md:col-span-2">
-          <button
-            type="submit"
-            disabled={loading || locked}
-            className="w-full bg-gray-800 hover:bg-gray-700 text-white py-3 rounded-lg disabled:opacity-50"
-          >
-            {locked
-              ? "Profil gesperrt"
-              : loading
-                ? "Speichern..."
-                : approvalStatus === 'approved'
-                  ? 'Änderungen speichern'
-                  : approvalStatus === 'pending'
-                    ? 'Zur Prüfung eingereicht'
-                    : 'Zur Prüfung einreichen'}
-          </button>
-        </div>
-      </form>
+      <ProfileForm
+        profile={profile}
+        setProfile={setProfileAdapter}
+        locked={locked}
+        onSubmit={handleSubmit}
+      />
       {backendDebug && (
         <div className="mt-4 p-3 bg-gray-900 border border-gray-800 rounded text-xs whitespace-pre-wrap text-gray-300">
           <strong>Debug Log:</strong>

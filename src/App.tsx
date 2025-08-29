@@ -10,7 +10,7 @@ import Admin from './pages/Admin';
 import { ProtectedRoute } from './components/ProtectedRoute.tsx';
 import Footer from './components/footer-04/footer-04'
 import Navbar01Page from './components/navbar-01/navbar-01';
-import Profile from './pages/ProfileSetup.tsx'
+import Profile from './pages/ProfileSetup/ProfileSetup.tsx'
 import CalendarPage from './pages/Kalender';
 import Kontakt from './pages/Kontakt';
 import MyGigs from './pages/MyGigs';
