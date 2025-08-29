@@ -63,7 +63,7 @@ const Gallery14 = () => {
   }, [api]);
 
   return (
-    <section className="overflow-hidden bg-black text-white py-32">
+    <section className="overflow-hidden bg-black text-white py-32 px-4 sm:px-6 md:px-0">
         <Carousel setApi={setApi}>
           <div className="grid gap-8 md:gap-4 lg:grid-cols-2 [&>div[data-slot=carousel-content]]:overflow-visible [&>div[data-slot=carousel-content]]:[clip-path:inset(-100vw_-100vw_-100vw_0)]">
             <div>

@@ -169,7 +169,8 @@ const Navbar01Page = () => {
             {/* Nav items - large touch targets */}
             <Link to="/home" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Home</Link>
             <Link to="/kuenstler" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Künstler</Link>
-            <Link to="/anfragen" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Booking Assistent</Link>
+            <Link to="/shows" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Shows</Link>
+            <Link to="/galerie" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Galerie</Link>
             <Link to="/kontakt" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">Kontakt</Link>
 
             {/* Divider */}
