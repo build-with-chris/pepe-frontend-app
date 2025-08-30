@@ -36,6 +36,7 @@ export default function KuenstlerVerwaltung() {
   const [slots, setSlots] = useState<any[]>([]);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   // UI state
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'unsubmitted'>('all');
@@ -175,33 +176,58 @@ export default function KuenstlerVerwaltung() {
   const closeDetails = () => setSelected(null);
 
   const approveSelected = async () => {
-  if (!selected) return;
-  setActionError(null);
-  setActionLoading(true);
-  try {
-    const res = await fetch(`${baseUrl}/admin/artists/${selected.id}/approve`, {
-      method: 'POST',
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
-    if (!res.ok) {
-      const t = await res.text();
-      throw new Error(`HTTP ${res.status}: ${t}`);
-    }
-    const data = await res.json().catch(() => null);
-    const newStatus = (data?.approval_status as string) || 'approved';
-    const approvedAt = (data?.approved_at as string) || new Date().toISOString();
+    if (!selected) return;
+    setActionError(null);
+    setActionLoading(true);
+    try {
+      const res = await fetch(`${baseUrl}/admin/artists/${selected.id}/approve`, {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(`HTTP ${res.status}: ${t}`);
+      }
+      const data = await res.json().catch(() => null);
+      const newStatus = (data?.approval_status as string) || 'approved';
+      const approvedAt = (data?.approved_at as string) || new Date().toISOString();
 
-    // UI aktualisieren
-    setSelected({ ...selected, approval_status: newStatus, approved_at: approvedAt });
-    setArtists(prev =>
-      prev.map(a => (a.id === selected.id ? { ...a, approval_status: newStatus, approved_at: approvedAt } : a))
-    );
-  } catch (e: any) {
-    setActionError(e.message || 'Approve failed');
-  } finally {
-    setActionLoading(false);
-  }
-};
+      // UI aktualisieren
+      setSelected({ ...selected, approval_status: newStatus, approved_at: approvedAt });
+      setArtists(prev =>
+        prev.map(a => (a.id === selected.id ? { ...a, approval_status: newStatus, approved_at: approvedAt } : a))
+      );
+    } catch (e: any) {
+      setActionError(e.message || 'Approve failed');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const deleteArtist = async (artist: Artist) => {
+    if (!token) return;
+    const ok = window.confirm(`Artist "${artist.name}" wirklich löschen?`);
+    if (!ok) return;
+    setActionError(null);
+    setDeletingId(artist.id);
+    try {
+      const res = await fetch(`${baseUrl}/api/artists/${artist.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(`HTTP ${res.status}: ${t}`);
+      }
+      // Entferne aus Liste und ggf. Modal schließen
+      setArtists(prev => prev.filter(a => a.id !== artist.id));
+      if (selected?.id === artist.id) setSelected(null);
+    } catch (e: any) {
+      setActionError(e.message || 'Delete failed');
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   if (loading) return <p className="p-6 text-white">Lade Künstler...</p>;
   if (error) return <p className="p-6 text-red-500">Fehler: {error}</p>;
@@ -239,6 +265,12 @@ export default function KuenstlerVerwaltung() {
           </div>
         </div>
 
+        {actionError && (
+          <div className="mb-4 rounded border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+            {actionError}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredSorted.map((artist) => (
             <button
@@ -259,6 +291,17 @@ export default function KuenstlerVerwaltung() {
                   </div>
                 )}
                 <div className="absolute top-2 left-2">{statusBadge(artist.approval_status)}</div>
+                {token && (
+                  <button
+                    type="button"
+                    title="Artist löschen"
+                    onClick={(e) => { e.stopPropagation(); deleteArtist(artist); }}
+                    disabled={deletingId === artist.id}
+                    className="absolute top-2 right-2 rounded bg-red-600/90 px-2 py-1 text-xs font-semibold text-white hover:bg-red-500 disabled:opacity-50"
+                  >
+                    {deletingId === artist.id ? '…' : 'Löschen'}
+                  </button>
+                )}
               </div>
               <div className="p-4">
                 <h2 className="text-lg font-semibold mb-1 line-clamp-1">{artist.name}</h2>

@@ -6,6 +6,8 @@ import { toLocalDate, formatISODate, getDateRange } from "@/utils/calendar";
 import { listAvailability, createAvailability, deleteAvailability } from "@/services/availabilityApi";
 import type { AvailabilitySlot, ISODate } from "@/services/availabilityApi";
 
+const baseUrl = import.meta.env.VITE_API_URL as string;
+
 function useBackendArtistId(user: any, token: string | null) {
   const [backendArtistId, setBackendArtistId] = useState<string | null>(null);
   const [loadingArtistId, setLoadingArtistId] = useState(true);
@@ -14,27 +16,31 @@ function useBackendArtistId(user: any, token: string | null) {
     if (!token) { setLoadingArtistId(false); return; }
     setLoadingArtistId(true);
     try {
-      // 1) Prefer the backend ensure endpoint
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/artists/me/ensure`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      const base = import.meta.env.VITE_API_URL;
+      // First try to read the current artist
+      let res = await fetch(`${base}/api/artists/me`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.ok) {
-        const data = await res.json().catch(() => ({}));
-        if (data?.id) { setBackendArtistId(String(data.id)); return; }
-      }
-      // 2) Fallback: try listing and matching by email
-      const email = user?.email;
-      if (email) {
-        const listRes = await fetch(`${import.meta.env.VITE_API_URL}/api/artists`, {
+
+      // If not linked/exists yet, ensure and retry
+      if (res.status === 403 || res.status === 404) {
+        await fetch(`${base}/api/artists/me/ensure`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        }).catch(() => {});
+        res = await fetch(`${base}/api/artists/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (listRes.ok) {
-          const artists = await listRes.json().catch(() => []);
-          const match = Array.isArray(artists) ? artists.find((a: any) => a.email && a.email.toLowerCase() === String(email).toLowerCase()) : null;
-          if (match?.id) { setBackendArtistId(String(match.id)); return; }
+      }
+
+      if (res.ok) {
+        const me = await res.json().catch(() => ({}));
+        if (me?.id) {
+          setBackendArtistId(String(me.id));
+          return;
         }
       }
+
       setBackendArtistId(null);
     } catch (e) {
       console.warn('[useBackendArtistId] error resolving id from backend', e);
@@ -107,36 +113,113 @@ const CalendarPage: React.FC = () => {
   const { backendArtistId, loadingArtistId, refreshArtistId } =
     useBackendArtistId(user, token);
 
-  const fetchAvailability = async () => {
-    if (!token) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await listAvailability({ token, artistId: backendArtistId ?? undefined });
-      setAvailable(data);
-    } catch (err: any) {
-      setError('Verfügbarkeit konnte nicht geladen werden.' + (err?.message ? ` ${err.message}` : ''));
-    } finally {
-      setLoading(false);
-    }
-  };
+
+    const fetchAvailability = async () => {
+      if (!token) return;
+    
+      // Artist-ID sicherstellen
+      if (!backendArtistId) {
+        await refreshArtistId();
+        if (!backendArtistId) {
+          await fetch(`${baseUrl}/api/artists/me/ensure`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          }).catch(() => {});
+          await refreshArtistId();
+          if (!backendArtistId) return;
+        }
+      }
+    
+      setLoading(true);
+      setError(null);
+      try {
+        let res = await fetch(`${baseUrl}/api/availability`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+    
+        if (!res.ok) {
+          const text = await res.text().catch(() => '');
+          const linkedErr = text.includes('Current user not linked to an artist');
+    
+          if ((res.status === 400 || res.status === 401 || res.status === 403) && linkedErr) {
+            await fetch(`${baseUrl}/api/artists/me/ensure`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            }).catch(() => {});
+            await refreshArtistId();
+            res = await fetch(`${baseUrl}/api/availability`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+          }
+          if (!res.ok) throw new Error(text || `HTTP ${res.status}`);
+        }
+    
+        const data = await res.json();
+        setAvailable(Array.isArray(data) ? data : (data?.items ?? []));
+      } catch (e: any) {
+        setError(e?.message || 'Fehler beim Laden der Verfügbarkeiten');
+      } finally {
+        setLoading(false);
+      }
+    };
 
   const addAvailability = async (date: Date) => {
     if (!token) return;
-    const iso = formatISODate(date) as ISODate;
-    if ((available ?? []).some((s) => s.date === iso)) return;
-
-    const tempSlot: AvailabilitySlot = { id: -Date.now(), date: iso };
-    setAvailable((prev) => [...(prev ?? []), tempSlot]);
-    try {
-      const newSlot = await createAvailability({ token, date: iso, artistId: backendArtistId ?? undefined });
-      setAvailable((prev) => {
-        const withoutTemp = (prev ?? []).filter((s) => s.id !== tempSlot.id && s.date !== iso);
-        return [...withoutTemp, newSlot];
+  
+    const postOnce = async (): Promise<Response> => {
+      const iso = formatISODate(date) as ISODate;
+      return fetch(`${baseUrl}/api/availability`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ date: iso }),
       });
-    } catch (err: any) {
-      setError('Verfügbarkeit konnte nicht hinzugefügt werden.' + (err?.message ? ` ${err.message}` : ''));
-      setAvailable((prev) => (prev ?? []).filter((s) => s.id !== tempSlot.id && s.date !== iso));
+    };
+  
+    // Artist-ID sicherstellen
+    if (!backendArtistId) {
+      await refreshArtistId();
+      if (!backendArtistId) {
+        await fetch(`${baseUrl}/api/artists/me/ensure`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        }).catch(() => {});
+        await refreshArtistId();
+        if (!backendArtistId) {
+          setError('Kein verknüpfter Künstler gefunden. Bitte neu anmelden oder Seite neu laden.');
+          return;
+        }
+      }
+    }
+  
+    setLoading(true);
+    setError(null);
+    try {
+      let res = await postOnce();
+  
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        const linkedErr = text.includes('Current user not linked to an artist');
+  
+        if ((res.status === 400 || res.status === 401 || res.status === 403) && linkedErr) {
+          // Selbstheilung: ensure + refresh + einmal retry
+          await fetch(`${baseUrl}/api/artists/me/ensure`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          }).catch(() => {});
+          await refreshArtistId();
+          res = await postOnce();
+        }
+        if (!res.ok) throw new Error(text || `HTTP ${res.status}`);
+      }
+  
+      await fetchAvailability(); // Liste aktualisieren
+    } catch (e: any) {
+      setError(`Verfügbarkeit konnte nicht hinzugefügt werden. ${e?.message || e}`);
+    } finally {
+      setLoading(false);
     }
   };
 

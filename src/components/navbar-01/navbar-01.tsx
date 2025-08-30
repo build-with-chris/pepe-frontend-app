@@ -1,6 +1,7 @@
 import { Button } from "../ui/button";
 import { Logo } from "./logo";
 import { NavMenu } from "./nav-menu";
+import { NavLinks } from "./NavLinks";
 import { NavigationSheet } from "./navigation-sheet";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -167,11 +168,11 @@ const Navbar01Page = () => {
 
           <div className="px-6 py-6 space-y-2">
             {/* Nav items - large touch targets */}
-            <Link to="/home" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.home")}</Link>
-            <Link to="/kuenstler" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.artists")}</Link>
-            <Link to="/shows" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.shows")}</Link>
-            <Link to="/galerie" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.gallery")}</Link>
-            <Link to="/kontakt" onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-4 text-xl text-gray-100 hover:bg-white/10">{t("nav.contact")}</Link>
+            <NavLinks
+              layout="mobile"
+              className="space-y-2"
+              onNavigate={() => setMenuOpen(false)}
+            />
 
             {/* Divider */}
             <div className="my-4 border-t border-white/10" />
@@ -194,7 +195,7 @@ const Navbar01Page = () => {
                 EN
               </button>
             </div>
-
+            
             {/* Auth / CTA */}
             <div className="px-4 pt-4">
               {user ? (

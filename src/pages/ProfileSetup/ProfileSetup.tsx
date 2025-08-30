@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import GuidelinesModal from "@/components/GuidelinesModal";
-import GalleryUploader from "@/components/GalleryUploader";
 import { uploadProfileImage, uploadGalleryImages } from "@/lib/storage/upload";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
 import { ProfileForm } from "./components/ProfileForm";
+import { ProfileStatusBanner } from "./components/ProfileStatusBanner";
 
 const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || "profiles";
 const baseUrl = import.meta.env.VITE_API_URL;
@@ -192,6 +192,72 @@ export default function Profile() {
     }
   };
 
+  const handleDeleteArtist = async () => {
+    if (!token) {
+      setError("Bitte logge dich zuerst ein.");
+      return;
+    }
+    const sure = window.confirm("Willst du deinen Künstler-Datensatz wirklich löschen? Dies betrifft nur die Künstlerdaten, nicht deinen Login.");
+    if (!sure) return;
+    setLoading(true);
+    try {
+      // ensure we have an artist id for the DELETE /artists/<id> route
+      let artistId = backendArtistId;
+      if (!artistId) {
+        // try to ensure + fetch /me to resolve id
+        await fetch(`${baseUrl}/api/artists/me/ensure`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        }).catch(() => {});
+        const meRes = await fetch(`${baseUrl}/api/artists/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }).catch(() => null as any);
+        if (meRes && meRes.ok) {
+          const me = await meRes.json().catch(() => null);
+          if (me?.id) {
+            artistId = String(me.id);
+            setBackendArtistId(artistId);
+          }
+        }
+      }
+      if (!artistId) {
+        throw new Error('Kein verknüpfter Künstler gefunden.');
+      }
+
+      const res = await fetch(`${baseUrl}/api/artists/${artistId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(txt || `HTTP ${res.status}`);
+      }
+      // Reset local UI state to a clean slate
+      setBackendArtistId(null);
+      setName("");
+      setAddress("");
+      setPhoneNumber("");
+      setDisciplines([]);
+      setPriceMin(700);
+      setPriceMax(900);
+      setBio("");
+      setProfileImageUrl(null);
+      setProfileImageFile(null);
+      setGalleryFiles([]);
+      setGalleryUrls([]);
+      setApprovalStatus('unsubmitted');
+      setRejectionReason(null);
+      setLocked(false);
+      setSuccess(false);
+      setError(null);
+      setBackendDebug((prev) => `Artist gelöscht.\n${prev || ''}`.trim());
+    } catch (err: any) {
+      setError(`Löschen fehlgeschlagen: ${err?.message || err}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const toggleDiscipline = (d: string) => {
     if (locked) return;
     setDisciplines(prev => (prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d]));
@@ -262,41 +328,24 @@ export default function Profile() {
           Profil erfolgreich gespeichert!
         </div>
       )}
-      {approvalStatus !== 'approved' && (
-        <div
-          className={`mb-4 rounded-lg border p-4 ${
-            approvalStatus === 'rejected'
-              ? 'bg-red-50 border-red-300 text-red-800'
-              : 'bg-amber-50 border-amber-300 text-amber-900'
-          }`}
-        >
-          {approvalStatus === 'pending' && (
-            <p>
-              Dein Profil ist <strong>zur Prüfung eingereicht</strong>. Ein Admin schaut es sich zeitnah an. Solange es nicht freigegeben ist, wirst du nicht als Künstler gelistet und erhältst keine Anfragen.
-            </p>
-          )}
-          {approvalStatus === 'rejected' && (
-            <div>
-              <p className="font-semibold">Dein Profil wurde leider abgelehnt.</p>
-              {rejectionReason && (
-                <p className="mt-1"><span className="font-medium">Grund:</span> {rejectionReason}</p>
-              )}
-              <p className="mt-2">Passe dein Profil an und reiche es erneut ein.</p>
-            </div>
-          )}
-          {approvalStatus === 'unsubmitted' && (
-            <p>
-              Reiche dein Profil zur <strong>Freigabe</strong> ein. Erst nach Freigabe wirst du auf der Künstlerseite angezeigt und kannst Anfragen erhalten.
-            </p>
-          )}
-        </div>
-      )}
+      <ProfileStatusBanner status={approvalStatus} rejectionReason={rejectionReason} className="mb-4" />
       <ProfileForm
         profile={profile}
         setProfile={setProfileAdapter}
         locked={locked}
         onSubmit={handleSubmit}
       />
+      <div className="mt-8 border-t border-white/10 pt-4">
+        <p className="mb-2 text-sm text-white/60">Probleme mit deinem Eintrag? Du kannst deinen bestehenden Künstler-Datensatz löschen und neu starten.</p>
+        <button
+          type="button"
+          onClick={handleDeleteArtist}
+          disabled={loading}
+          className="w-full rounded-lg bg-red-600 px-3 py-2 font-semibold text-white hover:bg-red-500 disabled:opacity-50"
+        >
+          Künstler-Datensatz löschen
+        </button>
+      </div>
       {backendDebug && (
         <div className="mt-4 p-3 bg-gray-900 border border-gray-800 rounded text-xs whitespace-pre-wrap text-gray-300">
           <strong>Debug Log:</strong>
