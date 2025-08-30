@@ -448,6 +448,7 @@
       "button": "Start booking assistant",
       "callAria": "Call now"
     },
+
   
     "contact2": {
       "title": "Contact",
@@ -470,7 +471,17 @@
         "submit": "Send message"
       }
     },
-  
+    "consent": {
+      "title": "Cookies at PepeShows",
+      "intro": "We use essential cookies and — with your consent — analytics cookies.",
+      "settings": "Settings",
+      "acceptAll": "Accept all",
+      "onlyEssential": "Only essential",
+      "saveSelection": "Save selection",
+      "analyticsTitle": "Analytics",
+      "analyticsDesc": "Helps us improve PepeShows. We collect data anonymously and handle your information confidentially.",
+      "privacy": "Privacy policy"
+    },
     "faq1": {
       "heading": "Frequently asked questions",
       "items": {

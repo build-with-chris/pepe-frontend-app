@@ -2,6 +2,21 @@ import React from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useLocation } from "react-router-dom";
+
+const getInitials = (full?: string, email?: string) => {
+  const t = (full || "").trim();
+  if (t) {
+    const parts = t.split(/\s+/).filter(Boolean);
+    const first = parts[0]?.[0] || "";
+    const last = parts[parts.length - 1]?.[0] || "";
+    return (first + last).toUpperCase();
+  }
+  const em = (email || "").trim();
+  if (em) return em.slice(0, 2).toUpperCase();
+  return "?";
+};
 
 type NavLinksProps = {
   layout?: "desktop" | "mobile";
@@ -16,6 +31,7 @@ export const NavLinks: React.FC<NavLinksProps> = ({
 }) => {
   const { user } = useAuth();
   const { t } = useTranslation();
+  const location = useLocation();
 
   let links: { to: string; label: string }[] = [];
 
@@ -41,7 +57,6 @@ export const NavLinks: React.FC<NavLinksProps> = ({
       // Authenticated artist/user links
       links = [
         { to: "/buchhaltung", label: t("nav.user.accounting", "Buchhaltung") },
-        { to: "/profile", label: t("nav.user.profile", "Profil") },
         { to: "/kalender", label: t("nav.user.calendar", "Kalender") },
         { to: "/meine-gigs", label: t("nav.user.myGigs", "Meine Gigs") },
         { to: "/meine-anfragen", label: t("nav.user.requests", "Anfragen") },
@@ -66,6 +81,27 @@ export const NavLinks: React.FC<NavLinksProps> = ({
           {link.label}
         </Link>
       ))}
+      {user && (
+        <Link
+          to="/profile"
+          onClick={onNavigate}
+          aria-label={t("nav.profile", { defaultValue: "Profil" })}
+          className="inline-flex items-center px-3"
+        >
+          <Avatar
+            className={`h-8 w-8 border ${
+              location.pathname.startsWith("/profile")
+                ? "ring-2 ring-white/90 border-transparent"
+                : "border-white/10"
+            }`}
+          >
+            <AvatarImage alt="Avatar" />
+            <AvatarFallback className="bg-white text-black text-xs font-semibold">
+              {getInitials((user as any)?.user_metadata?.full_name as string, (user as any)?.email as string)}
+            </AvatarFallback>
+          </Avatar>
+        </Link>
+      )}
     </nav>
   );
 };

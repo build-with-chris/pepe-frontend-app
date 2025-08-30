@@ -441,6 +441,17 @@
     "button": "Booking-Assistent starten",
     "callAria": "Jetzt anrufen"
   },
+  "consent": {
+    "title": "Cookies bei PepeShows",
+    "intro": "Wir nutzen notwendige Cookies und – mit deiner Zustimmung – Analyse-Cookies.",
+    "settings": "Einstellungen",
+    "acceptAll": "Alle akzeptieren",
+    "onlyEssential": "Nur notwendige",
+    "saveSelection": "Auswahl speichern",
+    "analyticsTitle": "Analyse",
+    "analyticsDesc": "Hilft uns, PepeShows zu verbessern. Wir erheben Daten anonym und behandeln deine Informationen vertraulich.",
+    "privacy": "Datenschutzerklärung"
+  },
   "contact2": {
     "title": "Kontakt",
     "description": "Wir sind für Fragen, Feedback oder Kooperationsmöglichkeiten erreichbar. Lass uns wissen, wie wir helfen können!",

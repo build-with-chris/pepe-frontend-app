@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/lib/supabase";
 import GuidelinesModal from "@/components/GuidelinesModal";
@@ -35,6 +35,32 @@ export default function Profile() {
   const [success, setSuccess] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<'approved' | 'pending' | 'rejected' | 'unsubmitted'>('unsubmitted');
   const [rejectionReason, setRejectionReason] = useState<string | null>(null);
+
+  // Unlock UX: show hint + scroll to the unlock button when locked area is clicked
+  const unlockBtnRef = useRef<HTMLButtonElement | null>(null);
+  const [showUnlockHint, setShowUnlockHint] = useState(false);
+  const hintTimeoutRef = useRef<number | null>(null);
+
+  const requestUnlock = () => {
+    // show hint banner
+    setShowUnlockHint(true);
+    if (hintTimeoutRef.current) window.clearTimeout(hintTimeoutRef.current);
+    hintTimeoutRef.current = window.setTimeout(() => setShowUnlockHint(false), 3000);
+
+    // smooth-scroll to the unlock button (offset for any sticky header)
+    const el = unlockBtnRef.current;
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      const y = rect.top + window.scrollY - 80;
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      // try to focus to hint visually where to click
+      try { el.focus(); } catch {}
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => () => { if (hintTimeoutRef.current) window.clearTimeout(hintTimeoutRef.current); }, []);
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -309,6 +335,8 @@ export default function Profile() {
         <h1 className="text-2xl font-bold">Profil einrichten</h1>
         {locked && (
           <button
+            ref={unlockBtnRef}
+            id="unlock-profile-button"
             type="button"
             onClick={() => {
               setLocked(false);
@@ -322,6 +350,11 @@ export default function Profile() {
           </button>
         )}
       </div>
+      {showUnlockHint && (
+        <div className="mb-4 rounded-md border border-yellow-500/30 bg-yellow-500/15 px-3 py-2 text-sm text-yellow-200">
+          Profil gesperrt – bitte oben <strong>„Profil bearbeiten“</strong> tippen, um Änderungen zu aktivieren.
+        </div>
+      )}
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {success && (
         <div className="mb-4 text-green-300 bg-green-900/20 border border-green-700 rounded p-3">
@@ -329,12 +362,22 @@ export default function Profile() {
         </div>
       )}
       <ProfileStatusBanner status={approvalStatus} rejectionReason={rejectionReason} className="mb-4" />
-      <ProfileForm
-        profile={profile}
-        setProfile={setProfileAdapter}
-        locked={locked}
-        onSubmit={handleSubmit}
-      />
+      <div className="relative">
+        <ProfileForm
+          profile={profile}
+          setProfile={setProfileAdapter}
+          locked={locked}
+          onSubmit={handleSubmit}
+        />
+        {locked && (
+          <div
+            className="absolute inset-0 z-10 cursor-not-allowed"
+            aria-hidden
+            onMouseDown={(e) => { e.preventDefault(); requestUnlock(); }}
+            onClick={(e) => { e.preventDefault(); requestUnlock(); }}
+          />
+        )}
+      </div>
       <div className="mt-8 border-t border-white/10 pt-4">
         <p className="mb-2 text-sm text-white/60">Probleme mit deinem Eintrag? Du kannst deinen bestehenden Künstler-Datensatz löschen und neu starten.</p>
         <button

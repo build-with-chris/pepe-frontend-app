@@ -1,6 +1,7 @@
 // src/components/ConsentBannerLite.tsx
 import * as React from 'react';
 import posthog from 'posthog-js';
+import { useTranslation } from 'react-i18next';
 
 function getCookie(name: string) {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -19,6 +20,7 @@ const COOKIE_NAME = 'pepe-consent-v2';
 type Consent = { analytics: boolean };
 
 export default function ConsentBannerLite() {
+  const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const [showSettings, setShowSettings] = React.useState(false);
   const [analyticsChoice, setAnalyticsChoice] = React.useState(false);
@@ -27,14 +29,12 @@ export default function ConsentBannerLite() {
     const qs = new URLSearchParams(window.location.search);
     if (qs.get('consent') === 'reset') {
       deleteCookie(COOKIE_NAME);
-      console.log('[Consent] Reset via query param, opening banner');
       setOpen(true);
       setAnalyticsChoice(false);
       try { posthog.opt_out_capturing(); posthog.set_config({ persistence: 'memory' }); } catch {}
       return;
     }
     const saved = getCookie(COOKIE_NAME);
-    console.log('[Consent] Saved cookie:', saved);
     if (!saved) {
       setOpen(true);
       setAnalyticsChoice(false);
@@ -83,12 +83,12 @@ export default function ConsentBannerLite() {
               {/* Header Row */}
               <div className="flex items-center justify-between gap-4 w-full">
                 <div className="flex items-center gap-3">
-                  <div className="grid h-8 w-8 place-items-center rounded-full bg-white text-black shadow">
+                  <div className="sm:grid h-8 w-8 place-items-center rounded-full text-black shadow">
                     <span aria-hidden>🍪</span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">Cookies bei PepeShows</p>
-                    <p className="text-xs text-white/70">Wir nutzen notwendige Cookies und – mit deiner Zustimmung – Analyse (PostHog).</p>
+                    <p className="text-sm font-medium text-white">{t('consent.title')}</p>
+                    <p className="hidden sm:block text-xs text-white/70">{t('consent.intro')}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -96,13 +96,13 @@ export default function ConsentBannerLite() {
                     onClick={() => setShowSettings(true)}
                     className="rounded-full border border-white/25 px-4 py-2 text-sm text-white hover:bg-white/10"
                   >
-                    Einstellungen
+                    {t('consent.settings')}
                   </button>
                   <button
                     onClick={acceptAll}
                     className="rounded-full bg-white px-4 py-2 text-sm font-medium text-black hover:bg-white/90"
                   >
-                    Alle akzeptieren
+                    {t('consent.acceptAll')}
                   </button>
                 </div>
               </div>
@@ -112,8 +112,8 @@ export default function ConsentBannerLite() {
                 <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-sm text-white">Analyse</p>
-                      <p className="text-xs text-white/60">Hilft uns, PepeShows zu verbessern. Wir erheben Daten anonym und behandeln deine Informationen vertraulich.</p>
+                      <p className="text-sm text-white">{t('consent.analyticsTitle')}</p>
+                      <p className="text-xs text-white/60">{t('consent.analyticsDesc')}</p>
                     </div>
                     {/* Toggle */}
                     <button
@@ -138,15 +138,15 @@ export default function ConsentBannerLite() {
                       onClick={onlyEssential}
                       className="rounded-full border border-white/25 px-3 py-1.5 text-xs text-white hover:bg-white/10"
                     >
-                      Nur notwendige
+                      {t('consent.onlyEssential')}
                     </button>
                     <div className="flex items-center gap-2">
-                      <a href="/datenschutz" className="text-xs text-white/70 underline underline-offset-4 hover:text-white">Datenschutzerklärung</a>
+                      <a href="/datenschutz" className="text-xs text-white/70 underline underline-offset-4 hover:text-white">{t('consent.privacy')}</a>
                       <button
                         onClick={saveSelection}
                         className="rounded-full bg-white px-4 py-2 text-sm font-medium text-black hover:bg-white/90"
                       >
-                        Auswahl speichern
+                        {t('consent.saveSelection')}
                       </button>
                     </div>
                   </div>

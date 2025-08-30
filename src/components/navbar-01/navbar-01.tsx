@@ -10,7 +10,20 @@ import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+const getInitials = (full?: string, email?: string) => {
+  const t = (full || "").trim();
+  if (t) {
+    const parts = t.split(/\s+/).filter(Boolean);
+    const first = parts[0]?.[0] || "";
+    const last = parts[parts.length - 1]?.[0] || "";
+    return (first + last).toUpperCase();
+  }
+  const em = (email || "").trim();
+  if (em) return em.slice(0, 2).toUpperCase();
+  return "?";
+};
 
 const Navbar01Page = () => {
   const { t, i18n } = useTranslation();
@@ -112,6 +125,27 @@ const Navbar01Page = () => {
                 EN
               </button>
             </div>
+            {/* User Avatar (links to profile) */}
+            {user && (
+              <Link
+                to="/profile"
+                aria-label={t("nav.profile", { defaultValue: "Profil" })}
+                className="hidden sm:inline-flex rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+              >
+                <Avatar
+                  className={`h-8 w-8 border transition ${
+                    location.pathname.startsWith("/profile")
+                      ? "ring-2 ring-white/90 border-transparent"
+                      : "border-white/10 hover:border-white/30"
+                  }`}
+                >
+                  <AvatarImage alt="Avatar" />
+                  <AvatarFallback className="bg-white text-black text-xs font-semibold">
+                    {getInitials((user as any)?.user_metadata?.full_name as string, (user as any)?.email as string)}
+                  </AvatarFallback>
+                </Avatar>
+              </Link>
+            )}
             {/* Hamburger (mobile & tablet) */}
             <button
               className="lg:hidden inline-flex items-center justify-center rounded-md p-2 sm:p-3 md:p-4 text-white/90 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
