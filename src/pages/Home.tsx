@@ -1,18 +1,16 @@
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
 import PepesParticles from "@/components/InteractivePepeParticles";
 import hero from "../assets/PepeHero.webp"
 import pepeMobile from "../assets/PEPE.png";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle, AnimatedArrow } from "@/components/ui/resizable";
 import type { ImperativePanelGroupHandle } from "react-resizable-panels";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem} from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Gallery23 } from "@/components/gallery23";
-import { Hero27 } from "@/components/hero27";
 import { Cta10 } from "@/components/cta10";
 import { useTranslation } from "react-i18next";
 import { Bento1 } from "@/components/bento1";
+import ConsentBannerLite from '@/components/ConsentBannerLite';
 
 const THRESHOLD = 45; // %
 
@@ -25,11 +23,7 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a;
 }
 
-function rotateArray<T>(arr: T[], startIndex: number): T[] {
-  if (!arr.length) return arr;
-  const i = ((startIndex % arr.length) + arr.length) % arr.length;
-  return [...arr.slice(i), ...arr.slice(0, i)];
-}
+
 
 export default function Home() {
   const { t } = useTranslation();
@@ -431,6 +425,7 @@ export default function Home() {
       <Gallery23 />
       
       </div>
+      <ConsentBannerLite />
     </>
 
   );
