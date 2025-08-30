@@ -3,25 +3,54 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-const LOCALSTORAGE_KEY = "guidelinesAccepted";
+import { useAuth } from "@/context/AuthContext";
+import { useLocation } from "react-router-dom";
 
 interface GuidelinesModalProps {
-  openInitially?: boolean; 
+  openInitially?: boolean;
+  onAccepted?: () => void;
 }
 
-export default function GuidelinesModal({ openInitially }: GuidelinesModalProps) {
+export default function GuidelinesModal({ openInitially, onAccepted }: GuidelinesModalProps) {
   const [open, setOpen] = React.useState(false);
   const [checked, setChecked] = React.useState(false);
+  const { token } = useAuth();
+  const location = useLocation();
 
   React.useEffect(() => {
-    const isAccepted = localStorage.getItem(LOCALSTORAGE_KEY) === "true";
-    setOpen(openInitially ?? !isAccepted);
-  }, [openInitially]);
+    // Open if explicitly requested via prop
+    if (openInitially) {
+      setOpen(true);
+      return;
+    }
+    // Open if "?guidelines=1" is in the URL
+    const qs = new URLSearchParams(location.search);
+    if (qs.get('guidelines') === '1') {
+      setOpen(true);
+    }
+    // Listen for a global trigger
+    const handler = () => setOpen(true);
+    window.addEventListener('artist:show-guidelines', handler as EventListener);
+    return () => window.removeEventListener('artist:show-guidelines', handler as EventListener);
+  }, [openInitially, location.search]);
 
-  const accept = () => {
-    localStorage.setItem(LOCALSTORAGE_KEY, "true");
-    setOpen(false);
+  const accept = async () => {
+    try {
+      await fetch('/api/artists/me/accept_guidelines', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ ok: true }),
+      });
+    } catch (e) {
+      console.warn('Failed to POST accept_guidelines:', e);
+    } finally {
+      setOpen(false);
+      try { window.dispatchEvent(new Event('artist:guidelines-accepted')); } catch {}
+      if (onAccepted) onAccepted();
+    }
   };
   const later = () => setOpen(false);
 

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
+import { NavLinks } from "./NavLinks";
 
 interface NavMenuExtProps extends NavigationMenuProps {
   user?: any | null; // optional override, falls gewünscht
@@ -43,7 +44,7 @@ export const NavMenu = ({ user: passedUser, ...props }: NavMenuExtProps) => {
         ]
       : [
           { label: t("nav.public.artists"), to: '/kuenstler' },
-          { label: t("nav.public.shows"), to: '/shows&formate' },
+          { label: t("nav.public.shows"), to: '/shows' },
           { label: t("nav.public.gallery"), to: '/galerie' },
           { label: t("nav.public.contact"), to: '/kontakt' },
         ];

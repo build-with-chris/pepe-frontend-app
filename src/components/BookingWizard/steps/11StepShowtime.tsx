@@ -85,12 +85,6 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         });
       } catch {}
 
-      try {
-        localStorage.setItem('bookingData', JSON.stringify(data));
-        console.log('💾 bookingData cached at submit (Step 11)');
-      } catch (e) {
-        console.warn('Could not cache bookingData at submit:', e);
-      }
       const res = await postRequest(data);
 
       try {
@@ -132,11 +126,10 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         // 👉 Notify the wizard to clear its cached data and also clear here as a fallback
         try {
           window.dispatchEvent(new Event('booking:submitted'));
-          console.log('ℹ️ bookingData preserved for reuse (Step 11)');
+          console.log('ℹ️ bookingData cleared after submission (Step 11)');
         } catch (e) {
           console.warn('Could not notify booking submitted:', e);
         }
-
         setShowAnim(false);
         setLoading(false);
       }, waitTime);

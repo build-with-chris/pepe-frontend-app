@@ -138,7 +138,7 @@ const Bento1 = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.6 }}
                   transition={{ duration: 0.6 }}
-                  className="pointer-events-none absolute bottom-0 left-[8%] h-[140%] w-[45%] rotate-[-18deg] blur-sm"
+                  className="pointer-events-none absolute bottom-0 left-[8%] h-[140%] w-[45%] rotate-[-18deg] blur-sm z-20"
                   style={{
                     clipPath: "polygon(0% 0%, 22% 0%, 90% 100%, 0% 100%)",
                     background:
@@ -151,7 +151,7 @@ const Bento1 = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.6 }}
                   transition={{ duration: 0.6, delay: 0.08 }}
-                  className="pointer-events-none absolute bottom-0 right-[8%] h-[140%] w-[45%] rotate-[18deg] blur-sm"
+                  className="pointer-events-none absolute bottom-0 right-[8%] h-[140%] w-[45%] rotate-[18deg] blur-sm z-20"
                   style={{
                     clipPath: "polygon(78% 0%, 100% 0%, 100% 100%, 10% 100%)",
                     background:
@@ -166,7 +166,7 @@ const Bento1 = () => {
             {/* Subtle top gradient for readability */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-10 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
             {/* Discreet top-centered header with centered icon below */}
-            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none">
+            <div className="absolute inset-x-0 top-3 z-30 flex items-start justify-center pointer-events-none">
               <div className="flex flex-col items-center gap-2">
                 <h2
                   className="text-center text-white font-semibold text-xl md:text-3xl lg:text-4xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
@@ -175,8 +175,13 @@ const Bento1 = () => {
                   {t("bento1.hero.title")}
                 </h2>
                 <div
-                  className="pointer-events-auto"
+                  className="pointer-events-auto cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Show sparkles and spotlights"
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click(); } }}
                   onClick={() => {
+                    setShowBeams(true);
                     setShowSparkleAnim(true);
                     setTimeout(() => {
                       setShowSparkleAnim(false);
@@ -196,7 +201,7 @@ const Bento1 = () => {
               </div>
             </div>
 
-            <CardContent className="relative z-20 flex h-full flex-col justify-end p-6">
+            <CardContent className="relative z-20 flex h-full flex-col justify-end p-6 pointer-events-none">
               {/* Visually hidden title for a11y (overlay above shows the visual title) */}
               <h2 className="sr-only">{t("bento1.hero.title")}</h2>
               {showSparkleAnim && (
@@ -320,7 +325,14 @@ const Bento1 = () => {
                 >
                   {t("bento1.third.title")}
                 </h2>
-                <div className="pointer-events-auto" onClick={() => setRevealAll((v) => !v)}>
+                <div
+                  className="pointer-events-auto cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Toggle spotlight reveal"
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click(); } }}
+                  onClick={() => setRevealAll((v) => !v)}
+                >
                   <motion.div
                     animate={typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches ? { opacity: [0.75, 1, 0.75], scale: [1, 1.02, 1] } : undefined}
                     transition={{ duration: 3, repeat: Infinity }}

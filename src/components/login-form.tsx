@@ -105,19 +105,22 @@ export function Login({
       }
       // Immediately verify that the artist is now resolvable
       let meOk = false;
+      let me: any = null;
       try {
         const meRes = await fetch(`${API}/api/artists/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const meText = await meRes.text();
-        console.log("/api/artists/me status=", meRes.status, "body=", meText);
         meOk = meRes.ok;
+        me = await meRes.json().catch(() => null);
+        console.log("/api/artists/me status=", meRes.status, "json=", me);
       } catch (e) {
         console.warn("/api/artists/me request error", e);
       }
       try {
         posthog.capture(meOk ? 'artist_profile_loaded' : 'artist_profile_missing');
       } catch {}
+
+      // Decide where to route after login
       const role = (supUser.app_metadata as any)?.role;
       if (role === 'admin') {
         navigate('/admin');
@@ -125,7 +128,16 @@ export function Login({
         if (!meOk) {
           alert("Dein Profil konnte nicht geladen werden. Bitte versuche es erneut oder kontaktiere den Support.");
         }
-        navigate('/profile');
+        // Show Artist Guidelines once after admin approval, on next login
+        const approved = !!(me && (me.approved === true || me.isApproved === true || me.status === 'approved'));
+        const guidelinesAccepted = !!(me && (me.guidelinesAccepted === true || me.guidelinesAccepted === 1 || me.guidelines_accepted === true || me.guidelines_accepted === 1));
+        if (approved && !guidelinesAccepted) {
+          // Open the modal on the profile page via query param and custom event
+          navigate('/profile?guidelines=1');
+          try { window.dispatchEvent(new Event('artist:show-guidelines')); } catch {}
+        } else {
+          navigate('/profile');
+        }
       }
     } catch (err) {
       console.error("handleSignIn exception:", err);

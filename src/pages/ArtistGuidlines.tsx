@@ -1,13 +1,57 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+
+const API_BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_API_URL) || '';
 
 export default function ArtistGuidlines() {
+  const { token } = useAuth();
+  const navigate = useNavigate();
+  const [checked, setChecked] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+
+  const accept = async () => {
+    if (!checked || submitting) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      const url = `${API_BASE}/api/artists/me/accept_guidelines`; console.log('POST', url);
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ ok: true }),
+      });
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(t || `HTTP ${res.status}`);
+      }
+      try { window.dispatchEvent(new Event('artist:guidelines-accepted')); } catch {}
+      navigate('/profile');
+    } catch (e: any) {
+      setError(e?.message || 'Konnte nicht speichern');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       <header className="border-b border-white/10 bg-gradient-to-b from-white/5 to-transparent">
         <div className="mx-auto max-w-5xl px-4 py-6 flex items-center justify-between">
           <h1 className="text-2xl md:text-3xl font-bold">Artist Guidelines</h1>
           <div className="flex items-center gap-2">
+            <button
+              onClick={accept}
+              disabled={!checked || submitting}
+              className="inline-flex items-center rounded-md bg-white px-3 py-1.5 text-sm font-medium text-black transition hover:bg-white/90 disabled:opacity-60 disabled:cursor-not-allowed"
+              title={!checked ? 'Bitte Checkbox bestätigen' : 'Richtlinien akzeptieren'}
+            >
+              {submitting ? 'Speichere…' : 'Akzeptieren'}
+            </button>
             <Link
               to="/home"
               className="text-sm text-gray-300 hover:text-white underline underline-offset-4"
@@ -19,6 +63,25 @@ export default function ArtistGuidlines() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-8 md:py-12">
+        {/* Consent Bar */}
+        <div className="mb-6 flex items-start gap-3 rounded-lg border border-white/10 bg-white/[0.03] p-4">
+          <input
+            id="consent"
+            type="checkbox"
+            checked={checked}
+            onChange={(e) => setChecked(e.target.checked)}
+            className="mt-1 h-4 w-4 rounded border-white/20 bg-transparent text-white focus:ring-white"
+          />
+          <label htmlFor="consent" className="text-sm text-gray-300">
+            Ich habe die Richtlinien gelesen und akzeptiere sie.
+          </label>
+        </div>
+        {error && (
+          <div className="mb-6 rounded-md border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+            {error}
+          </div>
+        )}
+
         {/* Intro */}
         <section className="mb-8 md:mb-10">
           <p className="text-gray-300 text-lg leading-relaxed">
@@ -143,14 +206,23 @@ export default function ArtistGuidlines() {
           </ul>
         </section>
 
-        <div className="flex items-center justify-between border-t border-white/10 pt-6">
+        <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-6">
           <span className="text-xs text-gray-400">Stand: {new Date().toLocaleDateString("de-DE")}</span>
-          <Link
-            to="/home"
-            className="text-sm text-gray-300 hover:text-white underline underline-offset-4"
-          >
-            Zur Startseite
-          </Link>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={accept}
+              disabled={!checked || submitting}
+              className="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-white/90 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {submitting ? 'Speichere…' : 'Richtlinien akzeptieren'}
+            </button>
+            <Link
+              to="/home"
+              className="text-sm text-gray-300 hover:text-white underline underline-offset-4"
+            >
+              Zur Startseite
+            </Link>
+          </div>
         </div>
       </main>
     </div>

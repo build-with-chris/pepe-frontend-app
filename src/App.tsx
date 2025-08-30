@@ -62,7 +62,7 @@ function App() {
         <Route path="/galerie" element={<Gallerie />} />
         <Route path="/mediamaterial" element={<Mediamaterial />} />
 
-        <Route path="/shows&formate" element={<Shows />} />
+        <Route path="/shows" element={<Shows />} />
         <Route path="/referenzen" element={<Referenzen />} />
         
         <Route path="/kuenstler" element={<Kuenstler />} />
