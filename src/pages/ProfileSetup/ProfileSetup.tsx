@@ -84,7 +84,16 @@ export default function Profile() {
         }
       if (!res.ok) return;
       const me = await res.json();
-        setName(me.name || "");
+
+        const isProbablyEmail = (s: string | null | undefined) => !!s && /.+@.+\..+/.test(s);
+        const metaName = (user?.user_metadata?.full_name || user?.user_metadata?.name || "").toString().trim();
+        let incomingName = (me.name || "").toString().trim();
+        // Prefer metadata name if backend sent an email or empty
+        if (!incomingName || isProbablyEmail(incomingName)) {
+          incomingName = metaName || incomingName;
+        }
+
+        setName(incomingName || "");
         setAddress(me.address || "");
         setPhoneNumber(me.phone_number || "");
         setDisciplines(me.disciplines || []);

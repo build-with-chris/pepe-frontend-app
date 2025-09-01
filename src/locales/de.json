@@ -735,6 +735,7 @@
     "langnote": "Pressemappe verfügbar in Deutsch & Englisch. Einsatzgebiet: flexibel (Künstler europaweit verteilt). Preise & Verfügbarkeiten: einfach über den Booking-Assistenten anfragen."
   },
   "signup": {
+   
     "success": "Registrierung erfolgreich! Bitte prüfe deine E-Mails zur Bestätigung.",
     "info": {
       "title": "Artist Registrierung",
@@ -751,7 +752,10 @@
       "loading": "Lädt...",
       "submit": "Registrieren",
       "already": "Schon registriert?",
-      "login": "Anmelden"
+      "login": "Anmelden",
+      "google": "Mit Google registrieren"
+       
+    
     }
   },
   "team10": {

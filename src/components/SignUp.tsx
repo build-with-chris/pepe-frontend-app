@@ -20,7 +20,16 @@ export default function SignUp() {
     console.log("handleSignUp triggered", { name, email, password });
     setLoading(true);
     setMessage(null);
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+          name: name
+        }
+      }
+    });
     console.log("Supabase signUp result:", { data, error });
     setLoading(false);
     if (error) {

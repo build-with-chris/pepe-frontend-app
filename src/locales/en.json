@@ -883,7 +883,8 @@
         "loading": "Loading…",
         "submit": "Sign up",
         "already": "Already registered?",
-        "login": "Log in"
+        "login": "Log in",
+         "google": "Sign up with Google"
       }
     },
   
