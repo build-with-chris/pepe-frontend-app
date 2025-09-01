@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import type { FormEvent } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Link } from "react-router-dom";
@@ -9,6 +11,51 @@ import { useTranslation } from "react-i18next";
 
 const Footer04Page = () => {
   const { t } = useTranslation();
+
+  const [email, setEmail] = useState("");
+  const [tsToken, setTsToken] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    // If Cloudflare Turnstile script is present, render widgets automatically
+    // The widget will call the callback and set the token when ready
+  }, []);
+
+  const handleNewsletterSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setMsg(null);
+    if (!/.+@.+\..+/.test(email)) {
+      setMsg(t("footer.newsletter.invalidEmail") as string);
+      return;
+    }
+    if (!tsToken) {
+      setMsg(t("footer.newsletter.noBotToken") as string);
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, turnstileToken: tsToken }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.error || `HTTP ${res.status}`);
+      }
+      setMsg(t("footer.newsletter.success") as string);
+      setEmail("");
+      setTsToken("");
+      // Reset the widget if available
+      // @ts-ignore
+      if (window.turnstile?.reset) { /* @ts-ignore */ window.turnstile.reset(); }
+    } catch (err: any) {
+      setMsg(`${t("footer.newsletter.fail")}: ${err?.message || ""}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const mainLinks = [
     { title: t("footer.mainLinks.mediamaterial"), href: "/mediamaterial" },
@@ -131,15 +178,25 @@ const Footer04Page = () => {
              
               <div className="mt-8 w-full max-w-xl">
                 <h6 className="font-semibold text-white/90">{t("footer.newsletter.title")}</h6>
-                <form className="mt-4 flex items-center gap-2 max-w-full">
+                <form className="mt-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 max-w-full" onSubmit={handleNewsletterSubmit}>
                   <Input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder={t("footer.newsletter.placeholder")}
                     className="flex-1 min-w-0 bg-white text-black placeholder:text-black/60"
+                    required
+                    aria-label={t("footer.newsletter.placeholder")}
                   />
+                  <div
+                    className="cf-turnstile"
+                    data-sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+                    data-callback={(token: string) => { setTsToken(token); }}
+                  ></div>
                   <div className="relative shrink-0">
-                    <Button type="button" className="relative z-[1]">{t("footer.newsletter.button")}</Button>
-                    {/* Lottie above the button, not overlapping and not affecting layout */}
+                    <Button type="submit" className="relative z-[1]" disabled={loading || !tsToken || !/.+@.+\..+/.test(email)}>
+                      {loading ? t("footer.newsletter.loading") : t("footer.newsletter.button")}
+                    </Button>
                     <div className="md:block pointer-events-none absolute -top-14 left-1/2 -translate-x-1/2 md:w-16 md:h-16 lg:w-20 lg:h-20">
                       <DotLottieReact
                         src="https://lottie.host/624aabe7-916a-416f-b6c2-be3a17f113f9/DyPtBBmqU4.lottie"
@@ -150,6 +207,9 @@ const Footer04Page = () => {
                     </div>
                   </div>
                 </form>
+                {msg && (
+                  <p className="mt-2 text-sm text-white/80" role="status">{msg}</p>
+                )}
               </div>
             </div>
           </div>

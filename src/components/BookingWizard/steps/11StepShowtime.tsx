@@ -44,6 +44,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const [animPriceMin, setAnimPriceMin] = useState<number>(0);
   const [animPriceMax, setAnimPriceMax] = useState<number>(0);
   const [showReplay, setShowReplay] = useState(false);
+  const [tsToken, setTsToken] = useState<string>("");
 
   const isGroup = Number(data.team_size) === 3;
 
@@ -72,6 +73,12 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
+    if (!tsToken) {
+      setError(t('booking.showtime.errors.botcheck') || 'Bitte bestätige den Bot-Check.');
+      setLoading(false);
+      setShowAnim(false);
+      return;
+    }
     setShowAnim(true);
     const startTime = Date.now();
     try {
@@ -85,7 +92,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         });
       } catch {}
 
-      const res = await postRequest(data);
+      const res = await postRequest({ ...data, turnstileToken: tsToken } as any);
 
       try {
         posthog.capture('booking_request_succeeded', {
@@ -130,6 +137,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         } catch (e) {
           console.warn('Could not notify booking submitted:', e);
         }
+        setTsToken("");
         setShowAnim(false);
         setLoading(false);
       }, waitTime);
@@ -159,11 +167,16 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
       <SummaryCard data={data} />
 
       <div className="navigation flex justify-center w-full mt-4">
+        <div
+          className="cf-turnstile mr-3"
+          data-sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
+          data-callback={(token: string) => { setTsToken(token); }}
+        ></div>
         {!response ? (
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || !tsToken}
             className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg shadow cursor-pointer hover:bg-sky-700 disabled:opacity-50 transition-colors"
           >
             {loading ? (
