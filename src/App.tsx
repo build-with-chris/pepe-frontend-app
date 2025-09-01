@@ -98,6 +98,7 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound />} />
         <Route path="/artist-guidelines" element={<ArtistGuidlines />} />
+        <Route path="/onboarding" element={<ArtistGuidlines />} />
       </Routes>
     {!['/anfragen', '/login', '/signup', '/buchhaltung', '/profile', '/kalender', '/meine-gigs', '/meine-anfragen'].includes(location.pathname) && <Footer />}
     </div>

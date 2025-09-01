@@ -34,6 +34,21 @@ export default function SignUp() {
     }
   };
 
+  const handleGoogleSignUp = async () => {
+    setMessage(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/onboarding`,
+        queryParams: { mode: "signup" },
+      },
+    });
+    if (error) {
+      console.error("Google sign-in error:", error);
+      setMessage(error.message);
+    }
+  };
+
   return (
     <div className="relative bg-black text-white min-h-screen flex items-center justify-center overflow-hidden">
       {/* subtle glow background */}
@@ -111,6 +126,13 @@ export default function SignUp() {
             className="mt-2 bg-gradient-to-r from-blue-500 to-black hover:from-blue-600 hover:to-black text-white font-semibold py-2 rounded-lg transition-all"
           >
             {loading ? t("signup.form.loading") : t("signup.form.submit")}
+          </Button>
+          <Button
+            type="button"
+            onClick={handleGoogleSignUp}
+            className="mt-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition-all"
+          >
+            {t("signup.form.google")}
           </Button>
           <p className="text-center text-sm mt-4 text-white/70">
             {t("signup.form.already")}{" "}
