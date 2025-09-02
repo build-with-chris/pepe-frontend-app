@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Calendar } from "@/components/ui/calendar";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import GuideAccordion from "./components/GuideAccordion";
 import { useAuth } from '@/context/AuthContext';
 import { toLocalDate, formatISODate, getDateRange } from "@/utils/calendar";
 import { listAvailability, createAvailability, deleteAvailability } from "@/services/availabilityApi";
 import type { AvailabilitySlot, ISODate } from "@/services/availabilityApi";
+import RangeActionsPanel from "./components/RangeActionsPanel";
+import AvailabilityLegend from "./components/AvailabilityLegend";
+
 
 const baseUrl = import.meta.env.VITE_API_URL as string;
 
@@ -332,23 +335,8 @@ const CalendarPage: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto p-6">
       <div className="mx-auto w-full max-w-[28rem] md:max-w-[36rem]">
-        <h1 className="text-2xl font-bold mb-4 text-white">Buchungskalender</h1>
-        <Accordion type="single" collapsible className="mb-5 rounded-md border border-white/40 bg-transparent">
-          <AccordionItem value="guide">
-            <AccordionTrigger className="px-4 text-white">Kurz erklärt</AccordionTrigger>
-            <AccordionContent className="px-4 pb-4 leading-relaxed text-white">
-              <p className="mb-2">
-                Nach deinem Login setzen wir automatisch <strong>365 Tage</strong> auf <span className="text-green-400 font-medium">verfügbar</span>. Außerdem rutscht jeden Tag der Zeitraum um einen Tag nach vorn – so bleibt immer ein Jahr im Voraus verfügbar.
-              </p>
-              <p className="mb-2">
-                <strong>Tag blockieren:</strong> Klicke auf einen Tag, um ihn auf <span className="text-red-400 font-medium">nicht verfügbar</span> zu setzen. Wähle zwei Daten, um einen ganzen Zeitraum zu markieren.
-              </p>
-              <p className="mb-0">
-                <strong>Zurück auf verfügbar:</strong> Wenn du einen rot markierten Tag wieder aktivierst, wird er direkt gespeichert. Die <span className="text-green-400 font-medium">grüne</span> Hervorhebung siehst du ggf. erst nach einem kurzen Seiten-Refresh oder wenn du zwischen den Menüpunkten wechselst.
-              </p>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        <h1 className="text-2xl font-bold mb-4 text-white">My Availability</h1>
+        <GuideAccordion />
       </div>
       {error && (
         <div className="mb-2 text-red-600 flex items-center gap-3">
@@ -362,137 +350,19 @@ const CalendarPage: React.FC = () => {
         </div>
       )}
       {loading && <div className="mb-2">Lade Verfügbarkeit…</div>}
-      <div className="mx-auto w-full max-w-[28rem] md:max-w-[36rem] text-sm mb-4 flex items-center justify-center gap-6 text-white">
-        <div className="flex items-center gap-2">
-          <span className="inline-block w-3 h-3 rounded-full bg-green-500/90" />
-          <span>Verfügbar</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="inline-block w-3 h-3 rounded-full bg-red-500/80" />
-          <span>Nicht verfügbar</span>
-        </div>
-      </div>
+      <AvailabilityLegend />
       {/* Range actions — now shown above the calendar for better visibility */}
-      <div className="mx-auto w-full max-w-[28rem] md:max-w-[36rem]">
-        {rangeStart && !rangeEnd && (
-          <div className="mb-3 p-3 border border-white/30 rounded bg-transparent text-white flex items-center justify-between gap-2">
-            <div><strong>Enddatum wählen.</strong></div>
-            <button
-              className="underline text-sm"
-              onClick={() => { setRangeStart(null); setRangeEnd(null); }}
-            >
-              Abbrechen
-            </button>
-          </div>
-        )}
-        {rangeStart && rangeEnd && (
-          (() => {
-            const datesInRange = getDateRange(rangeStart, rangeEnd);
-            const isoRange = datesInRange.map(d => formatISODate(d));
-            const availableInRange = isoRange.filter(d => (available ?? []).some(s => s.date === d));
-            const allAvailable = availableInRange.length === isoRange.length;
-            const noneAvailable = availableInRange.length === 0;
-            const title = `${rangeStart.toLocaleDateString()} bis ${rangeEnd.toLocaleDateString()}`;
-            return (
-              <div className="mb-3 p-3 border border-white/30 rounded bg-transparent text-white flex flex-col gap-2">
-                <div>Ausgewählter Zeitraum: <strong>{title}</strong></div>
-                <div className="flex flex-wrap gap-2 items-center">
-                  {allAvailable && (
-                    <button
-                      className="px-3 py-1 bg-red-600 rounded"
-                      disabled={processingRange}
-                      onClick={async () => {
-                        setProcessingRange(true);
-                        try {
-                          for (const iso of isoRange) {
-                            const slot = (available ?? []).find(s => s.date === iso);
-                            if (slot) await removeAvailability(slot);
-                          }
-                        } finally {
-                          setProcessingRange(false);
-                          setRangeStart(null);
-                          setRangeEnd(null);
-                        }
-                      }}
-                    >
-                      Verfügbarkeit löschen für {title}
-                    </button>
-                  )}
-                  {noneAvailable && (
-                    <button
-                      className="px-3 py-1 bg-green-600 rounded"
-                      disabled={processingRange}
-                      onClick={async () => {
-                        setProcessingRange(true);
-                        try {
-                          for (const iso of isoRange) {
-                            await addAvailability(toLocalDate(iso) as Date);
-                          }
-                        } finally {
-                          setProcessingRange(false);
-                          setRangeStart(null);
-                          setRangeEnd(null);
-                        }
-                      }}
-                    >
-                      Verfügbarkeit hinzufügen für {title}
-                    </button>
-                  )}
-                  {!allAvailable && !noneAvailable && (
-                    <>
-                      <button
-                        className="px-3 py-1 bg-green-600 rounded"
-                        disabled={processingRange}
-                        onClick={async () => {
-                          setProcessingRange(true);
-                          try {
-                            for (const iso of isoRange) {
-                              if (!(available ?? []).some(s => s.date === iso)) {
-                                await addAvailability(toLocalDate(iso) as Date);
-                              }
-                            }
-                          } finally {
-                            setProcessingRange(false);
-                            setRangeStart(null);
-                            setRangeEnd(null);
-                          }
-                        }}
-                      >
-                        Alle als verfügbar setzen
-                      </button>
-                      <button
-                        className="px-3 py-1 bg-red-600 rounded"
-                        disabled={processingRange}
-                        onClick={async () => {
-                          setProcessingRange(true);
-                          try {
-                            for (const iso of isoRange) {
-                              const slot = (available ?? []).find(s => s.date === iso);
-                              if (slot) await removeAvailability(slot);
-                            }
-                          } finally {
-                            setProcessingRange(false);
-                            setRangeStart(null);
-                            setRangeEnd(null);
-                          }
-                        }}
-                      >
-                        Alle entfernen
-                      </button>
-                    </>
-                  )}
-                  <button
-                    className="ml-auto underline text-sm"
-                    onClick={() => { setRangeStart(null); setRangeEnd(null); }}
-                  >
-                    Abbrechen
-                  </button>
-                </div>
-              </div>
-            );
-          })()
-        )}
-      </div>
+      <RangeActionsPanel
+        rangeStart={rangeStart}
+        rangeEnd={rangeEnd}
+        setRangeStart={setRangeStart}
+        setRangeEnd={setRangeEnd}
+        processingRange={processingRange}
+        setProcessingRange={setProcessingRange}
+        available={available}
+        addAvailability={addAvailability}
+        removeAvailability={removeAvailability}
+      />
       <div className="w-full flex justify-center">
         <Calendar
           mode="multiple"

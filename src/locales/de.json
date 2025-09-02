@@ -941,6 +941,27 @@
     "unsubmitted": {
       "hint": "Reiche dein Profil zur Freigabe ein, indem du dieses Profil einrichtest und auf „Speichern“ klickst. Erst nach Freigabe wirst du auf der Künstlerseite angezeigt und kannst Anfragen erhalten."
     }
+  },
+  "calendar": {
+    "guide": {
+      "title": "Kurz erklärt",
+      "autoAvailability": "Nach deinem Login setzen wir automatisch <strong>365 Tage</strong> auf <green>verfügbar</green>. Außerdem rutscht jeden Tag der Zeitraum um einen Tag nach vorn – so bleibt immer ein Jahr im Voraus verfügbar.",
+      "blockDay": "<strong>Tag blockieren:</strong> Klicke auf einen Tag, um ihn auf <red>nicht verfügbar</red> zu setzen. Wähle zwei Daten, um einen ganzen Zeitraum zu markieren.",
+      "backToAvailable": "<strong>Zurück auf verfügbar:</strong> Wenn du einen rot markierten Tag wieder aktivierst, wird er direkt gespeichert. Die <green>grüne</green> Hervorhebung siehst du ggf. erst nach einem kurzen Seiten-Refresh oder wenn du zwischen den Menüpunkten wechselst."
+    },
+    "range": {
+      "selectEnd": "Enddatum wählen.",
+      "cancel": "Abbrechen",
+      "selected": "Ausgewählter Zeitraum: <strong>{{start}} bis {{end}}</strong>",
+      "deleteForRange": "Verfügbarkeit löschen für {{start}}–{{end}}",
+      "addForRange": "Verfügbarkeit hinzufügen für {{start}}–{{end}}",
+      "setAllAvailable": "Alle als verfügbar setzen",
+      "removeAll": "Alle entfernen"
+    },
+    "legend": {
+      "available": "Verfügbar",
+      "unavailable": "Nicht verfügbar"
+    }
   }
 
 

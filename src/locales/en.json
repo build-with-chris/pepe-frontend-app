@@ -1126,6 +1126,26 @@
     "unsubmitted": {
       "hint": "Submit your profile for approval by setting it up and clicking “Save”. Only after approval will you appear on the artists page and be able to receive booking requests."
     }
+  }, 
+  "calendar": {
+    "guide": {
+      "title": "Quick guide",
+      "autoAvailability": "After logging in, we automatically set <strong>365 days</strong> to <green>available</green>. In addition, the window moves forward by one day every day — keeping one year in advance available at all times.",
+      "blockDay": "<strong>Block a day:</strong> Click a day to mark it as <red>unavailable</red>. Select two dates to mark a whole range.",
+      "backToAvailable": "<strong>Back to available:</strong> If you re-activate a red-marked day, it is saved immediately. The <green>green</green> highlight may only be visible after a short page refresh or when switching menu items."
+    },
+    "range": {
+      "selectEnd": "Select end date.",
+      "cancel": "Cancel",
+      "selected": "Selected range: <strong>{{start}} to {{end}}</strong>",
+      "deleteForRange": "Remove availability for {{start}}–{{end}}",
+      "addForRange": "Add availability for {{start}}–{{end}}",
+      "setAllAvailable": "Set all as available",
+      "removeAll": "Remove all"
+    },
+    "legend": {
+      "available": "Available",
+      "unavailable": "Unavailable"
+    }
   }
-
-  }
+}
