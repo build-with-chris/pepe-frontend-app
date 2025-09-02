@@ -943,6 +943,12 @@
     }
   },
   "calendar": {
+    "title": "Meine Verfügbarkeit",
+    "reload": "Nochmal laden",
+    "loading": "Lade Verfügbarkeit…",
+    "hints": {
+      "backend500": "Wenn weiterhin 500 kommt: Backend-Logs checken oder Token prüfen."
+    },
     "guide": {
       "title": "Kurz erklärt",
       "autoAvailability": "Nach deinem Login setzen wir automatisch <strong>365 Tage</strong> auf <green>verfügbar</green>. Außerdem rutscht jeden Tag der Zeitraum um einen Tag nach vorn – so bleibt immer ein Jahr im Voraus verfügbar.",
@@ -961,6 +967,55 @@
     "legend": {
       "available": "Verfügbar",
       "unavailable": "Nicht verfügbar"
+    }
+  },
+  "auth": {
+    "missingToken": "Kein Auth-Token gefunden. Bitte neu einloggen oder Seite neu laden."
+  },
+  "requests": {
+    "card": {
+      "untitled": "Anfrage"
+    },
+    "meta": {
+      "dateTime": "Datum & Uhrzeit",
+      "address": "Adresse",
+      "duration": "Dauer",
+      "guests": "Gäste",
+      "location": "Ort",
+      "indoor": "Indoor",
+      "outdoor": "Outdoor",
+      "disciplines": "Disziplinen"
+    },
+    "price": {
+      "estimated": "Voraussichtliche Preisempfehlung",
+      "offered": "Gesendet"
+    },
+    "title": "Meine Anfragen",
+    "subtitle": "Behalte neue Anfragen im Blick und sende dein Angebot.",
+    "tabs": {
+      "actionNeeded": "Aktion nötig",
+      "all": "Alle Anfragen"
+    },
+    "loading": "Lade Anfragen…",
+    "empty": "Keine Anfragen in dieser Ansicht.",
+    "errors": {
+      "loadFailed": "Fehler beim Laden der Anfragen"
+    },
+    "offer": {
+      "placeholder": "Dein Angebot (€)",
+      "send": "Angebot senden",
+      "submitting": "Sende…",
+      "invalidPrice": "Bitte gültigen Preis eingeben.",
+      "success": "Angebot erfolgreich an den Admin weitergegeben.",
+      "failed": "Fehler beim Absenden des Angebots"
+    },
+    "status": {
+      "angefragt": "Aktion nötig",
+      "angeboten": "Angeboten",
+      "akzeptiert": "Akzeptiert",
+      "abgelehnt": "Abgelehnt",
+      "storniert": "Storniert",
+      "unknown": "Unbekannt"
     }
   }
 

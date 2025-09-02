@@ -14,12 +14,12 @@ import Profile from './pages/ProfileSetup/ProfileSetup.tsx'
 import CalendarPage from './pages/Kalender/Kalender.tsx';
 import Kontakt from './pages/Kontakt';
 import MyGigs from './pages/MyGigs';
-import MeineAnfragen from './pages/MeineAnfragen';
+import MeineAnfragen from './pages/MeineAnfragen/MeineAnfragen.tsx';
 import Rechnungen from './pages/Invoices';
 import AnstehendeGigs from './pages/PendingGigs';
 import KuenstlerVerwaltung from './pages/Artists';
 import OfferEditPage from './pages/OfferEditPage';
-import Buchhaltung from './pages/Buchhaltung'
+import Buchhaltung from './pages/Buchhaltung/Buchhaltung.tsx'
 import NotFound from './pages/404';
 import ArtistGuidlines from './pages/ArtistGuidlines.tsx';
 import { Faq1 } from './components/faq1.tsx';

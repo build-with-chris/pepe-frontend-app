@@ -1128,6 +1128,12 @@
     }
   }, 
   "calendar": {
+    "title": "Availability Calendar",
+    "reload": "Reload",
+    "loading": "Loading availability…",
+    "hints": {
+      "backend500": "If 500 errors persist, check backend logs or verify the token."
+    },
     "guide": {
       "title": "Quick guide",
       "autoAvailability": "After logging in, we automatically set <strong>365 days</strong> to <green>available</green>. In addition, the window moves forward by one day every day — keeping one year in advance available at all times.",
@@ -1147,5 +1153,55 @@
       "available": "Available",
       "unavailable": "Unavailable"
     }
-  }
+  },
+  "auth": {
+    "missingToken": "No auth token found. Please sign in again or reload the page."
+  },
+  "requests": {
+    "card": {
+      "untitled": "Request"
+    },
+
+    "meta": {
+      "dateTime": "Date & time",
+      "address": "Address",
+      "duration": "Duration",
+      "guests": "Guests",
+      "location": "Location",
+      "indoor": "Indoor",
+      "outdoor": "Outdoor",
+      "disciplines": "Disciplines"
+    },
+    "price": {
+      "estimated": "Estimated recommendation",
+      "offered": "Sent"
+    },
+    "title": "My Requests",
+    "subtitle": "Track new inquiries and send your offer.",
+    "tabs": {
+      "actionNeeded": "Action needed",
+      "all": "All requests"
+    },
+    "loading": "Loading requests…",
+    "empty": "No requests in this view.",
+    "errors": {
+      "loadFailed": "Failed to load requests"
+    },
+    "offer": {
+      "placeholder": "Your offer (€)",
+      "send": "Send offer",
+      "submitting": "Sending…",
+      "invalidPrice": "Please enter a valid price.",
+      "success": "Offer successfully sent to the admin.",
+      "failed": "Failed to submit the offer"
+    },
+    "status": {
+      "angefragt": "Action needed",
+      "angeboten": "Offered",
+      "akzeptiert": "Accepted",
+      "abgelehnt": "Rejected",
+      "storniert": "Cancelled",
+      "unknown": "Unknown"
+    }
+}
 }

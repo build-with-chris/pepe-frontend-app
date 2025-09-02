@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Calendar } from "@/components/ui/calendar";
 import GuideAccordion from "./components/GuideAccordion";
 import { useAuth } from '@/context/AuthContext';
-import { toLocalDate, formatISODate, getDateRange } from "@/utils/calendar";
-import { listAvailability, createAvailability, deleteAvailability } from "@/services/availabilityApi";
+import { toLocalDate, formatISODate } from "@/utils/calendar";
+import { deleteAvailability } from "@/services/availabilityApi";
 import type { AvailabilitySlot, ISODate } from "@/services/availabilityApi";
 import RangeActionsPanel from "./components/RangeActionsPanel";
 import AvailabilityLegend from "./components/AvailabilityLegend";
+import useRangeSelection from "@/hooks/useRangeSelection";
 
 
 const baseUrl = import.meta.env.VITE_API_URL as string;
@@ -61,6 +63,7 @@ function useBackendArtistId(user: any, token: string | null) {
 
 const CalendarPage: React.FC = () => {
   const { token, user } = useAuth();
+  const { t } = useTranslation();
   const [available, setAvailable] = useState<AvailabilitySlot[]>([]);
   // Tick once per day at local midnight so the UI drops past days automatically
   const [todayTick, setTodayTick] = useState(0);
@@ -100,22 +103,13 @@ const CalendarPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [rangeStart, setRangeStart] = useState<Date | null>(null);
-  const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
-  const [processingRange, setProcessingRange] = useState(false);
-
   // Merkt sich, für welches Datum (ISO) wir bereits automatisch Verfügbarkeit sichergestellt haben
   const lastEnsuredIsoRef = useRef<string | null>(null);
-  // prevent flooding the API with concurrent add requests for the same day
-  const inFlightAdd = useRef<Set<string>>(new Set());
-
-
-
-  
 
   const { backendArtistId, loadingArtistId, refreshArtistId } =
     useBackendArtistId(user, token);
 
+  const { rangeStart, rangeEnd, setRangeStart, setRangeEnd, handleDayClick } = useRangeSelection({ disabledBefore: startOfToday });
 
     const fetchAvailability = async () => {
       if (!token) return;
@@ -280,62 +274,16 @@ const CalendarPage: React.FC = () => {
     })();
   }, [token, loadingArtistId, startOfToday, available, backendArtistId]);
 
-  // (removed effect that ensured all days from today to today+365 as available)
-
   // helper to check if date is available
   const isAvailable = (date: Date) => {
     const iso = formatISODate(date);
     return (available ?? []).some((s) => s.date === iso);
   };
 
- const handleDayClick = async (date: Date | undefined, _: any, event?: React.MouseEvent) => {
-  if (event) event.preventDefault();
-  if (!date) return;
-  // Ignore past dates entirely
-  if (date < startOfToday) return;
-  setError(null);
-
-  // wenn kein Range läuft oder der vorherige abgeschlossen ist, neuen starten
-  if (!rangeStart || (rangeStart && rangeEnd)) {
-    setRangeStart(date);
-    setRangeEnd(null);
-    return;
-  }
-
-  // Start gesetzt, aber noch kein Ende
-  if (rangeStart && !rangeEnd) {
-    if (date < rangeStart) {
-      setRangeStart(date);
-      return;
-    }
-
-    // gleicher Tag: sofort toggeln (einzeln) ohne await, optimistisches UI
-    if (date.getTime() === rangeStart.getTime()) {
-      const iso = formatISODate(date);
-      const already = (available ?? []).some((s) => s.date === iso);
-      if (already) {
-        const slot = (available ?? []).find((s) => s.date === iso);
-        if (slot) {
-          removeAvailability(slot);
-        }
-      } else {
-        addAvailability(date);
-      }
-      setRangeStart(null);
-      setRangeEnd(null);
-      return;
-    }
-
-    // gültiges Enddatum wählen
-    setRangeEnd(date);
-    return;
-  }
-};
-
   return (
     <div className="max-w-5xl mx-auto p-6">
       <div className="mx-auto w-full max-w-[28rem] md:max-w-[36rem]">
-        <h1 className="text-2xl font-bold mb-4 text-white">My Availability</h1>
+        <h1 className="text-2xl font-bold mb-4 text-white">{t('calendar.title')}</h1>
         <GuideAccordion />
       </div>
       {error && (
@@ -345,11 +293,11 @@ const CalendarPage: React.FC = () => {
             className="text-sm underline"
             onClick={() => fetchAvailability()}
           >
-            Nochmal laden
+            {t('calendar.reload')}
           </button>
         </div>
       )}
-      {loading && <div className="mb-2">Lade Verfügbarkeit…</div>}
+      {loading && <div className="mb-2">{t('calendar.loading')}</div>}
       <AvailabilityLegend />
       {/* Range actions — now shown above the calendar for better visibility */}
       <RangeActionsPanel
@@ -357,8 +305,8 @@ const CalendarPage: React.FC = () => {
         rangeEnd={rangeEnd}
         setRangeStart={setRangeStart}
         setRangeEnd={setRangeEnd}
-        processingRange={processingRange}
-        setProcessingRange={setProcessingRange}
+        processingRange={false}
+        setProcessingRange={() => {}}
         available={available}
         addAvailability={addAvailability}
         removeAvailability={removeAvailability}
@@ -377,7 +325,7 @@ const CalendarPage: React.FC = () => {
       {/* Range panel moved above the calendar */}
       {error && error.startsWith("Fehler beim Laden: 500") && (
         <div className="mt-2 text-sm text-yellow-700">
-          Wenn weiterhin 500 kommt: Backend-Logs checken oder Token prüfen.
+          {t('calendar.hints.backend500')}
         </div>
       )}
     </div>
