@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '@/lib/supabase';
-import { Upload } from 'lucide-react';
-
+import UploadSection from "./components/UploadSection";
+import RegisteredTable from "./components/RegisteredTable";
+import EarningsSummary from "./components/EarningsSummary";
 // Konfiguration für den Storage-Bucket (default: invoices)
 const INVOICE_BUCKET = import.meta.env.VITE_SUPABASE_INVOICES_BUCKET || 'invoices';
 
@@ -287,185 +288,46 @@ export default function Buhaltung() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 text-white">
-      <h1 className="text-2xl font-bold mb-6">🧾 Buchhaltung</h1>
+      <h1 className="text-2xl font-bold mb-6">🧾 Money money money</h1>
 
       {/* Upload & Archiv */}
-      <section className="mb-10">
-        <h2 className="text-xl font-semibold mb-3">Rechnungen hochladen</h2>
-        <div className="bg-gray-900 border border-gray-800 rounded p-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Betrag (EUR)</label>
-              <input
-                type="text"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="z.B. 250,00"
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Rechnungsdatum</label>
-              <input
-                type="date"
-                value={invoiceDate}
-                onChange={(e) => setInvoiceDate(e.target.value)}
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 text-white"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Notiz</label>
-              <input
-                type="text"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="optional"
-                className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 text-white placeholder:text-gray-400"
-              />
-            </div>
-          </div>
-          <p className="text-sm text-gray-300 mb-3">
-            Lade hier deine Rechnungen zu bestätigten Gigs hoch (PDF, JPG, PNG, WEBP). Dateien werden im privaten Ordner <code>user/&lt;deine-UID&gt;</code> gespeichert.
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            {/* Hidden file input */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept="application/pdf,image/jpeg,image/png,image/webp"
-              onChange={onUpload}
-              disabled={!artistId || uploading}
-              className="hidden"
-            />
+      {/* Hidden file input (kept in Page to wire onChange to Supabase upload) */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept="application/pdf,image/jpeg,image/png,image/webp"
+        onChange={onUpload}
+        disabled={!artistId || uploading}
+        className="hidden"
+      />
 
-            {/* Visible upload button */}
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={!artistId || uploading}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded border border-gray-700 disabled:opacity-50"
-            >
-              <Upload className="w-4 h-4" />
-              Rechnung hochladen
-            </button>
+      <UploadSection
+        amount={amount}
+        setAmount={setAmount}
+        invoiceDate={invoiceDate}
+        setInvoiceDate={setInvoiceDate}
+        note={note}
+        setNote={setNote}
+        uploading={uploading}
+        invError={invError}
+        canUpload={Boolean(artistId)}
+        onPick={() => fileInputRef.current?.click()}
+        onRefreshList={() => artistId && listInvoices(artistId)}
+        invoices={invoices}
+      />
 
-            <span className="text-xs text-gray-400">PDF, JPG, PNG, WEBP • mehrere Dateien möglich</span>
+      <RegisteredTable
+        rows={registered}
+        error={regError}
+        fmtAmount={fmtAmount}
+      />
 
-            <button
-              type="button"
-              onClick={() => artistId && listInvoices(artistId)}
-              className="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm border border-gray-700"
-            >
-              Liste aktualisieren
-            </button>
-
-            {uploading && <span className="text-gray-400 text-sm">Lade hoch…</span>}
-          </div>
-          {invError && <p className="text-red-400 text-sm mt-2">{invError}</p>}
-
-          <div className="mt-4">
-            <h3 className="font-medium mb-2">Rechnungs-Archiv</h3>
-            {invoices.length === 0 ? (
-              <p className="text-gray-400 text-sm">Noch keine Rechnungen hochgeladen.</p>
-            ) : (
-              <ul className="space-y-2">
-                {invoices.map((f) => (
-                  <li key={f.name} className="flex items-center justify-between bg-gray-800 rounded px-3 py-2">
-                    <div className="truncate pr-3">
-                      <a href={f.url} target="_blank" rel="noreferrer" className="text-blue-300 hover:underline">
-                        {f.name}
-                      </a>
-                      {f.size ? <span className="text-gray-400 text-xs ml-2">({Math.round(f.size/1024)} KB)</span> : null}
-                    </div>
-                    <a href={f.url} target="_blank" rel="noreferrer" className="text-sm text-gray-300 hover:text-white">
-                      Öffnen
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <section className="mb-10">
-        <h2 className="text-xl font-semibold mb-3">Registrierte Rechnungen (Datenbank)</h2>
-        <div className="bg-gray-900 border border-gray-800 rounded p-4">
-          {regError && <p className="text-red-400 text-sm mb-3">{regError}</p>}
-          {registered.length === 0 ? (
-            <p className="text-gray-400 text-sm">Noch keine registrierten Rechnungen.</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left min-w-[700px]">
-                <thead>
-                  <tr className="text-gray-300 border-b border-gray-800">
-                    <th className="py-2 pr-4">Erstellt</th>
-                    <th className="py-2 pr-4">Datei</th>
-                    <th className="py-2 pr-4">Datum</th>
-                    <th className="py-2 pr-4">Betrag</th>
-                    <th className="py-2 pr-4">Status</th>
-                    <th className="py-2 pr-4">Aktion</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {registered.map((r) => (
-                    <tr key={r.id} className="border-b border-gray-800">
-                      <td className="py-2 pr-4 text-gray-300">{r.created_at ? new Date(r.created_at).toLocaleString('de-DE') : '—'}</td>
-                      <td className="py-2 pr-4">
-                        <div className="truncate max-w-[360px] text-gray-200" title={r.storage_path}>{r.storage_path}</div>
-                      </td>
-                      <td className="py-2 pr-4 text-gray-300">{r.invoice_date || '—'}</td>
-                      <td className="py-2 pr-4 text-gray-300">{fmtAmount(r.amount_cents, r.currency)}</td>
-                      <td className="py-2 pr-4">
-                        <span className={
-                          r.status === 'paid' ? 'text-green-300' :
-                          r.status === 'rejected' ? 'text-red-300' :
-                          r.status === 'verified' ? 'text-amber-300' : 'text-gray-300'
-                        }>
-                          {r.status || 'uploaded'}
-                        </span>
-                      </td>
-                      <td className="py-2 pr-4">
-                        {'signed_url' in (r as any) && (r as any).signed_url ? (
-                          <a
-                            href={(r as any).signed_url as string}
-                            className="text-blue-300 hover:underline"
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            Öffnen
-                          </a>
-                        ) : (
-                          <span className="text-gray-500">—</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Verdienstübersicht */}
-      <section>
-        <h2 className="text-xl font-semibold mb-3">Verdienstübersicht</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-gray-900 border border-gray-800 rounded p-4">
-            <div className="text-sm text-gray-400">Aktueller Monat</div>
-            <div className="text-2xl font-bold mt-1">{monthTotal.toLocaleString('de-DE')} €</div>
-            <div className="text-xs text-gray-400 mt-1">{monthCount} angenommene Gigs</div>
-          </div>
-          <div className="bg-gray-900 border border-gray-800 rounded p-4">
-            <div className="text-sm text-gray-400">Aktuelles Jahr</div>
-            <div className="text-2xl font-bold mt-1">{yearTotal.toLocaleString('de-DE')} €</div>
-            <div className="text-xs text-gray-400 mt-1">{yearCount} angenommene Gigs</div>
-          </div>
-        </div>
-        {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
-      </section>
+      <EarningsSummary
+        month={{ total: monthTotal, count: monthCount }}
+        year={{ total: yearTotal, count: yearCount }}
+        error={error}
+      />
 
       <p className="text-xs text-gray-500 mt-6">
         Hinweis: Die Verdienstsummen basieren auf deiner angegebenen Gage (<code>artist_gage</code>) für akzeptierte Anfragen.

@@ -1017,6 +1017,50 @@
       "storniert": "Storniert",
       "unknown": "Unbekannt"
     }
+  },
+  "accounting": {
+    "upload": {
+      "title": "Rechnungen hochladen",
+      "amount": "Betrag (EUR)",
+      "amountPlaceholder": "z.B. 250,00",
+      "date": "Rechnungsdatum",
+      "note": "Notiz",
+      "noteOptional": "optional",
+      "hint": "Lade hier deine Rechnungen zu bestätigten Gigs hoch (PDF, JPG, PNG, WEBP). Dateien werden im privaten Ordner user/<deine-UID> gespeichert.",
+      "pick": "Rechnung hochladen",
+      "fileTypes": "PDF, JPG, PNG, WEBP • mehrere Dateien möglich",
+      "listRefresh": "Liste aktualisieren",
+      "uploading": "Lade hoch…",
+      "archive": "Rechnungs-Archiv",
+      "empty": "Noch keine Rechnungen hochgeladen.",
+      "open": "Öffnen"
+    },
+    "registered": {
+      "title": "Registrierte Rechnungen (Datenbank)",
+      "empty": "Noch keine registrierten Rechnungen.",
+      "th": {
+        "created": "Erstellt",
+        "file": "Datei",
+        "date": "Datum",
+        "amount": "Betrag",
+        "status": "Status",
+        "action": "Aktion"
+      },
+      "status": {
+        "uploaded": "hochgeladen",
+        "verified": "geprüft",
+        "paid": "bezahlt",
+        "rejected": "abgelehnt"
+      },
+      "open": "Öffnen"
+    },
+    "earnings": {
+      "title": "Verdienstübersicht",
+      "month": "Aktueller Monat",
+      "year": "Aktuelles Jahr",
+      "acceptedCount": "{{count}} angenommene Gigs",
+      "note": "Hinweis: Die Verdienstsummen basieren auf deiner angegebenen Gage (artist_gage) für akzeptierte Anfragen."
+    }
   }
 
 

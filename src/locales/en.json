@@ -1203,5 +1203,49 @@
       "storniert": "Cancelled",
       "unknown": "Unknown"
     }
-}
+},
+"accounting": {
+    "upload": {
+      "title": "Upload invoices",
+      "amount": "Amount (EUR)",
+      "amountPlaceholder": "e.g. 250.00",
+      "date": "Invoice date",
+      "note": "Note",
+      "noteOptional": "optional",
+      "hint": "Upload your invoices for confirmed gigs here (PDF, JPG, PNG, WEBP). Files are stored in your private folder user/<your-uid>.",
+      "pick": "Upload invoice",
+      "fileTypes": "PDF, JPG, PNG, WEBP • multiple files allowed",
+      "listRefresh": "Refresh list",
+      "uploading": "Uploading…",
+      "archive": "Invoice archive",
+      "empty": "No invoices uploaded yet.",
+      "open": "Open"
+    },
+    "registered": {
+      "title": "Registered invoices (database)",
+      "empty": "No registered invoices yet.",
+      "th": {
+        "created": "Created",
+        "file": "File",
+        "date": "Date",
+        "amount": "Amount",
+        "status": "Status",
+        "action": "Action"
+      },
+      "status": {
+        "uploaded": "uploaded",
+        "verified": "verified",
+        "paid": "paid",
+        "rejected": "rejected"
+      },
+      "open": "Open"
+    },
+    "earnings": {
+      "title": "Earnings overview",
+      "month": "Current month",
+      "year": "Current year",
+      "acceptedCount": "{{count}} accepted gigs",
+      "note": "Note: The earnings are based on your entered fee (artist_gage) for accepted requests."
+    }
+  }
 }
