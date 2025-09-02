@@ -11,7 +11,7 @@ import { ProtectedRoute } from './components/ProtectedRoute.tsx';
 import Footer from './components/footer-04/footer-04'
 import Navbar01Page from './components/navbar-01/navbar-01';
 import Profile from './pages/ProfileSetup/ProfileSetup.tsx'
-import CalendarPage from './pages/Kalender';
+import CalendarPage from './pages/Kalender/Kalender.tsx';
 import Kontakt from './pages/Kontakt';
 import MyGigs from './pages/MyGigs';
 import MeineAnfragen from './pages/MeineAnfragen';

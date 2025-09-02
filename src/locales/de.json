@@ -49,33 +49,36 @@
     }
   },
   "artists": {
-    "quote": "Wo Kunst zu Magie wird",
-    "filters": { "all": "Alle" },
-    "results_one": "{{count}} Ergebnis",
-    "results_other": "{{count}} Ergebnisse",
-    "loading": "Lade Künstler…",
-    "empty": "Noch keine Künstler verfügbar.",
-    "disciplines": {
-      "zauberer": "Zauberer",
-      "cyrWheel": "Cyr-Wheel",
-      "bodenakrobatik": "Bodenakrobatik",
-      "luftakrobatik": "Luftakrobatik",
-      "partnerakrobatik": "Partnerakrobatik",
-      "chinesePole": "Chinese Pole",
-      "hulaHoop": "Hula Hoop",
-      "handstand": "Handstand",
-      "contemporaryDance": "Contemporary Dance",
-      "breakdance": "Breakdance",
-      "teeterboard": "Teeterboard",
-      "jonglage": "Jonglage",
-      "moderation": "Moderation",
-      "pantomime": "Pantomime"
-    },
-    "disciplinesShort": {
-      "contemporaryDance": "Contemporary",
-      "pantomimeEntertainment": "Pantomime"
-    }
+  "quote": "Wo Kunst zu Magie wird",
+  "filters": { "all": "Alle" },
+  "results_one": "{{count}} Ergebnis",
+  "results_other": "{{count}} Ergebnisse",
+  "loading": "Lade Künstler…",
+  "empty": "Noch keine Künstler verfügbar.",
+  "disciplines": {
+    "zauberer": "Zauberer",
+    "cyrWheel": "Cyr-Wheel",
+    "bodenakrobatik": "Bodenakrobatik",
+    "luftakrobatik": "Luftakrobatik",
+    "partnerakrobatik": "Partnerakrobatik",
+    "chinesePole": "Chinese Pole",
+    "hulaHoop": "Hula Hoop",
+    "handstand": "Handstand",
+    "contemporaryDance": "Contemporary Dance",
+    "breakdance": "Breakdance",
+    "teeterboard": "Teeterboard",
+    "jonglage": "Jonglage",
+    "moderation": "Moderation",
+    "pantomime": "Pantomime",
+    "_fallback_note": "Diese Keys sind Beispiele. Ergänze hier eure echten Disziplin-Bezeichnungen.",
+    "Cyr-Wheel": "Cyr-Wheel",
+    "Jonglage": "Jonglage"
   },
+  "disciplinesShort": {
+    "contemporaryDance": "Contemporary",
+    "pantomimeEntertainment": "Pantomime"
+  }
+},
   "bento1": {
     "hero": {
       "title": "Pepe Shows, die begeistern."
@@ -923,13 +926,6 @@
     },
     "actions": {
       "save": "Speichern"
-    }
-  },
-  "artists": {
-    "disciplines": {
-      "_fallback_note": "Diese Keys sind Beispiele. Ergänze hier eure echten Disziplin-Bezeichnungen.",
-      "Cyr-Wheel": "Cyr-Wheel",
-      "Jonglage": "Jonglage"
     }
   },
 
