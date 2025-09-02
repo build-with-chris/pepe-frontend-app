@@ -31,7 +31,7 @@ type DisciplineKey =
   | "teeterboard"
   | "jonglage"
   | "moderation"
-  | "pantomimeEntertainment";
+  | "pantomime";
 
 const DISCIPLINE_ITEMS: { key: DisciplineKey; match: string }[] = [
   { key: "zauberer", match: "zauberer" },
@@ -47,7 +47,7 @@ const DISCIPLINE_ITEMS: { key: DisciplineKey; match: string }[] = [
   { key: "teeterboard", match: "teeterboard" },
   { key: "jonglage", match: "jonglage" },
   { key: "moderation", match: "moderation" },
-  { key: "pantomimeEntertainment", match: "pantomime" },
+  { key: "pantomime", match: "pantomime" },
 ];
 
 export default function Kuenstler(){
@@ -169,21 +169,10 @@ export default function Kuenstler(){
         </div>
 
           {/* Filterleiste nach Disziplin */}
-          <div className="mb-6">
-            <div className="flex flex-wrap gap-2 items-center">
-              <button
-                type="button"
-                onClick={clearFilters}
-                className={`px-3 py-1.5 rounded-full border text-sm transition-colors ${
-                  activeFilters.length === 0
-                    ? "bg-white text-black border-white"
-                    : "bg-transparent text-white border-white/30 hover:bg-white/10"
-                }`}
-              >
-                {t("artists.filters.all")}
-              </button>
-              <div className="flex-1">
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+          <div className="mb-8">
+            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-sm px-4 py-3 sm:px-6 sm:py-4">
+              <div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                   {DISCIPLINE_ITEMS.map((item) => {
                     const active = activeFilters.includes(item.key);
                     const full = t(`artists.disciplines.${item.key}`);
@@ -193,10 +182,10 @@ export default function Kuenstler(){
                         key={item.key}
                         type="button"
                         onClick={() => toggleFilter(item.key)}
-                        className={`px-3 py-1.5 rounded-full border text-sm whitespace-nowrap transition-colors ${
+                        className={`px-3 py-1.5 rounded-full border text-sm whitespace-nowrap transition-colors focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-0 ${
                           active
-                            ? "bg-white text-black border-white"
-                            : "bg-transparent text-white border-white/30 hover:bg-white/10"
+                            ? "bg-white text-black border-white shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]"
+                            : "bg-transparent text-white border-white/20 hover:bg-white/10 hover:border-white/40"
                         }`}
                         aria-pressed={active}
                       >
@@ -206,10 +195,25 @@ export default function Kuenstler(){
                     );
                   })}
                 </div>
+
+                <div className="mt-4 pt-3 border-t border-white/10 w-full flex items-center justify-center gap-4">
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className={`px-3 py-1.5 rounded-full border text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-white/40 focus:ring-offset-0 ${
+                      activeFilters.length === 0
+                        ? "bg-white text-black border-white shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]"
+                        : "bg-transparent text-white border-white/20 hover:bg-white/10 hover:border-white/40"
+                    }`}
+                    aria-pressed={activeFilters.length === 0}
+                  >
+                    {t("artists.filters.all")}
+                  </button>
+                  <span className="text-sm text-white/70">
+                    {t("artists.results", { count: filteredArtists.length })}
+                  </span>
+                </div>
               </div>
-              <span className="text-sm text-white/70 whitespace-nowrap">
-                {t("artists.results", { count: filteredArtists.length })}
-              </span>
             </div>
           </div>
 

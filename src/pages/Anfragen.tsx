@@ -63,6 +63,44 @@ export default function Anfragen() {
   useEffect(() => {
     localStorage.setItem('bookingStep', stepIndex.toString());
   }, [stepIndex]);
+
+  useEffect(() => {
+    const handleRestart = () => {
+      // jump back to Intro and clear state
+      setStepIndex(0);
+      setData(initialData);
+      try { localStorage.removeItem('bookingStep'); } catch {}
+      try { localStorage.removeItem('bookingData'); } catch {}
+      // scroll window to top (or parent scroller if needed)
+      try {
+        const scroller = document.querySelector('main');
+        if (scroller) {
+          (scroller as HTMLElement).scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      } catch {}
+    };
+
+    window.addEventListener('booking:reset', handleRestart);
+    // Removed: window.addEventListener('booking:submitted', handleRestart);
+    return () => {
+      window.removeEventListener('booking:reset', handleRestart);
+      // Removed: window.removeEventListener('booking:submitted', handleRestart);
+    };
+  }, []);
+
+  useEffect(() => {
+    // If a previous session finished, start fresh when page is revisited
+    const completed = localStorage.getItem('bookingCompleted');
+    if (completed === 'true') {
+      try { localStorage.removeItem('bookingCompleted'); } catch {}
+      try { localStorage.removeItem('bookingStep'); } catch {}
+      try { localStorage.removeItem('bookingData'); } catch {}
+      setData(initialData);
+      setStepIndex(0);
+    }
+  }, []);
   const CurrentStep = steps[stepIndex - 1];
 
   const onNext = () => {

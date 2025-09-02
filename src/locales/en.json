@@ -295,6 +295,9 @@
     "next": "Next"
   },
   "showtime": {
+    "errors": {
+      "botcheck": "Please confirm you're not a bot."
+    },
     "heading": {
       "line1": "Almost there – shall we send your request",
       "line2": "to our artists now?"
@@ -1048,5 +1051,84 @@
           "content": "Professional rigging, clean workflows and a very pleasant team. Exactly what you want a collaboration to be like."
         }
       }
+    },
+  "profileSetup": {
+    "title": "Set up profile",
+    "edit": "Edit profile",
+    "editAria": "Edit profile",
+    "lockedHint": "Profile is locked — tap “Edit profile” at the top to enable changes.",
+    "success": {
+      "saved": "Profile saved successfully!"
+    },
+    "errors": {
+      "fillRequired": "Please fill in all required fields.",
+      "minGtMax": "Minimum cannot be greater than maximum.",
+      "userEmailMissing": "User email is missing.",
+      "saveFailed": "Failed to save profile.",
+      "notLoggedIn": "Please sign in first.",
+      "noArtistLinked": "No linked artist found."
+    },
+    "delete": {
+      "help": "Having issues with your entry? You can delete your existing artist record and start fresh.",
+      "cta": "Delete artist record",
+      "confirm": "Do you really want to delete your artist record? This affects only the artist data, not your login.",
+      "failed": "Delete failed",
+      "done": "Artist deleted"
+    },
+    "debug": {
+      "title": "Debug log:"
     }
+  },
+  "profileForm": {
+    "sections": {
+      "basicData": "Basic data",
+      "disciplines": "Disciplines",
+      "pricing": "Price range",
+      "profileImage": "Profile image",
+      "gallery": "Gallery",
+      "aboutMe": "About me"
+    },
+    "labels": {
+      "name": "Name",
+      "address": "Address",
+      "phone": "Phone number",
+      "priceMin": "Price (min)",
+      "priceMax": "Price (max)"
+    },
+    "help": {
+      "priceMin": "Realistic guidance for a team event (~150 guests, 5-minute act, without travel). Fee only, plus materials if applicable.",
+      "priceMax": "Upper range for the same event case (150 guests, 5-minute act, without travel).",
+      "noProfileImage": "No profile image uploaded yet",
+      "profileImageUpload": "Upload/changes happen in the main form flow (container). This component shows a preview.",
+      "aboutMe": "This text appears on the homepage under your card. Be creative, but keep it short."
+    },
+    "alt": {
+      "profileImage": "Profile image"
+    },
+    "actions": {
+      "save": "Save"
+    }
+  },
+  "artists": {
+    "disciplines": {
+      "_fallback_note": "These keys are examples. Add your real discipline labels here.",
+      "Cyr-Wheel": "Cyr-wheel",
+      "Jonglage": "Juggling"
+    }
+  },
+
+  "profileStatusBanner": {
+    "pending": {
+      "info": "Your profile has been submitted for review. An admin will check it soon. Until it is approved, you won’t be listed as an artist and won’t receive requests."
+    },
+    "rejected": {
+      "title": "Your profile was rejected.",
+      "reason": "Reason: {{reason}}",
+      "hint": "Please update your profile and submit it again."
+    },
+    "unsubmitted": {
+      "hint": "Submit your profile for approval by setting it up and clicking “Save”. Only after approval will you appear on the artists page and be able to receive booking requests."
+    }
+  }
+
   }

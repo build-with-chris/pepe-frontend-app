@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export type ProfileStatus = 'approved' | 'pending' | 'rejected' | 'unsubmitted';
 
@@ -9,6 +10,8 @@ export interface ProfileStatusBannerProps {
 }
 
 export function ProfileStatusBanner({ status, rejectionReason, className }: ProfileStatusBannerProps) {
+  const { t } = useTranslation();
+
   if (status === 'approved') return null;
 
   const isRejected = status === 'rejected';
@@ -24,25 +27,25 @@ export function ProfileStatusBanner({ status, rejectionReason, className }: Prof
     >
       {status === 'pending' && (
         <p>
-          Dein Profil ist <strong>zur Prüfung eingereicht</strong>. Ein Admin schaut es sich zeitnah an. Solange es nicht freigegeben ist, wirst du nicht als Künstler gelistet und erhältst keine Anfragen.
+          {t('profileStatusBanner.pending.info')}
         </p>
       )}
 
       {status === 'rejected' && (
         <div>
-          <p className="font-semibold">Dein Profil wurde leider abgelehnt.</p>
+          <p className="font-semibold">{t('profileStatusBanner.rejected.title')}</p>
           {rejectionReason && (
             <p className="mt-1">
-              <span className="font-medium">Grund:</span> {rejectionReason}
+              {t('profileStatusBanner.rejected.reason', { reason: rejectionReason })}
             </p>
           )}
-          <p className="mt-2">Passe dein Profil an und reiche es erneut ein.</p>
+          <p className="mt-2">{t('profileStatusBanner.rejected.hint')}</p>
         </div>
       )}
 
       {status === 'unsubmitted' && (
         <p>
-          Reiche dein Profil zur <strong>Freigabe</strong> ein. Erst nach Freigabe wirst du auf der Künstlerseite angezeigt und kannst Anfragen erhalten.
+          {t('profileStatusBanner.unsubmitted.hint')}
         </p>
       )}
     </div>

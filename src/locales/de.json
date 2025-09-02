@@ -298,6 +298,9 @@
       "next": "Weiter"
     },
     "showtime": {
+      "errors": {
+      "botcheck": "Bitte bestätige kurz, dass du kein Bot bist."
+    },
       "heading": {
         "line1": "Fast geschafft – sollen wir deine Anfrage jetzt",
         "line2": "an unsere Künstler senden?"
@@ -864,5 +867,85 @@
       "5": { "role": "HR & Internal Events", "content": "Sommerfest mit Wow-Effekt. Die Showlänge wurde perfekt an unsere Agenda angepasst – null Stress für uns, maximaler Effekt fürs Team." },
       "6": { "role": "Hotel- & Veranstaltungsleitung", "content": "Professionelles Rigging, saubere Abläufe und ein sehr angenehmes Team. Genau so stellt man sich eine Zusammenarbeit vor." }
     }
+  },
+  "profileSetup": {
+    "title": "Profil einrichten",
+    "edit": "Profil bearbeiten",
+    "editAria": "Profil bearbeiten",
+    "lockedHint": "Profil gesperrt – bitte oben „Profil bearbeiten“ tippen, um Änderungen zu aktivieren.",
+    "success": {
+      "saved": "Profil erfolgreich gespeichert!"
+    },
+    "errors": {
+      "fillRequired": "Bitte fülle alle Pflichtfelder aus.",
+      "minGtMax": "Das Minimum darf nicht größer als das Maximum sein.",
+      "userEmailMissing": "Benutzer-E-Mail fehlt.",
+      "saveFailed": "Profil speichern fehlgeschlagen.",
+      "notLoggedIn": "Bitte logge dich zuerst ein.",
+      "noArtistLinked": "Kein verknüpfter Künstler gefunden."
+    },
+    "delete": {
+      "help": "Probleme mit deinem Eintrag? Du kannst deinen bestehenden Künstler-Datensatz löschen und neu starten.",
+      "cta": "Künstler-Datensatz löschen",
+      "confirm": "Willst du deinen Künstler-Datensatz wirklich löschen? Dies betrifft nur die Künstlerdaten, nicht deinen Login.",
+      "failed": "Löschen fehlgeschlagen",
+      "done": "Artist gelöscht"
+    },
+    "debug": {
+      "title": "Debug Log:"
+    }
+  },
+  "profileForm": {
+    "sections": {
+      "basicData": "Basisdaten",
+      "disciplines": "Disziplinen",
+      "pricing": "Preisrahmen",
+      "profileImage": "Profilbild",
+      "gallery": "Galerie",
+      "aboutMe": "Über mich"
+    },
+    "labels": {
+      "name": "Name",
+      "address": "Adresse",
+      "phone": "Telefonnummer",
+      "priceMin": "Preis (min)",
+      "priceMax": "Preis (max)"
+    },
+    "help": {
+      "priceMin": "Realistischer Richtwert für ein Teamevent (ca. 150 Personen, 5-Minuten-Act, ohne Anfahrtskosten). Nur Gage + ggf. Material.",
+      "priceMax": "Oberer Rahmen für denselben Event-Case (150 Gäste, 5-Minuten-Act, ohne Anfahrt).",
+      "noProfileImage": "Noch kein Profilbild hochgeladen",
+      "profileImageUpload": "Upload/Änderung erfolgt im Haupt-Formular-Flow (Container). Diese Komponente zeigt die Vorschau.",
+      "aboutMe": "Dieser Text erscheint auf der Homepage unter deiner Karte. Sei kreativ, aber halte dich kurz."
+    },
+    "alt": {
+      "profileImage": "Profilbild"
+    },
+    "actions": {
+      "save": "Speichern"
+    }
+  },
+  "artists": {
+    "disciplines": {
+      "_fallback_note": "Diese Keys sind Beispiele. Ergänze hier eure echten Disziplin-Bezeichnungen.",
+      "Cyr-Wheel": "Cyr-Wheel",
+      "Jonglage": "Jonglage"
+    }
+  },
+
+  "profileStatusBanner": {
+    "pending": {
+      "info": "Dein Profil ist zur Prüfung eingereicht. Ein Admin schaut es sich zeitnah an. Solange es nicht freigegeben ist, wirst du nicht als Künstler gelistet und erhältst keine Anfragen."
+    },
+    "rejected": {
+      "title": "Dein Profil wurde leider abgelehnt.",
+      "reason": "Grund: {{reason}}",
+      "hint": "Passe dein Profil an und reiche es erneut ein."
+    },
+    "unsubmitted": {
+      "hint": "Reiche dein Profil zur Freigabe ein, indem du dieses Profil einrichtest und auf „Speichern“ klickst. Erst nach Freigabe wirst du auf der Künstlerseite angezeigt und kannst Anfragen erhalten."
+    }
   }
+
+
 }

@@ -13,6 +13,43 @@ const ANIM_DURATION = 800; // ms
 const CONFETTI_COUNT = 100;
 const MIN_DELAY = 5000;
 
+// Clear any locally cached booking/wizard data (best-effort)
+function clearBookingCache() {
+  try {
+    const candidateKeys = [
+      'bookingData',
+      'wizardState',
+      'pepe-booking',
+      'pepe:wizard',
+      'formData',
+    ];
+
+    // remove known keys
+    candidateKeys.forEach((k) => {
+      try { localStorage.removeItem(k); } catch {}
+      try { sessionStorage.removeItem(k); } catch {}
+    });
+
+    // best-effort: remove anything that looks related
+    try {
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i) || '';
+        if (/(booking|wizard|form|pepe)/i.test(key)) {
+          localStorage.removeItem(key);
+        }
+      }
+    } catch {}
+    try {
+      for (let i = sessionStorage.length - 1; i >= 0; i--) {
+        const key = sessionStorage.key(i) || '';
+        if (/(booking|wizard|form|pepe)/i.test(key)) {
+          sessionStorage.removeItem(key);
+        }
+      }
+    } catch {}
+  } catch {}
+}
+
 const DISCIPLINE_VIDEO_MAP: Record<string, string> = {
   "led cyr": "LED CYR Blackbox.webm",
   "cyr": "Cyr 5.webm",
@@ -44,7 +81,6 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const [animPriceMin, setAnimPriceMin] = useState<number>(0);
   const [animPriceMax, setAnimPriceMax] = useState<number>(0);
   const [showReplay, setShowReplay] = useState(false);
-  const [tsToken, setTsToken] = useState<string>("");
 
   const isGroup = Number(data.team_size) === 3;
 
@@ -70,15 +106,15 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
     }
   }, [response]);
 
+  useEffect(() => {
+    const onReset = () => clearBookingCache();
+    window.addEventListener('booking:reset', onReset);
+    return () => window.removeEventListener('booking:reset', onReset);
+  }, []);
+
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
-    if (!tsToken) {
-      setError(t('booking.showtime.errors.botcheck') || 'Bitte bestätige den Bot-Check.');
-      setLoading(false);
-      setShowAnim(false);
-      return;
-    }
     setShowAnim(true);
     const startTime = Date.now();
     try {
@@ -92,7 +128,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         });
       } catch {}
 
-      const res = await postRequest({ ...data, turnstileToken: tsToken } as any);
+      const res = await postRequest(data);
 
       try {
         posthog.capture('booking_request_succeeded', {
@@ -137,7 +173,8 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         } catch (e) {
           console.warn('Could not notify booking submitted:', e);
         }
-        setTsToken("");
+        // Fallback: proactively clear local caches here as well
+        clearBookingCache();
         setShowAnim(false);
         setLoading(false);
       }, waitTime);
@@ -167,16 +204,11 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
       <SummaryCard data={data} />
 
       <div className="navigation flex justify-center w-full mt-4">
-        <div
-          className="cf-turnstile mr-3"
-          data-sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
-          data-callback={(token: string) => { setTsToken(token); }}
-        ></div>
         {!response ? (
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={loading || !tsToken}
+            disabled={loading}
             className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg shadow cursor-pointer hover:bg-sky-700 disabled:opacity-50 transition-colors"
           >
             {loading ? (

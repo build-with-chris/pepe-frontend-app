@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
 import { ProfileForm } from "./components/ProfileForm";
 import { ProfileStatusBanner } from "./components/ProfileStatusBanner";
+import { useTranslation } from "react-i18next";
 
 const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || "profiles";
 const baseUrl = import.meta.env.VITE_API_URL;
@@ -15,6 +16,7 @@ const baseUrl = import.meta.env.VITE_API_URL;
 export default function Profile() {
   const { user, token } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -124,11 +126,11 @@ export default function Profile() {
     setError(null);
 
     if (!name || !address || !phoneNumber || disciplines.length === 0) {
-      setError("Bitte fülle alle Pflichtfelder aus.");
+      setError(t('profileSetup.errors.fillRequired'));
       return;
     }
     if (priceMin > priceMax) {
-      setError("Das Minimum darf nicht größer als das Maximum sein.");
+      setError(t('profileSetup.errors.minGtMax'));
       return;
     }
 
@@ -144,7 +146,7 @@ export default function Profile() {
     setLoading(true);
     try {
       const baseUrl = import.meta.env.VITE_API_URL;
-      if (!user?.email) throw new Error("User email fehlt");
+      if (!user?.email) throw new Error(t('profileSetup.errors.userEmailMissing'));
 
       let effectiveId = backendArtistId || "new-id";
       let imageUrl = await uploadProfileImage(
@@ -220,7 +222,7 @@ export default function Profile() {
       if (nextStatus === 'pending') setRejectionReason(null);
       setLocked(true);
     } catch (err: any) {
-      setError("Profil speichern fehlgeschlagen.");
+      setError(t('profileSetup.errors.saveFailed'));
       setBackendDebug(prev => `Sync error: ${err?.message || err}${prev ? "\n" + prev : ""}`);
     } finally {
       setLoading(false);
@@ -229,10 +231,10 @@ export default function Profile() {
 
   const handleDeleteArtist = async () => {
     if (!token) {
-      setError("Bitte logge dich zuerst ein.");
+      setError(t('profileSetup.errors.notLoggedIn'));
       return;
     }
-    const sure = window.confirm("Willst du deinen Künstler-Datensatz wirklich löschen? Dies betrifft nur die Künstlerdaten, nicht deinen Login.");
+    const sure = window.confirm(t('profileSetup.delete.confirm'));
     if (!sure) return;
     setLoading(true);
     try {
@@ -256,7 +258,7 @@ export default function Profile() {
         }
       }
       if (!artistId) {
-        throw new Error('Kein verknüpfter Künstler gefunden.');
+        throw new Error(t('profileSetup.errors.noArtistLinked'));
       }
 
       const res = await fetch(`${baseUrl}/api/artists/${artistId}`, {
@@ -285,9 +287,9 @@ export default function Profile() {
       setLocked(false);
       setSuccess(false);
       setError(null);
-      setBackendDebug((prev) => `Artist gelöscht.\n${prev || ''}`.trim());
+      setBackendDebug((prev) => `${t('profileSetup.delete.done')}.\n${prev || ''}`.trim());
     } catch (err: any) {
-      setError(`Löschen fehlgeschlagen: ${err?.message || err}`);
+      setError(`${t('profileSetup.delete.failed')}: ${err?.message || err}`);
     } finally {
       setLoading(false);
     }
@@ -341,7 +343,7 @@ export default function Profile() {
   return (
     <div className="max-w-6xl mx-auto p-6 text-white">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Profil einrichten</h1>
+        <h1 className="text-2xl font-bold">{t('profileSetup.title')}</h1>
         {locked && (
           <button
             ref={unlockBtnRef}
@@ -352,22 +354,22 @@ export default function Profile() {
               setSuccess(false);
             }}
             className="inline-flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-md border border-gray-700 shadow"
-            aria-label="Profil bearbeiten"
+            aria-label={t('profileSetup.editAria')}
           >
             <Pencil className="w-4 h-4" />
-            Profil bearbeiten
+            {t('profileSetup.edit')}
           </button>
         )}
       </div>
       {showUnlockHint && (
         <div className="mb-4 rounded-md border border-yellow-500/30 bg-yellow-500/15 px-3 py-2 text-sm text-yellow-200">
-          Profil gesperrt – bitte oben <strong>„Profil bearbeiten“</strong> tippen, um Änderungen zu aktivieren.
+          {t('profileSetup.lockedHint')}
         </div>
       )}
       {error && <p className="text-red-600 mb-4">{error}</p>}
       {success && (
         <div className="mb-4 text-green-300 bg-green-900/20 border border-green-700 rounded p-3">
-          Profil erfolgreich gespeichert!
+          {t('profileSetup.success.saved')}
         </div>
       )}
       <ProfileStatusBanner status={approvalStatus} rejectionReason={rejectionReason} className="mb-4" />
@@ -388,19 +390,19 @@ export default function Profile() {
         )}
       </div>
       <div className="mt-8 border-t border-white/10 pt-4">
-        <p className="mb-2 text-sm text-white/60">Probleme mit deinem Eintrag? Du kannst deinen bestehenden Künstler-Datensatz löschen und neu starten.</p>
+        <p className="mb-2 text-sm text-white/60">{t('profileSetup.delete.help')}</p>
         <button
           type="button"
           onClick={handleDeleteArtist}
           disabled={loading}
           className="w-full rounded-lg bg-red-600 px-3 py-2 font-semibold text-white hover:bg-red-500 disabled:opacity-50"
         >
-          Künstler-Datensatz löschen
+          {t('profileSetup.delete.cta')}
         </button>
       </div>
       {backendDebug && (
         <div className="mt-4 p-3 bg-gray-900 border border-gray-800 rounded text-xs whitespace-pre-wrap text-gray-300">
-          <strong>Debug Log:</strong>
+          <strong>{t('profileSetup.debug.title')}</strong>
           <div>{backendDebug}</div>
         </div>
       )}

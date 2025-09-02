@@ -26,11 +26,11 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
     <form onSubmit={onSubmit} className="grid grid-cols-1 gap-6 md:grid-cols-2">
       {/* Basisdaten */}
       <section className="md:col-span-2 rounded-lg border border-gray-800 bg-gray-900 p-5 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-gray-300">Basisdaten</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-300">{t('profileForm.sections.basicData')}</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {/* Name */}
           <div>
-            <label className="mb-1 block font-medium text-gray-300">Name*</label>
+            <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.name')}*</label>
             <input
               type="text"
               value={profile.name ?? ""}
@@ -42,7 +42,7 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
           </div>
           {/* Adresse */}
           <div>
-            <label className="mb-1 block font-medium text-gray-300">Adresse*</label>
+            <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.address')}*</label>
             <input
               type="text"
               value={profile.address ?? ""}
@@ -54,7 +54,7 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
           </div>
           {/* Telefonnummer */}
           <div>
-            <label className="mb-1 block font-medium text-gray-300">Telefonnummer*</label>
+            <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.phone')}*</label>
             <input
               type="tel"
               value={profile.phoneNumber ?? ""}
@@ -69,7 +69,7 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
 
       {/* Disziplinen */}
       <section className="md:col-span-2 rounded-lg border border-gray-800 bg-gray-900 p-5 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-gray-300">Disziplinen</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-300">{t('profileForm.sections.disciplines')}</h2>
         <div className="flex flex-wrap gap-2">
           {disciplinesOptions.map((d) => (
             <button
@@ -81,7 +81,7 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
                 ? "border-blue-500 bg-blue-600 text-white"
                 : "border-gray-700 bg-gray-800 text-white hover:bg-gray-700"}`}
             >
-              {d}
+              {t(`artists.disciplines.${d}`, d)}
             </button>
           ))}
         </div>
@@ -89,10 +89,10 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
 
       {/* Preisrahmen */}
       <section className="md:col-span-2 rounded-lg border border-gray-800 bg-gray-900 p-5 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-gray-300">Preisrahmen</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-300">{t('profileForm.sections.pricing')}</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block font-medium text-gray-300">Preis (min)*</label>
+            <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.priceMin')}*</label>
             <input
               type="number"
               value={profile.priceMin ?? 0}
@@ -103,11 +103,11 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
               disabled={locked}
             />
             <p className="mt-1 text-sm text-gray-400">
-              Realistischer Richtwert für ein Teamevent (ca. 150 Personen, 5-Minuten-Act, ohne Anfahrtskosten). Nur Gage + ggf. Material.
+              {t('profileForm.help.priceMin')}
             </p>
           </div>
           <div>
-            <label className="mb-1 block font-medium text-gray-300">Preis (max)*</label>
+            <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.priceMax')}*</label>
             <input
               type="number"
               value={profile.priceMax ?? 0}
@@ -118,7 +118,7 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
               disabled={locked}
             />
             <p className="mt-1 text-sm text-gray-400">
-              Oberer Rahmen für denselben Event-Case (150 Gäste, 5-Minuten-Act, ohne Anfahrt).
+              {t('profileForm.help.priceMax')}
             </p>
           </div>
         </div>
@@ -126,14 +126,14 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
 
       {/* Profilbild (Preview) */}
       <section className="rounded-lg border border-gray-800 bg-gray-900 p-5 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold text-gray-300">Profilbild</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-300">{t('profileForm.sections.profileImage')}</h2>
         {profile.profileImageUrl ? (
-          <img src={profile.profileImageUrl} alt="Profilbild" className="mt-2 h-24 rounded object-cover" />
+          <img src={profile.profileImageUrl} alt={t('profileForm.alt.profileImage')} className="mt-2 h-24 rounded object-cover" />
         ) : (
-          <p className="text-sm text-gray-400">Noch kein Profilbild hochgeladen</p>
+          <p className="text-sm text-gray-400">{t('profileForm.help.noProfileImage')}</p>
         )}
         <p className="mt-3 text-xs text-gray-500">
-          Upload/Änderung erfolgt im Haupt-Formular-Flow (Container). Diese Komponente zeigt die Vorschau.
+          {t('profileForm.help.profileImageUpload')}
         </p>
       <input
         type="file"
@@ -151,7 +151,7 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
 
       {/* Galerie */}
       <section className="rounded-lg border border-gray-800 bg-gray-900 p-5 shadow-sm md:col-span-2">
-        <h2 className="mb-4 text-lg font-semibold text-gray-300">Galerie</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-300">{t('profileForm.sections.gallery')}</h2>
      <GalleryUploader
         galleryUrls={profile.galleryUrls || []}
         setGalleryUrls={(value) => {
@@ -169,8 +169,8 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
 
       {/* Über mich */}
       <section className="md:col-span-2 rounded-lg border border-gray-800 bg-gray-900 p-5 shadow-sm">
-        <h2 className="mb-2 text-lg font-semibold text-gray-300">Über mich</h2>
-        <p className="mb-2 text-sm text-gray-400">Dieser Text erscheint auf der Homepage unter deiner Karte. Sei kreativ, aber halte dich kurz.</p>
+        <h2 className="mb-2 text-lg font-semibold text-gray-300">{t('profileForm.sections.aboutMe')}</h2>
+        <p className="mb-2 text-sm text-gray-400">{t('profileForm.help.aboutMe')}</p>
         <textarea
           value={profile.bio ?? ""}
           onChange={(e) => setProfile({ bio: e.target.value })}
@@ -186,7 +186,7 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
           disabled={locked}
           className="w-full rounded-lg bg-gray-800 py-3 text-white hover:bg-gray-700 disabled:opacity-50"
         >
-          Speichern
+          {t('profileForm.actions.save')}
         </button>
       </div>
     </form>

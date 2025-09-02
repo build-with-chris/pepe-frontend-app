@@ -194,7 +194,7 @@ export function Login({
           <form className="" onSubmit={handleSignIn}>
             <div className="grid gap-6">
               <div className="flex flex-col gap-4">
-                <Button variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={loading || oauthLoading}>
+                <Button type="button" variant="outline" className="w-full" onClick={handleGoogleLogin} disabled={loading || oauthLoading}>
                   Login with Google
                 </Button>
               </div>
@@ -214,6 +214,7 @@ export function Login({
                     required
                     value={email}
                     onChange={e => setEmail(e.target.value)}
+                    autoComplete="email"
                   />
                 </div>
                 <div className="grid gap-3">
@@ -233,6 +234,7 @@ export function Login({
                     required
                     value={password}
                     onChange={e => setPassword(e.target.value)}
+                    autoComplete="current-password"
                   />
                 </div>
                 <Button type="submit" className="w-full mt-2" disabled={loading || oauthLoading}>
