@@ -14,6 +14,7 @@ interface SuccessViewProps {
   animPriceMax: number;
   showReplay: boolean;
   setShowReplay: React.Dispatch<React.SetStateAction<boolean>>;
+  response?: any;
 }
 
 const SuccessView: React.FC<SuccessViewProps> = ({
@@ -26,9 +27,14 @@ const SuccessView: React.FC<SuccessViewProps> = ({
   animPriceMax,
   showReplay,
   setShowReplay,
+  response,
 }) => {
   const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const isDuo = Number(data.team_size) === 2;
+  const numAvailable = typeof (response?.num_available_artists) === 'number' ? response.num_available_artists : animArtists;
+  const canShowDuoPrice = !isGroup && isDuo && numAvailable >= 2 && (animPriceMin > 0 || animPriceMax > 0);
 
   return (
     <div
@@ -104,27 +110,41 @@ const SuccessView: React.FC<SuccessViewProps> = ({
       </div>
 
       {/* Highlights */}
-      {!isGroup && (
+      {!isGroup ? (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
             <Users className="w-6 h-6 text-blue-600 mb-2" />
             <p className="text-lg text-black font-bold">
-              <CountUp end={animArtists} duration={2.5} />
+              <CountUp end={numAvailable} duration={2.5} />
             </p>
             <p className="text-xs text-black">
               {t('booking.showtime.success.available')}
             </p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
-            <PiggyBank className="w-6 h-6 text-blue-600 mb-2" />
-            <p className="text-lg font-bold text-black">
-              <CountUp end={animPriceMin} duration={2} /> -{' '}
-              <CountUp end={animPriceMax} duration={2} />
-            </p>
-            <p className="text-xs text-black">
-              {t('booking.showtime.success.priceRange')}
-            </p>
-          </div>
+
+          {(!isDuo || canShowDuoPrice) ? (
+            <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
+              <PiggyBank className="w-6 h-6 text-blue-600 mb-2" />
+              <p className="text-lg font-bold text-black">
+                <CountUp end={animPriceMin} duration={2} /> -{' '}
+                <CountUp end={animPriceMax} duration={2} />
+              </p>
+              <p className="text-xs text-black">
+                {t('booking.showtime.success.priceRange')}
+              </p>
+            </div>
+          ) : (
+            <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center text-center">
+              <PiggyBank className="w-6 h-6 text-blue-600 mb-2" />
+              <p className="text-sm text-black font-medium">
+                {t('booking.showtime.success.duoPending', 'Preis wird angezeigt, sobald zwei verfügbare Artists matchen.')}
+              </p>
+              <p className="text-xs text-gray-600 mt-1">
+                {t('booking.showtime.success.duoHint', 'Wir prüfen die Verfügbarkeit und melden uns kurzfristig.')}            
+              </p>
+            </div>
+          )}
+
           <div className="bg-gray-50 rounded-lg p-4 flex flex-col items-center">
             <Gift className="w-6 h-6 text-blue-600 mb-2" />
             <p className="text-lg font-bold text-black">in 48h</p>
@@ -132,6 +152,15 @@ const SuccessView: React.FC<SuccessViewProps> = ({
               {t('booking.showtime.success.bundle')}
             </p>
           </div>
+        </div>
+      ) : (
+        <div className="bg-gray-50 rounded-lg p-4 mb-8 text-center">
+          <p className="text-2xl font-bold text-black">{t('booking.showtime.success.groupInCoord', 'In Abstimmung')}</p>
+          <p className="text-sm text-gray-700 mt-1">{t('booking.showtime.success.groupExplain', 'Gruppen sind komplexer zu planen – wir melden uns so bald wie möglich mit Vorschlägen & Optionen.')}</p>
+          <p className="text-sm text-gray-900 mt-3">
+            {t('booking.showtime.success.available')}:{' '}
+            <span className="font-semibold">{numAvailable}</span>
+          </p>
         </div>
       )}
 

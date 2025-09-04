@@ -83,6 +83,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
   const [showReplay, setShowReplay] = useState(false);
 
   const isGroup = Number(data.team_size) === 3;
+  const isDuo = Number(data.team_size) === 2;
 
   // Pick a short cinematic loop based on discipline/show type
   const pickVideoFile = () => {
@@ -152,9 +153,10 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           const fromArtists = 0;
           const toArtists = Number(res?.num_available_artists || 0);
           const fromMin = 0;
-          const toMin = Number(res?.price_min || 0);
+          // For Duo: prefer backend-provided summed prices; for Group: no price animation
+          const toMin = isGroup ? 0 : (isDuo && res?.duo_price_min != null ? Number(res.duo_price_min) : Number(res?.price_min || 0));
           const fromMax = 0;
-          const toMax = Number(res?.price_max || 0);
+          const toMax = isGroup ? 0 : (isDuo && res?.duo_price_max != null ? Number(res.duo_price_max) : Number(res?.price_max || 0));
 
           const step = (now: number) => {
             const t = Math.min(1, (now - start) / duration);
@@ -233,6 +235,7 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
         <SuccessView
           responseRef={responseRef}
           data={data}
+          response={response}
           visualSrc={visualSrc}
           isGroup={isGroup}
           animArtists={animArtists}

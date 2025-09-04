@@ -361,6 +361,11 @@
     "priceRange": "Estimated price",
     "bundle": "Bundled offer",
     "cta": "Meet the artists",
+    "duoPending": "Price will be shown as soon as two available artists match.",
+        "duoHint": "We are checking availability and will get back to you shortly.",
+        "groupInCoord": "In coordination",
+        "groupExplain": "Group shows are more complex to plan – we will get back to you as soon as possible with proposals & options.",
+    
     "bundleValue": "within 48h via email",
     "curatorNote": "Chris is taking care of your request, coordinating with the artists, and will send you suitable proposals via email."
   },

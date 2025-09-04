@@ -364,6 +364,10 @@
         "priceRange": "Voraussichtlicher Preis",
         "bundle": "Gebündeltes Angebot",
         "cta": "Künstler kennenlernen",
+        "duoPending": "Preis wird angezeigt, sobald zwei verfügbare Artists matchen.",
+        "duoHint": "Wir prüfen die Verfügbarkeit und melden uns kurzfristig.",
+        "groupInCoord": "In Abstimmung",
+        "groupExplain": "Gruppen sind komplexer zu planen – wir melden uns so bald wie möglich mit Vorschlägen & Optionen.",
         "bundleValue": "in 48h per Mail",
         "curatorNote": "Chris kümmert sich um deine Anfrage und geht nun in die Abstimmung mit den Artisten und schickt dir passende Vorschläge via Mail"
       }, "timeline": {
