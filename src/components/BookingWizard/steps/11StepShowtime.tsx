@@ -153,10 +153,16 @@ const StepShowtime: React.FC<StepShowtimeProps> = ({ data, onPrev }) => {
           const fromArtists = 0;
           const toArtists = Number(res?.num_available_artists || 0);
           const fromMin = 0;
-          // For Duo: prefer backend-provided summed prices; for Group: no price animation
-          const toMin = isGroup ? 0 : (isDuo && res?.duo_price_min != null ? Number(res.duo_price_min) : Number(res?.price_min || 0));
+          // Prefer fully calculated backend prices; fall back to raw duo sums only if calculated values are missing.
+          const calcMin = Number(res?.price_min ?? 0);
+          const calcMax = Number(res?.price_max ?? 0);
+          const fallbackDuoMin = isDuo && res?.duo_price_min != null ? Number(res.duo_price_min) : 0;
+          const fallbackDuoMax = isDuo && res?.duo_price_max != null ? Number(res.duo_price_max) : 0;
+
+          const toMin = isGroup ? 0 : (calcMin > 0 ? calcMin : fallbackDuoMin);
+          const toMax = isGroup ? 0 : (calcMax > 0 ? calcMax : fallbackDuoMax);
+
           const fromMax = 0;
-          const toMax = isGroup ? 0 : (isDuo && res?.duo_price_max != null ? Number(res.duo_price_max) : Number(res?.price_max || 0));
 
           const step = (now: number) => {
             const t = Math.min(1, (now - start) / duration);
