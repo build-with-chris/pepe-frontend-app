@@ -908,11 +908,14 @@
       "aboutMe": "Über mich"
     },
     "labels": {
-      "name": "Name",
-      "address": "Adresse",
+       "name": "Name",
+      "street": "Straße",
+      "postalCode": "PLZ",
+      "city": "Stadt",
+      "country": "Land",
       "phone": "Telefonnummer",
-      "priceMin": "Preis (min)",
-      "priceMax": "Preis (max)"
+      "priceMin": "Mindestgage",
+      "priceMax": "Höchstgage"
     },
     "help": {
       "priceMin": "Realistischer Richtwert für ein Teamevent (ca. 150 Personen, 5-Minuten-Act, ohne Anfahrtskosten). Nur Gage + ggf. Material.",

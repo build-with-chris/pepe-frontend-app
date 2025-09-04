@@ -20,6 +20,10 @@ export default function Profile() {
 
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [street, setStreet] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [disciplines, setDisciplines] = useState<string[]>([]);
   const [priceMin, setPriceMin] = useState<number>(700);
@@ -97,6 +101,22 @@ export default function Profile() {
 
         setName(incomingName || "");
         setAddress(me.address || "");
+        // Try to split a single-line address into parts: "Street, 12345 City, Country"
+        const rawAddr = (me.address || "").toString();
+        if (rawAddr) {
+          const parts = rawAddr.split(",").map((p: string) => p.trim()).filter(Boolean);
+          let _street = ""; let _postal = ""; let _city = ""; let _country = "";
+          if (parts.length >= 1) _street = parts[0];
+          if (parts.length >= 2) {
+            const m = parts[1].match(/^(\d{4,5})\s+(.*)$/);
+            if (m) { _postal = m[1]; _city = m[2]; } else { _city = parts[1]; }
+          }
+          if (parts.length >= 3) _country = parts[2];
+          if (_street) setStreet(_street);
+          if (_postal) setPostalCode(_postal);
+          if (_city) setCity(_city);
+          if (_country) setCountry(_country);
+        }
         setPhoneNumber(me.phone_number || "");
         setDisciplines(me.disciplines || []);
         setPriceMin(me.price_min ?? 700);
@@ -125,7 +145,7 @@ export default function Profile() {
     e.preventDefault();
     setError(null);
 
-    if (!name || !address || !phoneNumber || disciplines.length === 0) {
+    if (!name || !street || !postalCode || !city || !country || !phoneNumber || disciplines.length === 0) {
       setError(t('profileSetup.errors.fillRequired'));
       return;
     }
@@ -170,10 +190,13 @@ export default function Profile() {
 
       const nextStatus = approvalStatus === 'approved' ? 'approved' : 'pending';
 
+      const fullAddress = `${street}, ${postalCode} ${city}, ${country}`.trim();
+      setAddress(fullAddress);
+
       // ALLE Felder mitsenden!
       const payload: any = {
         name,
-        address,
+        address: fullAddress,
         phone_number: phoneNumber,
         price_min: priceMin,
         price_max: priceMax,
@@ -205,6 +228,22 @@ export default function Profile() {
       if (saved) {
         setName(saved.name || "");
         setAddress(saved.address || "");
+        // Parse and update new fields from saved.address
+        const savedAddr = (saved.address || "").toString();
+        if (savedAddr) {
+          const parts = savedAddr.split(",").map((p: string) => p.trim()).filter(Boolean);
+          let _street = ""; let _postal = ""; let _city = ""; let _country = "";
+          if (parts.length >= 1) _street = parts[0];
+          if (parts.length >= 2) {
+            const m = parts[1].match(/^(\d{4,5})\s+(.*)$/);
+            if (m) { _postal = m[1]; _city = m[2]; } else { _city = parts[1]; }
+          }
+          if (parts.length >= 3) _country = parts[2];
+          setStreet(_street);
+          setPostalCode(_postal);
+          setCity(_city);
+          setCountry(_country);
+        }
         setPhoneNumber(saved.phone_number || "");
         setDisciplines(Array.isArray(saved.disciplines) ? saved.disciplines : []);
         setPriceMin(saved.price_min ?? priceMin);
@@ -273,6 +312,10 @@ export default function Profile() {
       setBackendArtistId(null);
       setName("");
       setAddress("");
+      setStreet("");
+      setPostalCode("");
+      setCity("");
+      setCountry("");
       setPhoneNumber("");
       setDisciplines([]);
       setPriceMin(700);
@@ -303,6 +346,10 @@ export default function Profile() {
   const profile = {
     name,
     address,
+    street,
+    postalCode,
+    city,
+    country,
     phoneNumber,
     disciplines,
     priceMin,
@@ -316,6 +363,10 @@ export default function Profile() {
   const setProfileAdapter = (next: any) => {
     if (typeof next.name !== "undefined") setName(next.name);
     if (typeof next.address !== "undefined") setAddress(next.address);
+    if (typeof next.street !== "undefined") setStreet(next.street);
+    if (typeof next.postalCode !== "undefined") setPostalCode(next.postalCode);
+    if (typeof next.city !== "undefined") setCity(next.city);
+    if (typeof next.country !== "undefined") setCountry(next.country);
     if (typeof next.phoneNumber !== "undefined") setPhoneNumber(next.phoneNumber);
     if (typeof next.disciplines !== "undefined") setDisciplines(next.disciplines as string[]);
     if (typeof next.priceMin !== "undefined") setPriceMin(next.priceMin as number);

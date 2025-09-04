@@ -41,16 +41,51 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
             />
           </div>
           {/* Adresse */}
-          <div>
-            <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.address')}*</label>
-            <input
-              type="text"
-              value={profile.address ?? ""}
-              onChange={(e) => setProfile({ address: e.target.value })}
-              className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
-              required
-              disabled={locked}
-            />
+          <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.street')}*</label>
+              <input
+                type="text"
+                value={profile.street ?? ""}
+                onChange={(e) => setProfile({ street: e.target.value })}
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
+                required
+                disabled={locked}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.postalCode')}*</label>
+              <input
+                type="text"
+                value={profile.postalCode ?? ""}
+                onChange={(e) => setProfile({ postalCode: e.target.value })}
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
+                required
+                disabled={locked}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.city')}*</label>
+              <input
+                type="text"
+                value={profile.city ?? ""}
+                onChange={(e) => setProfile({ city: e.target.value })}
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
+                required
+                disabled={locked}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.country')}*</label>
+              <input
+                type="text"
+                value={profile.country ?? ""}
+                onChange={(e) => setProfile({ country: e.target.value })}
+                className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
+                required
+                disabled={locked}
+              />
+            </div>
           </div>
           {/* Telefonnummer */}
           <div>

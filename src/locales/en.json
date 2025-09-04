@@ -54,7 +54,7 @@
   "empty": "No artists available yet.",
   "disciplines": {
     "zauberer": "Magician",
-    "cyrWheel": "Cyr wheel",
+    "cyrWheel": "Cyr-Wheel",
     "bodenakrobatik": "Floor acrobatics",
     "luftakrobatik": "Aerial acrobatics",
     "partnerakrobatik": "Partner acrobatics",
@@ -66,7 +66,7 @@
     "teeterboard": "Teeterboard",
     "jonglage": "Juggling",
     "moderation": "Hosting",
-    "pantomimeEntertainment": "Pantomime/Entertainment",
+    "pantomime": "Pantomime",
     "_fallback_note": "These keys are examples. Add your real discipline labels here.",
     "Cyr-Wheel": "Cyr-wheel",
     "Jonglage": "Juggling"
@@ -1093,10 +1093,13 @@
     },
     "labels": {
       "name": "Name",
-      "address": "Address",
-      "phone": "Phone number",
-      "priceMin": "Price (min)",
-      "priceMax": "Price (max)"
+      "street": "Street",
+      "postalCode": "Postal Code",
+      "city": "City",
+      "country": "Country",
+      "phone": "Phone Number",
+      "priceMin": "Minimum Fee",
+      "priceMax": "Maximum Fee"
     },
     "help": {
       "priceMin": "Realistic guidance for a team event (~150 guests, 5-minute act, without travel). Fee only, plus materials if applicable.",

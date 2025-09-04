@@ -1,8 +1,93 @@
-
-
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { BookingData } from '../types';
+
+const translateDiscipline = (t: any, d?: string) => {
+  if (!d) return '';
+  const key = `artists.disciplines.${String(d)}`;
+  const translated = t(key);
+  return translated === key ? d : translated;
+};
+
+const translateEventType = (t: any, v?: string) => {
+  if (!v) return '';
+  const raw = String(v).trim();
+
+  // 1) Try exact key path first
+  let key = `booking.eventType.options.${raw}`;
+  let translated = t(key);
+  if (translated !== key) return translated;
+
+  // 2) lowercase
+  const lower = raw.toLowerCase();
+  key = `booking.eventType.options.${lower}`;
+  translated = t(key);
+  if (translated !== key) return translated;
+
+  // 3) alias mapping (normalize by removing spaces/underscores)
+  const squashed = lower.replace(/[\s_]+/g, '');
+  const aliasMap: Record<string, string> = {
+    // corporate
+    'firmenfeier': 'corporate',  
+    'kulturevent': 'streetshow',
+  };
+  const alias = aliasMap[squashed] || aliasMap[lower];
+  if (alias) {
+    key = `booking.eventType.options.${alias}`;
+    translated = t(key);
+    if (translated !== key) return translated;
+  }
+
+  // 4) final fallback: show original value
+  return v;
+};
+
+const translateShowType = (t: any, v?: string) => {
+  if (!v) return '';
+  const raw = String(v).trim();
+  // expected keys: liveInteraction, stageShow
+  let key = `booking.showType.options.${raw}`;
+  let translated = t(key);
+  if (translated !== key) return translated;
+
+  const lower = raw.toLowerCase();
+  key = `booking.showType.options.${lower}`;
+  translated = t(key);
+  if (translated !== key) return translated;
+
+  // map common variants to canonical keys
+  const map: Record<string, string> = {
+    'live interaction': 'liveInteraction',
+    'live_interaction': 'liveInteraction',
+    'stage show': 'stageShow',
+    'stage_show': 'stageShow',
+  };
+  const alias = map[lower] || map[lower.replace(/[\s]+/g, ' ')] || map[lower.replace(/[\s_]+/g, '_')];
+  if (alias) {
+    key = `booking.showType.options.${alias}`;
+    translated = t(key);
+    if (translated !== key) return translated;
+  }
+
+  // final fallback
+  return v;
+};
+
+const translateTeamSize = (t: any, v: any) => {
+  if (v === undefined || v === null) return '';
+  const n = Number(v);
+  if (!Number.isNaN(n)) {
+    if (n === 1) return t('booking.teamSizes.solo', 'Solo');
+    if (n === 2) return t('booking.teamSizes.duo', 'Duo');
+    if (n >= 3) return t('booking.teamSizes.group', 'Gruppe');
+  }
+  // fallback string mapping
+  const s = String(v).toLowerCase();
+  if (s.includes('solo')) return t('booking.teamSizes.solo', 'Solo');
+  if (s.includes('duo')) return t('booking.teamSizes.duo', 'Duo');
+  if (s.includes('group') || s.includes('gruppe') || s.includes('trio')) return t('booking.teamSizes.group', 'Gruppe');
+  return v;
+};
 
 import { CalendarDays, ListChecks, Users, Clock, MapPin, Lightbulb, Mic, Star, User as UserIcon, Mail } from 'lucide-react';
 
@@ -18,20 +103,20 @@ const SummaryCard: React.FC<SummaryCardProps> = ({ data }) => {
     <h3 className="text-xl font-semibold mb-4 text-black ">{t('booking.showtime.summary.title')}</h3>
     <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-stone-700 break-words">
       <div>
-        <dt className="font-semibold text-gray-800 flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.eventType')}</dt>
-        <dd>{data.event_type}</dd>
+        <dt className="font-semibold text-gray-800 flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.eventType', 'Eventtyp')}</dt>
+        <dd>{translateEventType(t, data.event_type)}</dd>
       </div>
       <div>
-        <dt className="font-semibold text-gray-800 flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.showType')}</dt>
-        <dd>{data.show_type}</dd>
+        <dt className="font-semibold text-gray-800 flex items-center gap-2"><CalendarDays className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.showType', 'Show-Typ')}</dt>
+        <dd>{translateShowType(t, data.show_type)}</dd>
       </div>
       <div>
         <dt className="font-semibold text-gray-800 flex items-center gap-2"><ListChecks className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.disciplines')}</dt>
-        <dd>{data.disciplines.join(', ')}</dd>
+        <dd>{(data.disciplines || []).map((d) => translateDiscipline(t, d)).join(', ')}</dd>
       </div>
       <div>
         <dt className="font-semibold text-gray-800 flex items-center gap-2"><Users className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.teamSize')}</dt>
-        <dd>{Number(data.team_size) === 3 ? 'Gruppe' : data.team_size}</dd>
+        <dd>{translateTeamSize(t, data.team_size)}</dd>
       </div>
       <div>
         <dt className="font-semibold text-gray-800 flex items-center gap-2"><Clock className="h-4 w-4 text-blue-600" /> {t('booking.showtime.summary.labels.duration')}</dt>

@@ -59,7 +59,7 @@ const Footer04Page = () => {
 
   const mainLinks = [
     { title: t("footer.mainLinks.mediamaterial"), href: "/mediamaterial" },
-    { title: t("footer.mainLinks.showsAndFormate"), href: "/shows&formate" },
+    { title: t("footer.mainLinks.showsAndFormate"), href: "/shows" },
     { title: t("footer.mainLinks.referenzen"), href: "/referenzen" },
     { title: t("footer.mainLinks.faq"), href: "/faq" },
     { title: t("footer.mainLinks.agenturUndTeam"), href: "/agentur" },
