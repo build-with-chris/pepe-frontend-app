@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Download, ExternalLink, Image as ImageIcon, FileText, Palette, Type as TypeIcon, Camera, MessageSquare } from "lucide-react";
+import { Download, ExternalLink, Image as ImageIcon, Palette, Type as TypeIcon, Camera, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useTranslation } from "react-i18next";

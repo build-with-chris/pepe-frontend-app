@@ -32,7 +32,7 @@ const Gallery23 = () => {
   }, []);
 
   return (
-    <section className="bg-black text-white mb-10 mx-5">
+    <section className="bg-black text-white mb-10 mx-5 cv-auto">
       <div className="container p-6 md:p-8 lg:p-10">
         <div className="relative flex flex-col items-center gap-10 md:gap-12 bg-black p-10 py-20 md:flex-row md:items-start">
           <div className="flex h-142 flex-col justify-center items-center text-center w-full md:flex-1 md:min-w-0 md:pr-10">
@@ -101,6 +101,9 @@ const Gallery23 = () => {
                 </AnimatePresence>
                 <img
                   src={image.image}
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
                   className="size-full object-cover"
                   alt={image.title}
                 />

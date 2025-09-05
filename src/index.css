@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Enforce non-blocking text for Adobe Fonts */
+@font-face {
+  font-family: "futura-pt";
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -145,6 +151,12 @@
   .lead { @apply text-lg md:text-xl text-muted-foreground; }
   .eyebrow { @apply uppercase tracking-widest text-xs md:text-sm text-muted-foreground; }
   .button-text { @apply font-semibold tracking-wide; }
+}
+
+@layer utilities {
+  /* Performance helpers: defer rendering until visible, with intrinsic placeholder size */
+  .cv-auto { content-visibility: auto; contain-intrinsic-size: 1000px 800px; }
+  .cv-auto-sm { content-visibility: auto; contain-intrinsic-size: 800px 600px; }
 }
 
 [data-page="home"] body,

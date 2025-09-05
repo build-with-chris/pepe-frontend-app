@@ -1,6 +1,6 @@
 import PepesParticles from "@/components/InteractivePepeParticles";
 import hero from "../assets/PepeHero.webp"
-import pepeMobile from "../assets/PEPE.png";
+import pepeMobile from "../assets/PEPE.webp";
 import { useEffect, useState, useMemo, useRef } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle, AnimatedArrow } from "@/components/ui/resizable";
 import type { ImperativePanelGroupHandle } from "react-resizable-panels";
@@ -11,6 +11,7 @@ import { Cta10 } from "@/components/cta10";
 import { useTranslation } from "react-i18next";
 import { Bento1 } from "@/components/bento1";
 import ConsentBannerLite from '@/components/ConsentBannerLite';
+import { useLazyVideo } from "@/hooks/useLazyVideo";
 
 const THRESHOLD = 45; // %
 
@@ -44,6 +45,10 @@ export default function Home() {
 
   const [carouselApi, setCarouselApi] = useState<any>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // --- Use refs for lazy video loading ---
+  const desktopVideosRef = useLazyVideo();
+  const mobileVideosRef = useLazyVideo();
 
   const artistImagesSmall = [
     { src: "/images/Slider/Artist1.webp", name: "Carmen" },
@@ -178,33 +183,42 @@ export default function Home() {
     return shuffledSmall;
   }, [rightSize, shuffledSmall]);
 
+
   return (
     <>
       <div className="hidden md:block">
         <div
           id="hero"
-          className="relative w-screen min-h-[85vh] bg-black bg-center bg-no-repeat bg-cover"
-          style={{
-            backgroundImage: `url(${hero})`,
-            backgroundPosition: `center ${startOffset + offset}px`,
-            backgroundSize: 'cover',
-            backgroundAttachment: 'scroll'
-          }}
+          className="relative w-screen min-h-[85vh] bg-black overflow-hidden"
         >
+          {/* Hero image as real element so it can be prioritized as LCP */}
+          <picture>
+            <source srcSet={hero} type="image/webp" />
+            <img
+              src={hero}
+              alt="PepeShows Hero"
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 w-full h-full object-cover will-change-transform"
+              style={{ transform: `translateY(${startOffset + offset}px)` }}
+            />
+          </picture>
+
           {/* Dark overlay to dim the hero image */}
           <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+
           {/* Pepe Canvas unten mittig */}
           <div className="pointer-events-none absolute inset-x-0 -bottom-12 md:-bottom-5 z-10 flex justify-center">
             <div className="relative w-full max-w-[1080px] aspect-[8/3] overflow-hidden">
               <PepesParticles />
             </div>
-          </div>          
+          </div>
         </div>
       </div>
 
       {/* Mobile-only hero image */}
       <div className="block md:hidden w-full flex items-center justify-center py-8 px-4">
-        <img src={pepeMobile} alt="Pepe" className="max-w-full h-auto" />
+        <img src={pepeMobile} alt="Pepe" loading="lazy" decoding="async" className="max-w-full h-auto" />
       </div>
 
       
@@ -276,15 +290,19 @@ export default function Home() {
                       {s.mediaType === "video" ? (
                         <video
                           key={s.mediaSrc}
-                          src={s.mediaSrc}
+                          ref={desktopVideosRef}
                           autoPlay
                           muted
                           loop
                           playsInline
-                          preload="auto"
+                          preload="none"
                           aria-label="PepeShows Showcase Video"
                           className="absolute inset-0 w-full h-full object-cover"
-                        />
+                          {...({ 'webkit-playsinline': 'true' } as any)}
+                        >
+                          <source data-src={s.mediaSrc} type="video/webm" />
+                          <source data-src={s.mediaSrc.replace(/\.webm$/, ".mp4")} type="video/mp4" />
+                        </video>
                       ) : (
                         <img
                           src={s.mediaSrc}
@@ -340,15 +358,19 @@ export default function Home() {
                         {s.mediaType === "video" ? (
                           <video
                             key={s.mediaSrc}
-                            src={s.mediaSrc}
+                            ref={mobileVideosRef}
                             autoPlay
                             muted
                             loop
                             playsInline
-                            preload="auto"
+                            preload="none"
                             aria-label="PepeShows Showcase Video"
                             className="absolute inset-0 w-full h-full object-cover"
-                          />
+                            {...({ 'webkit-playsinline': 'true' } as any)}
+                          >
+                            <source data-src={s.mediaSrc} type="video/webm" />
+                            <source data-src={s.mediaSrc.replace(/\.webm$/, ".mp4")} type="video/mp4" />
+                          </video>
                         ) : (
                           <img
                             src={s.mediaSrc}

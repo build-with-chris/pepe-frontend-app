@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLazyVideo } from "@/hooks/useLazyVideo";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { Sparkles, Drama, Flashlight, ArrowRight } from "lucide-react";
 import { FlickeringGrid } from "@/components/magicui/flickering-grid";
@@ -78,6 +79,9 @@ const Bento1 = () => {
     : false;
   const images = isMobile ? sliderImagesMobile : sliderImages;
 
+  const videoSrc = isMobile ? "/videos/bentoVideoMobile.mp4" : "/videos/BentoVideo.mp4";
+  const spotlightVideoRef = useLazyVideo();
+
   useEffect(() => {
     setSlide((s) => s % images.length);
     if (isPaused) return;
@@ -89,7 +93,7 @@ const Bento1 = () => {
   }, [images.length, isPaused, isMobile]);
 
   return (
-    <section className="sm:pt-16 sm:pb-8 md:py-16">
+    <section className="sm:pt-16 sm:pb-8 md:py-16 cv-auto">
       <div className="container">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
           <Card className="group relative h-60 overflow-hidden rounded-xl border border-white/10 bg-black transition md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full">
@@ -277,16 +281,20 @@ const Bento1 = () => {
           >
             <div className="absolute inset-0">
               <video
+                ref={spotlightVideoRef}
                 autoPlay
                 loop
                 muted
                 playsInline
+                {...({ 'webkit-playsinline': 'true' } as any)}
+                preload="none"
+                data-src={videoSrc}
+                poster="/images/Bento1/Slider3Mobile.webp"
                 className="absolute inset-0 h-full w-full object-cover"
-                style={{ filter: revealAll ? "brightness(1)" : undefined }}
-              >
-                <source src="/videos/bentoVideoMobile.webm" type="video/webm" media="(max-width: 639px)" />
-                <source src="/videos/BentoVideo.webm" type="video/webm" />
-              </video>
+                style={{ filter: revealAll ? 'brightness(1)' : undefined }}
+                onPointerDown={(e) => { const v = e.currentTarget; if (v.paused) { try { v.muted = true; v.play().catch(() => {}); } catch {} } }}
+                onTouchStart={(e) => { const v = e.currentTarget; if (v.paused) { try { v.muted = true; v.play().catch(() => {}); } catch {} } }}
+              />
               {!revealAll && (
                 <>
                   {/* Global dark layer with a circular hole (mask) at the spotlight */}

@@ -2,9 +2,11 @@ import { CircleArrowRight, Files, Settings } from "lucide-react";
 import AboutImage1 from "/images/About1/About1.1.webp";
 import AboutImage2 from "/images/About1/About1.2.webp";
 import { useTranslation } from "react-i18next";
+import { useLazyVideo } from "@/hooks/useLazyVideo";
 
 const About1 = () => {
   const { t } = useTranslation();
+  const videoRef = useLazyVideo();
   return (
     <section className="py-32 bg-black text-white">
       <div className="container flex flex-col gap-28 px-4 sm:px-6 lg:px-0">
@@ -48,13 +50,18 @@ const About1 = () => {
             </h2>
             <div className="flex justify-center md:mt-10 md:-ml-20">
               <video
-                src="/videos/Short Trailer.webm"
+                ref={videoRef}
+                preload="none"
+                {...({ 'webkit-playsinline': 'true' } as any)}
                 muted
                 autoPlay
                 loop
                 playsInline
                 className="w-full max-w-2xl h-auto object-cover rounded-2xl"
-              />
+              >
+                <source data-src="/videos/Short Trailer.webm" type="video/webm" />
+                <source data-src="/videos/Short Trailer.mp4" type="video/mp4" />
+              </video>
             </div>
           </div>
           <div className="md:mt-35">

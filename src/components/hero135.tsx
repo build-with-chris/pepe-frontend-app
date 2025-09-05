@@ -2,9 +2,9 @@
 import { Play } from "lucide-react";
 import { Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLazyVideo } from "@/hooks/useLazyVideo";
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import {
 const Hero135 = () => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const { t } = useTranslation();
+  const videoRef = useLazyVideo();
 
   return (
     <Fragment>
@@ -34,12 +35,17 @@ const Hero135 = () => {
                 <AspectRatio ratio={1}>
                   <div className="size-full">
                     <video
-                      src="/videos/Vorschauloop.webm"
+                      preload="none"
+                      {...({ 'webkit-playsinline': 'true' } as any)}
+                      ref={videoRef}
                       muted
                       autoPlay
                       loop
                       className="size-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    />
+                    >
+                      <source data-src="/videos/Vorschauloop.webm" type="video/webm" />
+                      <source data-src="/videos/Vorschauloop.mp4" type="video/mp4" />
+                    </video>
              
                     {/* Full overlay center play button */}
                     <button

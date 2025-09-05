@@ -8,4 +8,4 @@ export default function Shows() {
             <About1 />
         </div>
     )
-}
+}    

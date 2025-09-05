@@ -24,7 +24,7 @@ const Cta10 = ({
 }: Cta10Props) => {
   const { t } = useTranslation();
   return (
-    <section className="bg-black text-white pt-12 md:py-16 px-6 md:px-12 lg:pt-20">
+    <section className="bg-black text-white pt-12 md:py-16 px-6 md:px-12 lg:pt-20 cv-auto">
       <div className="w-full ">
         <div className="w-full flex flex-col lg:flex-row gap-8 lg:gap-16 overflow-hidden rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm p-8 lg:p-12 hover:bg-white/10 transition">
           <div className="flex-1">
