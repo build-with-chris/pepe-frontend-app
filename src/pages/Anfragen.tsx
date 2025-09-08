@@ -101,6 +101,27 @@ export default function Anfragen() {
       setStepIndex(0);
     }
   }, []);
+
+  useEffect(() => {
+    // Support starting at a specific step via URL params
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const stepParam = params.get('step');
+      const skipIntro = params.get('skipIntro');
+
+      if (stepParam) {
+        const s = Math.max(1, Math.min(steps.length, Number(stepParam) || 1));
+        setStepIndex(s);
+        try { localStorage.setItem('bookingStep', String(s)); } catch {}
+        return;
+      }
+
+      if (skipIntro === '1' || skipIntro === 'true') {
+        setStepIndex(1); // jump to first real step
+        try { localStorage.setItem('bookingStep', '1'); } catch {}
+      }
+    } catch {}
+  }, []);
   const CurrentStep = steps[stepIndex - 1];
 
   const onNext = () => {
