@@ -1,19 +1,16 @@
 import PepesParticles from "@/components/InteractivePepeParticles";
 import hero from "../assets/PepeHero.webp"
 import pepeMobile from "../assets/PEPE.webp";
-import { useEffect, useState, useMemo, useRef } from "react";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle, AnimatedArrow } from "@/components/ui/resizable";
-import type { ImperativePanelGroupHandle } from "react-resizable-panels";
-import { Carousel, CarouselContent, CarouselItem} from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
-import { Gallery23 } from "@/components/gallery23";
-import { Cta10 } from "@/components/cta10";
+import { useEffect, useState, useMemo, useRef, Suspense, lazy } from "react";
+import { AnimatedArrow } from "@/components/ui/resizable";
+import { SpotlightsFixed } from "@/components/SpotlightsFixed";
 import { useTranslation } from "react-i18next";
-import { Bento1 } from "@/components/bento1";
 import ConsentBannerLite from '@/components/ConsentBannerLite';
-import { useLazyVideo } from "@/hooks/useLazyVideo";
 
-const THRESHOLD = 45; // %
+const Bento1 = lazy(() => import("@/components/bento1").then(m => ({ default: m.Bento1 })));
+const Cta10 = lazy(() => import("@/components/cta10").then(m => ({ default: m.Cta10 })));
+const Gallery23 = lazy(() => import("@/components/gallery23").then(m => ({ default: m.Gallery23 })));
+
 
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -29,26 +26,32 @@ function shuffleArray<T>(arr: T[]): T[] {
 export default function Home() {
   const { t } = useTranslation();
 
-  const groupRef = useRef<ImperativePanelGroupHandle | null>(null);
-
-  const handleJump = (target: number) => {
-    const handle = groupRef.current;
-    if (!handle) return;
-    const clamped = Math.max(0, Math.min(100, target));
-    // Layout order corresponds to [leftPanel, rightPanel]
-    handle.setLayout([100 - clamped, clamped]);
-  };
-
   const [offset, setOffset] = useState(0);
-  const [rightSize, setRightSize] = useState(20); // sync with right panel defaultSize
   const startOffset = -90; // start lower on the page
+  const [autoplayPlugin, setAutoplayPlugin] = useState<any>(null);
 
-  const [carouselApi, setCarouselApi] = useState<any>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(min-width: 768px)');
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const mod = await import('embla-carousel-autoplay');
+        if (!cancelled) {
+          const plugin = mod.default({ delay: 3200, stopOnInteraction: false });
+          setAutoplayPlugin(plugin);
+        }
+      } catch {}
+    };
+    if (mq.matches) load();
+    const onChange = (e: MediaQueryListEvent) => { if (e.matches && !autoplayPlugin) load(); };
+    mq.addEventListener ? mq.addEventListener('change', onChange) : mq.addListener(onChange);
+    return () => {
+      cancelled = true;
+      mq.removeEventListener ? mq.removeEventListener('change', onChange) : mq.removeListener(onChange);
+    };
+  }, []);
 
-  // --- Use refs for lazy video loading ---
-  const desktopVideosRef = useLazyVideo();
-  const mobileVideosRef = useLazyVideo();
 
   const artistImagesSmall = [
     { src: "/images/Slider/Artist1.webp", name: "Carmen" },
@@ -148,40 +151,7 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    if (!carouselApi) return;
-    const onSelect = () => setCurrentIndex(carouselApi.selectedScrollSnap());
-    onSelect();
-    carouselApi.on("select", onSelect);
-    return () => {
-      try { carouselApi.off("select", onSelect); } catch {}
-    };
-  }, [carouselApi]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const handle = groupRef.current;
-    const mq = window.matchMedia("(min-width: 768px) and (max-width: 1023px)");
-
-    const applyTabletSize = () => {
-      if (!handle) return;
-      if (mq.matches) {
-        // left = 60, right = 40 when tablet
-        handle.setLayout([60, 40]);
-        setRightSize(40);
-      }
-    };
-
-    applyTabletSize();
-    mq.addEventListener ? mq.addEventListener("change", applyTabletSize) : mq.addListener(applyTabletSize);
-    return () => {
-      mq.removeEventListener ? mq.removeEventListener("change", applyTabletSize) : mq.removeListener(applyTabletSize);
-    };
-  }, []);
-
-  const activeArtists = useMemo(() => {
-    return shuffledSmall;
-  }, [rightSize, shuffledSmall]);
+  // (removed carouselApi, currentIndex, rightSize, groupRef, and related effects)
 
 
   return (
@@ -189,7 +159,7 @@ export default function Home() {
       <div className="hidden md:block">
         <div
           id="hero"
-          className="relative w-screen min-h-[85vh] bg-black overflow-hidden"
+          className="relative w-screen min-h-[85vh] bg-black overflow-hidden mt-20 -mb-20"
         >
           {/* Hero image as real element so it can be prioritized as LCP */}
           <picture>
@@ -218,197 +188,36 @@ export default function Home() {
 
       {/* Mobile-only hero image */}
       <div className="block md:hidden w-full flex items-center justify-center py-8 px-4">
-        <img src={pepeMobile} alt="Pepe" loading="lazy" decoding="async" className="max-w-full h-auto" />
+        <img
+          src={pepeMobile}
+          alt="Pepe"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          width={960}
+          height={540}
+          className="max-w-full h-auto"
+        />
       </div>
 
       
           {/* Textblock 1 nach Hero */}
           <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
 
-        <Bento1 />
+        <Suspense fallback={null}>
+          <Bento1 />
+        </Suspense>
         </div>
   
 
       <div className="h-px w-full max-w-none mx-auto my-16 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
-      {/* Desktop/Tablet: horizontal layout */}
-      <div className="hidden md:block">
-        <ResizablePanelGroup
-          ref={groupRef}
-          direction="horizontal"
-          className="w-full mx-auto my-12 px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 rounded-lg overflow-hidden"
-          onLayout={(sizes: number[]) => {
-            // sizes[1] is the right panel when there are two panels
-            if (Array.isArray(sizes) && sizes.length > 1) {
-              setRightSize(sizes[1]);
-            }
-          }}
-        >
-          <ResizablePanel defaultSize={75} minSize={40} className="flex flex-col justify-center px-8 md:px-10 py-10 bg-black/50 w-full">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-6 text-white text-left">
-              {t("home.findArtistTitle")}
-            </h2>
-            <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg leading-relaxed text-left">
-              {t("home.findArtistSubtitle")}
-            </p>
-            <div className="flex flex-row gap-4">
-            <a href="/anfragen">
-              <button className="bg-[#3c4a8f] hover:bg-[#2d366d] text-white font-semibold px-7 py-3.5 rounded-full transition-colors duration-200 cursor-pointer text-sm md:text-base">
-                {t("home.findArtistButton")}
-              </button>
-            </a>
-            <AnimatedArrow />
-            </div>
-            <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg leading-relaxed text-left">{t("home.findArtistTime")}</p>
-          </ResizablePanel>
-          
-
-          <ResizableHandle
-            withHandle
-            withLottie={rightSize <= 30.5}
-            lottieSrc="https://lottie.host/da09d1f8-6469-4592-a1af-2bd5570a30b5/pQjA8tzdWc.lottie"
-            className="bg-white/10 hover:bg-white/20 transition-colors"
-            jumpTo={THRESHOLD}
-            onJump={handleJump}
-          />
-          <ResizablePanel
-            defaultSize={typeof window !== "undefined" && window.innerWidth >= 768 && window.innerWidth < 1024 ? 40 : 30}
-            minSize={30}
-            maxSize={45}
-            className="bg-black w-full min-h-[420px] p-2"
-          >
-            <Carousel
-              className="h-full min-h-[420px]"
-              opts={{ loop: true }}
-              plugins={[Autoplay({ delay: 3200, stopOnInteraction: false })]}
-              setApi={setCarouselApi}
-            >
-              <CarouselContent className="h-full">
-                {shuffledSpotlights.map((s, i) => (
-                  <CarouselItem key={i} className="h-full p-3">
-                    <div className="relative w-full h-full overflow-hidden rounded-xl ring-1 ring-white/12 shadow-lg">
-                      {s.mediaType === "video" ? (
-                        <video
-                          key={s.mediaSrc}
-                          ref={desktopVideosRef}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          preload="none"
-                          aria-label="PepeShows Showcase Video"
-                          className="absolute inset-0 w-full h-full object-cover"
-                          {...({ 'webkit-playsinline': 'true' } as any)}
-                        >
-                          <source data-src={s.mediaSrc} type="video/webm" />
-                          <source data-src={s.mediaSrc.replace(/\.webm$/, ".mp4")} type="video/mp4" />
-                        </video>
-                      ) : (
-                        <img
-                          src={s.mediaSrc}
-                          alt={s.title}
-                          className="absolute inset-0 w-full h-full object-cover"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-
-                      {/* Tags */}
-                      {s.tags && (
-                        <div className="absolute top-3 left-3 right-3 flex flex-wrap gap-2">
-                          {s.tags.map((tag, idx) => (
-                            <span
-                              key={idx}
-                              className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-2 py-1 text-[10px] font-medium text-white/90 backdrop-blur-sm"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Text overlay */}
-                      <div className="absolute bottom-3 left-3 right-3 text-white">
-                        {s.kicker && (
-                          <div className="text-[11px] uppercase tracking-widest opacity-80">{s.kicker}</div>
-                        )}
-                        <div className="text-base md:text-lg font-semibold leading-snug">{s.title}</div>
-                        {s.subtitle && (
-                          <div className="text-xs opacity-80 mt-0.5">{s.subtitle}</div>
-                        )}
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      </div>
+      {/* Desktop/Tablet: horizontal layout (fixed, no resize) */}
+      <SpotlightsFixed spotlights={shuffledSpotlights} autoplayPlugin={autoplayPlugin} />
 
       {/* Mobile: simple text block (no resizable) */}
       <div className="block md:hidden w-full mx-auto my-6 px-4">
         <div className="bg-black/50 rounded-lg p-6">
-          <div className="w-full mb-6">
-            <div className="relative w-full overflow-hidden rounded-lg aspect-[16/9] bg-black/40 ring-1 ring-white/10">
-              <Carousel className="absolute inset-0" opts={{ loop: true }} plugins={[Autoplay({ delay: 3200, stopOnInteraction: false })]}>
-                <CarouselContent className="h-full">
-                  {shuffledSpotlights.map((s, i) => (
-                    <CarouselItem key={i} className="h-full">
-                      <div className="relative w-full h-full">
-                        {s.mediaType === "video" ? (
-                          <video
-                            key={s.mediaSrc}
-                            ref={mobileVideosRef}
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            preload="none"
-                            aria-label="PepeShows Showcase Video"
-                            className="absolute inset-0 w-full h-full object-cover"
-                            {...({ 'webkit-playsinline': 'true' } as any)}
-                          >
-                            <source data-src={s.mediaSrc} type="video/webm" />
-                            <source data-src={s.mediaSrc.replace(/\.webm$/, ".mp4")} type="video/mp4" />
-                          </video>
-                        ) : (
-                          <img
-                            src={s.mediaSrc}
-                            alt={s.title}
-                            className="absolute inset-0 w-full h-full object-cover"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-                        {/* Tags */}
-                        {s.tags && (
-                          <div className="absolute top-2 left-2 right-2 flex flex-wrap gap-1">
-                            {s.tags.map((tag, idx) => (
-                              <span
-                                key={idx}
-                                className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur-sm"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        {/* Text overlay */}
-                        <div className="absolute bottom-2 left-2 right-2 text-white">
-                          {s.kicker && (
-                            <div className="text-[10px] uppercase tracking-widest opacity-80">{s.kicker}</div>
-                          )}
-                          <div className="text-sm font-semibold leading-snug">{s.title}</div>
-                          {s.subtitle && (
-                            <div className="text-[11px] opacity-80 mt-0.5">{s.subtitle}</div>
-                          )}
-                        </div>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-            </div>
-          </div>
           <h2 className="text-xl font-bold mb-3 text-white text-left">
             {t("home.findArtistTitle")}
           </h2>
@@ -429,22 +238,26 @@ export default function Home() {
 
             
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
-        <Cta10
-          heading={t("home.cta.heading")}
-          description={t("home.cta.description")}
-          buttons={{
-            primary: {
-              text: t("home.cta.button"),
-              url: "/agentur",
-            },
-          }}
-        />
+        <Suspense fallback={null}>
+          <Cta10
+            heading={t("home.cta.heading")}
+            description={t("home.cta.description")}
+            buttons={{
+              primary: {
+                text: t("home.cta.button"),
+                url: "/agentur",
+              },
+            }}
+          />
+        </Suspense>
       </div>
       <div className="h-12 bg-gradient-to-b from-black via-gray-900 to-black" />
  
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
 
-      <Gallery23 />
+      <Suspense fallback={null}>
+        <Gallery23 />
+      </Suspense>
       
       </div>
       <ConsentBannerLite />

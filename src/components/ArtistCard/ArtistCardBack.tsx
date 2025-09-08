@@ -1,16 +1,7 @@
+import { mergeGallery, normalizeInstagram } from "@/types/artist";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-
-export interface Artist {
-  id: number;
-  name: string;
-  profile_image_url?: string | null;
-  bio?: string | null;
-  disciplines?: string[] | null;
-  gallery?: string[] | null;
-  gallery_urls?: string[] | null;
-  quote?: string | null;
-  instagram?: string | null;
-}
+import type { Artist } from "@/types/artist";
+import React from "react";
 
 interface ArtistCardBackProps {
   artist: Artist;
@@ -18,17 +9,15 @@ interface ArtistCardBackProps {
 }
 
 const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
-  const images = [...(artist.gallery ?? []), ...(artist.gallery_urls ?? [])].filter(Boolean);
+  const images = mergeGallery(artist);
 
+  const quote = (artist?.quote?.trim() || artist?.bio?.trim() || "Kunst ist der kürzeste Weg zum Staunen.");
 
-  const quote =
-    artist?.quote?.trim() ||
-    (artist?.bio?.split(".")[0]?.trim()
-      ? `„${artist.bio.split(".")[0]}.“`
-      : "„Kunst ist der kürzeste Weg zum Staunen.“");
+  const [enlargedIndex, setEnlargedIndex] = React.useState<number | null>(null);
+  const enlarged = enlargedIndex !== null ? images[enlargedIndex] : null;
 
   return (
-    <div className="absolute inset-0 bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700 [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col">
+    <div className="absolute inset-0 bg-gray-800 rounded-lg shadow-lg overflow-y-auto border border-gray-700 [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col">
       {/* Carousel */}
       <div
         className="relative w-full h-60 md:h-80 bg-gray-900"
@@ -37,6 +26,7 @@ const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
         {images.length > 0 ? (
           <Carousel
             className="w-full h-full"
+            opts={{ loop: true }}
           >
             <CarouselContent>
               {images.map((src, idx) => (
@@ -45,21 +35,20 @@ const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
                     src={src}
                     alt={`${artist.name} – Bild ${idx + 1}`}
                     className="w-full h-full object-contain bg-black"
+                    loading="lazy"
+                    decoding="async"
                     onClick={(e) => {
                       e.stopPropagation();
+                      setEnlargedIndex(idx);
                     }}
                   />
                 </CarouselItem>
               ))}
             </CarouselContent>
             <>
-              <CarouselPrevious
-                className="absolute left-2 top-1/2 -translate-y-1/2"
-                onMouseDown={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
-              />
               <CarouselNext
-                className="absolute right-2 top-1/2 -translate-y-1/2"
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-10 rounded-full bg-white/30 hover:bg-white/40 text-white border border-white/50 shadow-md backdrop-blur-sm w-10 h-10"
+                aria-label="Nächstes Bild"
                 onMouseDown={(e) => e.stopPropagation()}
                 onTouchStart={(e) => e.stopPropagation()}
               />
@@ -74,9 +63,7 @@ const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
 
       {/* Inhalt */}
       <div className="relative flex-1 p-4 flex flex-col">
-        <blockquote className="text-gray-200 italic leading-relaxed">
-          {quote}
-        </blockquote>
+        <blockquote className="text-gray-200 italic leading-relaxed">„{quote}“</blockquote>
         <div className="mt-2 h-px bg-white/10" />
         <div className="mt-3 text-sm text-gray-400">
           <span className="text-gray-300 font-medium">{artist.name}</span>
@@ -112,7 +99,7 @@ const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
         {/* Instagram Link */}
         {artist.instagram && (
           <a
-            href={artist.instagram}
+            href={normalizeInstagram(artist.instagram)}
             target="_blank"
             rel="noopener noreferrer"
             className="absolute bottom-3 right-3 text-pink-400 hover:text-pink-300"
@@ -128,8 +115,35 @@ const ArtistCardBack: React.FC<ArtistCardBackProps> = ({ artist, onFlip }) => {
             </svg>
           </a>
         )}
+      </div>
+      {enlarged && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          onClick={(e) => {
+            e.stopPropagation();
+            setEnlargedIndex(null);
+          }}
+        >
+          <img
+            src={enlarged}
+            alt="Enlarged"
+            className="max-w-[90%] max-h-[90%] object-contain rounded shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            className="absolute right-5 top-1/2 -translate-y-1/2 z-50 rounded-full bg-white/30 hover:bg-white/40 text-white border border-white/50 shadow-md backdrop-blur-sm w-12 h-12 flex items-center justify-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (images.length > 0 && enlargedIndex !== null) {
+                setEnlargedIndex((enlargedIndex + 1) % images.length);
+              }
+            }}
+          >
+            ›
+          </button>
         </div>
-        </div>
+      )}
+    </div>
   );
 };
 

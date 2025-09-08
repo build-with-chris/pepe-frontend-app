@@ -1,18 +1,7 @@
-
-
 import React from "react";
 import ArtistCardFront from "./ArtistCardFront";
 import ArtistCardBack from "./ArtistCardBack";
-
-export interface Artist {
-  id: number;
-  name: string;
-  profile_image_url?: string | null;
-  bio?: string | null;
-  disciplines?: string[] | null;
-  gallery?: string[] | null;
-  quote?: string | null;
-}
+import type { Artist } from "@/types/artist";
 
 interface ArtistCardProps {
   artist: Artist;
@@ -20,10 +9,29 @@ interface ArtistCardProps {
 
 const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
   const [flipped, setFlipped] = React.useState(false);
+  const idRef = React.useRef(Math.random().toString(36).substr(2, 9));
 
-  const handleFlip = () => setFlipped((f) => !f);
+  const handleFlip = () => {
+    if (!flipped) {
+      const event = new CustomEvent("artistCardFlip", { detail: idRef.current });
+      window.dispatchEvent(event);
+      setFlipped(true);
+    } else {
+      setFlipped(false);
+    }
+  };
   const flipToFront = () => setFlipped(false);
   const flipToBack = () => setFlipped(true);
+
+  React.useEffect(() => {
+    const handler = (e: any) => {
+      if (e.detail !== idRef.current) {
+        setFlipped(false);
+      }
+    };
+    window.addEventListener("artistCardFlip", handler);
+    return () => window.removeEventListener("artistCardFlip", handler);
+  }, []);
 
   return (
     <div

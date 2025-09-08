@@ -33,6 +33,7 @@ const Navbar01Page = () => {
   const [show, setShow] = useState(true);
   const [lastY, setLastY] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [atTop, setAtTop] = useState(true);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -41,6 +42,7 @@ const Navbar01Page = () => {
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY || 0;
+      setAtTop(y === 0);
       // Immer sichtbar nahe am Seitenanfang
       if (y < 8) {
         setShow(true);
@@ -75,7 +77,7 @@ const Navbar01Page = () => {
       <nav
         className={`fixed top-0 left-0 right-0 w-full h-26 z-50 transition-transform duration-300 ${
           show ? 'translate-y-0' : '-translate-y-full'
-        } ${isHomeOrArtists ? 'bg-black/50 backdrop-blur' : 'bg-black/90 backdrop-blur'}
+        } ${location.pathname === '/home' && lastY <= 60 ? 'bg-black backdrop-blur' : (isHomeOrArtists ? 'bg-black/50 backdrop-blur' : 'bg-black/90 backdrop-blur')}
         `}
       >
         <div className="h-full flex items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">

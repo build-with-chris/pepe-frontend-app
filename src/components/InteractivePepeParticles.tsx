@@ -168,13 +168,6 @@ export default function InteractivePepeParticles() {
         const mouse = mouseRef.current;
         const lastMouse = lastMouseRef.current;
 
-        // debug: Mausposition als roter Punkt
-        if (mouse.x >= 0 && mouse.y >= 0) {
-          ctx.fillStyle = 'blue';
-          ctx.beginPath();
-          ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
-          ctx.fill();
-        }
 
         particles.forEach(p => {
           // Repulsion: inverse-quadratisch + boost bei schneller Mausbewegung

@@ -197,7 +197,7 @@ const Footer04Page = () => {
                     <Button type="submit" className="relative z-[1]" disabled={loading || !tsToken || !/.+@.+\..+/.test(email)}>
                       {loading ? t("footer.newsletter.loading") : t("footer.newsletter.button")}
                     </Button>
-                    <div className="md:block pointer-events-none absolute -top-14 left-1/2 -translate-x-1/2 md:w-16 md:h-16 lg:w-20 lg:h-20">
+                    <div className="hidden md:block pointer-events-none absolute -top-14 left-1/2 -translate-x-1/2 md:w-16 md:h-16 lg:w-20 lg:h-20" aria-hidden="true">
                       <DotLottieReact
                         src="https://lottie.host/624aabe7-916a-416f-b6c2-be3a17f113f9/DyPtBBmqU4.lottie"
                         loop

@@ -33,8 +33,8 @@ const Gallery23 = () => {
 
   return (
     <section className="bg-black text-white mb-10 mx-5 cv-auto">
-      <div className="container p-6 md:p-8 lg:p-10">
-        <div className="relative flex flex-col items-center gap-10 md:gap-12 bg-black p-10 py-20 md:flex-row md:items-start">
+      <div className="container p-4 md:p-8 lg:p-10">
+        <div className="relative flex flex-col items-center gap-8 md:gap-12 bg-black p-5 py-10 md:p-10 md:py-20 md:flex-row md:items-start">
           <div className="flex h-142 flex-col justify-center items-center text-center w-full md:flex-1 md:min-w-0 md:pr-10">
             <h1 className="max-w-lg font-calSans text-white">
               <span className="block text-3xl lg:hidden">{t("gallery23.headingMobile")}</span>
@@ -56,18 +56,18 @@ const Gallery23 = () => {
               <Logos3 />
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center gap-1 w-full md:flex-1 md:min-w-0">
+          <div className="flex flex-col items-center justify-center gap-2 w-full md:flex-1 md:min-w-0 md:max-w-[36rem] lg:max-w-[44rem]">
             {images.map((image, index) => (
               <motion.div
                 key={image.id}
-                initial={{ height: "2.5rem" }}
+                initial={{ height: "3rem" }}
                 animate={{
-                  height: activeImage === index ? "auto" : "2.5rem",
+                  height: activeImage === index ? "auto" : "3rem",
                 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
                 onClick={() => setActiveImage(index)}
                 onHoverStart={() => setActiveImage(index)}
-                className="group relative cursor-pointer overflow-hidden rounded-4xl border w-full max-w-full self-stretch aspect-square"
+                className="group relative cursor-pointer overflow-hidden rounded-4xl border w-full self-stretch max-w-full aspect-[4/3] md:aspect-[5/4] lg:aspect-[16/10]"
               >
                 <AnimatePresence>
                   {activeImage === index && (

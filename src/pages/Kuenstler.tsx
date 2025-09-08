@@ -5,16 +5,33 @@ import { Hero87 } from '@/components/hero87';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useTranslation } from "react-i18next";
 
+import type { Artist } from "@/types/artist";
 
-interface Artist {
-  id: number;
-  name: string;
-  profile_image_url?: string | null;
-  bio?: string | null;
-  disciplines?: string[] | null;
-  gallery?: string[] | null;
-  gallery_urls?: string[] | null;
-  instagram?: string | null;
+type LocalArtist = Artist & { id: number };
+
+function resolveImageUrl(a: any): string {
+  const candidate = (
+    a?.profile_image_url ||
+    a?.profile_image ||
+    a?.image_url ||
+    a?.image ||
+    a?.avatar ||
+    a?.picture ||
+    (a?.media && (a.media.profile || a.media.cover || a.media.url)) ||
+    ""
+  );
+  const s = String(candidate || "").trim();
+  if (!s) return "";
+  // Already absolute (http, https, or protocol-relative)
+  if (/^(https?:)?\/\//i.test(s)) return s;
+  // Leading slash → prefix API URL if available, else window origin
+  if (s.startsWith("/")) {
+    const api = import.meta.env.VITE_API_URL || "";
+    if (api) return `${api}${s}`;
+    try { return `${window.location.origin}${s}`; } catch { return s; }
+  }
+  // Otherwise return as-is (relative path handled by app)
+  return s;
 }
 
 type DisciplineKey =
@@ -51,7 +68,7 @@ const DISCIPLINE_ITEMS: { key: DisciplineKey; match: string }[] = [
 ];
 
 export default function Kuenstler(){
-  const [artists, setArtists] = useState<Artist[]>([]);
+  const [artists, setArtists] = useState<LocalArtist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeFilters, setActiveFilters] = useState<DisciplineKey[]>([]);
@@ -89,17 +106,15 @@ export default function Kuenstler(){
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         const rawList: any[] = Array.isArray(data) ? data : (data?.artists ?? []);
-        const mapped: Artist[] = rawList.map(a => ({
+        const mapped: LocalArtist[] = rawList.map((a) => ({
           id: a.id,
           name: a.name,
-          profile_image_url: a.profile_image_url ?? a.image_url ?? null,
-          bio: a.bio ?? null,
-          disciplines: a.disciplines ?? null,
-          // Galerie-Felder aus dem Backend
-          gallery: Array.isArray(a.gallery) ? a.gallery : null,
+          image: resolveImageUrl(a),
+          bio: a.bio ?? "",
+          disciplines: Array.isArray(a.disciplines) ? a.disciplines : [],
+          gallery: Array.isArray(a.gallery) ? a.gallery : [],
           gallery_urls: Array.isArray(a.gallery_urls) ? a.gallery_urls : [],
-          // Social
-          instagram: a.instagram ?? null,
+          instagram: a.instagram ?? undefined,
         }));
         setArtists(mapped);
       } catch (e: any) {
