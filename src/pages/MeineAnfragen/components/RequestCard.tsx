@@ -1,6 +1,7 @@
 import * as React from "react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import { formatDateTimeDE, getReceivedAt } from "@/utils/dates";
 
 // --- Types (local, aligned with your API shape) ---
 export type Anfrage = {
@@ -178,6 +179,9 @@ export default function RequestCard({
               {request.special_requests}
             </div>
           )}
+          <div className="mt-1 text-xs text-white/60">
+            {t('requests.receivedAt', { defaultValue: 'Eingegangen am' })}: {formatDateTimeDE(getReceivedAt(request))}
+          </div>
         </div>
         <StatusBadge status={request.status} />
       </div>

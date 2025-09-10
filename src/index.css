@@ -1,11 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Enforce non-blocking text for Adobe Fonts */
-@font-face {
-  font-family: "futura-pt";
-  font-display: swap;
-}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -162,4 +157,13 @@
 [data-page="home"] body,
 [data-page="home"] #root {
   background: transparent !important;
+}
+
+/* Accessibility: respect prefers-reduced-motion globally */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -211,7 +211,7 @@ export default function KuenstlerVerwaltung() {
     setActionError(null);
     setDeletingId(artist.id);
     try {
-      const res = await fetch(`${baseUrl}/api/artists/${artist.id}`, {
+      const res = await fetch(`${baseUrl}/admin/artists/${artist.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

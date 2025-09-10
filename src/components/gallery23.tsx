@@ -43,7 +43,7 @@ const Gallery23 = () => {
             <p className="text-md mt-10 max-w-2xl text-gray-300">
               {t("gallery23.subtitle")}
             </p>
-            <Link to="/kontakt">
+            <Link to="/kontakt" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <Button
                 variant="secondary"
                 className="group mt-10 flex w-fit items-center justify-center gap-2 rounded-full tracking-tight bg-white text-black hover:bg-gray-200"
@@ -57,58 +57,58 @@ const Gallery23 = () => {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center gap-2 w-full md:flex-1 md:min-w-0 md:max-w-[36rem] lg:max-w-[44rem]">
-            {images.map((image, index) => (
-              <motion.div
-                key={image.id}
-                initial={{ height: "3rem" }}
-                animate={{
-                  height: activeImage === index ? "auto" : "3rem",
-                }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                onClick={() => setActiveImage(index)}
-                onHoverStart={() => setActiveImage(index)}
-                className="group relative cursor-pointer overflow-hidden rounded-4xl border w-full self-stretch max-w-full aspect-[4/3] md:aspect-[5/4] lg:aspect-[16/10]"
-              >
-                <AnimatePresence>
-                  {activeImage === index && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="absolute h-full w-full bg-gradient-to-t from-black/70 to-transparent"
-                    />
-                  )}
-                </AnimatePresence>
-                <AnimatePresence>
-                  {activeImage === index && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      className="absolute flex h-full w-full flex-col items-end justify-end px-4 pb-5"
-                    >
-                    
-                      <h3 className="text-3xl font-bold text-white">
-                        {image.title.split(" ")[0]}
-                        <span className="font-playfair italic">
-                          {" "}
-                          {image.title.split(" ")[1]}{" "}
-                        </span>
+            {images.map((image, index) => {
+              const first = image.title.split(" ")[0] || image.title;
+              const second = image.title.split(" ")[1] || "";
+              return (
+                <div key={image.id} className="w-full self-stretch max-w-full">
+                  <motion.div
+                    initial={{ height: "3rem" }}
+                    animate={{ height: activeImage === index ? "auto" : "3rem" }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    onClick={() => setActiveImage(index)}
+                    onHoverStart={() => setActiveImage(index)}
+                    className="group relative cursor-pointer overflow-hidden rounded-4xl border w-full self-stretch max-w-full aspect-[4/3] md:aspect-[5/4] lg:aspect-[16/10]"
+                  >
+                    {/* Always-visible top overlay title */}
+                    <div className="absolute inset-x-0 top-0 z-10 flex items-start">
+                      <h3 className="m-2 md:m-3 text-white text-base md:text-lg lg:text-xl font-bold drop-shadow">
+                        {first}
+                        {second && (
+                          <span className="font-playfair italic"> {second} </span>
+                        )}
                       </h3>
-               
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                <img
-                  src={image.image}
-                  loading="lazy"
-                  decoding="async"
-                  fetchPriority="low"
-                  className="size-full object-cover"
-                  alt={image.title}
-                />
-              </motion.div>
-            ))}
+                    </div>
+                    {/* Top gradient for title readability */}
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-16 md:h-20 bg-gradient-to-b from-black/60 to-transparent" />
+                    <AnimatePresence>
+                      {activeImage === index && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="absolute h-full w-full bg-gradient-to-t from-black/70 to-transparent"
+                        />
+                      )}
+                    </AnimatePresence>
+                    <img
+                      src={image.image}
+                      loading="lazy"
+                      decoding="async"
+                      fetchPriority="low"
+                      width={480}
+                      height={360}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 75vw, 50vw"
+                      className={
+                        "size-full object-cover " +
+                        ((image.id === 3 || image.id === 5) ? "[object-position:center_15%]" : "object-center")
+                      }
+                      alt={image.title}
+                    />
+                  </motion.div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

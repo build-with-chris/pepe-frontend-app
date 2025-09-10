@@ -1,4 +1,5 @@
 import React, { useMemo, useEffect, useRef, useState } from "react";
+import { downscaleImages, downscaleImage } from "@/lib/storage/upload";
 
 export interface GalleryUploaderProps {
   galleryUrls: string[];
@@ -21,6 +22,8 @@ export default function GalleryUploader({
 
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerIndex, setViewerIndex] = useState(0);
+  const [optimizing, setOptimizing] = useState(false);
+  const [optProgress, setOptProgress] = useState(0); // 0..100
 
   // Stable previews for local files
   const previews = useMemo(() => (galleryFiles || []).map((f) => URL.createObjectURL(f)), [galleryFiles]);
@@ -57,17 +60,31 @@ export default function GalleryUploader({
     inputRef.current?.click();
   };
 
-  const onFilesSelected: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+  const onFilesSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const pickedAll = Array.from(e.target.files);
     const picked = remaining > 0 ? pickedAll.slice(0, remaining) : [];
     if (picked.length === 0) {
-      e.currentTarget.value = ""; // reset to allow re-selecting same files later
+      e.currentTarget.value = "";
       return;
     }
-    setGalleryFiles((prev) => [...prev, ...picked]);
-    // reset input so picking the same file again still triggers onChange
-    e.currentTarget.value = "";
+
+    setOptimizing(true);
+    setOptProgress(0);
+    try {
+      const scaled: File[] = [];
+      for (let i = 0; i < picked.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        const s = await downscaleImage(picked[i], 1600, 0.85);
+        scaled.push(s);
+        setOptProgress(Math.round(((i + 1) / picked.length) * 100));
+      }
+      setGalleryFiles((prev) => [...prev, ...scaled]);
+    } finally {
+      setOptimizing(false);
+      // reset input so picking the same file again still triggers onChange
+      e.currentTarget.value = "";
+    }
   };
 
   const removeUrl = (index: number) => {
@@ -106,17 +123,17 @@ export default function GalleryUploader({
         <button
           type="button"
           onClick={onPickFiles}
-          disabled={disabled}
+          disabled={disabled || optimizing || remaining === 0}
           className="inline-flex items-center rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-500 disabled:opacity-50"
         >
-          Bilder hinzufügen
+          {optimizing ? 'Optimiere Bilder…' : 'Bilder hinzufügen'}
         </button>
         <input
           ref={inputRef}
           type="file"
           accept="image/*"
           multiple
-          disabled={disabled}
+          disabled={disabled || optimizing || remaining === 0}
           onChange={onFilesSelected}
           className="hidden"
         />
@@ -124,6 +141,18 @@ export default function GalleryUploader({
           <span className="ml-3 align-middle text-xs text-gray-400">
             {currentCount}/{max}
           </span>
+        )}
+        <div className="mt-1 text-xs text-gray-400">
+          Bilder werden automatisch optimiert (max. 1600px) – für schnellere Uploads.
+        </div>
+
+        {optimizing && (
+          <div className="mt-2 h-2 w-full overflow-hidden rounded bg-white/10">
+            <div
+              className="h-2 bg-blue-500 transition-all"
+              style={{ width: `${optProgress}%` }}
+            />
+          </div>
         )}
       </div>
 
@@ -227,6 +256,7 @@ function Tile({
       <img
         src={src}
         alt="Galeriebild"
+        loading="lazy"
         className="h-28 w-full cursor-zoom-in object-cover sm:h-32"
         onClick={onPreview}
       />

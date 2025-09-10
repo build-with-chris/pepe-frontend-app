@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { Sparkles, Drama, ArrowRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,11 +13,14 @@ import { useTranslation } from "react-i18next";
 
 const Bento1 = () => {
   const { t } = useTranslation();
+  const prefersReduced = usePrefersReducedMotion();
   const [showBeams, setShowBeams] = useState(false);
 
 
   const cardRef = useRef<HTMLDivElement | null>(null);
   const inView = useInView(cardRef, { amount: 0.4, margin: "-10% 0px -10% 0px" });
+  const mobileSliderRef = useRef<HTMLDivElement | null>(null);
+  const mobileSliderInView = useInView(mobileSliderRef, { amount: 0.4, margin: "-10% 0px -10% 0px" });
   const controls = useAnimation();
   const isSmallScreen = typeof window !== "undefined"
     ? window.matchMedia && window.matchMedia("(max-width: 639px)").matches
@@ -59,13 +63,14 @@ const Bento1 = () => {
 
   useEffect(() => {
     setSlide((s) => s % images.length);
-    if (isPaused) return;
+    // Pause animation if explicitly paused, (on mobile) when the slider is not in view, or when user prefers reduced motion
+    if (isPaused || (isMobile && !mobileSliderInView) || prefersReduced) return;
     const interval = isMobile ? 4500 : 3500;
     const id = setInterval(() => {
       setSlide((s) => (s + 1) % images.length);
     }, interval);
     return () => clearInterval(id);
-  }, [images.length, isPaused, isMobile]);
+  }, [images.length, isPaused, isMobile, mobileSliderInView, prefersReduced]);
 
   return (
     <section className="sm:pt-16 sm:pb-8 md:py-16 cv-auto">
@@ -94,6 +99,8 @@ const Bento1 = () => {
                 <img
                   src="/images/Bento1/CircusTent.png"
                   alt="Circuszelt mit Luftartistin"
+                  width={1400}
+                  height={900}
                   className="mt-auto h-auto w-full max-w-[1400px] max-h-full select-none object-contain object-center md:object-cover"
                   loading="eager"
                   decoding="async"
@@ -177,7 +184,7 @@ const Bento1 = () => {
             <CardContent className="relative z-20 flex h-full flex-col justify-end p-6 pointer-events-none">
               {/* Visually hidden title for a11y (overlay above shows the visual title) */}
               <h2 className="sr-only">{t("bento1.hero.title")}</h2>
-              {showSparkleAnim && (
+              {showSparkleAnim && !prefersReduced && (
                 <div className="absolute top-4 right-2 sm:right-3 md:right-4 z-30 pointer-events-none">
                   <DotLottieReact
                     src="https://lottie.host/8f8332c8-41ef-4d9d-ad07-d9dd352b1cb4/UVLLlb0OP5.lottie"
@@ -191,7 +198,7 @@ const Bento1 = () => {
                   />
                 </div>
               )}
-              {showGlobalSparkles && (
+              {showGlobalSparkles && !prefersReduced && (
                 <div className="absolute inset-0 z-40 pointer-events-none">
                   <DotLottieReact
                     src="https://lottie.host/e86a7557-375e-4cf6-abc0-c8f0d034b637/mQay5cJDVU.lottie"
@@ -232,9 +239,15 @@ const Bento1 = () => {
               <motion.img
                 src={thirdImage}
                 alt={t("bento1.third.title")}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+                width={1400}
+                height={900}
+                sizes="(max-width: 639px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="absolute inset-0 h-full w-full object-cover"
                 initial={{ scale: 1.02, x: 0, y: 0 }}
-                animate={{ scale: [1.02, 1.08, 1.02], x: [0, 8, 0], y: [0, -8, 0] }}
+                animate={prefersReduced ? { scale: 1.02, x: 0, y: 0 } : { scale: [1.02, 1.08, 1.02], x: [0, 8, 0], y: [0, -8, 0] }}
                 transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
               />
               {/* Soft vignette and readability layer */}
@@ -255,7 +268,7 @@ const Bento1 = () => {
           </Card>
 
           <Card
-            className="group relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-[600px]"
+            className="group relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-[600px] hidden md:block"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
@@ -265,6 +278,10 @@ const Bento1 = () => {
                   key={src}
                   src={src}
                   alt={t("bento1.slider.alt")}
+                  decoding="async"
+                  fetchPriority="low"
+                  width={1400}
+                  height={900}
                   className="absolute inset-0 h-full w-full object-cover"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: i === slide ? 0.9 : 0 }}
@@ -309,6 +326,48 @@ const Bento1 = () => {
             </div>
           </Card>
 
+          {/* Mobile-only Gallery clone to alternate text/media order */}
+          <Card
+            className="group relative h-60 overflow-hidden rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 block md:hidden"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            <div ref={mobileSliderRef} className="absolute inset-0">
+              {images.map((src, i) => (
+                <motion.img
+                  key={src}
+                  src={src}
+                  alt={t("bento1.slider.alt")}
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  width={800}
+                  height={600}
+                  sizes="(max-width: 639px) 100vw, 100vw"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: i === slide ? 0.9 : 0 }}
+                  transition={{ duration: 0.8 }}
+                />
+              ))}
+              <div className="absolute inset-0 bg-black/30" />
+            </div>
+            {/* Subtle top gradient for readability */}
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-10 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
+            {/* Discreet top-centered title */}
+            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none">
+              <h2
+                className="text-center text-white font-semibold text-xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
+                style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
+              >
+                {t("bento1.middle.title")}
+              </h2>
+            </div>
+            <CardContent className="z-10 flex h-full flex-col justify-end p-6">
+              <h2 className="sr-only">{t("bento1.middle.title")}</h2>
+            </CardContent>
+          </Card>
+
 
           <Card className="relative col-span-1 h-60 rounded-xl border border-white/10 bg-neutral-900/80 backdrop-blur-sm transition hover:bg-neutral-900/60 
           md:col-span-2 md:row-span-1 md:h-[300px] lg:col-span-4 lg:h-[300px]">
@@ -317,7 +376,7 @@ const Bento1 = () => {
               <p className="text-gray-300 my-6 text-center text-base md:text-lg lg:text-xl">
                 {t("bento1.values.fairnessBodyPrefix")}{" "}
                 <a
-                  href="https://www.kreativkultur.berlin/en/resource-center/honoraruntergrenzen/"
+                  href="https://darstellende-kuenste.de/themen/soziale-lage#anchor-1376"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline hover:text-white"

@@ -40,9 +40,9 @@ const About1 = () => {
         <div className="grid gap-6 md:grid-cols-2 items-stretch">
           {/* Left text */}
           <div className="flex flex-col justify-center rounded-2xl bg-white/5 backdrop-blur-sm p-8">
-            <h2 className="text-2xl md:text-3xl font-semibold mb-3">innovative showkonzepte</h2>
+            <h2 className="text-2xl md:text-3xl font-semibold mb-3">{t("about1.spotlight.title")}</h2>
             <p className="text-white/80 leading-relaxed">
-              Wir kombinieren Artistik, Musik und Lichtdesign zu modularen Showkonzepten, die sich nahtlos an Location und Publikum anpassen. Ob Gala, Festival oder Corporate Event – unser Ansatz setzt auf Timing, Dynamik und dramaturgische Höhepunkte, die nachhaltig im Gedächtnis bleiben.
+              {t("about1.spotlight.body")}
             </p>
           </div>
 

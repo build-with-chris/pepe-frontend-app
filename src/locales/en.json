@@ -4,6 +4,10 @@
         "title": "Shows & formats – clearly planned, powerfully performed",
         "subtitle": "From short show highlights to full-evening variety: we deliver the right size – including direction, music & costumes. Book solo acts directly or curated ensembles tailored to your event."
       },
+      "spotlight": {
+      "title": "Unusual props, extraordinary shows",
+      "body": "We turn unexpected objects into breathtaking acts: chainsaw juggling, foot archery in a handstand, or aerial acrobatics from a crane — precisely choreographed, safely performed, and unforgettable for your audience."
+    },
       "mission": {
         "kicker": "OUR MISSION",
         "body": "Every event is unique – and that’s exactly how we design our concepts. Our goal: the perfect show for your occasion and a magical moment that lasts."
@@ -1068,12 +1072,13 @@
       "saved": "Profile saved successfully!"
     },
     "errors": {
-      "fillRequired": "Please fill in all required fields.",
-      "minGtMax": "Minimum cannot be greater than maximum.",
-      "userEmailMissing": "User email is missing.",
-      "saveFailed": "Failed to save profile.",
-      "notLoggedIn": "Please sign in first.",
-      "noArtistLinked": "No linked artist found."
+      "fillRequired": "Please fill out all required fields.",
+      "required": "Please fill out this field.",
+      "minGtMax": "Minimum price must not exceed maximum price.",
+      "saveFailed": "Save failed",
+      "notLoggedIn": "You are not logged in.",
+      "userEmailMissing": "No email is associated with your account.",
+      "noArtistLinked": "No artist profile is linked."
     },
     "delete": {
       "help": "Having issues with your entry? You can delete your existing artist record and start fresh.",
@@ -1091,9 +1096,9 @@
       "basicData": "Basic data",
       "disciplines": "Disciplines",
       "pricing": "Price range",
-      "profileImage": "Profile image",
-      "gallery": "Gallery",
-      "aboutMe": "About me"
+      "profileImage": "Profile picture square 1:1 (max. 2 MB)",
+      "gallery": "Gallery images in landscape 4:3 or 16:9",
+      "aboutMe": "About me – start with 1 catchy sentence. Maximum 3 sentences in total"
     },
     "labels": {
       "name": "Name",
@@ -1123,15 +1128,21 @@
 
   "profileStatusBanner": {
     "pending": {
-      "info": "Your profile has been submitted for review. An admin will check it soon. Until it is approved, you won’t be listed as an artist and won’t receive requests."
+      "info": "Your profile is currently under review. This may take a little time."
     },
     "rejected": {
-      "title": "Your profile was rejected.",
+      "title": "Your profile needs changes",
       "reason": "Reason: {{reason}}",
-      "hint": "Please update your profile and submit it again."
+      "hint": "Please adjust your profile and resubmit."
     },
     "unsubmitted": {
-      "hint": "Submit your profile for approval by setting it up and clicking “Save”. Only after approval will you appear on the artists page and be able to receive booking requests."
+      "hint": "Your profile hasn’t been submitted yet. Complete it to get discovered."
+    },
+    "actions": {
+      "editNow": "Edit now",
+      "startNow": "Start now",
+      "viewGuidelines": "View guidelines",
+      "contactSupport": "Contact support"
     }
   }, 
   "calendar": {

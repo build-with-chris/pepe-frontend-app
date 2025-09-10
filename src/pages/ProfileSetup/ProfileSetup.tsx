@@ -8,6 +8,7 @@ import { Pencil } from "lucide-react";
 import { ProfileForm } from "./components/ProfileForm";
 import { ProfileStatusBanner } from "./components/ProfileStatusBanner";
 import { useTranslation } from "react-i18next";
+import { fetchWithRetry, ValidationError, AuthError, ForbiddenError, ConflictError, NetworkError, NotFoundError } from "@/lib/http";
 
 const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || "profiles";
 const baseUrl = import.meta.env.VITE_API_URL;
@@ -41,6 +42,7 @@ export default function Profile() {
   const [success, setSuccess] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState<'approved' | 'pending' | 'rejected' | 'unsubmitted'>('unsubmitted');
   const [rejectionReason, setRejectionReason] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   // Unlock UX: show hint + scroll to the unlock button when locked area is clicked
   const unlockBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -76,20 +78,33 @@ export default function Profile() {
     const loadProfile = async () => {
       if (!user || !token) return;
       try {
-        let res = await fetch(`${baseUrl}/api/artists/me`, {
-        headers: { Authorization: `Bearer ${token}` },
+        let me: any | null = null;
+      try {
+        const res = await fetchWithRetry(`${baseUrl}/api/artists/me`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        if (res.status === 403 || res.status === 404) {
-          await fetch(`${baseUrl}/api/artists/me/ensure`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          }).catch(() => {});
-          res = await fetch(`${baseUrl}/api/artists/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+        me = await res.json();
+      } catch (err) {
+        if (err instanceof ForbiddenError || err instanceof NotFoundError) {
+          try {
+            await fetchWithRetry(`${baseUrl}/api/artists/me/ensure`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            });
+            const res2 = await fetchWithRetry(`${baseUrl}/api/artists/me`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            me = await res2.json();
+          } catch {
+            return;
+          }
+        } else if (err instanceof AuthError || err instanceof NetworkError) {
+          return;
+        } else {
+          return;
         }
-      if (!res.ok) return;
-      const me = await res.json();
+      }
+      if (!me) return;
 
         const isProbablyEmail = (s: string | null | undefined) => !!s && /.+@.+\..+/.test(s);
         const metaName = (user?.user_metadata?.full_name || user?.user_metadata?.name || "").toString().trim();
@@ -126,6 +141,7 @@ export default function Profile() {
         setGalleryUrls(Array.isArray(me.gallery_urls) ? me.gallery_urls : []);
         setApprovalStatus((me.approval_status as any) ?? 'unsubmitted');
         setRejectionReason(me.rejection_reason ?? null);
+        setFieldErrors({});
         if (me.id) {
         setBackendArtistId(String(me.id));
         const st = (me.approval_status as string) || 'unsubmitted';
@@ -155,11 +171,10 @@ export default function Profile() {
     }
 
     if (!backendArtistId) {
-      const ensured = await fetch(`${baseUrl}/api/artists/me/ensure`, {
+      const ensured = await fetchWithRetry(`${baseUrl}/api/artists/me/ensure`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-    }).then(r => r.ok ? r.json() : null).catch(() => null);
-    if (ensured?.id) setBackendArtistId(String(ensured.id));
+    }).then(r => r.json()).catch(() => null);
     }
 
 
@@ -208,7 +223,7 @@ export default function Profile() {
       if (imageUrl) payload.profile_image_url = imageUrl;
 
       // speichern + Rückgabe prüfen
-      const saveRes = await fetch(`${baseUrl}/api/artists/me/profile`, {
+      const saveRes = await fetchWithRetry(`${baseUrl}/api/artists/me/profile`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -216,12 +231,6 @@ export default function Profile() {
         },
         body: JSON.stringify(payload),
       });
-
-      if (!saveRes.ok) {
-        const t = await saveRes.text();
-        throw new Error(`Save failed: ${saveRes.status} ${t}`);
-      }
-
       const saved = await saveRes.json().catch(() => null);
 
       // UI aus Serverantwort aktualisieren (stellt sicher, dass wir sehen, was wirklich gespeichert wurde)
@@ -257,13 +266,58 @@ export default function Profile() {
       }
 
       setSuccess(true);
+      setFieldErrors({});
       window.scrollTo({ top: 0, behavior: "smooth" });
       if (nextStatus === 'pending') setRejectionReason(null);
       setLocked(true);
     } catch (err: any) {
-      setError(t('profileSetup.errors.saveFailed'));
-      setBackendDebug(prev => `Sync error: ${err?.message || err}${prev ? "\n" + prev : ""}`);
-    } finally {
+        // Handle backend validation errors and map to form fields
+        if (err instanceof ValidationError) {
+          // Map backend snake_case keys to our local camelCase field names
+          const mapKey = (k: string) => ({
+            name: 'name',
+            street: 'street',
+            postal_code: 'postalCode',
+            city: 'city',
+            country: 'country',
+            phone_number: 'phoneNumber',
+            disciplines: 'disciplines',
+            price_min: 'priceMin',
+            price_max: 'priceMax',
+            bio: 'bio',
+            address: 'address',
+          } as Record<string, string>)[k] || k;
+
+          const details = err.details || {};
+          const next: Record<string, string> = {};
+          Object.keys(details).forEach((k) => {
+            const v = details[k];
+            const key = mapKey(k);
+            if (Array.isArray(v)) {
+              next[key] = v.join(', ');
+            } else if (typeof v === 'string') {
+              next[key] = v;
+            } else if (v && typeof v === 'object') {
+              // Nested structures -> flatten to first string if present
+              const first = Object.values(v).find((x) => typeof x === 'string');
+              if (typeof first === 'string') next[key] = first;
+            }
+          });
+          setFieldErrors(next);
+          setError(t('profileSetup.errors.fillRequired'));
+        } else if (err instanceof AuthError) {
+          setError(t('profileSetup.errors.notLoggedIn'));
+        } else if (err instanceof ForbiddenError) {
+          setError('Du hast keine Berechtigung für diese Aktion.');
+        } else if (err instanceof ConflictError) {
+          setError('Konflikt – Eintrag ist verknüpft und kann nicht geändert werden.');
+        } else if (err instanceof NetworkError) {
+          setError(err.message);
+        } else {
+          setError(t('profileSetup.errors.saveFailed'));
+        }
+        setBackendDebug(prev => `Sync error: ${err?.message || err}${prev ? "\n" + prev : ""}`);
+      } finally {
       setLoading(false);
     }
   };
@@ -281,14 +335,14 @@ export default function Profile() {
       let artistId = backendArtistId;
       if (!artistId) {
         // try to ensure + fetch /me to resolve id
-        await fetch(`${baseUrl}/api/artists/me/ensure`, {
+        await fetchWithRetry(`${baseUrl}/api/artists/me/ensure`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         }).catch(() => {});
-        const meRes = await fetch(`${baseUrl}/api/artists/me`, {
+        const meRes = await fetchWithRetry(`${baseUrl}/api/artists/me`, {
           headers: { Authorization: `Bearer ${token}` },
         }).catch(() => null as any);
-        if (meRes && meRes.ok) {
+        if (meRes) {
           const me = await meRes.json().catch(() => null);
           if (me?.id) {
             artistId = String(me.id);
@@ -300,14 +354,10 @@ export default function Profile() {
         throw new Error(t('profileSetup.errors.noArtistLinked'));
       }
 
-      const res = await fetch(`${baseUrl}/api/artists/${artistId}`, {
+      await fetchWithRetry(`${baseUrl}/api/artists/${artistId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) {
-        const txt = await res.text().catch(() => "");
-        throw new Error(txt || `HTTP ${res.status}`);
-      }
       // Reset local UI state to a clean slate
       setBackendArtistId(null);
       setName("");
@@ -417,27 +467,51 @@ export default function Profile() {
           {t('profileSetup.lockedHint')}
         </div>
       )}
-      {error && <p className="text-red-600 mb-4">{error}</p>}
+      {error && (
+        <p className="text-red-500 mb-4" role="alert" aria-live="assertive">{error}</p>
+      )}
       {success && (
-        <div className="mb-4 text-green-300 bg-green-900/20 border border-green-700 rounded p-3">
+        <div className="mb-4 text-green-300 bg-green-900/20 border border-green-700 rounded p-3" role="status" aria-live="polite">
           {t('profileSetup.success.saved')}
         </div>
       )}
-      <ProfileStatusBanner status={approvalStatus} rejectionReason={rejectionReason} className="mb-4" />
+      <ProfileStatusBanner
+        status={approvalStatus}
+        rejectionReason={rejectionReason}
+        className="mb-4"
+        onEdit={() => { setLocked(false); setSuccess(false); }}
+        onOpenGuidelines={() => {
+          // If your GuidelinesModal exposes a global opener or context, call it here.
+          // As a placeholder, we scroll to bottom where the modal trigger might live.
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }}
+        supportEmail="info@pepeshows.de"
+      />
       <div className="relative">
         <ProfileForm
           profile={profile}
           setProfile={setProfileAdapter}
           locked={locked}
           onSubmit={handleSubmit}
+          fieldErrors={fieldErrors}
         />
         {locked && (
-          <div
-            className="absolute inset-0 z-10 cursor-not-allowed"
-            aria-hidden
-            onMouseDown={(e) => { e.preventDefault(); requestUnlock(); }}
-            onClick={(e) => { e.preventDefault(); requestUnlock(); }}
-          />
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+            <div className="rounded-md border border-white/20 bg-black/70 p-4 text-sm text-white max-w-md text-center">
+              <p className="mb-3">{t('profileSetup.lockedHint')}</p>
+              <button
+                ref={unlockBtnRef}
+                id="unlock-profile-button"
+                type="button"
+                onClick={() => { setLocked(false); setSuccess(false); }}
+                className="inline-flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-md border border-gray-700 shadow"
+                aria-label={t('profileSetup.editAria')}
+              >
+                <Pencil className="w-4 h-4" />
+                {t('profileSetup.edit')}
+              </button>
+            </div>
+          </div>
         )}
       </div>
       <div className="mt-8 border-t border-white/10 pt-4">
@@ -446,7 +520,7 @@ export default function Profile() {
           type="button"
           onClick={handleDeleteArtist}
           disabled={loading}
-          className="w-full rounded-lg bg-red-600 px-3 py-2 font-semibold text-white hover:bg-red-500 disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-md border border-red-700/60 px-3 py-2 text-red-200 hover:bg-red-800/20 disabled:opacity-50"
         >
           {t('profileSetup.delete.cta')}
         </button>

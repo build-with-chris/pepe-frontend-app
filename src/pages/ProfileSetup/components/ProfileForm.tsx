@@ -2,17 +2,30 @@ import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { disciplinesOptions } from "@/constraints/disciplines";
 import GalleryUploader from "@/components/GalleryUploader";
+import { downscaleImage } from "@/lib/storage/upload";
 
 export type ProfileFormProps = {
   profile: any;
   setProfile: (profile: any) => void;
   locked: boolean;
   onSubmit: (e: React.FormEvent) => void;
+  fieldErrors?: Record<string, string>;
 };
 
-export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFormProps) {
+export function ProfileForm({ profile, setProfile, locked, onSubmit, fieldErrors = {} }: ProfileFormProps) {
   const { t } = useTranslation();
   const galleryInputRef = useRef<HTMLInputElement>(null);
+
+  const isBlank = (v: any) => v === undefined || v === null || (typeof v === 'string' && v.trim() === '');
+  const errors = {
+    name: isBlank(profile.name),
+    street: isBlank(profile.street),
+    postalCode: isBlank(profile.postalCode),
+    city: isBlank(profile.city),
+    country: isBlank(profile.country),
+    phoneNumber: isBlank(profile.phoneNumber),
+    disciplines: !Array.isArray(profile.disciplines) || profile.disciplines.length === 0,
+  } as const;
 
   const toggleDiscipline = (d: string) => {
     const current = Array.isArray(profile.disciplines) ? profile.disciplines : [];
@@ -23,7 +36,13 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
   };
 
   return (
-    <form onSubmit={onSubmit} className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <form
+      onSubmit={(e) => {
+        onSubmit(e);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }}
+      className="grid grid-cols-1 gap-6 md:grid-cols-2"
+    >
       {/* Basisdaten */}
       <section className="md:col-span-2 rounded-lg border border-gray-800 bg-gray-900 p-5 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-gray-300">{t('profileForm.sections.basicData')}</h2>
@@ -38,7 +57,11 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
               className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
               required
               disabled={locked}
+              aria-invalid={errors.name || undefined}
             />
+            {(fieldErrors.name || errors.name) && (
+              <p id="name-error" className="mt-1 text-sm text-red-400">{fieldErrors.name || t('profileSetup.errors.required')}</p>
+            )}
           </div>
           {/* Adresse */}
           <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -51,7 +74,11 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
                 className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
                 required
                 disabled={locked}
+                aria-invalid={errors.street || undefined}
               />
+              {(fieldErrors.street || errors.street) && (
+                <p id="street-error" className="mt-1 text-sm text-red-400">{fieldErrors.street || t('profileSetup.errors.required')}</p>
+              )}
             </div>
             <div>
               <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.postalCode')}*</label>
@@ -62,7 +89,11 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
                 className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
                 required
                 disabled={locked}
+                aria-invalid={errors.postalCode || undefined}
               />
+              {(fieldErrors.postalCode || errors.postalCode) && (
+                <p id="postal-error" className="mt-1 text-sm text-red-400">{fieldErrors.postalCode || t('profileSetup.errors.required')}</p>
+              )}
             </div>
             <div>
               <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.city')}*</label>
@@ -73,7 +104,11 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
                 className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
                 required
                 disabled={locked}
+                aria-invalid={errors.city || undefined}
               />
+              {(fieldErrors.city || errors.city) && (
+                <p id="city-error" className="mt-1 text-sm text-red-400">{fieldErrors.city || t('profileSetup.errors.required')}</p>
+              )}
             </div>
             <div>
               <label className="mb-1 block font-medium text-gray-300">{t('profileForm.labels.country')}*</label>
@@ -84,7 +119,11 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
                 className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
                 required
                 disabled={locked}
+                aria-invalid={errors.country || undefined}
               />
+              {(fieldErrors.country || errors.country) && (
+                <p id="country-error" className="mt-1 text-sm text-red-400">{fieldErrors.country || t('profileSetup.errors.required')}</p>
+              )}
             </div>
           </div>
           {/* Telefonnummer */}
@@ -97,7 +136,11 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
               className="w-full rounded border border-gray-700 bg-gray-800 px-3 py-2 text-white placeholder:text-gray-400"
               required
               disabled={locked}
+              aria-invalid={errors.phoneNumber || undefined}
             />
+            {(fieldErrors.phoneNumber || errors.phoneNumber) && (
+              <p id="phone-error" className="mt-1 text-sm text-red-400">{fieldErrors.phoneNumber || t('profileSetup.errors.required')}</p>
+            )}
           </div>
         </div>
       </section>
@@ -120,6 +163,9 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
             </button>
           ))}
         </div>
+        {(fieldErrors.disciplines || errors.disciplines) && (
+          <p id="disciplines-error" className="mt-2 text-sm text-red-400">{fieldErrors.disciplines || t('profileSetup.errors.required')}</p>
+        )}
       </section>
 
       {/* Preisrahmen */}
@@ -155,6 +201,12 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
             <p className="mt-1 text-sm text-gray-400">
               {t('profileForm.help.priceMax')}
             </p>
+            {profile.priceMin > profile.priceMax && (
+              <p className="mt-1 text-sm text-red-400">{t('profileSetup.errors.minGtMax')}</p>
+            )}
+            {(fieldErrors.priceMin || fieldErrors.priceMax) && (
+              <p className="mt-1 text-sm text-red-400">{fieldErrors.priceMin || fieldErrors.priceMax}</p>
+            )}
           </div>
         </div>
       </section>
@@ -173,11 +225,12 @@ export function ProfileForm({ profile, setProfile, locked, onSubmit }: ProfileFo
       <input
         type="file"
         accept="image/*"
-        onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) {
-            setProfile({ profileImageFile: file });
-            }
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            const scaled = await downscaleImage(file, 1600, 0.85);
+            setProfile({ profileImageFile: scaled });
+          }
         }}
         disabled={locked}
         className="mt-3 block w-full text-sm text-gray-400 file:mr-4 file:rounded-md file:border-0 file:bg-blue-600 file:px-3 file:py-1 file:text-white hover:file:bg-blue-500 disabled:file:opacity-50"

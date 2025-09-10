@@ -2,6 +2,7 @@
 import * as React from 'react';
 import posthog from 'posthog-js';
 import { useTranslation } from 'react-i18next';
+import { initAnalytics } from '@/lib/analytics';
 
 function getCookie(name: string) {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -63,9 +64,15 @@ export default function ConsentBannerLite() {
     setOpen(false);
   };
 
-  const acceptAll = () => persist(true);
+  const acceptAll = async () => {
+    try { await initAnalytics(); } catch {}
+    return persist(true);
+  };
   const onlyEssential = () => persist(false);
-  const saveSelection = () => persist(analyticsChoice);
+  const saveSelection = async () => {
+    try { if (analyticsChoice) { await initAnalytics(); } } catch {}
+    return persist(analyticsChoice);
+  };
 
   // Dev helper: window.pepeShowConsent() to reopen
   (window as any).pepeShowConsent = () => setOpen(true);
@@ -73,7 +80,7 @@ export default function ConsentBannerLite() {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[90]">
+    <div className="fixed bottom-0 left-0 right-0 z-[90] min-h-14">
       {/* gradient border frame */}
       <div className="mx-auto w-full max-w-5xl p-[1px] bg-gradient-to-r from-white/30 via-white/10 to-white/30 rounded-t-2xl shadow-2xl">
         {/* panel */}

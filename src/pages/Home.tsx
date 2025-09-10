@@ -1,15 +1,15 @@
-import PepesParticles from "@/components/InteractivePepeParticles";
 import hero from "../assets/PepeHero.webp"
 import pepeMobile from "../assets/PEPE.webp";
-import { useEffect, useState, useMemo, useRef, Suspense, lazy } from "react";
-import { AnimatedArrow } from "@/components/ui/resizable";
-import { SpotlightsFixed } from "@/components/SpotlightsFixed";
+import { useEffect, useState, useMemo, Suspense, lazy, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import ConsentBannerLite from '@/components/ConsentBannerLite';
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 
 const Bento1 = lazy(() => import("@/components/bento1").then(m => ({ default: m.Bento1 })));
 const Cta10 = lazy(() => import("@/components/cta10").then(m => ({ default: m.Cta10 })));
 const Gallery23 = lazy(() => import("@/components/gallery23").then(m => ({ default: m.Gallery23 })));
+const PepesParticles = lazy(() => import("@/components/InteractivePepeParticles"));
+const SpotlightsFixed = lazy(() => import("@/components/SpotlightsFixed").then(m => ({ default: m.SpotlightsFixed })));
+const ConsentBannerLite = lazy(() => import('@/components/ConsentBannerLite'));
 
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -25,10 +25,69 @@ function shuffleArray<T>(arr: T[]): T[] {
 
 export default function Home() {
   const { t } = useTranslation();
+  const prefersReduced = usePrefersReducedMotion();
 
   const [offset, setOffset] = useState(0);
   const startOffset = -90; // start lower on the page
   const [autoplayPlugin, setAutoplayPlugin] = useState<any>(null);
+  const [mobileSlide, setMobileSlide] = useState(0);
+  const mobileCarouselRef = useRef<HTMLDivElement | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const desktopSpotlightsRef = useRef<HTMLDivElement | null>(null);
+  const [spotlightsVisible, setSpotlightsVisible] = useState(false);
+  useEffect(() => {
+    if (!isDesktop) return;
+    const el = desktopSpotlightsRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some(e => e.isIntersecting)) {
+          setSpotlightsVisible(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '300px 0px' }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [isDesktop]);
+
+  
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(min-width: 768px)');
+    const apply = () => setIsDesktop(mq.matches);
+    apply();
+    mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply);
+    return () => {
+      mq.removeEventListener ? mq.removeEventListener('change', apply) : mq.removeListener(apply);
+    };
+  }, []);
+
+  const [showParticles, setShowParticles] = useState(false);
+  useEffect(() => {
+  if (!isDesktop || prefersReduced) return;
+  const win: any = typeof window !== 'undefined' ? window : undefined;
+  const id = win && 'requestIdleCallback' in win
+    ? win.requestIdleCallback(() => setShowParticles(true))
+    : setTimeout(() => setShowParticles(true), 1200);
+  return () => {
+    if (typeof id === 'number') clearTimeout(id);
+    else if (win && 'cancelIdleCallback' in win) win.cancelIdleCallback(id);
+  };
+}, [isDesktop, prefersReduced]);
+
+  const [showConsent, setShowConsent] = useState(false);
+  useEffect(() => {
+    const win: any = typeof window !== 'undefined' ? window : undefined;
+    const id = win && 'requestIdleCallback' in win
+      ? win.requestIdleCallback(() => setShowConsent(true))
+      : setTimeout(() => setShowConsent(true), 1000);
+    return () => {
+      if (typeof id === 'number') clearTimeout(id);
+      else if (win && 'cancelIdleCallback' in win) win.cancelIdleCallback(id);
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -52,16 +111,25 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+  if (prefersReduced) return;
+  const interval = setInterval(() => {
+    setMobileSlide(prev => (prev + 1) % 3);
+  }, 4000);
+  return () => clearInterval(interval);
+}, [prefersReduced]);
 
-  const artistImagesSmall = [
-    { src: "/images/Slider/Artist1.webp", name: "Carmen" },
-    { src: "/images/Slider/Artist2.webp", name: "Jonas" },
-    { src: "/images/Slider/Artist3.webp", name: "Sophie" },
-    { src: "/images/Slider/Artist4.webp", name: "Dani" },
-    { src: "/images/Slider/Artist5.webp", name: "Jakob" },
-    { src: "/images/Slider/Artist6.webp", name: "Jaward" },
-    { src: "/images/Slider/Artist7.webp", name: "Michi" },
-  ];
+  useEffect(() => {
+    if (mobileCarouselRef.current) {
+      const el = mobileCarouselRef.current;
+      const child = el.children[mobileSlide] as HTMLElement;
+      if (child) {
+        el.scrollTo({ left: child.offsetLeft, behavior: 'smooth' });
+      }
+    }
+  }, [mobileSlide]);
+
+
 
   const spotlights = [
     {
@@ -130,26 +198,28 @@ export default function Home() {
     },
   ];
 
-  const shuffledSmall = useMemo(() => shuffleArray(artistImagesSmall), []);
   const shuffledSpotlights = useMemo(() => shuffleArray(spotlights), []);
 
   useEffect(() => {
-    const onScroll = () => {
-      const el = document.getElementById("hero");
-      if (!el) return;
-      const sectionTop = el.offsetTop;
-      const y = window.scrollY;
-      if (y >= sectionTop) {
-        setOffset((y - sectionTop) * 1); // parallax factor (slower than scroll)
-      } else {
-        setOffset(0);
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    // run once in case page is already scrolled
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  if (!isDesktop || prefersReduced) {
+    setOffset(0);
+    return;
+  }
+  const onScroll = () => {
+    const el = document.getElementById("hero");
+    if (!el) return;
+    const sectionTop = el.offsetTop;
+    const y = window.scrollY;
+    if (y >= sectionTop) {
+      setOffset((y - sectionTop) * 1);
+    } else {
+      setOffset(0);
+    }
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  return () => window.removeEventListener("scroll", onScroll);
+}, [isDesktop, prefersReduced]);
 
   // (removed carouselApi, currentIndex, rightSize, groupRef, and related effects)
 
@@ -159,17 +229,17 @@ export default function Home() {
       <div className="hidden md:block">
         <div
           id="hero"
-          className="relative w-screen min-h-[85vh] bg-black overflow-hidden mt-20 -mb-20"
+          className="relative w-screen min-h-[85vh] bg-black overflow-hidden -mb-10"
         >
           {/* Hero image as real element so it can be prioritized as LCP */}
           <picture>
-            <source srcSet={hero} type="image/webp" />
+            <source srcSet={hero} type="image/webp" sizes="100vw" />
             <img
               src={hero}
               alt="PepeShows Hero"
               fetchPriority="high"
               decoding="async"
-              className="absolute inset-0 w-full h-full object-cover will-change-transform"
+              className="absolute inset-0 w-full h-full object-contain will-change-transform"
               style={{ transform: `translateY(${startOffset + offset}px)` }}
             />
           </picture>
@@ -180,7 +250,11 @@ export default function Home() {
           {/* Pepe Canvas unten mittig */}
           <div className="pointer-events-none absolute inset-x-0 -bottom-12 md:-bottom-5 z-10 flex justify-center">
             <div className="relative w-full max-w-[1080px] aspect-[8/3] overflow-hidden">
-              <PepesParticles />
+              {isDesktop && showParticles && (
+                <Suspense fallback={null}>
+                  <PepesParticles />
+                </Suspense>
+              )}
             </div>
           </div>
         </div>
@@ -204,16 +278,87 @@ export default function Home() {
           {/* Textblock 1 nach Hero */}
           <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
 
-        <Suspense fallback={null}>
-          <Bento1 />
-        </Suspense>
+        <div style={{ contentVisibility: 'auto', containIntrinsicSize: '1200px' }} className="min-h-[1200px]">
+          <Suspense fallback={null}>
+            <Bento1 />
+          </Suspense>
+        </div>
         </div>
   
 
       <div className="h-px w-full max-w-none mx-auto my-16 bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
       {/* Desktop/Tablet: horizontal layout (fixed, no resize) */}
-      <SpotlightsFixed spotlights={shuffledSpotlights} autoplayPlugin={autoplayPlugin} />
+      <div ref={desktopSpotlightsRef} className="hidden md:block">
+        {spotlightsVisible && (
+          <Suspense fallback={null}>
+            <SpotlightsFixed spotlights={shuffledSpotlights} autoplayPlugin={autoplayPlugin} />
+          </Suspense>
+        )}
+      </div>
+
+      {/* Mobile: statische Bilder als Carousel (scroll-snap) */}
+        <div className="block md:hidden w-full mx-auto my-6 px-0">
+          <div
+            className="relative"
+            aria-label="PepeShows Highlights Carousel"
+          >
+            <div
+              ref={mobileCarouselRef}
+              className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar"
+            >
+              {/* Slide 1 */}
+              <div className="snap-start shrink-0 w-full px-4">
+                <img
+                  src="/images/home_1.webp"
+                  alt="PepeShows Highlight 1"
+                  width={480}
+                  height={270}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full rounded-lg object-cover"
+                />
+              </div>
+              {/* Slide 2 */}
+              <div className="snap-start shrink-0 w-full px-4">
+                <img
+                  src="/images/home_2.webp"
+                  alt="PepeShows Highlight 2"
+                  width={480}
+                  height={270}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full rounded-lg object-cover"
+                />
+              </div>
+              {/* Slide 3 */}
+              <div className="snap-start shrink-0 w-full px-4">
+                <img
+                  src="/images/home_3.webp"
+                  alt="PepeShows Highlight 3"
+                  width={480}
+                  height={270}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full rounded-lg object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Dots */}
+            <div className="mt-3 flex items-center justify-center gap-2">
+              {[0,1,2].map(i => (
+                <span
+                  key={i}
+                  className={
+                    "h-1.5 rounded-full transition-all " +
+                    (i === mobileSlide ? "w-4 bg-white/80" : "w-1.5 bg-white/30")
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        </div>
 
       {/* Mobile: simple text block (no resizable) */}
       <div className="block md:hidden w-full mx-auto my-6 px-4">
@@ -224,7 +369,7 @@ export default function Home() {
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
             {t("home.findArtistSubtitle")}
           </p>
-          <a href="/anfragen">
+          <a href="/anfragen?skipIntro=1">
             <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-full transition-colors duration-200">
               {t("home.findArtistButton")}
             </button>
@@ -238,29 +383,37 @@ export default function Home() {
 
             
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
-        <Suspense fallback={null}>
-          <Cta10
-            heading={t("home.cta.heading")}
-            description={t("home.cta.description")}
-            buttons={{
-              primary: {
-                text: t("home.cta.button"),
-                url: "/agentur",
-              },
-            }}
-          />
-        </Suspense>
+        <div style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}>
+          <Suspense fallback={null}>
+            <Cta10
+              heading={t("home.cta.heading")}
+              description={t("home.cta.description")}
+              buttons={{
+                primary: {
+                  text: t("home.cta.button"),
+                  url: "/agentur",
+                },
+              }}
+            />
+          </Suspense>
+        </div>
       </div>
       <div className="h-12 bg-gradient-to-b from-black via-gray-900 to-black" />
  
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
 
-      <Suspense fallback={null}>
-        <Gallery23 />
-      </Suspense>
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: '1600px' }} className="min-h-[1600px]">
+        <Suspense fallback={null}>
+          <Gallery23 />
+        </Suspense>
+      </div>
       
       </div>
-      <ConsentBannerLite />
+      {showConsent && (
+        <Suspense fallback={null}>
+          <ConsentBannerLite />
+        </Suspense>
+      )}
     </>
 
   );

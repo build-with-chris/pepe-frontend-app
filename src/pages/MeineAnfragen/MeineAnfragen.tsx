@@ -2,7 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import List from "./components/List";
 import RequestCard from "./components/RequestCard";
+
 import { useTranslation } from 'react-i18next';
+
+function getReceivedAtTs(record: any): number {
+  const v =
+    record?.request_created_at ??
+    record?.booking_request_created_at ??
+    record?.request?.created_at ??
+    record?.created_at ??
+    record?.createdAt ??
+    record?.created ??
+    record?.received_at ??
+    record?.submitted_at ?? null;
+  if (!v) return 0;
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? 0 : d.getTime();
+}
 
 type Status = 'angefragt' | 'angeboten' | 'akzeptiert' | 'abgelehnt' | 'storniert';
 
@@ -76,6 +92,8 @@ const MeineAnfragen: React.FC = () => {
           ...item,
           admin_comment: item.comment ?? item.artist_comment ?? undefined,
         }));
+        // Sort by received/created date (newest first)
+        list.sort((a, b) => getReceivedAtTs(b) - getReceivedAtTs(a));
         setAnfragen(list);
         console.log('🕵️‍♀️ Loaded requests with all fields:', list);
         console.log('🧐 Loaded statuses:', list.map(a => a.status));

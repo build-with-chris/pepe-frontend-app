@@ -5,6 +5,10 @@
       "title": "Shows & Formate – klar geplant, stark gespielt",
       "subtitle": "Von kurzem Show-Highlight bis abendfüllendem Varieté: Wir liefern die passende Größe – inklusive Regie, Musik & Kostüm. Direkt buchbare Solo-Acts oder individuell kuratierte Ensembles."
     },
+    "spotlight": {
+      "title": "Ungewöhnliche Requisiten, außergewöhnliche Shows",
+      "body": "Wir verwandeln ungewöhnliche Gegenstände in spektakuläre Acts: Jonglage mit der Kettensäge, Bogenschießen mit den Füßen im Handstand oder Luftakrobatik am Kran – präzise choreografiert, sicher umgesetzt und unvergesslich für dein Publikum."
+    },
     "mission": {
       "kicker": "UNSERE MISSION",
       "body": "Jede Veranstaltung ist einzigartig – und genau so gestalten wir auch unsere Konzepte. Unser Ziel: die passende Show zu Ihrem Anlass und ein magischer Augenblick, der in Erinnerung bleibt."
@@ -884,11 +888,12 @@
     },
     "errors": {
       "fillRequired": "Bitte fülle alle Pflichtfelder aus.",
-      "minGtMax": "Das Minimum darf nicht größer als das Maximum sein.",
-      "userEmailMissing": "Benutzer-E-Mail fehlt.",
-      "saveFailed": "Profil speichern fehlgeschlagen.",
-      "notLoggedIn": "Bitte logge dich zuerst ein.",
-      "noArtistLinked": "Kein verknüpfter Künstler gefunden."
+      "required": "Bitte dieses Feld ausfüllen.",
+      "minGtMax": "Der Mindestpreis darf nicht über dem Maximalpreis liegen.",
+      "saveFailed": "Speichern fehlgeschlagen",
+      "notLoggedIn": "Du bist nicht eingeloggt.",
+      "userEmailMissing": "Es ist keine E-Mail im Benutzerprofil hinterlegt.",
+      "noArtistLinked": "Es ist kein Artist-Profil verknüpft."
     },
     "delete": {
       "help": "Probleme mit deinem Eintrag? Du kannst deinen bestehenden Künstler-Datensatz löschen und neu starten.",
@@ -898,7 +903,7 @@
       "done": "Artist gelöscht"
     },
     "debug": {
-      "title": "Debug Log:"
+      "title": "Info:"
     }
   },
   "profileForm": {
@@ -906,9 +911,9 @@
       "basicData": "Basisdaten",
       "disciplines": "Disziplinen",
       "pricing": "Preisrahmen",
-      "profileImage": "Profilbild",
-      "gallery": "Galerie",
-      "aboutMe": "Über mich"
+      "profileImage": "Profilbild Quadratisch 1:1 (max. 2mb)", 
+      "gallery": "Galeriebilder bitte Quer 4:3 oder 16:9",
+      "aboutMe": "Über mich - 1 Satz der catcht zu beginnt. Insgesamt max. 3 Sätze"
     },
     "labels": {
        "name": "Name",
@@ -937,15 +942,21 @@
 
   "profileStatusBanner": {
     "pending": {
-      "info": "Dein Profil ist zur Prüfung eingereicht. Ein Admin schaut es sich zeitnah an. Solange es nicht freigegeben ist, wirst du nicht als Künstler gelistet und erhältst keine Anfragen."
+      "info": "Dein Profil wird derzeit geprüft. Das kann etwas Zeit in Anspruch nehmen."
     },
     "rejected": {
-      "title": "Dein Profil wurde leider abgelehnt.",
+      "title": "Dein Profil benötigt Anpassungen",
       "reason": "Grund: {{reason}}",
-      "hint": "Passe dein Profil an und reiche es erneut ein."
+      "hint": "Bitte passe dein Profil an und reiche es erneut ein."
     },
     "unsubmitted": {
-      "hint": "Reiche dein Profil zur Freigabe ein, indem du dieses Profil einrichtest und auf „Speichern“ klickst. Erst nach Freigabe wirst du auf der Künstlerseite angezeigt und kannst Anfragen erhalten."
+      "hint": "Dein Profil ist noch nicht eingereicht. Vervollständige es, um gefunden zu werden."
+    },
+    "actions": {
+      "editNow": "Jetzt bearbeiten",
+      "startNow": "Jetzt starten",
+      "viewGuidelines": "Richtlinien ansehen",
+      "contactSupport": "Support kontaktieren"
     }
   },
   "calendar": {

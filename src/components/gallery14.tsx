@@ -12,7 +12,6 @@ import {
   CarouselContent,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 
 
@@ -64,7 +63,7 @@ const Gallery14 = () => {
 
   return (
     <section className="overflow-hidden bg-black text-white py-32 px-4 sm:px-6 md:px-0">
-        <Carousel setApi={setApi}>
+        <Carousel setApi={setApi} opts={{ loop: true }}>
           <div className="grid gap-8 md:gap-4 lg:grid-cols-2 [&>div[data-slot=carousel-content]]:overflow-visible [&>div[data-slot=carousel-content]]:[clip-path:inset(-100vw_-100vw_-100vw_0)]">
             <div>
               <h2 className="text-4xl font-semibold md:text-6xl text-white">
@@ -87,9 +86,8 @@ const Gallery14 = () => {
                 </ul>
                 <p className="text-sm text-white/70">{t("gallery14.tagline")}</p>
               </div>
-              <div className="mt-8 hidden items-center gap-4 md:flex">
-                <CarouselPrevious className="static size-12 translate-x-0 translate-y-0 text-black border-white" />
-                <CarouselNext className="static size-12 translate-x-0 translate-y-0 text-black border-white" />
+              <div className="mt-18 hidden md:flex justify-center">
+                <CarouselNext className="static size-12 text-black border-white" />
               </div>
             </div>
 
@@ -122,7 +120,7 @@ const Gallery14 = () => {
             <span
               key={index}
               className={cn(
-                "flex h-8 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-muted-foreground/15 text-xs font-semibold whitespace-nowrap transition-all duration-300",
+                "flex h-8 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white/40 text-xs font-semibold whitespace-nowrap transition-all duration-300",
                 index + 1 === current ? "w-32" : "m-4 size-4",
               )}
               onClick={() => api && api.scrollTo(index)}

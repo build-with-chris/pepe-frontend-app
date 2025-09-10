@@ -17,13 +17,18 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ["@porscheofficial/cookie-consent-banner-react"],
+    include: ["react", "react-dom", "@porscheofficial/cookie-consent-banner-react"],
     exclude: [
       // Damit esbuild den fehlerhaften Entry nicht anfasst
       "@porscheofficial/cookie-consent-banner/loader",
+      // Analytics nicht vorab pre-bundlen – wird on-demand geladen
+      "posthog-js",
     ],
   },
   build: {
+    sourcemap: false,
+    cssCodeSplit: true,
+    modulePreload: { polyfill: false },
     rollupOptions: {
       output: {
         manualChunks: {
@@ -37,6 +42,10 @@ export default defineConfig({
           ],
           supabase: ["@supabase/supabase-js"],
           ui_misc: ["sonner"],
+          react: ["react", "react-dom"],
+          motion: ["framer-motion"],
+          embla: ["embla-carousel", "embla-carousel-autoplay"],
+          i18n: ["i18next", "react-i18next"],
         },
       },
     },

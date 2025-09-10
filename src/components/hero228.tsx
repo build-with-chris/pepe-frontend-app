@@ -42,6 +42,11 @@ const Hero228 = () => {
 
   const { t } = useTranslation();
 
+  const mobileHeading = React.useMemo(() => {
+    const fallback = `${t('hero228.headingDesktopLine1', { defaultValue: '' })} ${t('hero228.headingDesktopLine2', { defaultValue: '' })}`.trim() || 'Unsere Künstler';
+    return t('hero228.headingMobile', { defaultValue: fallback });
+  }, [t]);
+
   const baseTestimonials = [
     { id: 1, image: "/images/Hero228/Artist1.webp", name: "Artist 1" },
     { id: 2, image: "/images/Hero228/Artist2.webp", name: "Artist 2" },
@@ -97,18 +102,18 @@ const Hero228 = () => {
   );
 
   return (
-    <section className="bg-black py-32 text-white">
+    <section className="bg-black pt-24 sm:pt-32 pb-24 sm:pb-32 text-white">
       <div className="container flex flex-col items-center justify-center gap-4 text-center">
-        <h1 className="max-w-3xl text-5xl font-medium tracking-tighter text-white md:px-9 md:text-6xl">
-          <span className="block text-3xl sm:hidden mt-24">{t("hero228.headingMobile")}</span>
+        <h1 className="relative z-10 mb-8 max-w-3xl text-5xl font-medium tracking-tighter text-white md:px-9 md:text-6xl leading-tight">
+          <span className="block text-3xl sm:hidden mt-2">{mobileHeading}</span>
           <span className="hidden sm:block text-4xl md:text-5xl">{t("hero228.headingDesktopLine1")}<br />{t("hero228.headingDesktopLine2")}</span>
         </h1>
-        <p className="mt-5 max-w-xl text-white/70">
+        <p className="mt-5 max-w-xl text-white/70 hidden sm:block">
         {t("hero228.subtitle")}
         </p>
 
         <Carousel
-          className="max-w-5xl"
+          className="max-w-5xl block relative z-0 mt-4"
           plugins={[
             Autoplay({
               delay: 2000,

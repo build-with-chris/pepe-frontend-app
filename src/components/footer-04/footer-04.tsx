@@ -157,7 +157,7 @@ const Footer04Page = () => {
 
             {/* rest fills remaining width */}
             <div className="flex-1 w-full min-w-0">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-6">
                 <Link
                   to="/"
                   onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -169,10 +169,14 @@ const Footer04Page = () => {
                   to="https://www.instagram.com/pepe_arts/"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-white/70 hover:text-white"
+                  className="inline-flex items-center gap-2 text-white/80 hover:text-white"
                   aria-label="Instagram"
                 >
                   <InstagramIcon className="h-5 w-5" />
+                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-gradient-to-r from-pink-400/70 to-purple-500/70 text-white">
+                    45,4k
+                  </span>
+                  <span className="sr-only">PepeShows auf Instagram – 45,4k Follower</span>
                 </Link>
               </div>
              

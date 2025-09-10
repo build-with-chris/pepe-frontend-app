@@ -1,3 +1,4 @@
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
@@ -5,6 +6,8 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 export type Spotlight = {
   mediaType: "video" | "image";
   mediaSrc: string;
+  /** Optional poster image to show before/without loading the video */
+  posterSrc?: string;
   kicker?: string;
   title: string;
   subtitle?: string;
@@ -18,6 +21,7 @@ interface SpotlightsFixedProps {
 
 export const SpotlightsFixed: React.FC<SpotlightsFixedProps> = ({ spotlights, autoplayPlugin }) => {
   const { t } = useTranslation();
+  const prefersReduced = usePrefersReducedMotion();
   const desktopCarouselRef = React.useRef<HTMLDivElement | null>(null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [carouselApi, setCarouselApi] = React.useState<any>(null);
@@ -56,6 +60,11 @@ export const SpotlightsFixed: React.FC<SpotlightsFixedProps> = ({ spotlights, au
     const next = videos[(idx + 1) % videos.length];
     if (prev) hydrateVideoSources(prev);
     if (next) hydrateVideoSources(next);
+  }
+
+  function posterFrom(src: string) {
+    // try to replace video extension with webp poster
+    return src.replace(/\.(webm|mp4)$/i, ".webp");
   }
 
   React.useEffect(() => {
@@ -110,7 +119,7 @@ export const SpotlightsFixed: React.FC<SpotlightsFixedProps> = ({ spotlights, au
               <Carousel
                 className="h-full"
                 opts={{ loop: true }}
-                plugins={autoplayPlugin ? [autoplayPlugin] : []}
+                plugins={!prefersReduced && autoplayPlugin ? [autoplayPlugin] : []}
                 setApi={setCarouselApi}
               >
                 <CarouselContent className="h-full">
@@ -118,24 +127,45 @@ export const SpotlightsFixed: React.FC<SpotlightsFixedProps> = ({ spotlights, au
                     <CarouselItem key={i} className="h-full p-3">
                       <div className="relative w-full h-full overflow-hidden rounded-xl ring-1 ring-white/12 shadow-lg">
                         {s.mediaType === "video" ? (
-                          <video
-                            key={s.mediaSrc}
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            preload="none"
-                            aria-label="PepeShows Showcase Video"
-                            className="absolute inset-0 w-full h-full object-cover"
-                            {...({ 'webkit-playsinline': 'true' } as any)}
-                          >
-                            <source data-src={s.mediaSrc} type="video/webm" />
-                            <source data-src={s.mediaSrc.replace(/\.webm$/, ".mp4")} type="video/mp4" />
-                          </video>
+                          <>
+                            {/* Poster first: lightweight, lazy */}
+                            <img
+                              src={s.posterSrc || posterFrom(s.mediaSrc)}
+                              alt={s.title}
+                              loading="lazy"
+                              decoding="async"
+                              fetchPriority="low"
+                              width={1280}
+                              height={720}
+                              className="absolute inset-0 w-full h-full object-cover"
+                            />
+                            {/* Only mount the video when this slide is active to avoid decoding off-screen videos */}
+                            {i === currentIndex && !prefersReduced && (
+                              <video
+                                key={s.mediaSrc}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="none"
+                                aria-label="PepeShows Showcase Video"
+                                className="absolute inset-0 w-full h-full object-cover"
+                                {...({ 'webkit-playsinline': 'true' } as any)}
+                              >
+                                <source data-src={s.mediaSrc} type="video/webm" />
+                                <source data-src={s.mediaSrc.replace(/\.webm$/i, ".mp4")} type="video/mp4" />
+                              </video>
+                            )}
+                          </>
                         ) : (
                           <img
                             src={s.mediaSrc}
                             alt={s.title}
+                            loading="lazy"
+                            decoding="async"
+                            fetchPriority="low"
+                            width={1280}
+                            height={720}
                             className="absolute inset-0 w-full h-full object-cover"
                           />
                         )}
