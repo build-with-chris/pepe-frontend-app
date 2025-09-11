@@ -14,12 +14,13 @@ export function initPostHog() {
   posthog.init(
     import.meta.env.VITE_POSTHOG_KEY,
     {
-      api_host: import.meta.env.VITE_POSTHOG_HOST || 'https://eu.posthog.com',
-      autocapture: true,               // Klicks, Formular-Events etc.
-      capture_pageview: false,         // Wir tracken Pageviews manuell (SPA)
-      person_profiles: 'identified_only', // DSGVO-freundlicher
+      // Stelle sicher, dass du VITE_POSTHOG_HOST in deiner .env auf deinen eigenen CDN/Proxy setzt,
+      // z.B. https://analytics.pepeshows.de
+      api_host: import.meta.env.VITE_POSTHOG_HOST || 'https://analytics.pepeshows.de',
+      autocapture: true,
+      capture_pageview: false,
+      person_profiles: 'identified_only',
       session_recording: {
-        // Session Replay
         maskAllInputs: true,
         maskTextSelector: '*[data-ph-no-capture="true"]'
       }

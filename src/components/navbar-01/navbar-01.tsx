@@ -2,12 +2,11 @@ import { Button } from "../ui/button";
 import { Logo } from "./logo";
 import { NavMenu } from "./nav-menu";
 import { NavLinks } from "./NavLinks";
-import { NavigationSheet } from "./navigation-sheet";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { useNavigate, useLocation } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -63,7 +62,8 @@ const Navbar01Page = () => {
 
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut();
+      const sb = await getSupabase();
+      await sb.auth.signOut();
     } catch (e) {
       console.warn("Logout error:", e);
     }

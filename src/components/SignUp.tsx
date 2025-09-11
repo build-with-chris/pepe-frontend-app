@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -20,7 +20,8 @@ export default function SignUp() {
     console.log("handleSignUp triggered", { name, email, password });
     setLoading(true);
     setMessage(null);
-    const { data, error } = await supabase.auth.signUp({
+    const sb = await getSupabase();
+    const { data, error } = await sb.auth.signUp({
       email,
       password,
       options: {
@@ -45,7 +46,8 @@ export default function SignUp() {
 
   const handleGoogleSignUp = async () => {
     setMessage(null);
-    const { error } = await supabase.auth.signInWithOAuth({
+    const sb = await getSupabase();
+    const { error } = await sb.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/onboarding`,

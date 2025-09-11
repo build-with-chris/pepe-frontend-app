@@ -1,8 +1,8 @@
 import hero from "../assets/PepeHero.webp"
-import pepeMobile from "../assets/PEPE.webp";
 import { useEffect, useState, useMemo, Suspense, lazy, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { Helmet } from "react-helmet-async";
 
 const Bento1 = lazy(() => import("@/components/bento1").then(m => ({ default: m.Bento1 })));
 const Cta10 = lazy(() => import("@/components/cta10").then(m => ({ default: m.Cta10 })));
@@ -11,6 +11,7 @@ const PepesParticles = lazy(() => import("@/components/InteractivePepeParticles"
 const SpotlightsFixed = lazy(() => import("@/components/SpotlightsFixed").then(m => ({ default: m.SpotlightsFixed })));
 const ConsentBannerLite = lazy(() => import('@/components/ConsentBannerLite'));
 
+const PEPE_MOBILE = "/images/PEPE-380.webp"; // align preload+img to same URL
 
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -281,6 +282,15 @@ export default function Home() {
 
   return (
     <>
+      <Helmet>
+        <title>PepeShows – Künstler & Artisten buchen</title>
+        <meta
+          name="description"
+          content="Finde außergewöhnliche Artisten und Shows für Events. PepeShows bietet Cyr-Wheel, Pantomime, Hula Hoop und mehr. Buchen Sie einzigartige Acts für unvergessliche Momente."
+        />
+        <link rel="preload" as="image" href={PEPE_MOBILE} />
+        <link rel="preload" as="image" href={hero} />
+      </Helmet>
       <div className="hidden md:block">
         <div
           id="hero"
@@ -317,16 +327,16 @@ export default function Home() {
 
       {/* Mobile-only hero image */}
       <div className="block md:hidden w-full flex items-center justify-center py-8 px-4">
-        <img
-          src={pepeMobile}
-          alt="Pepe"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-          width={380}
-          height={380}
-          className="max-w-full h-auto"
-        />
+        <div className="relative w-full max-w-[380px] aspect-square">
+          <img
+            src={PEPE_MOBILE}
+            alt="Pepe"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-contain"
+          />
+        </div>
       </div>
 
       
@@ -366,39 +376,39 @@ export default function Home() {
             >
               {/* Slide 1 */}
               <div className="snap-start shrink-0 w-full px-4">
-                <img
-                  src="/images/home_1.webp"
-                  alt="PepeShows Highlight 1"
-                  width={480}
-                  height={270}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full rounded-lg object-cover"
-                />
+                <div className="relative w-full aspect-video">
+                  <img
+                    src="/images/home_1.webp"
+                    alt="PepeShows Highlight 1"
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                  />
+                </div>
               </div>
               {/* Slide 2 */}
               <div className="snap-start shrink-0 w-full px-4">
-                <img
-                  src="/images/home_2.webp"
-                  alt="PepeShows Highlight 2"
-                  width={480}
-                  height={270}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full rounded-lg object-cover"
-                />
+                <div className="relative w-full aspect-video">
+                  <img
+                    src="/images/home_2.webp"
+                    alt="PepeShows Highlight 2"
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                  />
+                </div>
               </div>
               {/* Slide 3 */}
               <div className="snap-start shrink-0 w-full px-4">
-                <img
-                  src="/images/home_3.webp"
-                  alt="PepeShows Highlight 3"
-                  width={480}
-                  height={270}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full rounded-lg object-cover"
-                />
+                <div className="relative w-full aspect-video">
+                  <img
+                    src="/images/home_3.webp"
+                    alt="PepeShows Highlight 3"
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                  />
+                </div>
               </div>
             </div>
 

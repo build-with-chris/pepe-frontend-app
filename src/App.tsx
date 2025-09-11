@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import posthog from './lib/posthog';
+import { initAnalytics } from './lib/analytics';
 import { useEffect, Suspense, lazy } from 'react';
 import {Login} from './components/login-form'
 import { ProtectedRoute } from './components/ProtectedRoute.tsx';
@@ -41,13 +41,8 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    // Nur tracken, wenn PostHog aktiv ist
-    if ((posthog as any)?.capture) {
-      posthog.capture('$pageview', {
-        $current_url: window.location.href,
-        path: location.pathname,
-      });
-    }
+    // Initialize analytics only after user interaction, no idle fallback
+    initAnalytics();
   }, [location.pathname]);
 
   return (

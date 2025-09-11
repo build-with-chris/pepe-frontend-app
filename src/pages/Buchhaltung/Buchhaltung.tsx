@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 import UploadSection from "./components/UploadSection";
 import RegisteredTable from "./components/RegisteredTable";
 import EarningsSummary from "./components/EarningsSummary";
@@ -84,6 +84,7 @@ export default function Buhaltung() {
     let mounted = true;
     (async () => {
       try {
+        const supabase = await getSupabase();
         const { data, error } = await supabase.auth.getUser();
         if (error) throw error;
         if (!mounted) return;
@@ -124,6 +125,7 @@ export default function Buhaltung() {
   // 3) Rechnungen aus dem Storage listen
   const listInvoices = async (aid: number) => {
     try {
+      const supabase = await getSupabase();
       setInvError(null);
       if (!uid) throw new Error('Kein Supabase-User erkannt');
       const prefix = `user/${uid}`;
@@ -157,6 +159,7 @@ export default function Buhaltung() {
   const listRegistered = async () => {
     try {
       setRegError(null);
+      const supabase = await getSupabase();
       const baseUrl = import.meta.env.VITE_API_URL as string;
       const res = await fetch(`${baseUrl}/api/invoices`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -206,6 +209,7 @@ export default function Buhaltung() {
     setUploading(true);
     setInvError(null);
     try {
+      const supabase = await getSupabase();
       if (!uid) throw new Error('Kein Supabase-User erkannt');
       const prefix = `user/${uid}`;
       const backendUrl = import.meta.env.VITE_API_URL as string;

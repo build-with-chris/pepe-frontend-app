@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import GuidelinesModal from "@/components/GuidelinesModal";
 import { uploadProfileImage, uploadGalleryImages } from "@/lib/storage/upload";
 import { useNavigate } from "react-router-dom";
@@ -182,13 +182,14 @@ export default function Profile() {
     try {
       const baseUrl = import.meta.env.VITE_API_URL;
       if (!user?.email) throw new Error(t('profileSetup.errors.userEmailMissing'));
+      const sb = await getSupabase();
 
       let effectiveId = backendArtistId || "new-id";
       let imageUrl = await uploadProfileImage(
         profileImageFile,
         effectiveId,
         PROFILE_BUCKET,
-        supabase,
+        sb,
         setProfileImageUrl,
         setBackendDebug,
         profileImageUrl
@@ -198,7 +199,7 @@ export default function Profile() {
         galleryFiles,
         effectiveId,
         PROFILE_BUCKET,
-        supabase,
+        sb,
         galleryUrls,
         setGalleryUrls
       );

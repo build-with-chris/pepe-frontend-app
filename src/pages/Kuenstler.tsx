@@ -4,6 +4,7 @@ import { Hero228 } from '@/components/hero228';
 import { Hero87 } from '@/components/hero87';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet-async";
 
 import type { Artist } from "@/types/artist";
 
@@ -150,6 +151,13 @@ export default function Kuenstler(){
 
     return (
       <div className="pt-20 md:pt-24 lg:pt-28">
+        <Helmet>
+          <title>Künstler:innen – PepeShows</title>
+          <meta
+            name="description"
+            content="Außergewöhnliche Künstler:innen, perfekt inszeniert für Ihr Publikum. Unser internationales Team aus Weltmeistern und preisgekrönten Artisten bringt Visionen mit Leidenschaft auf die Bühne – professionell und unvergesslich."
+          />
+        </Helmet>
 
         <div className="relative h-[560px] md:h-[640px] lg:h-[800px] overflow-hidden flex items-center justify-center mb-8">
           <Hero228 />

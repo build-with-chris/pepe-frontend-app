@@ -1,23 +1,6 @@
-// PostHog initialisation is delayed until first user interaction (pointer/keyboard)
-// OR after a 4s timeout, whichever happens first. This keeps heavy work out of the
-// critical path. Pageview is captured on idle after init.
-
-let scheduled = false;
 let started = false;
 
-function onIdle(cb: () => void, fallbackMs = 800) {
-  const w = typeof window !== 'undefined' ? (window as any) : undefined;
-  if (w && 'requestIdleCallback' in w) {
-    return w.requestIdleCallback(cb, { timeout: fallbackMs });
-  }
-  return setTimeout(cb, fallbackMs);
-}
-
-export async function initAnalytics(): Promise<void> {
-  if (started) return;               // already fully started
-  if (scheduled) return;             // already waiting for trigger
-  scheduled = true;
-
+export async function initAnalytics() {
   await new Promise<void>((resolve) => {
     const start = async () => {
       if (started) return resolve();
@@ -30,12 +13,24 @@ export async function initAnalytics(): Promise<void> {
           capture_pageview: false,
           person_profiles: 'identified_only',
         });
-        // Fire first pageview on idle to avoid blocking user timing
-        onIdle(() => posthog.capture('$pageview'), 800);
+        // Pageview NUR nach Interaktion, im Idle
+        const onIdle = (cb: () => void, ms = 800) => {
+          const w: any = typeof window !== 'undefined' ? window : undefined;
+          if (w && 'requestIdleCallback' in w) return w.requestIdleCallback(cb, { timeout: ms });
+          return setTimeout(cb, ms);
+        };
+        onIdle(() => posthog.capture('$pageview'));
       } catch {
-        // swallow errors silently – analytics must never break UX
+        // ignore
       } finally {
         resolve();
+      }
+    };
+
+    const cleanup = () => {
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('pointerdown', onInteract);
+        document.removeEventListener('keydown', onInteract);
       }
     };
 
@@ -44,18 +39,6 @@ export async function initAnalytics(): Promise<void> {
       start();
     };
 
-    const timeoutId = setTimeout(() => {
-      cleanup();
-      start();
-    }, 4000);
-
-    const cleanup = () => {
-      document.removeEventListener('pointerdown', onInteract);
-      document.removeEventListener('keydown', onInteract);
-      clearTimeout(timeoutId);
-    };
-
-    // Listen for the **next** user interaction
     if (typeof document !== 'undefined') {
       document.addEventListener('pointerdown', onInteract, { once: true, passive: true });
       document.addEventListener('keydown', onInteract, { once: true });

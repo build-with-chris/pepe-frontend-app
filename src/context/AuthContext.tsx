@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import type {Session} from '@supabase/supabase-js';
-import type {ReactNode} from 'react';
+import type { SupabaseClient, Session } from '@supabase/supabase-js';
+import type { ReactNode } from 'react';
+import { getSupabase as loadSupabase } from '@/lib/supabase';
 
 interface UserPayload {
   sub: string;           // User ID
@@ -13,23 +13,20 @@ interface UserPayload {
 interface AuthContextValue {
   user: UserPayload | null;
   token: string | null;
-  supabase: SupabaseClient;
+  supabase: SupabaseClient | null; // lazily set, may be null initially
+  getSupabase: () => Promise<SupabaseClient>; // helper for consumers
   setUser: (u: UserPayload | null) => void; // kept for backward compatibility
   setToken: (t: string | null) => void;
 }
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey);
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserPayload | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [supabaseClient, setSupabaseClient] = useState<SupabaseClient | null>(null);
 
-  // Ensure profiles row in Supabase is synced with backend artist id on login
-  async function syncSupabaseProfileWithBackend(u: { id: string; email?: string }, accessToken: string) {
+  async function syncSupabaseProfileWithBackend(client: SupabaseClient, u: { id: string; email?: string }, accessToken: string) {
     try {
       const backendUrl = import.meta.env.VITE_BACKEND_URL as string;
       if (!backendUrl || !accessToken || !u?.id) return;
@@ -46,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // 2) Upsert profile link in Supabase (user_id -> backend_artist_id)
-      const { error: upsertErr } = await supabase
+      const { error: upsertErr } = await client
         .from('profiles')
         .upsert(
           {
@@ -64,47 +61,64 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    // initial session
+    let isMounted = true;
+    let subscription: { unsubscribe: () => void } | null = null;
+
     (async () => {
-      const { data } = await supabase.auth.getSession();
+      const client = await loadSupabase();
+      if (!isMounted) return;
+
+      // expose for debugging if needed
+      (window as any).supabaseClient = client;
+
+      // set client in context
+      setSupabaseClient(client);
+
+      // initial session
+      const { data } = await client.auth.getSession();
       const session: Session | null = data.session;
       if (session) {
         const u = session.user;
         setToken(session.access_token);
         setUser({ sub: u.id, email: u.email || undefined, role: (u.app_metadata as any)?.role || undefined });
-        (window as any).supabaseClient = supabase;
         // sync Supabase profiles with backend artist link on initial session
-        syncSupabaseProfileWithBackend({ id: u.id, email: u.email ?? undefined }, session.access_token);
+        syncSupabaseProfileWithBackend(client, { id: u.id, email: u.email ?? undefined }, session.access_token);
+      }
+
+      const { data: listenerData } = client.auth.onAuthStateChange((_, newSession) => {
+        if (newSession) {
+          const u = newSession.user;
+          setToken(newSession.access_token);
+          setUser({ sub: u.id, email: u.email || undefined, role: (u.app_metadata as any)?.role || undefined });
+          // sync profiles link whenever session changes (login/refresh)
+          syncSupabaseProfileWithBackend(client, { id: u.id, email: u.email ?? undefined }, newSession.access_token);
+        } else {
+          setToken(null);
+          setUser(null);
+        }
+        (window as any).supabaseClient = client;
+      });
+
+      if (listenerData && typeof listenerData.subscription?.unsubscribe === 'function') {
+        subscription = listenerData.subscription;
       }
     })();
 
-    let subscription: { unsubscribe: () => void } | null = null;
-    const { data: listenerData } = supabase.auth.onAuthStateChange((_, newSession) => {
-      if (newSession) {
-        const u = newSession.user;
-        setToken(newSession.access_token);
-        setUser({ sub: u.id, email: u.email || undefined, role: (u.app_metadata as any)?.role || undefined });
-        // sync profiles link whenever session changes (login/refresh)
-        syncSupabaseProfileWithBackend({ id: u.id, email: u.email ?? undefined }, newSession.access_token);
-      } else {
-        setToken(null);
-        setUser(null);
-      }
-      (window as any).supabaseClient = supabase;
-    });
-    if (listenerData && typeof listenerData.subscription?.unsubscribe === 'function') {
-      subscription = listenerData.subscription;
-    }
-
     return () => {
-      if (subscription) {
-        subscription.unsubscribe();
-      }
+      isMounted = false;
+      if (subscription) subscription.unsubscribe();
     };
   }, []);
 
+  const getSupabase = async (): Promise<SupabaseClient> => {
+    if (supabaseClient) return supabaseClient;
+    const client = await loadSupabase();
+    setSupabaseClient(client);
+    return client;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, supabase, setUser, setToken }}>
+    <AuthContext.Provider value={{ user, token, supabase: supabaseClient, getSupabase, setUser, setToken }}>
       {children}
     </AuthContext.Provider>
   );

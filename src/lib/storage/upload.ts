@@ -1,4 +1,3 @@
-import { supabase } from "@/lib/supabase";
 import { SupabaseClient } from "@supabase/supabase-js";
 
 const PROFILE_BUCKET = import.meta.env.VITE_SUPABASE_PROFILE_BUCKET || "profiles";
@@ -22,12 +21,12 @@ export async function uploadProfileImage(
     else ext = "jpg";
   }
   const path = `artist/${artistId}/${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from(PROFILE_BUCKET).upload(path, file, {
+  const { error } = await supabaseClient.storage.from(PROFILE_BUCKET).upload(path, file, {
     contentType: file.type || `image/${ext}`,
     upsert: false,
   });
   if (error) throw error;
-  const { data } = supabase.storage.from(PROFILE_BUCKET).getPublicUrl(path);
+  const { data } = supabaseClient.storage.from(PROFILE_BUCKET).getPublicUrl(path);
   return data.publicUrl;
 }
 
@@ -52,12 +51,12 @@ export async function uploadGalleryImages(
       else ext = "jpg";
     }
     const path = `artist/${artistId}/gallery/${Date.now()}-${i}.${ext}`;
-    const { error } = await supabase.storage.from(PROFILE_BUCKET).upload(path, f, {
+    const { error } = await supabaseClient.storage.from(PROFILE_BUCKET).upload(path, f, {
       contentType: f.type || `image/${ext}`,
       upsert: false,
     });
     if (error) continue;
-    const { data } = supabase.storage.from(PROFILE_BUCKET).getPublicUrl(path);
+    const { data } = supabaseClient.storage.from(PROFILE_BUCKET).getPublicUrl(path);
     if (data?.publicUrl) out.push(data.publicUrl);
   }
   return [...existingUrls, ...out];

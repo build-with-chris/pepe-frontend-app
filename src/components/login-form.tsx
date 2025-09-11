@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import posthog from "@/lib/posthog";
 
 export function Login({
@@ -38,7 +38,8 @@ export function Login({
     }
     try {
       // Authenticate with Supabase
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+      const sb = await getSupabase();
+      const { data: signInData, error: signInError } = await sb.auth.signInWithPassword({
         email,
         password,
       });
@@ -159,7 +160,8 @@ export function Login({
     setOauthLoading(true);
     try {
       try { posthog.capture('oauth_start', { provider: 'google', mode: 'login' }); } catch {}
-      const { error } = await supabase.auth.signInWithOAuth({
+      const sb = await getSupabase();
+      const { error } = await sb.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/onboarding`,

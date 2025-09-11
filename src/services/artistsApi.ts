@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import type { Session } from "@supabase/supabase-js";
 
 const BASE_URL = "https://pepe-backend-4nid.onrender.com/api";
@@ -29,6 +29,7 @@ export interface ArtistPayload {
 
 // Fetch all artists
 export async function getArtists(): Promise<Artist[]> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from("artists")
     .select("*");
@@ -38,6 +39,7 @@ export async function getArtists(): Promise<Artist[]> {
 
 // Fetch single artist by ID
 export async function getArtist(id: number): Promise<Artist> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from("artists")
     .select("*")
@@ -49,6 +51,7 @@ export async function getArtist(id: number): Promise<Artist> {
 
 // Create a new artist
 export async function createArtist(payload: ArtistPayload): Promise<Artist> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from("artists")
     .insert([payload])
@@ -59,6 +62,7 @@ export async function createArtist(payload: ArtistPayload): Promise<Artist> {
 
 // Update an existing artist
 export async function updateArtist(id: number, payload: ArtistPayload): Promise<Artist> {
+  const supabase = await getSupabase();
   const { data, error } = await supabase
     .from("artists")
     .update(payload)
@@ -70,6 +74,7 @@ export async function updateArtist(id: number, payload: ArtistPayload): Promise<
 
 // Delete an artist
 export async function deleteArtist(id: number): Promise<void> {
+  const supabase = await getSupabase();
   const { error } = await supabase
     .from("artists")
     .delete()

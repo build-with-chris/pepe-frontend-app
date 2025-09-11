@@ -10,6 +10,6 @@
     "VITE_PUBLIC_SITE_URL": "https://pepeshows.de",
     "VITE_API_URL": "https://pepe-backend-4nid.onrender.com",
     "VITE_ENABLE_ANALYTICS": "true",
-    "VITE_POSTHOG_HOST": "https://eu.posthog.com"
+    "VITE_POSTHOG_HOST":"https://analytics.pepeshows.de"
   }
 }

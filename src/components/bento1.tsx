@@ -11,6 +11,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { useTranslation } from "react-i18next";
 
+import { Helmet } from "react-helmet-async";
+
 const Bento1 = () => {
   const { t } = useTranslation();
   const prefersReduced = usePrefersReducedMotion();
@@ -74,6 +76,9 @@ const Bento1 = () => {
 
   return (
     <section className="sm:pt-16 sm:pb-8 md:py-16 cv-auto">
+      <Helmet>
+        <link rel="preload" as="image" href="/images/Bento1/CircusTentMobile.webp" media="(max-width: 639px)" />
+      </Helmet>
       <div className="container">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-6 lg:grid-cols-12">
           <Card className="group relative h-60 overflow-hidden rounded-xl border border-white/10 bg-black transition md:col-span-2 md:row-span-2 md:h-[400px] lg:col-span-4 lg:h-full">
@@ -93,8 +98,8 @@ const Bento1 = () => {
                 <source
                   srcSet="/images/Bento1/CircusTentMobile.webp"
                   type="image/webp"
-                  sizes="(max-width: 639px) 100vw, 1400px"
                   media="(max-width: 639px)"
+                  sizes="100vw"
                 />
                 <img
                   src="/images/Bento1/CircusTent.png"
@@ -103,6 +108,7 @@ const Bento1 = () => {
                   height={900}
                   className="mt-auto h-auto w-full max-w-[1400px] max-h-full select-none object-contain object-center md:object-cover"
                   loading="eager"
+                  fetchPriority="high"
                   decoding="async"
                   onError={(e) => {
                     console.error("/images/Bento1/CircusTent.png failed to load", e.currentTarget.src);
@@ -146,7 +152,7 @@ const Bento1 = () => {
             {/* Subtle top gradient for readability */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-10 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
             {/* Discreet top-centered header with centered icon below */}
-            <div className="absolute inset-x-0 top-3 z-30 flex items-start justify-center pointer-events-none">
+            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none min-h-[40px]">
               <div className="flex flex-col items-center gap-2">
                 <h2
                   className="text-center text-white font-semibold text-xl md:text-3xl lg:text-4xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
@@ -245,7 +251,6 @@ const Bento1 = () => {
                 fetchPriority="low"
                 width={isMobile ? 380 : 1400}
                 height={isMobile ? 252 : 900}
-                sizes={isMobile ? "(max-width: 639px) 90vw, 380px" : "(max-width: 1024px) 50vw, 33vw"}
                 className="absolute inset-0 h-full w-full object-cover"
                 initial={{ scale: 1.02, x: 0, y: 0 }}
                 animate={prefersReduced ? { scale: 1.02, x: 0, y: 0 } : { scale: [1.02, 1.08, 1.02], x: [0, 8, 0], y: [0, -8, 0] }}
@@ -255,7 +260,7 @@ const Bento1 = () => {
               <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/15 to-black/35" />
             </div>
             {/* Discreet top-centered header */}
-            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none">
+            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none min-h-[40px]">
               <h2
                 className="text-center text-white font-semibold text-xl md:text-3xl lg:text-4xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
                 style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
@@ -294,7 +299,7 @@ const Bento1 = () => {
             {/* Subtle top gradient for readability */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-10 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
             {/* Discreet top-centered title */}
-            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none">
+            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none min-h-[40px]">
               <h2
                 className="text-center text-white font-semibold text-xl md:text-3xl lg:text-4xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
                 style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}
@@ -344,7 +349,6 @@ const Bento1 = () => {
                   fetchPriority="low"
                   width={800}
                   height={600}
-                  sizes="(max-width: 639px) 100vw, 100vw"
                   className="absolute inset-0 h-full w-full object-cover"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: i === slide ? 0.9 : 0 }}
@@ -356,7 +360,7 @@ const Bento1 = () => {
             {/* Subtle top gradient for readability */}
             <div className="pointer-events-none absolute inset-x-0 top-0 h-24 z-10 bg-gradient-to-b from-black/35 via-black/10 to-transparent" />
             {/* Discreet top-centered title */}
-            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none">
+            <div className="absolute inset-x-0 top-3 z-20 flex items-start justify-center pointer-events-none min-h-[40px]">
               <h2
                 className="text-center text-white font-semibold text-xl tracking-tight px-3 leading-tight transition-opacity duration-300 group-hover:opacity-40"
                 style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55)" }}

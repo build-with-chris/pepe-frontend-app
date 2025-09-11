@@ -3,11 +3,19 @@ import { Logos3 } from "@/components/logos3";
 import { Cta10 } from "@/components/cta10";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useTranslation } from "react-i18next";
+import { Helmet } from "react-helmet-async";
 
 export default function Kontakt() {
   const { t } = useTranslation();
   return (
     <>
+      <Helmet>
+        <title>Kontakt – PepeShows</title>
+        <meta
+          name="description"
+          content="Nehmen Sie Kontakt mit PepeShows auf – wir beraten Sie persönlich zu Shows, Künstlern und individuellen Event-Konzepten. Jetzt Anfrage stellen oder direkt anrufen."
+        />
+      </Helmet>
       <div className="flex flex-col items-stretch justify-center min-h-screen w-full mx-auto px-6 md:px-12 lg:px-20 gap-12">
         <a href="/anfragen" className="w-full block">
           <Cta10
