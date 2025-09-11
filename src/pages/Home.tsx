@@ -35,6 +35,13 @@ export default function Home() {
   const [isDesktop, setIsDesktop] = useState(false);
   const desktopSpotlightsRef = useRef<HTMLDivElement | null>(null);
   const [spotlightsVisible, setSpotlightsVisible] = useState(false);
+  // Sentinels for lazy-mounting below-the-fold sections
+  const bentoRef = useRef<HTMLDivElement | null>(null);
+  const ctaRef = useRef<HTMLDivElement | null>(null);
+  const galleryRef = useRef<HTMLDivElement | null>(null);
+  const [bentoVisible, setBentoVisible] = useState(false);
+  const [ctaVisible, setCtaVisible] = useState(false);
+  const [galleryVisible, setGalleryVisible] = useState(false);
   useEffect(() => {
     if (!isDesktop) return;
     const el = desktopSpotlightsRef.current;
@@ -51,6 +58,48 @@ export default function Home() {
     io.observe(el);
     return () => io.disconnect();
   }, [isDesktop]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const opts: IntersectionObserverInit = { rootMargin: '1000px 0px' };
+
+    const observers: IntersectionObserver[] = [];
+
+    if (bentoRef.current && !bentoVisible) {
+      const ob = new IntersectionObserver((entries, io) => {
+        if (entries.some(e => e.isIntersecting)) {
+          setBentoVisible(true);
+          io.disconnect();
+        }
+      }, opts);
+      ob.observe(bentoRef.current);
+      observers.push(ob);
+    }
+
+    if (ctaRef.current && !ctaVisible) {
+      const ob = new IntersectionObserver((entries, io) => {
+        if (entries.some(e => e.isIntersecting)) {
+          setCtaVisible(true);
+          io.disconnect();
+        }
+      }, opts);
+      ob.observe(ctaRef.current);
+      observers.push(ob);
+    }
+
+    if (galleryRef.current && !galleryVisible) {
+      const ob = new IntersectionObserver((entries, io) => {
+        if (entries.some(e => e.isIntersecting)) {
+          setGalleryVisible(true);
+          io.disconnect();
+        }
+      }, opts);
+      ob.observe(galleryRef.current);
+      observers.push(ob);
+    }
+
+    return () => observers.forEach(o => o.disconnect());
+  }, [bentoVisible, ctaVisible, galleryVisible]);
 
   
   useEffect(() => {
@@ -129,10 +178,9 @@ export default function Home() {
     }
   }, [mobileSlide]);
 
-
-
   const spotlights = [
     {
+      posterSrc: "/images/posters/Pantomime-1024.webp",
       mediaType: "video" as const,
       mediaSrc: "/videos/Short%20Clips/Pantomime.webm",
       kicker: "Walking Act / Pantomime",
@@ -141,6 +189,7 @@ export default function Home() {
       tags: ["Live", "Mobil", "Publikumsnähe"],
     },
     {
+      posterSrc: "/images/posters/Pantomime 2-1024.webp",
       mediaType: "video" as const,
       mediaSrc: "/videos/Short%20Clips/Pantomime%202.webm",
       kicker: "Walking Act / Pantomime",
@@ -149,6 +198,7 @@ export default function Home() {
       tags: ["Interaktiv", "< 10 Sek.", "Welcome"],
     },
     {
+      posterSrc: "/images/posters/Cyr 5-1024.webp",
       mediaType: "video" as const,
       mediaSrc: "/videos/Short%20Clips/Cyr%205.webm",
       kicker: "Cyr-Wheel",
@@ -157,6 +207,7 @@ export default function Home() {
       tags: ["Bühne", "Dynamisch", "Wow"],
     },
     {
+      posterSrc: "/images/posters/LED CYR Blackbox-1024.webp",
       mediaType: "video" as const,
       mediaSrc: "/videos/Short%20Clips/LED%20CYR%20Blackbox.webm",
       kicker: "Cyr-Wheel (LED)",
@@ -165,6 +216,7 @@ export default function Home() {
       tags: ["LED", "Dark Stage", "Effekt"],
     },
     {
+      posterSrc: "/images/posters/Chienise Pole-1024.webp",
       mediaType: "video" as const,
       mediaSrc: "/videos/Short%20Clips/Chienise%20Pole.webm",
       kicker: "Chinese Pole",
@@ -173,6 +225,7 @@ export default function Home() {
       tags: ["Kraft", "Vertikal", "Akrobatik"],
     },
     {
+      posterSrc: "/images/posters/Contortion-1024.webp",
       mediaType: "video" as const,
       mediaSrc: "/videos/Short%20Clips/Contortion.webm",
       kicker: "Contortion",
@@ -181,6 +234,7 @@ export default function Home() {
       tags: ["Flexibility", "Artistry"],
     },
     {
+      posterSrc: "/images/posters/Handstand-1024.webp",
       mediaType: "video" as const,
       mediaSrc: "/videos/Short%20Clips/Handstand.webm",
       kicker: "Handstand Akrobatik",
@@ -189,6 +243,7 @@ export default function Home() {
       tags: ["Balance", "Kontrolle"],
     },
     {
+      posterSrc: "/images/posters/Hula-1024.webp",
       mediaType: "video" as const,
       mediaSrc: "/videos/Short%20Clips/Hula.webm",
       kicker: "Hula Hoop",
@@ -229,7 +284,7 @@ export default function Home() {
       <div className="hidden md:block">
         <div
           id="hero"
-          className="relative w-screen min-h-[85vh] bg-black overflow-hidden -mb-10"
+          className="relative w-screen min-h-[85vh] bg-black overflow-hidden mt-20 -mb-10"
         >
           {/* Hero image as real element so it can be prioritized as LCP */}
           <picture>
@@ -268,8 +323,8 @@ export default function Home() {
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          width={960}
-          height={540}
+          width={380}
+          height={380}
           className="max-w-full h-auto"
         />
       </div>
@@ -278,10 +333,12 @@ export default function Home() {
           {/* Textblock 1 nach Hero */}
           <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
 
-        <div style={{ contentVisibility: 'auto', containIntrinsicSize: '1200px' }} className="min-h-[1200px]">
-          <Suspense fallback={null}>
-            <Bento1 />
-          </Suspense>
+        <div ref={bentoRef} style={{ contentVisibility: 'auto', containIntrinsicSize: '1200px' }}>
+          {bentoVisible && (
+            <Suspense fallback={null}>
+              <Bento1 />
+            </Suspense>
+          )}
         </div>
         </div>
   
@@ -383,29 +440,33 @@ export default function Home() {
 
             
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
-        <div style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}>
-          <Suspense fallback={null}>
-            <Cta10
-              heading={t("home.cta.heading")}
-              description={t("home.cta.description")}
-              buttons={{
-                primary: {
-                  text: t("home.cta.button"),
-                  url: "/agentur",
-                },
-              }}
-            />
-          </Suspense>
+        <div ref={ctaRef} style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}>
+          {ctaVisible && (
+            <Suspense fallback={null}>
+              <Cta10
+                heading={t("home.cta.heading")}
+                description={t("home.cta.description")}
+                buttons={{
+                  primary: {
+                    text: t("home.cta.button"),
+                    url: "/agentur",
+                  },
+                }}
+              />
+            </Suspense>
+          )}
         </div>
       </div>
       <div className="h-12 bg-gradient-to-b from-black via-gray-900 to-black" />
  
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24">
 
-      <div style={{ contentVisibility: 'auto', containIntrinsicSize: '1600px' }} className="min-h-[1600px]">
-        <Suspense fallback={null}>
-          <Gallery23 />
-        </Suspense>
+      <div ref={galleryRef} style={{ contentVisibility: 'auto', containIntrinsicSize: '1200px' }}>
+        {galleryVisible && (
+          <Suspense fallback={null}>
+            <Gallery23 />
+          </Suspense>
+        )}
       </div>
       
       </div>

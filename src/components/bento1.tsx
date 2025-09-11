@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { motion, useAnimation, useInView } from "framer-motion";
-import { Sparkles, Drama, ArrowRight } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -59,7 +59,7 @@ const Bento1 = () => {
     ? window.matchMedia && window.matchMedia("(max-width: 639px)").matches
     : false;
   const images = isMobile ? sliderImagesMobile : sliderImages;
-  const thirdImage = isMobile ? "/images/Bento1/BurnMobile.webp" : "/images/Bento1/Burn.webp";
+  const thirdImage = isMobile ? "/images/Bento1/BurnMobile-380.webp" : "/images/Bento1/Burn.webp";
 
   useEffect(() => {
     setSlide((s) => s % images.length);
@@ -238,13 +238,14 @@ const Bento1 = () => {
             <div className="absolute inset-0">
               <motion.img
                 src={thirdImage}
+                srcSet={isMobile ? "/images/Bento1/BurnMobile-380.webp 380w, /images/Bento1/BurnMobile-720.webp 720w" : undefined}
                 alt={t("bento1.third.title")}
                 loading="lazy"
                 decoding="async"
                 fetchPriority="low"
-                width={1400}
-                height={900}
-                sizes="(max-width: 639px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                width={isMobile ? 380 : 1400}
+                height={isMobile ? 252 : 900}
+                sizes={isMobile ? "(max-width: 639px) 90vw, 380px" : "(max-width: 1024px) 50vw, 33vw"}
                 className="absolute inset-0 h-full w-full object-cover"
                 initial={{ scale: 1.02, x: 0, y: 0 }}
                 animate={prefersReduced ? { scale: 1.02, x: 0, y: 0 } : { scale: [1.02, 1.08, 1.02], x: [0, 8, 0], y: [0, -8, 0] }}
@@ -391,7 +392,21 @@ const Bento1 = () => {
                     key={i}
                     className="border-border h-8 w-8 border-2 md:h-8 md:w-8 lg:h-10 lg:w-10"
                   >
-                    <AvatarImage src={`/images/Slider/${file}`} />
+                    <AvatarImage
+                      src={`/images/Slider/${file}`}
+                      srcSet={`/images/Slider/${file.replace('.webp','-64.webp')} 64w`}
+                      sizes="28px"
+                      width={28}
+                      height={28}
+                      alt={`Artist ${i + 1}`}
+                      onError={(e) => {
+                        const img = e.currentTarget as HTMLImageElement;
+                        img.onerror = null; // prevent loops
+                        img.src = `/images/Slider/${file}`; // fall back to original
+                        img.removeAttribute('srcset');
+                        img.removeAttribute('sizes');
+                      }}
+                    />
                     <AvatarFallback>ART{i+1}</AvatarFallback>
                   </Avatar>
                 ))}

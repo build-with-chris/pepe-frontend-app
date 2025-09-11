@@ -29,7 +29,7 @@ const Logos3 = ({
     {
       id: "logo-porsche",
       description: "Porsche",
-      image: "/images/Logos/porsche.svg",
+      image: "/images/Logos/Porsche.png",
       className: "h-8 w-auto",
     },
     {

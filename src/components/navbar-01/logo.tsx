@@ -1,5 +1,5 @@
 import React from 'react';
-import LogoImage from '../../assets/LogoPepe.png';
+import LogoImage from '../../assets/LogoPepeSingle.webp';
 import SchriftImage from '../../assets/PepeSchrift.png';
 import { Link } from 'react-router'
 
@@ -16,7 +16,7 @@ export const Logo: React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = (props)
       src={SchriftImage}
       alt="Pepe Schriftzug"
       width={85}
-      className="ml-2 -mt-1 h-auto hidden md:block"
+      className="ml-2 h-auto hidden md:block"
     />
   </Link>
 );
